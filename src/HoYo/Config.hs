@@ -5,6 +5,7 @@ module HoYo.Config (
   , settings
   , defaultConfig
   , initConfig
+  , getConfig
 
   -- ** Encoding and decoding
   , decodeConfig
@@ -52,3 +53,6 @@ defaultConfigPath = "~/.config/hoyo/config"
 
 initConfig :: MonadIO m => m ()
 initConfig = void $ encodeConfigFile defaultConfigPath defaultConfig
+
+getConfig :: MonadIO m => m Config
+getConfig = return defaultConfig -- error "todo"

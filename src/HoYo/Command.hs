@@ -2,6 +2,8 @@ module HoYo.Command where
 
 import HoYo.Types
 
+import Control.Monad.IO.Class
+
 newtype AddOptions = AddOptions {
   addDirectory :: FilePath
   }
@@ -19,13 +21,13 @@ data Command =
   | List ListOptions
 
 runAdd :: AddOptions -> HoYoMonad ()
-runAdd = error "todo"
+runAdd opts = liftIO $ putStrLn ("bookmark dir " ++ addDirectory opts)
 
 runMove :: MoveOptions -> HoYoMonad ()
-runMove = error "todo"
+runMove opts = liftIO $ putStrLn ("move to dir bookmark #" ++ show (moveIndex opts))
 
 runList :: ListOptions -> HoYoMonad ()
-runList = error "todo"
+runList _ = liftIO $ putStrLn "list bookmarks"
 
 runCommand :: Command -> HoYoMonad ()
 runCommand (Add opts)   = runAdd opts
