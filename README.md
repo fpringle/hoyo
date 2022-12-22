@@ -1,0 +1,2 @@
+# goto
+Bookmarks for cd
