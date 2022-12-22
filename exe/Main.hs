@@ -1,6 +1,6 @@
 module Main where
 
--- import GoTo
+-- import HoYo
 
 main :: IO ()
 main = return ()

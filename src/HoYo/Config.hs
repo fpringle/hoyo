@@ -1,5 +1,5 @@
-module GoTo.Config (
-  -- GoTo config
+module HoYo.Config (
+  -- HoYo config
   Config (..)
   , bookmarks
   , settings
@@ -11,9 +11,9 @@ module GoTo.Config (
   , encodeConfigFile
   ) where
 
-import GoTo.Types
-import GoTo.Settings
-import GoTo.Bookmark
+import HoYo.Types
+import HoYo.Settings
+import HoYo.Bookmark
 
 import qualified Data.Text as T
 import Data.Bifunctor (first)

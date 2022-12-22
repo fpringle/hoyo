@@ -1,6 +1,6 @@
-module GoTo.Bookmark where
+module HoYo.Bookmark where
 
-import GoTo.Types
+import HoYo.Types
 
 import Toml (TomlCodec, (.=))
 import qualified Toml

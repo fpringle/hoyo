@@ -1,4 +1,4 @@
-Goto
+HoYo
 ====
 
 - bookmark directories for cd-ing

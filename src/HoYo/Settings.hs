@@ -1,6 +1,6 @@
-module GoTo.Settings where
+module HoYo.Settings where
 
-import GoTo.Types
+import HoYo.Types
 
 import Toml (TomlCodec, (.=))
 import qualified Toml

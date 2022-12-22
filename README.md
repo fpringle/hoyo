@@ -1,2 +1,2 @@
-# goto
+# hoyo
 Bookmarks for cd

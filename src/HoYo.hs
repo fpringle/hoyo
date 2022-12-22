@@ -1,0 +1,2 @@
+module HoYo (
+  ) where

@@ -1,6 +1,6 @@
 {-# LANGUAGE TemplateHaskell #-}
 {-# OPTIONS -Wno-missing-signatures #-}
-module GoTo.Types where
+module HoYo.Types where
 
 import Lens.Simple
 
