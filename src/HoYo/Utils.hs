@@ -9,8 +9,12 @@ import Control.Monad.Reader.Class (MonadReader (ask))
 
 import Lens.Simple
 
-runHoYo :: HoYoMonad a -> Config -> IO (Either String a)
+runHoYo :: HoYoMonad a -> Env -> IO (Either String a)
 runHoYo = runReaderT . runExceptT . unHoYo
 
 asks' :: MonadReader a m => Getter a a' b b' -> m b
 asks' getter = view getter <$> ask
+
+maximumDefault :: Ord a => a -> [a] -> a
+maximumDefault def [] = def
+maximumDefault _ xs = maximum xs

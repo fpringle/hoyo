@@ -15,15 +15,19 @@ import qualified Toml
 (.==) :: Toml.Codec field a -> (object -> field) -> Toml.Codec object a
 (.==) = (Toml..=)
 
-data Config = Config {
-  _bookmarks    :: ![Bookmark]
-  , _settings   :: !Settings
+data Env = Env {
+  _bookmarks        :: !Bookmarks
+  , _bookmarksPath  :: !FilePath
+  , _settings       :: !Settings
+  , _settingsPath   :: !FilePath
   }
 
 data Bookmark = Bookmark {
   _bookmarkDirectory    :: !FilePath
   , _bookmarkIndex      :: !Int
   }
+
+newtype Bookmarks = Bookmarks { unBookmarks :: [Bookmark] }
 
 instance Eq Bookmark where
   (Bookmark _ b1) == (Bookmark _ b2)  = b1 == b2 
@@ -35,8 +39,8 @@ data Settings = Settings {
   }
 
 newtype HoYoMonad a = HoYoMonad {
-  unHoYo :: ExceptT String (ReaderT Config IO) a
-  } deriving (Functor, Applicative, Monad, MonadError String, MonadReader Config, MonadIO)
+  unHoYo :: ExceptT String (ReaderT Env IO) a
+  } deriving (Functor, Applicative, Monad, MonadError String, MonadReader Env, MonadIO)
 
-makeLenses ''Config
 makeLenses ''Bookmark
+makeLenses ''Env

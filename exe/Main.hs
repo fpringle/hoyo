@@ -2,32 +2,37 @@ module Main where
 
 import HoYo
 import HoYo.Command
-import HoYo.Config
+import HoYo.Env
 
 import System.IO
 import System.Exit
+import System.Directory
 
 import Options.Applicative
 
 globalOptions :: Parser GlobalOptions
 globalOptions = GlobalOptions
-                  <$> strOption (long "config"
+                  <$> optional (strOption (long "config"
                                 <> short 'c'
-                                <> metavar "config file"
-                                <> value defaultConfigPath
+                                <> metavar "FILE"
                                 <> help "Override the default config file"
-                                <> showDefault)
+                                <> showDefault))
+                  <*> optional (strOption (long "bookmarks"
+                                <> short 'b'
+                                <> metavar "FILE"
+                                <> help "Override the default bookmarks file"
+                                <> showDefault))
 
 addCommand :: Parser Options
 addCommand = Options
               <$> (Add . AddOptions
-                    <$> argument str (metavar "dir" <> help "Directory to bookmark"))
+                    <$> argument str (metavar "DIR" <> help "Directory to bookmark"))
               <*> globalOptions
 
 moveCommand :: Parser Options
 moveCommand = Options
               <$> (Move . MoveOptions
-                    <$> argument auto (metavar "index" <> help "Index of the bookmark to move to"))
+                    <$> argument auto (metavar "INDEX" <> help "Index of the bookmark to move to"))
               <*> globalOptions
 
 listCommand :: Parser Options
@@ -35,11 +40,17 @@ listCommand = Options
               <$> pure (List ListOptions)
               <*> globalOptions
 
+clearCommand :: Parser Options
+clearCommand = Options
+                <$> pure (Clear ClearOptions)
+                <*> globalOptions
+
 parseCommand :: Parser Options
 parseCommand = hsubparser (
   command "add" (info addCommand (progDesc "Add a bookmark"))
   <> command "move" (info moveCommand (progDesc "Change directory using a bookmark"))
   <> command "list" (info listCommand (progDesc "List existing bookmarks"))
+  <> command "clear" (info clearCommand (progDesc "Clear all bookmarks"))
   ) <|> moveCommand
 
 opts :: ParserInfo Options
@@ -51,9 +62,17 @@ opts = info (parseCommand <**> helper) (
 main :: IO ()
 main = do
   Options os globals <- execParser opts
-  getConfig (configPath globals) >>= \case
+
+  sFp <- case configPath globals of
+    Nothing -> getXdgDirectory XdgConfig "hoyo/config.toml"
+    Just d  -> return d
+  bFp <- case dataPath globals of
+    Nothing -> getXdgDirectory XdgData "hoyo/bookmarks.toml"
+    Just d  -> return d
+
+  getEnv bFp sFp >>= \case
     Left err    -> hPutStrLn stderr err >> exitFailure
-    Right cfg   -> runHoYo (runCommand os) cfg >>= \case
+    Right env   -> runHoYo (runCommand os) env >>= \case
       Left err  -> do hPutStrLn stderr err
                       exitFailure
       Right _   -> return ()
