@@ -3,6 +3,8 @@ module HoYo.Config (
   Config (..)
   , bookmarks
   , settings
+  , defaultConfig
+  , initConfig
 
   -- ** Encoding and decoding
   , decodeConfig
@@ -18,15 +20,17 @@ import HoYo.Bookmark
 import qualified Data.Text as T
 import Data.Bifunctor (first)
 
-import Toml (TomlCodec, (.=))
+import Toml (TomlCodec)
 import qualified Toml
 
 import Control.Monad.IO.Class
 
+import Control.Monad (void)
+
 configCodec :: TomlCodec Config
 configCodec = Config
-  <$> Toml.list bookmarkCodec   "directory"   .= _bookmarks
-  <*> Toml.table settingsCodec  "settings"    .= _settings
+  <$> Toml.list bookmarkCodec   "directory"   .== _bookmarks
+  <*> Toml.table settingsCodec  "settings"    .== _settings
 
 decodeConfig :: T.Text -> Either T.Text Config
 decodeConfig = first Toml.prettyTomlDecodeErrors . Toml.decodeExact configCodec
@@ -39,3 +43,12 @@ encodeConfig = Toml.encode configCodec
 
 encodeConfigFile :: MonadIO m => FilePath -> Config -> m T.Text
 encodeConfigFile = Toml.encodeToFile configCodec
+
+defaultConfig :: Config
+defaultConfig = Config [] defaultSettings
+
+defaultConfigPath :: FilePath
+defaultConfigPath = "~/.config/hoyo/config"
+
+initConfig :: MonadIO m => m ()
+initConfig = void $ encodeConfigFile defaultConfigPath defaultConfig

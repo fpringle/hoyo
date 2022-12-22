@@ -9,6 +9,12 @@ import Control.Monad.IO.Class (MonadIO)
 
 import Lens.Simple
 
+import Toml ((.=))
+import qualified Toml
+
+(.==) :: Toml.Codec field a -> (object -> field) -> Toml.Codec object a
+(.==) = (Toml..=)
+
 data Config = Config {
   _bookmarks    :: ![Bookmark]
   , _settings   :: !Settings
