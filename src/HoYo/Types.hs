@@ -2,6 +2,11 @@
 {-# OPTIONS -Wno-missing-signatures #-}
 module HoYo.Types where
 
+import Control.Monad.Except (ExceptT, runExceptT, MonadError)
+import Control.Monad.Trans.Reader (ReaderT, runReaderT)
+import Control.Monad.Reader.Class (MonadReader)
+import Control.Monad.IO.Class (MonadIO)
+
 import Lens.Simple
 
 data Config = Config {
@@ -16,6 +21,13 @@ data Bookmark = Bookmark {
 
 data Settings = Settings {
   }
+
+newtype HoYoMonad a = HoYoMonad {
+  unHoYo :: ExceptT String (ReaderT Config IO) a
+  } deriving (Functor, Applicative, Monad, MonadError String, MonadReader Config, MonadIO)
+
+runHoYo :: HoYoMonad a -> Config -> IO (Either String a)
+runHoYo = runReaderT . runExceptT . unHoYo
 
 makeLenses ''Config
 makeLenses ''Bookmark
