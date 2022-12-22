@@ -4,6 +4,7 @@ module HoYo.Config (
   , bookmarks
   , settings
   , defaultConfig
+  , defaultConfigPath
   , initConfig
   , getConfig
 
@@ -26,7 +27,9 @@ import qualified Toml
 
 import Control.Monad.IO.Class
 
-import Control.Monad (void)
+import Control.Monad (void, unless)
+
+import System.Directory
 
 configCodec :: TomlCodec Config
 configCodec = Config
@@ -51,8 +54,15 @@ defaultConfig = Config [] defaultSettings
 defaultConfigPath :: FilePath
 defaultConfigPath = "~/.config/hoyo/config"
 
-initConfig :: MonadIO m => m ()
-initConfig = void $ encodeConfigFile defaultConfigPath defaultConfig
+initConfig :: MonadIO m => FilePath -> m ()
+initConfig fp = void $ encodeConfigFile fp defaultConfig
 
-getConfig :: MonadIO m => m Config
-getConfig = return defaultConfig -- error "todo"
+initConfigIfNotExists :: MonadIO m => FilePath -> m ()
+initConfigIfNotExists fp = do
+  ex <- liftIO $ doesFileExist fp
+  unless ex $ initConfig fp
+
+getConfig :: MonadIO m => FilePath -> m (Either String Config)
+getConfig fp = do
+  initConfigIfNotExists fp
+  first T.unpack <$> decodeConfigFile fp

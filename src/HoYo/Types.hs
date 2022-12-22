@@ -2,8 +2,8 @@
 {-# OPTIONS -Wno-missing-signatures #-}
 module HoYo.Types where
 
-import Control.Monad.Except (ExceptT, runExceptT, MonadError)
-import Control.Monad.Trans.Reader (ReaderT, runReaderT)
+import Control.Monad.Except (ExceptT, MonadError)
+import Control.Monad.Trans.Reader (ReaderT)
 import Control.Monad.Reader.Class (MonadReader)
 import Control.Monad.IO.Class (MonadIO)
 
@@ -25,15 +25,18 @@ data Bookmark = Bookmark {
   , _bookmarkIndex      :: !Int
   }
 
+instance Eq Bookmark where
+  (Bookmark _ b1) == (Bookmark _ b2)  = b1 == b2 
+
+instance Ord Bookmark where
+  compare (Bookmark _ b1) (Bookmark _ b2) = compare b1 b2
+
 data Settings = Settings {
   }
 
 newtype HoYoMonad a = HoYoMonad {
   unHoYo :: ExceptT String (ReaderT Config IO) a
   } deriving (Functor, Applicative, Monad, MonadError String, MonadReader Config, MonadIO)
-
-runHoYo :: HoYoMonad a -> Config -> IO (Either String a)
-runHoYo = runReaderT . runExceptT . unHoYo
 
 makeLenses ''Config
 makeLenses ''Bookmark

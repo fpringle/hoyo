@@ -2,4 +2,4 @@ module HoYo (
   runHoYo
   ) where
 
-import HoYo.Types
+import HoYo.Utils

@@ -1,4 +1,3 @@
-{-# LANGUAGE LambdaCase #-}
 module Main where
 
 import HoYo
@@ -10,23 +9,40 @@ import System.Exit
 
 import Options.Applicative
 
-addCommand :: Parser Command
-addCommand = Add . AddOptions <$> argument str (metavar "dir" <> help "Directory to bookmark")
+globalOptions :: Parser GlobalOptions
+globalOptions = GlobalOptions
+                  <$> strOption (long "config"
+                                <> short 'c'
+                                <> metavar "config file"
+                                <> value defaultConfigPath
+                                <> help "Override the default config file"
+                                <> showDefault)
 
-moveCommand :: Parser Command
-moveCommand = Move . MoveOptions <$> argument auto (metavar "index" <> help "Index of the bookmark to move to")
+addCommand :: Parser Options
+addCommand = Options
+              <$> (Add . AddOptions
+                    <$> argument str (metavar "dir" <> help "Directory to bookmark"))
+              <*> globalOptions
 
-listCommand :: Parser Command
-listCommand = pure (List ListOptions)
+moveCommand :: Parser Options
+moveCommand = Options
+              <$> (Move . MoveOptions
+                    <$> argument auto (metavar "index" <> help "Index of the bookmark to move to"))
+              <*> globalOptions
 
-parseCommand :: Parser Command
+listCommand :: Parser Options
+listCommand = Options
+              <$> pure (List ListOptions)
+              <*> globalOptions
+
+parseCommand :: Parser Options
 parseCommand = hsubparser (
   command "add" (info addCommand (progDesc "Add a bookmark"))
   <> command "move" (info moveCommand (progDesc "Change directory using a bookmark"))
   <> command "list" (info listCommand (progDesc "List existing bookmarks"))
   ) <|> moveCommand
 
-opts :: ParserInfo Command
+opts :: ParserInfo Options
 opts = info (parseCommand <**> helper) (
           fullDesc
           <> progDesc "Set directory bookmarks for quick \"cd\"-like behaviour"
@@ -34,9 +50,10 @@ opts = info (parseCommand <**> helper) (
 
 main :: IO ()
 main = do
-  options <- execParser opts
-  cfg <- getConfig
-  runHoYo (runCommand options) cfg >>= \case
-    Left err  -> do hPutStrLn stderr err
-                    exitFailure
-    Right _   -> return ()
+  Options os globals <- execParser opts
+  getConfig (configPath globals) >>= \case
+    Left err    -> hPutStrLn stderr err >> exitFailure
+    Right cfg   -> runHoYo (runCommand os) cfg >>= \case
+      Left err  -> do hPutStrLn stderr err
+                      exitFailure
+      Right _   -> return ()
