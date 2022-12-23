@@ -3,7 +3,7 @@
 - autocomplete
 - verbose output
 - add bookmark name?
-- sub-sub commands e.g. hoyo config print, hoyo config set
+- hoyo config set
 
 ## New commands
 

@@ -54,42 +54,36 @@ parseOverrideEnableClearing = parseOverride
                                 (long "enable-clear" <> help "Enable the 'clear' command")
                                 (long "disable-clear" <> help "Disable the 'clear' command")
 
-addCommand :: Parser Options
-addCommand = Options
-              <$> (Add . AddOptions
-                    <$> argument str (metavar "DIR" <> help "Directory to bookmark"))
-              <*> globalOptions
+addCommand :: Parser Command
+addCommand = Add . AddOptions
+                <$> argument str (metavar "DIR" <> help "Directory to bookmark")
 
-moveCommand :: Parser Options
-moveCommand = Options
-              <$> (Move . MoveOptions
-                    <$> argument auto (metavar "INDEX" <> help "Index of the bookmark to move to"))
-              <*> globalOptions
+moveCommand :: Parser Command
+moveCommand = Move . MoveOptions
+                <$> argument auto (metavar "INDEX" <> help "Index of the bookmark to move to")
 
-listCommand :: Parser Options
-listCommand = Options (List ListOptions) <$> globalOptions
+listCommand :: Parser Command
+listCommand = pure (List ListOptions)
 
-clearCommand :: Parser Options
-clearCommand = Options (Clear ClearOptions) <$> globalOptions
+clearCommand :: Parser Command
+clearCommand = pure (Clear ClearOptions)
 
-deleteCommand :: Parser Options
-deleteCommand =  Options
-                  <$> (Delete . DeleteOptions
-                        <$> argument auto (metavar "INDEX" <> help "Index of the bookmark to delete"))
-                  <*> globalOptions
+deleteCommand :: Parser Command
+deleteCommand =  Delete . DeleteOptions
+                    <$> argument auto (metavar "INDEX" <> help "Index of the bookmark to delete")
 
-refreshCommand :: Parser Options
-refreshCommand = Options (Refresh RefreshOptions) <$> globalOptions
+refreshCommand :: Parser Command
+refreshCommand = pure (Refresh RefreshOptions)
 
-configCommand :: Parser Options
+configCommand :: Parser Command
 configCommand = hsubparser (
   command "print" (info configPrintCommand (progDesc "Print hoyo config"))
   )
 
-configPrintCommand :: Parser Options
-configPrintCommand = Options (Config (Print ConfigPrintOptions)) <$> globalOptions
+configPrintCommand :: Parser Command
+configPrintCommand = pure (Config (Print ConfigPrintOptions))
 
-parseCommand :: Parser Options
+parseCommand :: Parser Command
 parseCommand = hsubparser (
   command "add" (info addCommand (progDesc "Add a bookmark"))
   <> command "move" (info moveCommand (progDesc "Change directory using a bookmark"))
@@ -100,8 +94,11 @@ parseCommand = hsubparser (
   <> command "config" (info configCommand (progDesc "View/manage hoyo config"))
   ) <|> moveCommand
 
+parseOptions :: Parser Options
+parseOptions = Options <$> parseCommand <*> globalOptions
+
 opts :: ParserInfo Options
-opts = info (parseCommand <**> helper) (
+opts = info (parseOptions <**> helper) (
           fullDesc
           <> progDesc "Set directory bookmarks for quick \"cd\"-like behaviour"
           )
