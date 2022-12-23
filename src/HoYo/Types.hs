@@ -35,6 +35,7 @@ newtype Bookmarks = Bookmarks { unBookmarks :: [Bookmark] }
 data Settings = Settings {
   _failOnError            :: !Bool
   , _displayCreationTime  :: !Bool
+  , _enableClearing       :: !Bool
   }
 
 newtype HoYoMonad a = HoYoMonad {

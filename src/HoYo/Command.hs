@@ -104,8 +104,16 @@ runList _ = do
     then liftIO $ putStrLn (num <> ". " <> timeStr <> "\t" <> dir)
     else liftIO $ putStrLn (num <> ". " <> dir)
 
+clearDisabledErrMsg :: String
+clearDisabledErrMsg = intercalate "\n" [
+  "The 'clear' command is disabled by default."
+  , "Set enable_clear = true in the config to enable." 
+  ]
+
 runClear :: ClearOptions -> HoYoMonad ()
-runClear _ = modifyBookmarks $ const []
+runClear _ = do
+  assert clearDisabledErrMsg (asks' (settings . enableClearing))
+  modifyBookmarks $ const []
 
 runDelete :: DeleteOptions -> HoYoMonad ()
 runDelete opts = do

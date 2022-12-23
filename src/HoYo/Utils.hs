@@ -20,11 +20,10 @@ maximumDefault :: Ord a => a -> [a] -> a
 maximumDefault def [] = def
 maximumDefault _ xs = maximum xs
 
-assert :: String -> HoYoMonad Bool -> HoYoMonad Bool
+assert :: String -> HoYoMonad Bool -> HoYoMonad ()
 assert err check = do
   res <- check
   unless res $ throwError err
-  return res
 
 assertVerbose :: String -> HoYoMonad Bool -> HoYoMonad Bool
 assertVerbose err check = do

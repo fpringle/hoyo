@@ -13,4 +13,4 @@
 
 ## New settings
 
-- disable clearing
+-

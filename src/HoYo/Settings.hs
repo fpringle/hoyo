@@ -15,11 +15,13 @@ settingsCodec :: TomlCodec Settings
 settingsCodec = Settings
   <$> Toml.bool     "fail_on_error"             .== _failOnError
   <*> Toml.bool     "display_creation_time"     .== _displayCreationTime
+  <*> Toml.bool     "enable_clearing"           .== _enableClearing
 
 defaultSettings :: Settings
 defaultSettings = Settings {
   _failOnError                = False
   , _displayCreationTime      = False
+  , _enableClearing           = False
   }
 
 decodeSettings :: T.Text -> Either T.Text Settings
