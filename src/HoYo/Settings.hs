@@ -1,6 +1,7 @@
 module HoYo.Settings where
 
 import HoYo.Types
+import HoYo.Utils
 
 import qualified Data.Text as T
 import Data.Bifunctor (first)
@@ -35,3 +36,6 @@ encodeSettings = Toml.encode settingsCodec
 
 encodeSettingsFile :: MonadIO m => FilePath -> Settings -> m ()
 encodeSettingsFile fp = void . Toml.encodeToFile settingsCodec fp
+
+getKeyVals :: Settings -> [(Toml.Key, Toml.AnyValue)]
+getKeyVals = tomlToKeyVals . Toml.execTomlCodec settingsCodec

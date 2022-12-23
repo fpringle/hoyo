@@ -56,6 +56,11 @@ refreshCommand = Options
                 <$> pure (Refresh RefreshOptions)
                 <*> globalOptions
 
+printSettingsCommand :: Parser Options
+printSettingsCommand = Options
+                        <$> pure (PrintSettings PrintSettingsOptions)
+                        <*> globalOptions
+
 parseCommand :: Parser Options
 parseCommand = hsubparser (
   command "add" (info addCommand (progDesc "Add a bookmark"))
@@ -64,6 +69,7 @@ parseCommand = hsubparser (
   <> command "clear" (info clearCommand (progDesc "Clear all bookmarks"))
   <> command "delete" (info deleteCommand (progDesc "Delete a bookmark"))
   <> command "refresh" (info refreshCommand (progDesc "Re-calculate bookmark indices"))
+  <> command "print-config" (info printSettingsCommand (progDesc "Print hoyo config"))
   ) <|> moveCommand
 
 opts :: ParserInfo Options

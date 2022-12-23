@@ -3,9 +3,12 @@ module HoYo.Command where
 import HoYo.Types
 import HoYo.Utils
 import HoYo.Bookmark
+import HoYo.Settings
 
 import Data.List
 import Data.Function
+
+import qualified Data.Text as T
 
 import Control.Monad.IO.Class
 import Control.Monad
@@ -16,6 +19,8 @@ import Lens.Simple
 import System.Directory
 
 import Data.Time
+
+import qualified Toml
 
 newtype AddOptions = AddOptions {
   addDirectory :: FilePath
@@ -38,6 +43,9 @@ newtype DeleteOptions = DeleteOptions {
 data RefreshOptions = RefreshOptions {
   }
 
+data PrintSettingsOptions = PrintSettingsOptions {
+  }
+
 data Command =
   Add AddOptions
   | Move MoveOptions
@@ -45,6 +53,7 @@ data Command =
   | Clear ClearOptions
   | Delete DeleteOptions
   | Refresh RefreshOptions
+  | PrintSettings PrintSettingsOptions
 
 data GlobalOptions = GlobalOptions {
   configPath    :: Maybe FilePath
@@ -130,6 +139,15 @@ runRefresh _ = modifyBookmarks $
     . nubBy ((==) `on` view bookmarkDirectory)                -- remove duplicate directories
     . sortOn (zonedTimeToUTC . view bookmarkCreationTime)     -- sort by creation time
 
+runPrintSettings :: PrintSettingsOptions -> HoYoMonad ()
+runPrintSettings _ = do
+  s <- asks' settings
+  let keyVals = getKeyVals s
+  forM_ keyVals $ \(k, Toml.AnyValue v) -> do
+    let kStr = Toml.prettyKey k
+    let vStr = valText v
+    liftIO $ putStrLn $ T.unpack (kStr <> " = " <> vStr)
+
 runCommand :: Command -> HoYoMonad ()
 runCommand (Add opts)   = runAdd opts
 runCommand (Move opts)  = runMove opts
@@ -137,3 +155,4 @@ runCommand (List opts)  = runList opts
 runCommand (Clear opts)  = runClear opts
 runCommand (Delete opts)  = runDelete opts
 runCommand (Refresh opts)  = runRefresh opts
+runCommand (PrintSettings opts)  = runPrintSettings opts
