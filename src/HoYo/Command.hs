@@ -96,10 +96,13 @@ runList :: ListOptions -> HoYoMonad ()
 runList _ = do
   bms <- sortOn (view bookmarkIndex) . unBookmarks <$> asks' bookmarks
   let numberWidth = maximumDefault 1 $ map (length . show . view bookmarkIndex) bms
-  forM_ bms $ \(Bookmark dir idx _) -> do
+  displayTime <- asks' (settings . displayCreationTime)
+  forM_ bms $ \(Bookmark dir idx zTime) -> do
     let num = pad numberWidth (show idx)
-    -- let timeStr = formatTime defaultTimeLocale "%D %T" zTime
-    liftIO $ putStrLn (num <> ". " <> dir)
+    let timeStr = formatTime defaultTimeLocale "%D %T" zTime
+    if displayTime
+    then liftIO $ putStrLn (num <> ". " <> timeStr <> "\t" <> dir)
+    else liftIO $ putStrLn (num <> ". " <> dir)
 
 runClear :: ClearOptions -> HoYoMonad ()
 runClear _ = modifyBookmarks $ const []

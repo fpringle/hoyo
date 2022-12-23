@@ -2,6 +2,8 @@
 
 - autocomplete
 - verbose output
+- add bookmark name?
+- override settings with flags
 
 ## New commands
 
