@@ -33,6 +33,8 @@ data Bookmark = Bookmark {
 newtype Bookmarks = Bookmarks { unBookmarks :: [Bookmark] }
 
 data Settings = Settings {
+  _failOnError            :: !Bool
+  , _displayCreationTime  :: !Bool
   }
 
 newtype HoYoMonad a = HoYoMonad {
@@ -40,4 +42,5 @@ newtype HoYoMonad a = HoYoMonad {
   } deriving (Functor, Applicative, Monad, MonadError String, MonadReader Env, MonadIO)
 
 makeLenses ''Bookmark
+makeLenses ''Settings
 makeLenses ''Env

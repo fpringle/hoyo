@@ -5,10 +5,10 @@ import HoYo.Utils
 import HoYo.Bookmark
 
 import Data.List
+import Data.Function
 
 import Control.Monad.IO.Class
-import Control.Monad (forM_)
-
+import Control.Monad
 import Control.Monad.Reader.Class (ask)
 
 import Lens.Simple
@@ -68,11 +68,17 @@ modifyBookmarksM f = do
 runAdd :: AddOptions -> HoYoMonad ()
 runAdd opts = do
   dir <- liftIO $ makeAbsolute (addDirectory opts)
+  void $ assertVerbose "not a directory" $ liftIO $ doesDirectoryExist dir
   modifyBookmarksM $ \bms -> do
-    let maxIndex = maximumDefault 0 $ map (view bookmarkIndex) bms
-    zTime <- liftIO getZonedTime
-    let newBookMark = Bookmark dir (maxIndex + 1) zTime
-    return (newBookMark : bms)
+    uniq <- assertVerbose "bookmark already exists" $
+      return $ all ((/= dir) . view bookmarkDirectory) bms
+    if uniq
+    then do
+      let maxIndex = maximumDefault 0 $ map (view bookmarkIndex) bms
+      zTime <- liftIO getZonedTime
+      let newBookMark = Bookmark dir (maxIndex + 1) zTime
+      return (newBookMark : bms)
+    else return bms
 
 runMove :: MoveOptions -> HoYoMonad ()
 runMove opts = do
@@ -99,12 +105,19 @@ runClear :: ClearOptions -> HoYoMonad ()
 runClear _ = modifyBookmarks $ const []
 
 runDelete :: DeleteOptions -> HoYoMonad ()
-runDelete opts = modifyBookmarks $ filter ((/= idx) . view bookmarkIndex)
-  where idx = deleteIndex opts
+runDelete opts = do
+  let idx = deleteIndex opts
+  modifyBookmarksM $ \bms -> do
+    let sameIdx = filter ((== idx) . view bookmarkIndex) bms
+    void $ assertVerbose ("no bookmark with index #" <> show idx) $ return $ not $ null sameIdx
+    void $ assertVerbose ("multiple bookmark with index #" <> show idx) $ return $ length sameIdx == 1
+    return $ filter ((/= idx) . view bookmarkIndex) bms
 
 runRefresh :: RefreshOptions -> HoYoMonad ()
-runRefresh _ = modifyBookmarks $ zipWith (set bookmarkIndex) [1..]
-                                  . sortOn (zonedTimeToUTC . view bookmarkCreationTime)
+runRefresh _ = modifyBookmarks $
+  zipWith (set bookmarkIndex) [1..]                           -- re-index from 1
+    . nubBy ((==) `on` view bookmarkDirectory)                -- remove duplicate directories
+    . sortOn (zonedTimeToUTC . view bookmarkCreationTime)     -- sort by creation time
 
 runCommand :: Command -> HoYoMonad ()
 runCommand (Add opts)   = runAdd opts

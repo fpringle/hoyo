@@ -12,10 +12,15 @@ import Toml (TomlCodec)
 import qualified Toml
 
 settingsCodec :: TomlCodec Settings
-settingsCodec = pure Settings
+settingsCodec = Settings
+  <$> Toml.bool     "fail_on_error"             .== _failOnError
+  <*> Toml.bool     "display_creation_time"     .== _displayCreationTime
 
 defaultSettings :: Settings
-defaultSettings = Settings
+defaultSettings = Settings {
+  _failOnError                = False
+  , _displayCreationTime      = False
+  }
 
 decodeSettings :: T.Text -> Either T.Text Settings
 decodeSettings = first Toml.prettyTomlDecodeErrors . Toml.decodeExact settingsCodec

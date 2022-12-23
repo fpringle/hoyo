@@ -72,6 +72,11 @@ opts = info (parseCommand <**> helper) (
           <> progDesc "Set directory bookmarks for quick \"cd\"-like behaviour"
           )
 
+failure :: String -> IO ()
+failure err = do
+  hPutStrLn stderr ("Error: " <> err)
+  exitFailure
+
 main :: IO ()
 main = do
   Options os globals <- execParser opts
@@ -84,8 +89,7 @@ main = do
     Just d  -> return d
 
   getEnv bFp sFp >>= \case
-    Left err    -> hPutStrLn stderr err >> exitFailure
+    Left err    -> failure err
     Right env   -> runHoYo (runCommand os) env >>= \case
-      Left err  -> do hPutStrLn stderr err
-                      exitFailure
+      Left err  -> failure err
       Right _   -> return ()
