@@ -8,6 +8,8 @@ import HoYo.Settings
 import Data.List
 import Data.Function
 
+import Control.Applicative
+
 import qualified Data.Text as T
 
 import Control.Monad.IO.Class
@@ -55,9 +57,45 @@ data Command =
   | Refresh RefreshOptions
   | PrintSettings PrintSettingsOptions
 
+data MaybeOverride =
+  OverrideFalse
+  | OverrideTrue
+  | NoOverride
+  | Conflict
+
+combOverride :: Bool -> Bool -> MaybeOverride
+combOverride False False = NoOverride
+combOverride True  False = OverrideTrue
+combOverride False True  = OverrideFalse
+combOverride True  True  = Conflict
+
+data OverrideOptions = OverrideOptions {
+  overrideFailOnError               :: MaybeOverride
+  , overrideDisplayCreationTime     :: MaybeOverride
+  , overrideEnableClearing          :: MaybeOverride
+  }
+
+overrideFunc :: MaybeOverride -> (Bool -> Bool)
+overrideFunc NoOverride     = id
+overrideFunc OverrideTrue   = const True
+overrideFunc OverrideFalse  = const False
+overrideFunc Conflict       = error "override conflict!"
+
+overrideSettings :: OverrideOptions -> Settings -> Settings
+overrideSettings opts =
+  over failOnError            (overrideFunc $         overrideFailOnError opts)
+  . over displayCreationTime  (overrideFunc $ overrideDisplayCreationTime opts)
+  . over enableClearing       (overrideFunc $      overrideEnableClearing opts)
+
+verifyOverrides :: OverrideOptions -> Maybe String
+verifyOverrides (OverrideOptions o1 o2 o3) = verify o1 <|> verify o2 <|> verify o3
+  where verify Conflict = Just "conflicting flags"
+        verify _ = Nothing
+
 data GlobalOptions = GlobalOptions {
   configPath    :: Maybe FilePath
   , dataPath    :: Maybe FilePath
+  , overrides   :: OverrideOptions
   }
 
 data Options = Options {
@@ -116,7 +154,7 @@ runList _ = do
 clearDisabledErrMsg :: String
 clearDisabledErrMsg = intercalate "\n" [
   "The 'clear' command is disabled by default."
-  , "Set enable_clear = true in the config to enable." 
+  , "To enable, set enable_clear = true in the config or pass the --enable-clear flag." 
   ]
 
 runClear :: ClearOptions -> HoYoMonad ()

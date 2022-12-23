@@ -4,11 +4,15 @@ import HoYo
 import HoYo.Command
 import HoYo.Env
 
+import Control.Monad
+
 import System.IO
 import System.Exit
 import System.Directory
 
 import Options.Applicative
+
+import Lens.Simple
 
 globalOptions :: Parser GlobalOptions
 globalOptions = GlobalOptions
@@ -22,6 +26,27 @@ globalOptions = GlobalOptions
                                 <> metavar "FILE"
                                 <> help "Override the default bookmarks file"
                                 <> showDefault))
+                  <*> overrideOptions
+
+overrideOptions :: Parser OverrideOptions
+overrideOptions = OverrideOptions
+                    <$> parseOverrideFailOnError
+                    <*> parseOverrideDisplayCreationTime
+                    <*> parseOverrideEnableClearing
+
+parseOverride :: Mod FlagFields Bool -> Mod FlagFields Bool -> Parser MaybeOverride
+parseOverride posMod negMod = combOverride
+                                <$> switch posMod
+                                <*> switch negMod
+
+parseOverrideFailOnError :: Parser MaybeOverride
+parseOverrideFailOnError = parseOverride (long "fail") (long "nofail")
+
+parseOverrideDisplayCreationTime :: Parser MaybeOverride
+parseOverrideDisplayCreationTime = parseOverride (long "time") (long "notime")
+
+parseOverrideEnableClearing :: Parser MaybeOverride
+parseOverrideEnableClearing = parseOverride (long "enable-clear") (long "disable-clear")
 
 addCommand :: Parser Options
 addCommand = Options
@@ -36,14 +61,10 @@ moveCommand = Options
               <*> globalOptions
 
 listCommand :: Parser Options
-listCommand = Options
-              <$> pure (List ListOptions)
-              <*> globalOptions
+listCommand = Options (List ListOptions) <$> globalOptions
 
 clearCommand :: Parser Options
-clearCommand = Options
-                <$> pure (Clear ClearOptions)
-                <*> globalOptions
+clearCommand = Options (Clear ClearOptions) <$> globalOptions
 
 deleteCommand :: Parser Options
 deleteCommand =  Options
@@ -52,14 +73,10 @@ deleteCommand =  Options
                   <*> globalOptions
 
 refreshCommand :: Parser Options
-refreshCommand = Options
-                <$> pure (Refresh RefreshOptions)
-                <*> globalOptions
+refreshCommand = Options (Refresh RefreshOptions) <$> globalOptions
 
 printSettingsCommand :: Parser Options
-printSettingsCommand = Options
-                        <$> pure (PrintSettings PrintSettingsOptions)
-                        <*> globalOptions
+printSettingsCommand = Options (PrintSettings PrintSettingsOptions) <$> globalOptions
 
 parseCommand :: Parser Options
 parseCommand = hsubparser (
@@ -86,6 +103,7 @@ failure err = do
 main :: IO ()
 main = do
   Options os globals <- execParser opts
+  forM_ (verifyOverrides $ overrides globals) failure
 
   sFp <- case configPath globals of
     Nothing -> getXdgDirectory XdgConfig "hoyo/config.toml"
@@ -96,6 +114,8 @@ main = do
 
   getEnv bFp sFp >>= \case
     Left err    -> failure err
-    Right env   -> runHoYo (runCommand os) env >>= \case
-      Left err  -> failure err
-      Right _   -> return ()
+    Right env   -> do
+      let overridenEnv = over settings (overrideSettings $ overrides globals) env
+      runHoYo (runCommand os) overridenEnv >>= \case
+        Left err  -> failure err
+        Right _   -> return ()
