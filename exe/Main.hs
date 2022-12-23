@@ -40,13 +40,19 @@ parseOverride posMod negMod = combOverride
                                 <*> switch negMod
 
 parseOverrideFailOnError :: Parser MaybeOverride
-parseOverrideFailOnError = parseOverride (long "fail") (long "nofail")
+parseOverrideFailOnError = parseOverride
+                              (long "fail" <> help "Fail on error")
+                              (long "nofail" <> help "Disable fail on error")
 
 parseOverrideDisplayCreationTime :: Parser MaybeOverride
-parseOverrideDisplayCreationTime = parseOverride (long "time") (long "notime")
+parseOverrideDisplayCreationTime = parseOverride
+                                    (long "time" <> help "Display bookmark creation times")
+                                    (long "notime" <> help "Hide bookmark creation times")
 
 parseOverrideEnableClearing :: Parser MaybeOverride
-parseOverrideEnableClearing = parseOverride (long "enable-clear") (long "disable-clear")
+parseOverrideEnableClearing = parseOverride
+                                (long "enable-clear" <> help "Enable the 'clear' command")
+                                (long "disable-clear" <> help "Disable the 'clear' command")
 
 addCommand :: Parser Options
 addCommand = Options
