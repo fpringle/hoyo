@@ -12,6 +12,8 @@ import Lens.Simple
 import Toml ((.=))
 import qualified Toml
 
+import Data.Time
+
 (.==) :: Toml.Codec field a -> (object -> field) -> Toml.Codec object a
 (.==) = (Toml..=)
 
@@ -23,8 +25,9 @@ data Env = Env {
   }
 
 data Bookmark = Bookmark {
-  _bookmarkDirectory    :: !FilePath
-  , _bookmarkIndex      :: !Int
+  _bookmarkDirectory        :: !FilePath
+  , _bookmarkIndex          :: !Int
+  , _bookmarkCreationTime   :: !ZonedTime
   }
 
 newtype Bookmarks = Bookmarks { unBookmarks :: [Bookmark] }

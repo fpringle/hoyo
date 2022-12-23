@@ -16,8 +16,9 @@ import Lens.Simple
 
 bookmarkCodec :: TomlCodec Bookmark
 bookmarkCodec = Bookmark
-  <$> Toml.string "directory"     .== _bookmarkDirectory
-  <*> Toml.int    "index"         .== _bookmarkIndex
+  <$> Toml.string     "directory"     .== _bookmarkDirectory
+  <*> Toml.int        "index"         .== _bookmarkIndex
+  <*> Toml.zonedTime  "created"       .== _bookmarkCreationTime
 
 bookmarksCodec :: TomlCodec Bookmarks
 bookmarksCodec = Toml.diwrap (Toml.list bookmarkCodec "bookmarks")

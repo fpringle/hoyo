@@ -15,6 +15,8 @@ import Lens.Simple
 
 import System.Directory
 
+import Data.Time
+
 newtype AddOptions = AddOptions {
   addDirectory :: FilePath
   }
@@ -66,10 +68,11 @@ modifyBookmarksM f = do
 runAdd :: AddOptions -> HoYoMonad ()
 runAdd opts = do
   dir <- liftIO $ makeAbsolute (addDirectory opts)
-  modifyBookmarks $ \bms ->
+  modifyBookmarksM $ \bms -> do
     let maxIndex = maximumDefault 0 $ map (view bookmarkIndex) bms
-        newBookMark = Bookmark dir (maxIndex + 1)
-    in newBookMark : bms
+    zTime <- liftIO getZonedTime
+    let newBookMark = Bookmark dir (maxIndex + 1) zTime
+    return (newBookMark : bms)
 
 runMove :: MoveOptions -> HoYoMonad ()
 runMove opts = do
@@ -87,8 +90,9 @@ runList :: ListOptions -> HoYoMonad ()
 runList _ = do
   bms <- sortOn (view bookmarkIndex) . unBookmarks <$> asks' bookmarks
   let numberWidth = maximumDefault 1 $ map (length . show . view bookmarkIndex) bms
-  forM_ bms $ \(Bookmark dir idx) -> do
+  forM_ bms $ \(Bookmark dir idx _) -> do
     let num = pad numberWidth (show idx)
+    -- let timeStr = formatTime defaultTimeLocale "%D %T" zTime
     liftIO $ putStrLn (num <> ". " <> dir)
 
 runClear :: ClearOptions -> HoYoMonad ()
@@ -99,7 +103,8 @@ runDelete opts = modifyBookmarks $ filter ((/= idx) . view bookmarkIndex)
   where idx = deleteIndex opts
 
 runRefresh :: RefreshOptions -> HoYoMonad ()
-runRefresh _ = modifyBookmarks $ zipWith (set bookmarkIndex) [1..] . sortOn (view bookmarkIndex)
+runRefresh _ = modifyBookmarks $ zipWith (set bookmarkIndex) [1..]
+                                  . sortOn (zonedTimeToUTC . view bookmarkCreationTime)
 
 runCommand :: Command -> HoYoMonad ()
 runCommand (Add opts)   = runAdd opts
