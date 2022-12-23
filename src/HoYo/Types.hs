@@ -29,12 +29,6 @@ data Bookmark = Bookmark {
 
 newtype Bookmarks = Bookmarks { unBookmarks :: [Bookmark] }
 
-instance Eq Bookmark where
-  (Bookmark _ b1) == (Bookmark _ b2)  = b1 == b2 
-
-instance Ord Bookmark where
-  compare (Bookmark _ b1) (Bookmark _ b2) = compare b1 b2
-
 data Settings = Settings {
   }
 

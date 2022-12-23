@@ -33,12 +33,16 @@ newtype DeleteOptions = DeleteOptions {
   deleteIndex :: Int
   }
 
+data RefreshOptions = RefreshOptions {
+  }
+
 data Command =
   Add AddOptions
   | Move MoveOptions
   | List ListOptions
   | Clear ClearOptions
   | Delete DeleteOptions
+  | Refresh RefreshOptions
 
 data GlobalOptions = GlobalOptions {
   configPath    :: Maybe FilePath
@@ -81,7 +85,7 @@ pad n s = replicate (n - length s) ' ' <> s
 
 runList :: ListOptions -> HoYoMonad ()
 runList _ = do
-  bms <- sort . unBookmarks <$> asks' bookmarks
+  bms <- sortOn (view bookmarkIndex) . unBookmarks <$> asks' bookmarks
   let numberWidth = maximumDefault 1 $ map (length . show . view bookmarkIndex) bms
   forM_ bms $ \(Bookmark dir idx) -> do
     let num = pad numberWidth (show idx)
@@ -94,9 +98,13 @@ runDelete :: DeleteOptions -> HoYoMonad ()
 runDelete opts = modifyBookmarks $ filter ((/= idx) . view bookmarkIndex)
   where idx = deleteIndex opts
 
+runRefresh :: RefreshOptions -> HoYoMonad ()
+runRefresh _ = modifyBookmarks $ zipWith (set bookmarkIndex) [1..] . sortOn (view bookmarkIndex)
+
 runCommand :: Command -> HoYoMonad ()
 runCommand (Add opts)   = runAdd opts
 runCommand (Move opts)  = runMove opts
 runCommand (List opts)  = runList opts
 runCommand (Clear opts)  = runClear opts
 runCommand (Delete opts)  = runDelete opts
+runCommand (Refresh opts)  = runRefresh opts

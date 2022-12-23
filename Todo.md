@@ -5,7 +5,7 @@
 
 ## New commands
 
-- refresh indices
+-
 
 ## New settings
 
