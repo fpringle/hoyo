@@ -81,8 +81,13 @@ deleteCommand =  Options
 refreshCommand :: Parser Options
 refreshCommand = Options (Refresh RefreshOptions) <$> globalOptions
 
-printSettingsCommand :: Parser Options
-printSettingsCommand = Options (PrintSettings PrintSettingsOptions) <$> globalOptions
+configCommand :: Parser Options
+configCommand = hsubparser (
+  command "print" (info configPrintCommand (progDesc "Print hoyo config"))
+  )
+
+configPrintCommand :: Parser Options
+configPrintCommand = Options (Config (Print ConfigPrintOptions)) <$> globalOptions
 
 parseCommand :: Parser Options
 parseCommand = hsubparser (
@@ -92,7 +97,7 @@ parseCommand = hsubparser (
   <> command "clear" (info clearCommand (progDesc "Clear all bookmarks"))
   <> command "delete" (info deleteCommand (progDesc "Delete a bookmark"))
   <> command "refresh" (info refreshCommand (progDesc "Re-calculate bookmark indices"))
-  <> command "print-config" (info printSettingsCommand (progDesc "Print hoyo config"))
+  <> command "config" (info configCommand (progDesc "View/manage hoyo config"))
   ) <|> moveCommand
 
 opts :: ParserInfo Options

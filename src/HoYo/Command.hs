@@ -45,8 +45,11 @@ newtype DeleteOptions = DeleteOptions {
 data RefreshOptions = RefreshOptions {
   }
 
-data PrintSettingsOptions = PrintSettingsOptions {
+data ConfigPrintOptions = ConfigPrintOptions {
   }
+
+newtype ConfigCommand =
+  Print ConfigPrintOptions
 
 data Command =
   Add AddOptions
@@ -55,7 +58,7 @@ data Command =
   | Clear ClearOptions
   | Delete DeleteOptions
   | Refresh RefreshOptions
-  | PrintSettings PrintSettingsOptions
+  | Config ConfigCommand
 
 data MaybeOverride =
   OverrideFalse
@@ -177,7 +180,7 @@ runRefresh _ = modifyBookmarks $
     . nubBy ((==) `on` view bookmarkDirectory)                -- remove duplicate directories
     . sortOn (zonedTimeToUTC . view bookmarkCreationTime)     -- sort by creation time
 
-runPrintSettings :: PrintSettingsOptions -> HoYoMonad ()
+runPrintSettings :: ConfigPrintOptions -> HoYoMonad ()
 runPrintSettings _ = do
   s <- asks' settings
   let keyVals = getKeyVals s
@@ -186,6 +189,9 @@ runPrintSettings _ = do
     let vStr = valText v
     liftIO $ putStrLn $ T.unpack (kStr <> " = " <> vStr)
 
+runConfig :: ConfigCommand -> HoYoMonad ()
+runConfig (Print opts) = runPrintSettings opts
+
 runCommand :: Command -> HoYoMonad ()
 runCommand (Add opts)   = runAdd opts
 runCommand (Move opts)  = runMove opts
@@ -193,4 +199,5 @@ runCommand (List opts)  = runList opts
 runCommand (Clear opts)  = runClear opts
 runCommand (Delete opts)  = runDelete opts
 runCommand (Refresh opts)  = runRefresh opts
-runCommand (PrintSettings opts)  = runPrintSettings opts
+runCommand (Config opts)   = runConfig opts
+-- runCommand (PrintSettings opts)  = runPrintSettings opts
