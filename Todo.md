@@ -5,7 +5,6 @@
 
 ## New commands
 
-- delete a bookmark
 - refresh indices
 
 ## New settings

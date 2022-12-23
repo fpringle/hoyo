@@ -45,12 +45,19 @@ clearCommand = Options
                 <$> pure (Clear ClearOptions)
                 <*> globalOptions
 
+deleteCommand :: Parser Options
+deleteCommand =  Options
+                  <$> (Delete . DeleteOptions
+                        <$> argument auto (metavar "INDEX" <> help "Index of the bookmark to delete"))
+                  <*> globalOptions
+
 parseCommand :: Parser Options
 parseCommand = hsubparser (
   command "add" (info addCommand (progDesc "Add a bookmark"))
   <> command "move" (info moveCommand (progDesc "Change directory using a bookmark"))
   <> command "list" (info listCommand (progDesc "List existing bookmarks"))
   <> command "clear" (info clearCommand (progDesc "Clear all bookmarks"))
+  <> command "delete" (info deleteCommand (progDesc "Delete a bookmark"))
   ) <|> moveCommand
 
 opts :: ParserInfo Options

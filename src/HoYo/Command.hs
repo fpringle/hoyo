@@ -29,11 +29,16 @@ data ListOptions = ListOptions {
 data ClearOptions = ClearOptions {
   }
 
+newtype DeleteOptions = DeleteOptions {
+  deleteIndex :: Int
+  }
+
 data Command =
   Add AddOptions
   | Move MoveOptions
   | List ListOptions
   | Clear ClearOptions
+  | Delete DeleteOptions
 
 data GlobalOptions = GlobalOptions {
   configPath    :: Maybe FilePath
@@ -85,8 +90,13 @@ runList _ = do
 runClear :: ClearOptions -> HoYoMonad ()
 runClear _ = modifyBookmarks $ const []
 
+runDelete :: DeleteOptions -> HoYoMonad ()
+runDelete opts = modifyBookmarks $ filter ((/= idx) . view bookmarkIndex)
+  where idx = deleteIndex opts
+
 runCommand :: Command -> HoYoMonad ()
 runCommand (Add opts)   = runAdd opts
 runCommand (Move opts)  = runMove opts
 runCommand (List opts)  = runList opts
 runCommand (Clear opts)  = runClear opts
+runCommand (Delete opts)  = runDelete opts
