@@ -2,10 +2,10 @@
 {-# OPTIONS -Wno-missing-signatures #-}
 module HoYo.Types where
 
-import Control.Monad.Except (ExceptT, MonadError)
+import Control.Monad.Except (ExceptT, MonadError (..))
 import Control.Monad.Trans.Reader (ReaderT)
 import Control.Monad.Reader.Class (MonadReader)
-import Control.Monad.IO.Class (MonadIO)
+import Control.Monad.IO.Class
 
 import Lens.Simple
 
@@ -13,6 +13,8 @@ import Toml ((.=))
 import qualified Toml
 
 import Data.Time
+
+import System.IO.Error
 
 (.==) :: Toml.Codec field a -> (object -> field) -> Toml.Codec object a
 (.==) = (Toml..=)
@@ -50,7 +52,12 @@ data Config = Config {
 
 newtype HoYoMonad a = HoYoMonad {
   unHoYo :: ExceptT String (ReaderT Env IO) a
-  } deriving (Functor, Applicative, Monad, MonadError String, MonadReader Env, MonadIO)
+  } deriving (Functor, Applicative, Monad, MonadError String, MonadReader Env)
+
+instance MonadIO HoYoMonad where
+  liftIO m = HoYoMonad (liftIO $ tryIOError m) >>= \case
+    Left err      -> throwError ("IO error: " <> show err)
+    Right result  -> return result
 
 makeLenses ''Bookmark
 makeLenses ''Config
