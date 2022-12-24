@@ -82,16 +82,16 @@ refreshCommand :: Parser Command
 refreshCommand = pure (Refresh RefreshOptions)
 
 configCommand :: Parser Command
-configCommand = hsubparser (
+configCommand = ConfigCmd <$> hsubparser (
   command "print" (info configPrintCommand (progDesc "Print hoyo config"))
   <> command "reset" (info configResetCommand (progDesc "Reset hoyo config"))
   )
 
-configPrintCommand :: Parser Command
-configPrintCommand = pure (ConfigCmd (Print ConfigPrintOptions))
+configPrintCommand :: Parser ConfigCommand
+configPrintCommand = pure (Print ConfigPrintOptions)
 
-configResetCommand :: Parser Command
-configResetCommand = pure (ConfigCmd (Reset ConfigResetOptions))
+configResetCommand :: Parser ConfigCommand
+configResetCommand = pure (Reset ConfigResetOptions)
 
 parseCommand :: Parser Command
 parseCommand = hsubparser (
