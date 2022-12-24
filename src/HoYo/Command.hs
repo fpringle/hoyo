@@ -48,8 +48,12 @@ data RefreshOptions = RefreshOptions {
 data ConfigPrintOptions = ConfigPrintOptions {
   }
 
-newtype ConfigCommand =
+data ConfigResetOptions = ConfigResetOptions {
+  }
+
+data ConfigCommand =
   Print ConfigPrintOptions
+  | Reset ConfigResetOptions
 
 data Command =
   Add AddOptions
@@ -76,6 +80,7 @@ data OverrideOptions = OverrideOptions {
   overrideFailOnError               :: MaybeOverride
   , overrideDisplayCreationTime     :: MaybeOverride
   , overrideEnableClearing          :: MaybeOverride
+  , overrideEnableReset             :: MaybeOverride
   }
 
 overrideFunc :: MaybeOverride -> (Bool -> Bool)
@@ -89,9 +94,13 @@ overrideSettings opts =
   over failOnError            (overrideFunc $         overrideFailOnError opts)
   . over displayCreationTime  (overrideFunc $ overrideDisplayCreationTime opts)
   . over enableClearing       (overrideFunc $      overrideEnableClearing opts)
+  . over enableReset          (overrideFunc $         overrideEnableReset opts)
 
 verifyOverrides :: OverrideOptions -> Maybe String
-verifyOverrides (OverrideOptions o1 o2 o3) = verify o1 <|> verify o2 <|> verify o3
+verifyOverrides (OverrideOptions o1 o2 o3 o4) = verify o1
+                                                  <|> verify o2
+                                                  <|> verify o3
+                                                  <|> verify o4
   where verify Conflict = Just "conflicting flags"
         verify _ = Nothing
 
@@ -160,6 +169,12 @@ clearDisabledErrMsg = intercalate "\n" [
   , "To enable, set enable_clear = true in the config or pass the --enable-clear flag." 
   ]
 
+resetDisabledErrMsg :: String
+resetDisabledErrMsg = intercalate "\n" [
+  "The 'config reset' command is disabled by default."
+  , "To enable, set enable_reset = true in the config or pass the --enable-reset flag." 
+  ]
+
 runClear :: ClearOptions -> HoYoMonad ()
 runClear _ = do
   assert clearDisabledErrMsg (asks' (settings . enableClearing))
@@ -180,8 +195,8 @@ runRefresh _ = modifyBookmarks $
     . nubBy ((==) `on` view bookmarkDirectory)                -- remove duplicate directories
     . sortOn (zonedTimeToUTC . view bookmarkCreationTime)     -- sort by creation time
 
-runPrintSettings :: ConfigPrintOptions -> HoYoMonad ()
-runPrintSettings _ = do
+runConfigPrint :: ConfigPrintOptions -> HoYoMonad ()
+runConfigPrint _ = do
   s <- asks' settings
   let keyVals = getKeyVals s
   forM_ keyVals $ \(k, Toml.AnyValue v) -> do
@@ -189,8 +204,15 @@ runPrintSettings _ = do
     let vStr = valText v
     liftIO $ putStrLn $ T.unpack (kStr <> " = " <> vStr)
 
+runConfigReset :: ConfigResetOptions -> HoYoMonad ()
+runConfigReset _ = do
+  assert resetDisabledErrMsg (asks' (settings . enableReset))
+  cfgPath <- asks' settingsPath
+  encodeSettingsFile cfgPath defaultSettings
+
 runConfig :: ConfigCommand -> HoYoMonad ()
-runConfig (Print opts) = runPrintSettings opts
+runConfig (Print opts) = runConfigPrint opts
+runConfig (Reset opts) = runConfigReset opts
 
 runCommand :: Command -> HoYoMonad ()
 runCommand (Add opts)   = runAdd opts
@@ -200,4 +222,3 @@ runCommand (Clear opts)  = runClear opts
 runCommand (Delete opts)  = runDelete opts
 runCommand (Refresh opts)  = runRefresh opts
 runCommand (Config opts)   = runConfig opts
--- runCommand (PrintSettings opts)  = runPrintSettings opts

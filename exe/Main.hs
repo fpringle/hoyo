@@ -33,6 +33,7 @@ overrideOptions = OverrideOptions
                     <$> parseOverrideFailOnError
                     <*> parseOverrideDisplayCreationTime
                     <*> parseOverrideEnableClearing
+                    <*> parseOverrideEnableReset
 
 parseOverride :: Mod FlagFields Bool -> Mod FlagFields Bool -> Parser MaybeOverride
 parseOverride posMod negMod = combOverride
@@ -53,6 +54,11 @@ parseOverrideEnableClearing :: Parser MaybeOverride
 parseOverrideEnableClearing = parseOverride
                                 (long "enable-clear" <> help "Enable the 'clear' command")
                                 (long "disable-clear" <> help "Disable the 'clear' command")
+
+parseOverrideEnableReset :: Parser MaybeOverride
+parseOverrideEnableReset = parseOverride
+                              (long "enable-reset" <> help "Enable the 'config reset' command")
+                              (long "disable-reset" <> help "Disable the 'config reset' command")
 
 addCommand :: Parser Command
 addCommand = Add . AddOptions
@@ -78,10 +84,14 @@ refreshCommand = pure (Refresh RefreshOptions)
 configCommand :: Parser Command
 configCommand = hsubparser (
   command "print" (info configPrintCommand (progDesc "Print hoyo config"))
+  <> command "reset" (info configResetCommand (progDesc "Reset hoyo config"))
   )
 
 configPrintCommand :: Parser Command
 configPrintCommand = pure (Config (Print ConfigPrintOptions))
+
+configResetCommand :: Parser Command
+configResetCommand = pure (Config (Reset ConfigResetOptions))
 
 parseCommand :: Parser Command
 parseCommand = hsubparser (

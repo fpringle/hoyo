@@ -36,6 +36,7 @@ data Settings = Settings {
   _failOnError            :: !Bool
   , _displayCreationTime  :: !Bool
   , _enableClearing       :: !Bool
+  , _enableReset          :: !Bool
   }
 
 newtype HoYoMonad a = HoYoMonad {
