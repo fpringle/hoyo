@@ -13,7 +13,7 @@ library
     exposed-modules:
         HoYo
         HoYo.Env
-        HoYo.Settings
+        HoYo.Config
         HoYo.Command
         HoYo.Bookmark
         HoYo.Utils

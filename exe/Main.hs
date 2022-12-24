@@ -88,10 +88,10 @@ configCommand = hsubparser (
   )
 
 configPrintCommand :: Parser Command
-configPrintCommand = pure (Config (Print ConfigPrintOptions))
+configPrintCommand = pure (ConfigCmd (Print ConfigPrintOptions))
 
 configResetCommand :: Parser Command
-configResetCommand = pure (Config (Reset ConfigResetOptions))
+configResetCommand = pure (ConfigCmd (Reset ConfigResetOptions))
 
 parseCommand :: Parser Command
 parseCommand = hsubparser (
@@ -123,7 +123,7 @@ main = do
   Options os globals <- execParser opts
   forM_ (verifyOverrides $ overrides globals) failure
 
-  sFp <- case configPath globals of
+  sFp <- case globalConfigPath globals of
     Nothing -> getXdgDirectory XdgConfig "hoyo/config.toml"
     Just d  -> return d
   bFp <- case dataPath globals of
@@ -133,7 +133,7 @@ main = do
   getEnv bFp sFp >>= \case
     Left err    -> failure err
     Right env   -> do
-      let overridenEnv = over settings (overrideSettings $ overrides globals) env
+      let overridenEnv = over config (overrideConfig $ overrides globals) env
       runHoYo (runCommand os) overridenEnv >>= \case
         Left err  -> failure err
         Right _   -> return ()

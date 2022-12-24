@@ -4,7 +4,7 @@
 - verbose output
 - add bookmark name?
 - hoyo config set
-- rename Settings to Config everywhere
+- backup bookmarks/config during clear/reset
 
 ## New commands
 

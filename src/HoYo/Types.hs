@@ -20,8 +20,8 @@ import Data.Time
 data Env = Env {
   _bookmarks        :: !Bookmarks
   , _bookmarksPath  :: !FilePath
-  , _settings       :: !Settings
-  , _settingsPath   :: !FilePath
+  , _config       :: !Config
+  , _configPath   :: !FilePath
   }
 
 data Bookmark = Bookmark {
@@ -32,7 +32,7 @@ data Bookmark = Bookmark {
 
 newtype Bookmarks = Bookmarks { unBookmarks :: [Bookmark] }
 
-data Settings = Settings {
+data Config = Config {
   _failOnError            :: !Bool
   , _displayCreationTime  :: !Bool
   , _enableClearing       :: !Bool
@@ -44,5 +44,5 @@ newtype HoYoMonad a = HoYoMonad {
   } deriving (Functor, Applicative, Monad, MonadError String, MonadReader Env, MonadIO)
 
 makeLenses ''Bookmark
-makeLenses ''Settings
+makeLenses ''Config
 makeLenses ''Env

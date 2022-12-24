@@ -42,7 +42,7 @@ assert err check = do
 
 assertVerbose :: String -> HoYoMonad Bool -> HoYoMonad Bool
 assertVerbose err check = do
-  shouldFail <- asks' (settings . failOnError)
+  shouldFail <- asks' (config . failOnError)
   res <- check
   when (shouldFail && not res) $ throwError err
   return res

@@ -3,7 +3,7 @@ module HoYo.Command where
 import HoYo.Types
 import HoYo.Utils
 import HoYo.Bookmark
-import HoYo.Settings
+import HoYo.Config
 
 import Data.List
 import Data.Function
@@ -62,7 +62,7 @@ data Command =
   | Clear ClearOptions
   | Delete DeleteOptions
   | Refresh RefreshOptions
-  | Config ConfigCommand
+  | ConfigCmd ConfigCommand
 
 data MaybeOverride =
   OverrideFalse
@@ -89,8 +89,8 @@ overrideFunc OverrideTrue   = const True
 overrideFunc OverrideFalse  = const False
 overrideFunc Conflict       = error "override conflict!"
 
-overrideSettings :: OverrideOptions -> Settings -> Settings
-overrideSettings opts =
+overrideConfig :: OverrideOptions -> Config -> Config
+overrideConfig opts =
   over failOnError            (overrideFunc $         overrideFailOnError opts)
   . over displayCreationTime  (overrideFunc $ overrideDisplayCreationTime opts)
   . over enableClearing       (overrideFunc $      overrideEnableClearing opts)
@@ -105,9 +105,9 @@ verifyOverrides (OverrideOptions o1 o2 o3 o4) = verify o1
         verify _ = Nothing
 
 data GlobalOptions = GlobalOptions {
-  configPath    :: Maybe FilePath
-  , dataPath    :: Maybe FilePath
-  , overrides   :: OverrideOptions
+  globalConfigPath  :: Maybe FilePath
+  , dataPath        :: Maybe FilePath
+  , overrides       :: OverrideOptions
   }
 
 data Options = Options {
@@ -155,7 +155,7 @@ runList :: ListOptions -> HoYoMonad ()
 runList _ = do
   bms <- sortOn (view bookmarkIndex) . unBookmarks <$> asks' bookmarks
   let numberWidth = maximumDefault 1 $ map (length . show . view bookmarkIndex) bms
-  displayTime <- asks' (settings . displayCreationTime)
+  displayTime <- asks' (config . displayCreationTime)
   forM_ bms $ \(Bookmark dir idx zTime) -> do
     let num = pad numberWidth (show idx)
     let timeStr = formatTime defaultTimeLocale "%D %T" zTime
@@ -177,7 +177,7 @@ resetDisabledErrMsg = intercalate "\n" [
 
 runClear :: ClearOptions -> HoYoMonad ()
 runClear _ = do
-  assert clearDisabledErrMsg (asks' (settings . enableClearing))
+  assert clearDisabledErrMsg (asks' (config . enableClearing))
   modifyBookmarks $ const []
 
 runDelete :: DeleteOptions -> HoYoMonad ()
@@ -197,7 +197,7 @@ runRefresh _ = modifyBookmarks $
 
 runConfigPrint :: ConfigPrintOptions -> HoYoMonad ()
 runConfigPrint _ = do
-  s <- asks' settings
+  s <- asks' config
   let keyVals = getKeyVals s
   forM_ keyVals $ \(k, Toml.AnyValue v) -> do
     let kStr = Toml.prettyKey k
@@ -206,9 +206,9 @@ runConfigPrint _ = do
 
 runConfigReset :: ConfigResetOptions -> HoYoMonad ()
 runConfigReset _ = do
-  assert resetDisabledErrMsg (asks' (settings . enableReset))
-  cfgPath <- asks' settingsPath
-  encodeSettingsFile cfgPath defaultSettings
+  assert resetDisabledErrMsg (asks' (config . enableReset))
+  path <- asks' configPath
+  encodeConfigFile path defaultConfig
 
 runConfig :: ConfigCommand -> HoYoMonad ()
 runConfig (Print opts) = runConfigPrint opts
@@ -221,4 +221,4 @@ runCommand (List opts)  = runList opts
 runCommand (Clear opts)  = runClear opts
 runCommand (Delete opts)  = runDelete opts
 runCommand (Refresh opts)  = runRefresh opts
-runCommand (Config opts)   = runConfig opts
+runCommand (ConfigCmd opts)   = runConfig opts

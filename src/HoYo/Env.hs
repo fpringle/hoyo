@@ -3,14 +3,14 @@ module HoYo.Env (
   Env (..)
   , bookmarks
   , bookmarksPath
-  , settings
-  , settingsPath
+  , config
+  , configPath
   , initEnv
   , getEnv
   ) where
 
 import HoYo.Types
-import HoYo.Settings
+import HoYo.Config
 import HoYo.Bookmark
 
 import qualified Data.Text as T
@@ -28,12 +28,12 @@ import System.FilePath
 writeEnv :: MonadIO m => Env -> m ()
 writeEnv env = do
   encodeBookmarksFile (view bookmarksPath env) (view bookmarks env)
-  encodeSettingsFile (view settingsPath env) (view settings env)
+  encodeConfigFile (view configPath env) (view config env)
 
 readEnv :: MonadIO m => FilePath -> FilePath -> m (Either String Env)
 readEnv bFp sFp = do
   bs <- first T.unpack <$> decodeBookmarksFile bFp
-  se <- first T.unpack <$> decodeSettingsFile sFp
+  se <- first T.unpack <$> decodeConfigFile sFp
   case (bs, se) of
     (Right b, Right s)  -> return $ Right (Env b bFp s sFp)
     (Left e, Right _)   -> return $ Left e
@@ -50,7 +50,7 @@ initEnv :: MonadIO m => FilePath -> FilePath -> m ()
 initEnv bFp sFp = do
   initPath sFp
   initPath bFp
-  let env = Env defaultBookmarks bFp defaultSettings sFp
+  let env = Env defaultBookmarks bFp defaultConfig sFp
   writeEnv env
 
 initBookmarksIfNotExists :: MonadIO m => FilePath -> m ()
@@ -61,18 +61,18 @@ initBookmarksIfNotExists fp' = do
     initPath fp
     encodeBookmarksFile fp defaultBookmarks
 
-initSettingsIfNotExists :: MonadIO m => FilePath -> m ()
-initSettingsIfNotExists fp' = do
+initConfigIfNotExists :: MonadIO m => FilePath -> m ()
+initConfigIfNotExists fp' = do
   fp <- liftIO $ makeAbsolute fp'
   ex <- liftIO $ doesFileExist fp
   unless ex $ do
     initPath fp
-    encodeSettingsFile fp defaultSettings
+    encodeConfigFile fp defaultConfig
 
 initEnvIfNotExists :: MonadIO m => FilePath -> FilePath -> m ()
 initEnvIfNotExists bFp sFp = do
   initBookmarksIfNotExists bFp
-  initSettingsIfNotExists sFp
+  initConfigIfNotExists sFp
 
 getEnv :: MonadIO m => FilePath -> FilePath -> m (Either String Env)
 getEnv bFp' sFp' = do
