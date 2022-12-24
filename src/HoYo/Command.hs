@@ -40,8 +40,8 @@ data ClearOptions = ClearOptions {
   }
 
 newtype DeleteOptions = DeleteOptions {
-  deleteIndex :: Int
-  -- deleteSearch :: BookmarkSearchTerm
+  -- deleteIndex :: Int
+  deleteSearch :: BookmarkSearchTerm
   }
 
 data RefreshOptions = RefreshOptions {
@@ -147,7 +147,7 @@ runMove :: MoveOptions -> HoYoMonad ()
 runMove opts = do
   bms <- asks' bookmarks 
   let search = moveSearch opts
-  case searchBookmarks search bms of
+  case fst $ searchBookmarks search bms of
     []    -> liftIO $ putStrLn ("Unknown bookmark: " <> show search)
     [bm]  -> liftIO $ putStrLn ("Move to bookmark " <> show search
                                       <> ": " <> view bookmarkDirectory bm)
@@ -189,12 +189,14 @@ runClear _ = do
 
 runDelete :: DeleteOptions -> HoYoMonad ()
 runDelete opts = do
-  let idx = deleteIndex opts
+  let search = deleteSearch opts
   modifyBookmarksM $ \bms -> do
-    let sameIdx = filter ((== idx) . view bookmarkIndex) bms
-    void $ assertVerbose ("no bookmark with index #" <> show idx) $ return $ not $ null sameIdx
-    void $ assertVerbose ("multiple bookmark with index #" <> show idx) $ return $ length sameIdx == 1
-    return $ filter ((/= idx) . view bookmarkIndex) bms
+    let (searchResults, afterDelete) = searchBookmarks search (Bookmarks bms)
+    void $ assertVerbose ("no bookmarks found for search " <> show search)
+                            $ return $ not $ null searchResults
+    void $ assertVerbose ("multiple bookmarks found for search " <> show search)
+                            $ return $ length searchResults == 1
+    return afterDelete
 
 runRefresh :: RefreshOptions -> HoYoMonad ()
 runRefresh _ = modifyBookmarks $

@@ -87,7 +87,7 @@ clearCommand = pure (Clear ClearOptions)
 
 deleteCommand :: Parser Command
 deleteCommand =  Delete . DeleteOptions
-                    <$> argument auto (metavar "INDEX" <> help "Index of the bookmark to delete")
+                    <$> argument searchTerm (metavar "BOOKMARK" <> help "Index or name of the bookmark to delete")
 
 refreshCommand :: Parser Command
 refreshCommand = pure (Refresh RefreshOptions)
