@@ -61,8 +61,11 @@ parseOverrideEnableReset = parseOverride
                               (long "disable-reset" <> help "Disable the 'config reset' command")
 
 addCommand :: Parser Command
-addCommand = Add . AddOptions
+addCommand = Add <$> (
+              AddOptions
                 <$> argument str (metavar "DIR" <> help "Directory to bookmark")
+                <*> optional (argument str (metavar "NAME" <> help "Optionally give a name to your bookmark"))
+              )
 
 moveCommand :: Parser Command
 moveCommand = Move . MoveOptions

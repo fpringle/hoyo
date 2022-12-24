@@ -16,9 +16,10 @@ import Lens.Simple
 
 bookmarkCodec :: TomlCodec Bookmark
 bookmarkCodec = Bookmark
-  <$> Toml.string     "directory"     .== _bookmarkDirectory
-  <*> Toml.int        "index"         .== _bookmarkIndex
-  <*> Toml.zonedTime  "created"       .== _bookmarkCreationTime
+  <$> Toml.string     "directory"           .== _bookmarkDirectory
+  <*> Toml.int        "index"               .== _bookmarkIndex
+  <*> Toml.zonedTime  "created"             .== _bookmarkCreationTime
+  <*> Toml.dioptional (Toml.string "name")  .== _bookmarkName
 
 bookmarksCodec :: TomlCodec Bookmarks
 bookmarksCodec = Toml.diwrap (Toml.list bookmarkCodec "bookmarks")
@@ -40,3 +41,11 @@ encodeBookmarksFile fp = void . Toml.encodeToFile bookmarksCodec fp
 
 lookupBookmark :: Int -> Bookmarks -> Maybe Bookmark
 lookupBookmark idx (Bookmarks bms) = find ((== idx) . view bookmarkIndex) bms
+
+data BookmarkSearchTerm =
+  SearchIndex Int
+  | SearchName String
+
+searchBookmarks :: BookmarkSearchTerm -> Bookmarks -> [Bookmark]
+searchBookmarks (SearchIndex idx) (Bookmarks bms) = filter ((== idx) . view bookmarkIndex) bms
+searchBookmarks (SearchName name) (Bookmarks bms) = filter ((== Just name) . view bookmarkName) bms

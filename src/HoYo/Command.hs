@@ -24,8 +24,9 @@ import Data.Time
 
 import qualified Toml
 
-newtype AddOptions = AddOptions {
-  addDirectory :: FilePath
+data AddOptions = AddOptions {
+  addDirectory  :: FilePath
+  , addName     :: Maybe String
   }
 
 newtype MoveOptions = MoveOptions {
@@ -126,7 +127,7 @@ modifyBookmarksM f = do
 
 runAdd :: AddOptions -> HoYoMonad ()
 runAdd opts = do
-  dir <- liftIO $ makeAbsolute (addDirectory opts)
+  dir <- liftIO $ canonicalizePath (addDirectory opts)
   void $ assertVerbose "not a directory" $ liftIO $ doesDirectoryExist dir
   modifyBookmarksM $ \bms -> do
     uniq <- assertVerbose "bookmark already exists" $
@@ -135,7 +136,7 @@ runAdd opts = do
     then do
       let maxIndex = maximumDefault 0 $ map (view bookmarkIndex) bms
       zTime <- liftIO getZonedTime
-      let newBookMark = Bookmark dir (maxIndex + 1) zTime
+      let newBookMark = Bookmark dir (maxIndex + 1) zTime (addName opts)
       return (newBookMark : bms)
     else return bms
 
@@ -156,12 +157,14 @@ runList _ = do
   bms <- sortOn (view bookmarkIndex) . unBookmarks <$> asks' bookmarks
   let numberWidth = maximumDefault 1 $ map (length . show . view bookmarkIndex) bms
   displayTime <- asks' (config . displayCreationTime)
-  forM_ bms $ \(Bookmark dir idx zTime) -> do
+  forM_ bms $ \(Bookmark dir idx zTime mbName) -> do
     let num = pad numberWidth (show idx)
     let timeStr = formatTime defaultTimeLocale "%D %T" zTime
+    let d = case mbName of Nothing    -> dir
+                           Just name  -> dir <> " " <> name
     if displayTime
-    then liftIO $ putStrLn (num <> ". " <> timeStr <> "\t" <> dir)
-    else liftIO $ putStrLn (num <> ". " <> dir)
+    then liftIO $ putStrLn (num <> ". " <> timeStr <> "\t" <> d)
+    else liftIO $ putStrLn (num <> ". " <> d)
 
 clearDisabledErrMsg :: String
 clearDisabledErrMsg = intercalate "\n" [
@@ -215,10 +218,10 @@ runConfig (Print opts) = runConfigPrint opts
 runConfig (Reset opts) = runConfigReset opts
 
 runCommand :: Command -> HoYoMonad ()
-runCommand (Add opts)   = runAdd opts
-runCommand (Move opts)  = runMove opts
-runCommand (List opts)  = runList opts
-runCommand (Clear opts)  = runClear opts
-runCommand (Delete opts)  = runDelete opts
-runCommand (Refresh opts)  = runRefresh opts
-runCommand (ConfigCmd opts)   = runConfig opts
+runCommand       (Add opts) = runAdd opts
+runCommand      (Move opts) = runMove opts
+runCommand      (List opts) = runList opts
+runCommand     (Clear opts) = runClear opts
+runCommand    (Delete opts) = runDelete opts
+runCommand   (Refresh opts) = runRefresh opts
+runCommand (ConfigCmd opts) = runConfig opts

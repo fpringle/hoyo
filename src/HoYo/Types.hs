@@ -28,6 +28,7 @@ data Bookmark = Bookmark {
   _bookmarkDirectory        :: !FilePath
   , _bookmarkIndex          :: !Int
   , _bookmarkCreationTime   :: !ZonedTime
+  , _bookmarkName           :: !(Maybe String)
   }
 
 newtype Bookmarks = Bookmarks { unBookmarks :: [Bookmark] }
