@@ -2,9 +2,7 @@
 
 - autocomplete
 - verbose output
-- add bookmark name?
 - hoyo config set
-- backup bookmarks/config during clear/reset
 
 ## New commands
 

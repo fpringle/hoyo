@@ -185,6 +185,11 @@ resetDisabledErrMsg = intercalate "\n" [
 runClear :: ClearOptions -> HoYoMonad ()
 runClear _ = do
   assert clearDisabledErrMsg (asks' (config . enableClearing))
+
+  path <- asks' bookmarksPath
+  backup <- asks' (config . backupBeforeClear)
+  when backup $ backupFile path "bkp"
+
   modifyBookmarks $ const []
 
 runDelete :: DeleteOptions -> HoYoMonad ()
@@ -216,7 +221,12 @@ runConfigPrint _ = do
 runConfigReset :: ConfigResetOptions -> HoYoMonad ()
 runConfigReset _ = do
   assert resetDisabledErrMsg (asks' (config . enableReset))
+
   path <- asks' configPath
+
+  backup <- asks' (config . backupBeforeClear)
+  when backup $ backupFile path "bkp"
+
   encodeConfigFile path defaultConfig
 
 runConfig :: ConfigCommand -> HoYoMonad ()

@@ -5,7 +5,7 @@ module HoYo.Utils where
 
 import HoYo.Types
 
-import Data.List (foldl')
+import Data.List
 import Data.Char (ord, isAscii)
 import qualified Data.Text as T
 import qualified Data.List.NonEmpty as NE
@@ -15,15 +15,18 @@ import Data.Semigroup (stimes)
 import Text.Printf (printf)
 
 import Control.Monad (when, unless)
-import Control.Monad.Except (runExceptT, throwError)
+import Control.Monad.Except (MonadError(..), runExceptT, throwError)
 import Control.Monad.Trans.Reader (runReaderT)
 import Control.Monad.Reader.Class (MonadReader (ask))
+import Control.Monad.IO.Class
 
 import Lens.Simple
 
 import qualified Toml
 
 import Data.Time
+
+import System.Directory
 
 runHoYo :: HoYoMonad a -> Env -> IO (Either String a)
 runHoYo = runReaderT . runExceptT . unHoYo
@@ -118,3 +121,27 @@ valText (Toml.Array arr)   = withLines Toml.defaultOptions valText arr
 
 showText :: Show a => a -> T.Text
 showText = T.pack . show
+
+getBackupFile :: (MonadIO m, MonadError String m) => FilePath -> String -> m FilePath
+getBackupFile fp ext = do
+  ex <- liftIO $ doesFileExist fp
+  unless ex $ throwError ("not a file: " <> fp)
+  let firstTry = fp <> "." <> ext
+  firstExists <- liftIO $ doesFileExist firstTry
+  if firstExists
+  then getBackupFile' fp 2
+  else return firstTry
+
+  where
+    getBackupFile' :: (MonadIO m, MonadError String m) => FilePath -> Int -> m FilePath
+    getBackupFile' file' n = do
+      let file = file' <> "." <> show n <> ext
+      fileExists <- liftIO $ doesFileExist file
+      if fileExists
+      then getBackupFile' file' (n + 1)
+      else return file
+
+backupFile :: (MonadIO m, MonadError String m) => FilePath -> String -> m ()
+backupFile fp ext = do
+  file <- getBackupFile fp ext
+  liftIO $ copyFileWithMetadata fp file

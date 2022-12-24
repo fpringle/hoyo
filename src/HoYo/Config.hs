@@ -18,6 +18,7 @@ configCodec = Config
   <*> Toml.bool     "display_creation_time"     .== _displayCreationTime
   <*> Toml.bool     "enable_clearing"           .== _enableClearing
   <*> Toml.bool     "enable_reset"              .== _enableReset
+  <*> Toml.bool     "backup_before_clear"       .== _backupBeforeClear
 
 defaultConfig :: Config
 defaultConfig = Config {
@@ -25,6 +26,7 @@ defaultConfig = Config {
   , _displayCreationTime      = False
   , _enableClearing           = False
   , _enableReset              = False
+  , _backupBeforeClear        = False
   }
 
 decodeConfig :: T.Text -> Either T.Text Config

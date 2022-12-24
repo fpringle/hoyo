@@ -48,6 +48,7 @@ data Config = Config {
   , _displayCreationTime  :: !Bool
   , _enableClearing       :: !Bool
   , _enableReset          :: !Bool
+  , _backupBeforeClear    :: !Bool
   }
 
 newtype HoYoMonad a = HoYoMonad {
