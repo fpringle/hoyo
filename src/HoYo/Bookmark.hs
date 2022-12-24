@@ -1,8 +1,17 @@
-module HoYo.Bookmark where
+module HoYo.Bookmark (
+  bookmarksCodec
+  , defaultBookmarks
+  , decodeBookmarks
+  , decodeBookmarksFile
+  , encodeBookmarks
+  , encodeBookmarksFile
+  , searchBookmarks
+  , BookmarkSearchTerm (..)
+  ) where
 
 import HoYo.Types
 
-import Data.List
+-- import Data.List
 import qualified Data.Text as T
 import Data.Bifunctor (first)
 
@@ -39,12 +48,8 @@ encodeBookmarks = Toml.encode bookmarksCodec
 encodeBookmarksFile :: MonadIO m => FilePath -> Bookmarks -> m ()
 encodeBookmarksFile fp = void . Toml.encodeToFile bookmarksCodec fp
 
-lookupBookmark :: Int -> Bookmarks -> Maybe Bookmark
-lookupBookmark idx (Bookmarks bms) = find ((== idx) . view bookmarkIndex) bms
-
-data BookmarkSearchTerm =
-  SearchIndex Int
-  | SearchName String
+-- lookupBookmark :: Int -> Bookmarks -> Maybe Bookmark
+-- lookupBookmark idx (Bookmarks bms) = find ((== idx) . view bookmarkIndex) bms
 
 searchBookmarks :: BookmarkSearchTerm -> Bookmarks -> [Bookmark]
 searchBookmarks (SearchIndex idx) (Bookmarks bms) = filter ((== idx) . view bookmarkIndex) bms

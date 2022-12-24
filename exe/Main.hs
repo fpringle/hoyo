@@ -3,6 +3,9 @@ module Main where
 import HoYo
 import HoYo.Command
 import HoYo.Env
+import HoYo.Bookmark
+
+import Text.Read
 
 import Control.Monad
 
@@ -63,13 +66,18 @@ parseOverrideEnableReset = parseOverride
 addCommand :: Parser Command
 addCommand = Add <$> (
               AddOptions
-                <$> argument str (metavar "DIR" <> help "Directory to bookmark")
-                <*> optional (argument str (metavar "NAME" <> help "Optionally give a name to your bookmark"))
+                <$> strArgument (metavar "DIR" <> help "Directory to bookmark")
+                <*> optional (strArgument (metavar "NAME" <> help "Optionally give a name to your bookmark"))
               )
+
+searchTerm :: ReadM BookmarkSearchTerm
+searchTerm = eitherReader $ \s ->
+  SearchIndex <$> readEither s
+  <|> Right (SearchName s)
 
 moveCommand :: Parser Command
 moveCommand = Move . MoveOptions
-                <$> argument auto (metavar "INDEX" <> help "Index of the bookmark to move to")
+                <$> argument searchTerm (metavar "BOOKMARK" <> help "Index or name of the bookmark to move to")
 
 listCommand :: Parser Command
 listCommand = pure (List ListOptions)

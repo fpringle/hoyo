@@ -33,6 +33,14 @@ data Bookmark = Bookmark {
 
 newtype Bookmarks = Bookmarks { unBookmarks :: [Bookmark] }
 
+data BookmarkSearchTerm =
+  SearchIndex Int
+  | SearchName String
+
+instance Show BookmarkSearchTerm where
+  show (SearchIndex idx) = '#' : show idx
+  show (SearchName name) = name
+
 data Config = Config {
   _failOnError            :: !Bool
   , _displayCreationTime  :: !Bool

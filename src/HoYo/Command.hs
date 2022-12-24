@@ -30,7 +30,7 @@ data AddOptions = AddOptions {
   }
 
 newtype MoveOptions = MoveOptions {
-  moveIndex :: Int
+  moveSearch :: BookmarkSearchTerm
   }
 
 data ListOptions = ListOptions {
@@ -41,6 +41,7 @@ data ClearOptions = ClearOptions {
 
 newtype DeleteOptions = DeleteOptions {
   deleteIndex :: Int
+  -- deleteSearch :: BookmarkSearchTerm
   }
 
 data RefreshOptions = RefreshOptions {
@@ -127,9 +128,11 @@ modifyBookmarksM f = do
 
 runAdd :: AddOptions -> HoYoMonad ()
 runAdd opts = do
+  -- TODO: verify the nickname isn't a number (messes up parsing for search)
   dir <- liftIO $ canonicalizePath (addDirectory opts)
   void $ assertVerbose "not a directory" $ liftIO $ doesDirectoryExist dir
   modifyBookmarksM $ \bms -> do
+    -- TODO: also change nickname is unique
     uniq <- assertVerbose "bookmark already exists" $
       return $ all ((/= dir) . view bookmarkDirectory) bms
     if uniq
@@ -143,11 +146,12 @@ runAdd opts = do
 runMove :: MoveOptions -> HoYoMonad ()
 runMove opts = do
   bms <- asks' bookmarks 
-  let idx = moveIndex opts
-  case lookupBookmark idx bms of
-    Nothing -> liftIO $ putStrLn ("Unknown bookmark: #" <> show idx)
-    Just bm  -> liftIO $ putStrLn ("move to dir bookmark #" <> show idx
+  let search = moveSearch opts
+  case searchBookmarks search bms of
+    []    -> liftIO $ putStrLn ("Unknown bookmark: " <> show search)
+    [bm]  -> liftIO $ putStrLn ("Move to bookmark " <> show search
                                       <> ": " <> view bookmarkDirectory bm)
+    _     -> error "todo"
 
 pad :: Int -> String -> String
 pad n s = replicate (n - length s) ' ' <> s
