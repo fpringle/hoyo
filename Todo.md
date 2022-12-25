@@ -2,11 +2,10 @@
 
 - autocomplete
 - verbose output
-- search case-insensitive
 
 ## New commands
 
--
+- search
 
 ## New settings
 

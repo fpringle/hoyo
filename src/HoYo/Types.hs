@@ -31,9 +31,10 @@ data Bookmark = Bookmark {
   , _bookmarkIndex          :: !Int
   , _bookmarkCreationTime   :: !ZonedTime
   , _bookmarkName           :: !(Maybe String)
-  }
+  } deriving Show
 
 newtype Bookmarks = Bookmarks { unBookmarks :: [Bookmark] }
+  deriving Show
 
 data BookmarkSearchTerm =
   SearchIndex Int

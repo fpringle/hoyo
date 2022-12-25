@@ -14,6 +14,8 @@ import HoYo.Types
 import Data.List
 import qualified Data.Text as T
 import Data.Bifunctor (first)
+import Data.Function
+import Data.Char (toLower)
 
 import Control.Monad.IO.Class
 import Control.Monad (void)
@@ -49,5 +51,7 @@ encodeBookmarksFile :: MonadIO m => FilePath -> Bookmarks -> m ()
 encodeBookmarksFile fp = void . Toml.encodeToFile bookmarksCodec fp
 
 searchBookmarks :: BookmarkSearchTerm -> Bookmarks -> ([Bookmark], [Bookmark])
-searchBookmarks (SearchIndex idx) (Bookmarks bms) = partition ((== idx) . view bookmarkIndex) bms
-searchBookmarks (SearchName name) (Bookmarks bms) = partition ((== Just name) . view bookmarkName) bms
+searchBookmarks (SearchIndex idx) (Bookmarks bms) =
+  partition ((== idx) . view bookmarkIndex) bms
+searchBookmarks (SearchName name) (Bookmarks bms) =
+  partition (on (==) (fmap (map toLower)) (Just name) . view bookmarkName) bms
