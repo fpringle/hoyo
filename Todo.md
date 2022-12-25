@@ -2,11 +2,11 @@
 
 - autocomplete
 - verbose output
-- hoyo config set
+- search case-insensitive
 
 ## New commands
 
-- config: modify settings
+-
 
 ## New settings
 

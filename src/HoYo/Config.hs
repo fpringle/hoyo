@@ -1,3 +1,4 @@
+{-# LANGUAGE RankNTypes #-}
 module HoYo.Config where
 
 import HoYo.Types
@@ -8,9 +9,12 @@ import Data.Bifunctor (first)
 
 import Control.Monad
 import Control.Monad.IO.Class
+import Control.Monad.Except
 
 import Toml (TomlCodec)
 import qualified Toml
+
+import Lens.Simple
 
 configCodec :: TomlCodec Config
 configCodec = Config
@@ -43,3 +47,16 @@ encodeConfigFile fp = void . Toml.encodeToFile configCodec fp
 
 getKeyVals :: Config -> [(Toml.Key, Toml.AnyValue)]
 getKeyVals = tomlToKeyVals . Toml.execTomlCodec configCodec
+
+setConfig :: MonadError String m => String -> String -> Config -> m Config
+setConfig   "fail_on_error"           val cfg = flip (set failOnError) cfg
+                                                  <$> liftEither (readBool val)
+setConfig   "display_creation_time"   val cfg = flip (set displayCreationTime) cfg
+                                                  <$> liftEither (readBool val)
+setConfig   "enable_clearing"         val cfg = flip (set enableClearing) cfg
+                                                  <$> liftEither (readBool val)
+setConfig   "enable_reset"            val cfg = flip (set enableReset) cfg
+                                                  <$> liftEither (readBool val)
+setConfig   "backup_before_clear"     val cfg = flip (set backupBeforeClear) cfg
+                                                  <$> liftEither (readBool val)
+setConfig key _ _ = throwError ("Invalid key: " <> key)

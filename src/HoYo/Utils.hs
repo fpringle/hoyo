@@ -7,22 +7,27 @@ import HoYo.Types
 
 import Data.List
 import Data.Char (ord, isAscii)
+import Data.Bifunctor (first, bimap)
 import qualified Data.Text as T
 import qualified Data.List.NonEmpty as NE
 import qualified Data.HashMap.Strict as HashMap
 import Data.Semigroup (stimes)
 
 import Text.Printf (printf)
+import Text.Read (readEither)
+import Control.Applicative
 
 import Control.Monad (when, unless)
-import Control.Monad.Except (MonadError(..), runExceptT, throwError)
+import Control.Monad.Except (MonadError(..), runExceptT, throwError, liftEither)
 import Control.Monad.Trans.Reader (runReaderT)
 import Control.Monad.Reader.Class (MonadReader (ask))
 import Control.Monad.IO.Class
 
 import Lens.Simple
 
-import qualified Toml
+import qualified Toml hiding (parse)
+import qualified Toml.Parser.Value as Toml
+import qualified Toml.Parser.Core as Toml (parse, errorBundlePretty)
 
 import Data.Time
 
@@ -145,3 +150,17 @@ backupFile :: (MonadIO m, MonadError String m) => FilePath -> String -> m ()
 backupFile fp ext = do
   file <- getBackupFile fp ext
   liftIO $ copyFileWithMetadata fp file
+
+readBool :: MonadError String m => String -> m Bool
+readBool s = liftEither (
+              readEither s
+                <|> first Toml.errorBundlePretty (Toml.parse Toml.boolP "" $ T.pack s)
+                <|> Left ("Couldn't parse bool: " <> s)
+              )
+
+readInt :: MonadError String m => String -> m Int
+readInt s = liftEither (
+              readEither s
+                <|> bimap Toml.errorBundlePretty fromIntegral (Toml.parse Toml.integerP "" $ T.pack s)
+                <|> Left ("Couldn't parse integer: " <> s)
+              )

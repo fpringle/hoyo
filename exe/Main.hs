@@ -96,6 +96,7 @@ configCommand :: Parser Command
 configCommand = ConfigCmd <$> hsubparser (
   command "print" (info configPrintCommand (progDesc "Print hoyo config"))
   <> command "reset" (info configResetCommand (progDesc "Reset hoyo config"))
+  <> command "set" (info configSetCommand (progDesc "Modify hoyo config"))
   )
 
 configPrintCommand :: Parser ConfigCommand
@@ -103,6 +104,13 @@ configPrintCommand = pure (Print ConfigPrintOptions)
 
 configResetCommand :: Parser ConfigCommand
 configResetCommand = pure (Reset ConfigResetOptions)
+
+configSetCommand :: Parser ConfigCommand
+configSetCommand = Set <$> (
+                    ConfigSetOptions
+                      <$> argument str (metavar "KEY" <> help "Option to modify")
+                      <*> argument str (metavar "VALUE" <> help "Option value")
+                    )
 
 parseCommand :: Parser Command
 parseCommand = hsubparser (

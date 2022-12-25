@@ -53,9 +53,15 @@ data ConfigPrintOptions = ConfigPrintOptions {
 data ConfigResetOptions = ConfigResetOptions {
   }
 
+data ConfigSetOptions = ConfigSetOptions {
+  setKey        :: String
+  , setValue    :: String
+  }
+
 data ConfigCommand =
   Print ConfigPrintOptions
   | Reset ConfigResetOptions
+  | Set ConfigSetOptions
 
 data Command =
   Add AddOptions
@@ -229,9 +235,19 @@ runConfigReset _ = do
 
   encodeConfigFile path defaultConfig
 
+runConfigSet :: ConfigSetOptions -> HoYoMonad ()
+runConfigSet opts = do
+  let key = setKey opts
+  let val = setValue opts
+  cfgPath <- asks' configPath
+  asks' config
+    >>= setConfig key val
+    >>= encodeConfigFile cfgPath
+
 runConfig :: ConfigCommand -> HoYoMonad ()
 runConfig (Print opts) = runConfigPrint opts
 runConfig (Reset opts) = runConfigReset opts
+runConfig (Set opts) = runConfigSet opts
 
 runCommand :: Command -> HoYoMonad ()
 runCommand       (Add opts) = runAdd opts

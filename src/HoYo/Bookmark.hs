@@ -48,9 +48,6 @@ encodeBookmarks = Toml.encode bookmarksCodec
 encodeBookmarksFile :: MonadIO m => FilePath -> Bookmarks -> m ()
 encodeBookmarksFile fp = void . Toml.encodeToFile bookmarksCodec fp
 
--- lookupBookmark :: Int -> Bookmarks -> Maybe Bookmark
--- lookupBookmark idx (Bookmarks bms) = find ((== idx) . view bookmarkIndex) bms
-
 searchBookmarks :: BookmarkSearchTerm -> Bookmarks -> ([Bookmark], [Bookmark])
 searchBookmarks (SearchIndex idx) (Bookmarks bms) = partition ((== idx) . view bookmarkIndex) bms
 searchBookmarks (SearchName name) (Bookmarks bms) = partition ((== Just name) . view bookmarkName) bms
