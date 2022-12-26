@@ -5,12 +5,14 @@ import HoYo
 import HoYo.Command
 import HoYo.Env
 import HoYo.Bookmark
+import HoYo.Utils
 
 import Text.Read
 
 import Control.Monad
 
-import System.IO
+import System.Environment (withProgName)
+-- import System.IO
 import System.Exit
 import System.Directory
 
@@ -146,16 +148,16 @@ parseOptions = Options <$> parseCommand <*> globalOptions
 versionOption :: Parser (a -> a)
 versionOption = infoOption versionInfo (long "version")
 
-opts :: ParserInfo Options
-opts = info (parseOptions <**> helper) (
+options :: ParserInfo Options
+options = info (parseOptions <**> helper) (
           fullDesc
           <> progDesc "Set directory bookmarks for quick \"cd\"-like behaviour"
           )
 
 failure :: String -> IO ()
 failure err = do
-  hPutStrLn stderr ("Error: " <> err)
-  exitFailure
+  printStderr ("Error: " <> err)
+  exitWith (ExitFailure 1)
 
 versionString :: String
 versionString = $$(packageVersionStringTH "hoyo.cabal")
@@ -167,8 +169,9 @@ versionInfo =
   <> "\n\nCopyright (c) 2022, Frederick Pringle\n\nAll rights reserved."
 
 main :: IO ()
-main = do
-  Options os globals <- execParser opts
+main = withProgName "hoyo" $ do
+  -- Options os globals <- getOptions
+  Options os globals <- execParser options
   forM_ (verifyOverrides $ overrides globals) failure
 
   sFp <- case globalConfigPath globals of

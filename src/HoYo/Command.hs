@@ -12,13 +12,15 @@ import Control.Applicative
 
 import qualified Data.Text as T
 
-import Control.Monad.IO.Class
 import Control.Monad
+import Control.Monad.Except (throwError)
 import Control.Monad.Reader.Class (ask)
+import Control.Monad.IO.Class
 
 import Lens.Simple
 
 import System.Directory
+import System.Exit
 
 import Data.Time
 
@@ -155,10 +157,11 @@ runMove opts = do
   bms <- asks' bookmarks 
   let search = moveSearch opts
   case fst $ searchBookmarks search bms of
-    []    -> liftIO $ putStrLn ("Unknown bookmark: " <> show search)
-    [bm]  -> liftIO $ putStrLn ("Move to bookmark " <> show search
-                                      <> ": " <> view bookmarkDirectory bm)
-    _     -> error "todo"
+    []    -> throwError ("Unknown bookmark: " <> show search)
+    -- TODO
+    [bm]  -> do printStdout ("cd " <> view bookmarkDirectory bm)
+                liftIO $ exitWith (ExitFailure 3)
+    _     -> throwError "todo"
 
 pad :: Int -> String -> String
 pad n s = replicate (n - length s) ' ' <> s
@@ -176,8 +179,8 @@ runList opts = do
     let d = case mbName of Nothing    -> dir
                            Just name  -> dir <> " " <> name
     if displayTime
-    then liftIO $ putStrLn (num <> ". " <> timeStr <> "\t" <> d)
-    else liftIO $ putStrLn (num <> ". " <> d)
+    then printStdout (num <> ". " <> timeStr <> "\t" <> d)
+    else printStdout (num <> ". " <> d)
 
 clearDisabledErrMsg :: String
 clearDisabledErrMsg = intercalate "\n" [
@@ -225,7 +228,7 @@ runConfigPrint _ = do
   forM_ keyVals $ \(k, Toml.AnyValue v) -> do
     let kStr = Toml.prettyKey k
     let vStr = valText v
-    liftIO $ putStrLn $ T.unpack (kStr <> " = " <> vStr)
+    printStdout $ T.unpack (kStr <> " = " <> vStr)
 
 runConfigReset :: ConfigResetOptions -> HoYoMonad ()
 runConfigReset _ = do

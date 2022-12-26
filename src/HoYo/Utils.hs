@@ -13,6 +13,8 @@ import qualified Data.List.NonEmpty as NE
 import qualified Data.HashMap.Strict as HashMap
 import Data.Semigroup (stimes)
 
+import System.IO
+
 import Text.Printf (printf)
 import Text.Read (readEither)
 import Control.Applicative
@@ -164,3 +166,9 @@ readInt s = liftEither (
                 <|> bimap Toml.errorBundlePretty fromIntegral (Toml.parse Toml.integerP "" $ T.pack s)
                 <|> Left ("Couldn't parse integer: " <> s)
               )
+
+printStderr :: MonadIO m => String -> m ()
+printStderr = liftIO . hPutStrLn stderr
+
+printStdout :: MonadIO m => String -> m ()
+printStdout = liftIO . putStrLn

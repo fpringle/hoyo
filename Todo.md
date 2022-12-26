@@ -2,6 +2,7 @@
 
 - autocomplete
 - verbose output
+- --quiet option
 
 ## New commands
 
