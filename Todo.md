@@ -5,7 +5,7 @@
 
 ## New commands
 
-- search
+-
 
 ## New settings
 

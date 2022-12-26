@@ -6,6 +6,7 @@ module HoYo.Bookmark (
   , encodeBookmarks
   , encodeBookmarksFile
   , searchBookmarks
+  , filterBookmarks
   , BookmarkSearchTerm (..)
   ) where
 
@@ -55,3 +56,20 @@ searchBookmarks (SearchIndex idx) (Bookmarks bms) =
   partition ((== idx) . view bookmarkIndex) bms
 searchBookmarks (SearchName name) (Bookmarks bms) =
   partition (on (==) (fmap (map toLower)) (Just name) . view bookmarkName) bms
+
+filterBookmarkByName :: Maybe String -> Bookmark -> Bool
+filterBookmarkByName Nothing = const True
+filterBookmarkByName (Just name) = on (==) (fmap (map toLower)) (Just name) . view bookmarkName
+
+filterBookmarkByDirInfix :: Maybe String -> Bookmark -> Bool
+filterBookmarkByDirInfix Nothing = const True
+filterBookmarkByDirInfix (Just pref) =
+  on isInfixOf (dropWhileEnd (== '/')) pref . view bookmarkDirectory
+
+combAnd :: (a -> Bool) -> (a -> Bool) -> a -> Bool
+combAnd pred1 pred2 a = on (&&) ($ a) pred1 pred2
+
+filterBookmarks :: Maybe String -> Maybe String -> Bookmark -> Bool
+filterBookmarks name dirInfix = combAnd
+                                    (filterBookmarkByName name)
+                                    (filterBookmarkByDirInfix dirInfix)

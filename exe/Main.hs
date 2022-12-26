@@ -70,24 +70,38 @@ addCommand = Add <$> (
                 <*> optional (strArgument (metavar "NAME" <> help "Optionally give a name to your bookmark"))
               )
 
-searchTerm :: ReadM BookmarkSearchTerm
-searchTerm = eitherReader $ \s ->
+bookmarkSearchTerm :: ReadM BookmarkSearchTerm
+bookmarkSearchTerm = eitherReader $ \s ->
   SearchIndex <$> readEither s
   <|> Right (SearchName s)
 
 moveCommand :: Parser Command
 moveCommand = Move . MoveOptions
-                <$> argument searchTerm (metavar "BOOKMARK" <> help "Index or name of the bookmark to move to")
+                <$> argument bookmarkSearchTerm (metavar "BOOKMARK" <> help "Index or name of the bookmark to move to")
 
 listCommand :: Parser Command
-listCommand = pure (List ListOptions)
+listCommand = List <$> (
+                  ListOptions
+                    <$> optional (strOption (
+                          long "name"
+                          <> short 'n'
+                          <> metavar "NAME" 
+                          <> help "Search bookmarks by name"
+                        ))
+                    <*> optional (strOption (
+                          long "dir"
+                          <> short 'd'
+                          <> metavar "DIRECTORY"
+                          <> help "Search bookmarks by directory"
+                        ))
+                  )
 
 clearCommand :: Parser Command
 clearCommand = pure (Clear ClearOptions)
 
 deleteCommand :: Parser Command
 deleteCommand =  Delete . DeleteOptions
-                    <$> argument searchTerm (metavar "BOOKMARK" <> help "Index or name of the bookmark to delete")
+                    <$> argument bookmarkSearchTerm (metavar "BOOKMARK" <> help "Index or name of the bookmark to delete")
 
 refreshCommand :: Parser Command
 refreshCommand = pure (Refresh RefreshOptions)

@@ -34,13 +34,14 @@ newtype MoveOptions = MoveOptions {
   }
 
 data ListOptions = ListOptions {
+  listFilterName                :: Maybe String
+  , listFilterDirectoryInfix    :: Maybe String
   }
 
 data ClearOptions = ClearOptions {
   }
 
 newtype DeleteOptions = DeleteOptions {
-  -- deleteIndex :: Int
   deleteSearch :: BookmarkSearchTerm
   }
 
@@ -163,8 +164,10 @@ pad :: Int -> String -> String
 pad n s = replicate (n - length s) ' ' <> s
 
 runList :: ListOptions -> HoYoMonad ()
-runList _ = do
-  bms <- sortOn (view bookmarkIndex) . unBookmarks <$> asks' bookmarks
+runList opts = do
+  let filt = filterBookmarks (listFilterName opts) (listFilterDirectoryInfix opts)
+  bms' <- asks' bookmarks
+  let bms = filter filt $ sortOn (view bookmarkIndex) $ unBookmarks bms'
   let numberWidth = maximumDefault 1 $ map (length . show . view bookmarkIndex) bms
   displayTime <- asks' (config . displayCreationTime)
   forM_ bms $ \(Bookmark dir idx zTime mbName) -> do
