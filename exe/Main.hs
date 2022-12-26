@@ -135,7 +135,7 @@ parseCommand = hsubparser (
   <> command "delete" (info deleteCommand (progDesc "Delete a bookmark"))
   <> command "refresh" (info refreshCommand (progDesc "Re-calculate bookmark indices"))
   <> command "config" (info configCommand (progDesc "View/manage hoyo config"))
-  ) <|> moveCommand
+  )
 
 parseOptions :: Parser Options
 parseOptions = Options <$> parseCommand <*> globalOptions

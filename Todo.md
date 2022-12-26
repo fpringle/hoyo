@@ -2,6 +2,7 @@
 
 - autocomplete
 - verbose output
+- --version flag
 
 ## New commands
 
