@@ -1,8 +1,9 @@
 # To-do list
 
-- autocomplete
 - verbose output
 - --quiet option
+- github releases
+- instructions
 
 ## New commands
 
