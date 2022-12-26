@@ -1,3 +1,4 @@
+{-# LANGUAGE TemplateHaskell #-}
 module Main where
 
 import HoYo
@@ -16,6 +17,8 @@ import System.Directory
 import Options.Applicative
 
 import Lens.Simple
+
+import Data.Version.Package
 
 globalOptions :: Parser GlobalOptions
 globalOptions = GlobalOptions
@@ -127,7 +130,7 @@ configSetCommand = Set <$> (
                     )
 
 parseCommand :: Parser Command
-parseCommand = hsubparser (
+parseCommand = versionOption <*> hsubparser (
   command "add" (info addCommand (progDesc "Add a bookmark"))
   <> command "move" (info moveCommand (progDesc "Change directory using a bookmark"))
   <> command "list" (info listCommand (progDesc "List existing bookmarks"))
@@ -140,6 +143,9 @@ parseCommand = hsubparser (
 parseOptions :: Parser Options
 parseOptions = Options <$> parseCommand <*> globalOptions
 
+versionOption :: Parser (a -> a)
+versionOption = infoOption versionInfo (long "version")
+
 opts :: ParserInfo Options
 opts = info (parseOptions <**> helper) (
           fullDesc
@@ -150,6 +156,15 @@ failure :: String -> IO ()
 failure err = do
   hPutStrLn stderr ("Error: " <> err)
   exitFailure
+
+versionString :: String
+versionString = $$(packageVersionStringTH "hoyo.cabal")
+
+versionInfo :: String
+versionInfo =
+  "hoyo "
+  <> versionString
+  <> "\n\nCopyright (c) 2022, Frederick Pringle\n\nAll rights reserved."
 
 main :: IO ()
 main = do
