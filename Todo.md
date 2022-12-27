@@ -6,6 +6,8 @@
 - [ ] --quiet option
 - [ ] github releases
 - [ ] instructions
+- [ ] post-install script
+    - nix?
 
 ### New commands
 
@@ -15,9 +17,10 @@
 
 -
 
-## In Progress
+## In Progress / Selected for development
 
-- 
+- [ ] GitHub stuff
+- [ ] Documentation
 
 ## Done ✓
 
