@@ -6,7 +6,6 @@
 - [ ] --quiet option
 - [ ] post-install script
     - nix?
-- [ ] testing
 - [ ] github actions
     - [ ] test coverage
     - [ ] documentation coverage
@@ -21,6 +20,7 @@
 
 ## In Progress / Selected for development
 
+- [ ] testing
 
 ## Done ✓
 
