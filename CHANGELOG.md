@@ -10,16 +10,26 @@ and this project adheres to the
 
 ### Added
 
+### Fixed
+
+### Changed
+
+### Removed
+
+## [0.1.0.2] - 2022-12-27
+
+### Added
+
 - Start of a test suite.
 - Pre-commit hook to run tests.
 - GitHub Action to run tests.
 - Pre-commit hook for linting (scripts/lint.sh)
 
-### Fixed
-
 ### Changed
 
-- Instead of building documentation through a GitHub action (this is slow since the runner needs to re-download Cabal, GHC etc every time), build docs using a pre-commit hook.
+- Instead of building documentation through a GitHub action
+(this is slow since the runner needs to re-download Cabal, GHC etc every time),
+build docs using a pre-commit hook.
 
 ### Removed
 
@@ -40,6 +50,7 @@ and this project adheres to the
 
 - Initial release.
 
-[unreleased]: https://github.com/fpringle/hoyo/compare/v0.1.0.1...HEAD
+[unreleased]: https://github.com/fpringle/hoyo/compare/v0.1.0.2...HEAD
+[0.1.0.2]: https://github.com/fpringle/hoyo/compare/v0.1.0.1...v0.1.0.2
 [0.1.0.1]: https://github.com/fpringle/hoyo/compare/v0.1.0.0...v0.1.0.1
 [0.1.0.0]: https://github.com/fpringle/hoyo/releases/tag/v0.1.0.0
