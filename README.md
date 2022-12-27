@@ -17,7 +17,7 @@ mv hoyo-cli ~/.local/bin/hoyo-cli
 
 ## Download shell config script and source
 
-Download [this bash script](https://raw.githubusercontent.com/fpringle/hoyo/main/scripts/hoyo.sh).
+Download [this bash script](scripts/hoyo.sh).
 
 Add the following line to your `.bashrc`:
 
