@@ -5,9 +5,9 @@
 - [ ] verbose output
 - [ ] --quiet option
 - [ ] github releases
-- [ ] instructions
 - [ ] post-install script
     - nix?
+- [ ] linting (stylish-haskell)
 
 ### New commands
 
@@ -19,7 +19,6 @@
 
 ## In Progress / Selected for development
 
-- [ ] GitHub stuff
 
 ## Done ✓
 
@@ -42,3 +41,5 @@
 - [x] display creation time
 - [x] output on error?
 - [x] Documentation
+- [x] GitHub stuff
+- [x] instructions
