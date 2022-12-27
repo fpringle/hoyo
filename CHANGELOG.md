@@ -13,6 +13,7 @@ and this project adheres to the
 - Start of a test suite.
 - Pre-commit hook to run tests.
 - GitHub Action to run tests.
+- Pre-commit hook for linting (scripts/lint.sh)
 
 ### Fixed
 
@@ -21,6 +22,9 @@ and this project adheres to the
 - Instead of building documentation through a GitHub action (this is slow since the runner needs to re-download Cabal, GHC etc every time), build docs using a pre-commit hook.
 
 ### Removed
+
+- Removed Todo.md - it can stay out of version control, and CHANGELOG.md can document WIPs.
+- Removed scripts/(un)deploy.
 
 ## [0.1.0.1] - 2022-12-27
 
