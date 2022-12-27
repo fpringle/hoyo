@@ -1,16 +1,31 @@
 cabal-version: 3.0
 name:          hoyo
-version:       0.1.0.0
+version:       0.1.0.1
 license:       BSD-3-Clause
 license-file:  LICENSE
 maintainer:    freddyjepringle@gmail.com
 author:        Frederick Pringle
 synopsis:      Bookmark directories for cd
+description:
+  hoyo is a command-line utility enabling easy bookmarking
+  of directory for quick cd-like behaviour.
+
+  See the [github readme](https://github.com/fpringle/hoyo#readme)
+  for more information.
+homepage:      https://github.com/fpringle/hoyo
 category:      System
 build-type:    Simple
-extra-doc-files:
-        CHANGELOG.md
-        README.md
+extra-doc-files: CHANGELOG.md README.md
+
+source-repository head
+  type:     git
+  location: git://github.com/fpringle/hoyo.git
+  branch:   main
+
+source-repository this
+  type:     git
+  location: git://github.com/fpringle/hoyo.git
+  tag:      v0.1.0.1
 
 library
     exposed-modules:

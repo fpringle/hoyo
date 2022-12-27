@@ -9,14 +9,20 @@ and this project adheres to the
 ## [Unreleased]
 
 ### Added 
-- Documentation at [GitHub Pages site](https://fpringle.github.io/hoyo/).
-- CHANGELOG.md (this file).
 
 ### Fixed
 
 ### Changed
 
 ### Removed
+
+## [0.1.0.1] - 2022-12-27
+
+### Added
+
+- Documentation at [GitHub Pages site](https://fpringle.github.io/hoyo/).
+- CHANGELOG.md (this file).
+- More fields in hoyo.cabal - now passes `cabal check`.
 
 ## [0.1.0.0] - 2022-12-27
 
