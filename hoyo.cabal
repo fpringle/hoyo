@@ -8,6 +8,9 @@ author:        Frederick Pringle
 synopsis:      Bookmark directories for cd
 category:      System
 build-type:    Simple
+extra-doc-files:
+        CHANGELOG.md
+        README.md
 
 library
     exposed-modules:

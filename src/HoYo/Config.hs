@@ -27,7 +27,6 @@ import qualified Data.Text as T
 
 import Control.Monad
 import Control.Monad.Except
-import Control.Monad.IO.Class
 
 import qualified Toml
 import Toml (TomlCodec)
