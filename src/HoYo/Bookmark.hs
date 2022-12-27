@@ -20,12 +20,6 @@ module HoYo.Bookmark (
   , decodeBookmarksFile
   , encodeBookmarks
   , encodeBookmarksFile
-
-  -- * Bookmark lenses
-  -- , bookmarkDirectory
-  -- , bookmarkIndex
-  -- , bookmarkCreationTime
-  -- , bookmarkName
   ) where
 
 import HoYo.Types
