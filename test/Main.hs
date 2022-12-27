@@ -6,6 +6,10 @@ import Gen
 
 import Test.QuickCheck
 
+import Data.Function
+import Control.Monad
+import System.Exit
+
 testBookmarkSearch' :: (BookmarkSearchTerm, Bookmarks) -> Property
 testBookmarkSearch' (search, bms) =
   let
@@ -31,7 +35,28 @@ testBookmarkSearch = forAll ((,) <$> genBookmarkSearchTerm <*> genBookmarks) tes
 testBookmarkSearchSuccess :: Property
 testBookmarkSearchSuccess = forAll ((,) <$> genBookmark <*> genBookmarks) testBookmarkSearchSuccess'
 
+testBookmarkFilterByName' :: (Bookmark, Bookmark) -> Property
+testBookmarkFilterByName' (bm1, bm2) = filterBookmarkByName name bm1
+                                        .&&. (name === Nothing .||. not (filterBookmarkByName name bm2))
+
+  where name = _bookmarkName bm1
+
+testBookmarkFilterByName :: Property
+testBookmarkFilterByName = forAll bookmarksWithDifferentNames testBookmarkFilterByName'
+  where
+    bookmarksWithDifferentNames = do
+      bm1 <- genBookmark
+      bm2 <- suchThat genBookmark (on (/=) _bookmarkName bm1)
+      return (bm1, bm2)
+
+tests :: [Property]
+tests = [
+  testBookmarkSearch
+  , testBookmarkSearchSuccess
+  , testBookmarkFilterByName
+  ]
+
 main :: IO ()
-main = do
-  quickCheck testBookmarkSearch
-  quickCheck testBookmarkSearchSuccess
+main = forM_ tests $ \prop -> do
+  res <- quickCheckResult prop
+  unless (isSuccess res) exitFailure
