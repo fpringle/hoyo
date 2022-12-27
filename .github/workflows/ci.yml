@@ -1,8 +1,8 @@
-name: Cabal CI
+name: CI
 
 on:
     push:
-        branches: [ testing ]
+        branches: [ main ]
 
 jobs:
     build:
