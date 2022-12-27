@@ -2,10 +2,6 @@
 module HoYo.Env (
   -- HoYo config
   Env (..)
-  -- , bookmarks
-  -- , bookmarksPath
-  -- , config
-  -- , configPath
   , initEnv
   , getEnv
   , writeEnv

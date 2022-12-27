@@ -3,11 +3,6 @@
 -- usually at ~/.config/hoyo/config.toml
 module HoYo.Config (
   Config (..)
-  -- , failOnError
-  -- , displayCreationTime
-  -- , enableClearing
-  -- , enableReset
-  -- , backupBeforeClear
 
   , defaultConfig
   , decodeConfig

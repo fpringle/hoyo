@@ -16,7 +16,7 @@ word :: Gen String
 word = listOf1 letter
 
 genFilePath :: Gen FilePath
-genFilePath = joinPath <$> listOf word
+genFilePath = joinPath . ("/" :) <$> listOf word
 
 genZonedTime :: Gen ZonedTime
 genZonedTime = ZonedTime <$> genLocalTime <*> genTimeZone

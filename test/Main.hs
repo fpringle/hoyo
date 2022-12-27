@@ -9,6 +9,7 @@ import Test.QuickCheck
 import Data.Function
 import Control.Monad
 import System.Exit
+import Data.List
 
 testBookmarkSearch' :: (BookmarkSearchTerm, Bookmarks) -> Property
 testBookmarkSearch' (search, bms) =
@@ -36,8 +37,9 @@ testBookmarkSearchSuccess :: Property
 testBookmarkSearchSuccess = forAll ((,) <$> genBookmark <*> genBookmarks) testBookmarkSearchSuccess'
 
 testBookmarkFilterByName' :: (Bookmark, Bookmark) -> Property
-testBookmarkFilterByName' (bm1, bm2) = filterBookmarkByName name bm1
-                                        .&&. (name === Nothing .||. not (filterBookmarkByName name bm2))
+testBookmarkFilterByName' (bm1, bm2) =
+  filterBookmarkByName name bm1
+    .&&. (name === Nothing .||. not (filterBookmarkByName name bm2))
 
   where name = _bookmarkName bm1
 
@@ -49,11 +51,27 @@ testBookmarkFilterByName = forAll bookmarksWithDifferentNames testBookmarkFilter
       bm2 <- suchThat genBookmark (on (/=) _bookmarkName bm1)
       return (bm1, bm2)
 
+testBookmarkFilterByDirInfix' :: (Bookmark, Bookmark) -> Property
+testBookmarkFilterByDirInfix' (bm1, bm2) =
+  filterBookmarkByDirInfix (Just dir) bm1
+    .&&. not (filterBookmarkByDirInfix (Just dir) bm2)
+
+  where dir = _bookmarkDirectory bm1
+
+testBookmarkFilterByDirInfix :: Property
+testBookmarkFilterByDirInfix = forAll bookmarksWithDifferentDirectories testBookmarkFilterByDirInfix'
+  where
+    bookmarksWithDifferentDirectories = do
+      bm1 <- suchThat genBookmark ((/= "/") . _bookmarkDirectory)
+      bm2 <- suchThat genBookmark (not . on isInfixOf _bookmarkDirectory bm1)
+      return (bm1, bm2)
+
 tests :: [Property]
 tests = [
   testBookmarkSearch
   , testBookmarkSearchSuccess
   , testBookmarkFilterByName
+  , testBookmarkFilterByDirInfix
   ]
 
 main :: IO ()
