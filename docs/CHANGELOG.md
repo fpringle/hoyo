@@ -10,6 +10,8 @@ and this project adheres to the
 
 ### Added
 
+- Pre-commit hook for linting (scripts/lint.sh)
+
 ### Fixed
 
 ### Changed
