@@ -1,0 +1,23 @@
+name: Cabal CI
+
+on:
+    push:
+        branches: [ testing ]
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout repo
+              uses: actions/checkout@v3
+
+            - name: Setup GHC and Cabal
+              uses: haskell/actions/setup@v2
+              with:
+                  ghc-version: '8.10.7'
+                  cabal-version: '3.8.1.0'
+                  stack-version: '2.7.5'
+
+            - name: Run tests
+              run: |
+                  bash scripts/run_tests.sh
