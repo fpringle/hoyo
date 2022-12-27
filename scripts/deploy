@@ -1,4 +1,0 @@
-#!/usr/bin/bash
-
-gh repo edit fpringle/hoyo --visibility public &&
-jq -n '{"source":{"branch":"main","path":"/docs"}}' | gh api "repos/{owner}/{repo}/pages" --input -

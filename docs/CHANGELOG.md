@@ -18,6 +18,9 @@ and this project adheres to the
 
 ### Removed
 
+- Removed Todo.md - it can stay out of version control, and CHANGELOG.md can document WIPs.
+- Removed scripts/(un)deploy.
+
 ## [0.1.0.1] - 2022-12-27
 
 ### Added
