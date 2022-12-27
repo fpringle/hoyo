@@ -2,15 +2,15 @@
 {-# OPTIONS -Wno-missing-signatures #-}
 module HoYo.Types where
 
-import Control.Monad.Except (ExceptT, MonadError (..))
-import Control.Monad.Trans.Reader (ReaderT)
-import Control.Monad.Reader.Class (MonadReader)
+import Control.Monad.Except (ExceptT, MonadError(..))
 import Control.Monad.IO.Class
+import Control.Monad.Reader.Class (MonadReader)
+import Control.Monad.Trans.Reader (ReaderT)
 
 import Lens.Simple
 
-import Toml ((.=))
 import qualified Toml
+import Toml ((.=))
 
 import Data.Time
 

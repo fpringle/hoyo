@@ -22,15 +22,15 @@ module HoYo.Config (
 import HoYo.Types
 import HoYo.Utils
 
-import qualified Data.Text as T
 import Data.Bifunctor (first)
+import qualified Data.Text as T
 
 import Control.Monad
-import Control.Monad.IO.Class
 import Control.Monad.Except
+import Control.Monad.IO.Class
 
-import Toml (TomlCodec)
 import qualified Toml
+import Toml (TomlCodec)
 
 import Lens.Simple
 

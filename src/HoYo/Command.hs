@@ -37,13 +37,13 @@ module HoYo.Command (
   , MaybeOverride (..)
   ) where
 
-import HoYo.Types
-import HoYo.Utils
 import HoYo.Bookmark
 import HoYo.Config
+import HoYo.Types
+import HoYo.Utils
 
-import Data.List
 import Data.Function
+import Data.List
 
 import Control.Applicative
 
@@ -51,8 +51,8 @@ import qualified Data.Text as T
 
 import Control.Monad
 import Control.Monad.Except (throwError)
-import Control.Monad.Reader.Class (ask)
 import Control.Monad.IO.Class
+import Control.Monad.Reader.Class (ask)
 
 import Lens.Simple
 
@@ -227,7 +227,7 @@ runAdd opts = do
 -- | Run the "move" command: search for a bookmark and @cd@ to it.
 runMove :: MoveOptions -> HoYoMonad ()
 runMove opts = do
-  bms <- asks' bookmarks 
+  bms <- asks' bookmarks
   let search = moveSearch opts
   case fst $ searchBookmarks search bms of
     []    -> throwError ("Unknown bookmark: " <> show search)
@@ -259,13 +259,13 @@ runList opts = do
 clearDisabledErrMsg :: String
 clearDisabledErrMsg = intercalate "\n" [
   "The 'clear' command is disabled by default."
-  , "To enable, set enable_clear = true in the config or pass the --enable-clear flag." 
+  , "To enable, set enable_clear = true in the config or pass the --enable-clear flag."
   ]
 
 resetDisabledErrMsg :: String
 resetDisabledErrMsg = intercalate "\n" [
   "The 'config reset' command is disabled by default."
-  , "To enable, set enable_reset = true in the config or pass the --enable-reset flag." 
+  , "To enable, set enable_reset = true in the config or pass the --enable-reset flag."
   ]
 
 -- | Run the "clear" command: delete all the saved bookmarks.

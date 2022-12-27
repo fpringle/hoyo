@@ -9,8 +9,8 @@ import Control.Monad
 
 import System.Environment (withProgName)
 -- import System.IO
-import System.Exit
 import System.Directory
+import System.Exit
 
 import Options.Applicative
 
@@ -84,7 +84,7 @@ listCommand = List <$> (
                     <$> optional (strOption (
                           long "name"
                           <> short 'n'
-                          <> metavar "NAME" 
+                          <> metavar "NAME"
                           <> help "Search bookmarks by name"
                         ))
                     <*> optional (strOption (

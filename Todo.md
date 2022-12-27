@@ -6,7 +6,6 @@
 - [ ] --quiet option
 - [ ] post-install script
     - nix?
-- [ ] linting (stylish-haskell)
 - [ ] testing
 - [ ] github actions
     - [ ] test coverage
@@ -48,3 +47,4 @@
 - [x] instructions
 - [x] push documentation to github pages
 - [x] github releases
+- [x] linting (stylish-haskell)

@@ -1,35 +1,35 @@
-{-# LANGUAGE RankNTypes #-}
-{-# LANGUAGE GADTs #-}
+{-# LANGUAGE GADTs           #-}
+{-# LANGUAGE RankNTypes      #-}
 {-# LANGUAGE RecordWildCards #-}
 module HoYo.Utils where
 
 import HoYo.Types
 
-import Data.List
-import Data.Char (ord, isAscii)
-import Data.Bifunctor (first, bimap)
-import qualified Data.Text as T
-import qualified Data.List.NonEmpty as NE
+import Data.Bifunctor (bimap, first)
+import Data.Char (isAscii, ord)
 import qualified Data.HashMap.Strict as HashMap
+import Data.List
+import qualified Data.List.NonEmpty as NE
 import Data.Semigroup (stimes)
+import qualified Data.Text as T
 
 import System.IO
 
+import Control.Applicative
 import Text.Printf (printf)
 import Text.Read (readEither)
-import Control.Applicative
 
-import Control.Monad (when, unless)
-import Control.Monad.Except (MonadError(..), runExceptT, throwError, liftEither)
-import Control.Monad.Trans.Reader (runReaderT)
-import Control.Monad.Reader.Class (MonadReader (ask))
+import Control.Monad (unless, when)
+import Control.Monad.Except (MonadError(..), liftEither, runExceptT, throwError)
 import Control.Monad.IO.Class
+import Control.Monad.Reader.Class (MonadReader(ask))
+import Control.Monad.Trans.Reader (runReaderT)
 
 import Lens.Simple
 
 import qualified Toml hiding (parse)
+import qualified Toml.Parser.Core as Toml (errorBundlePretty, parse)
 import qualified Toml.Parser.Value as Toml
-import qualified Toml.Parser.Core as Toml (parse, errorBundlePretty)
 
 import Data.Time
 

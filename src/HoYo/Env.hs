@@ -12,12 +12,12 @@ module HoYo.Env (
   , readEnv
   ) where
 
-import HoYo.Types
-import HoYo.Config
 import HoYo.Bookmark
+import HoYo.Config
+import HoYo.Types
 
-import qualified Data.Text as T
 import Data.Bifunctor (first)
+import qualified Data.Text as T
 
 import Control.Monad.IO.Class
 

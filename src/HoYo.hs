@@ -34,9 +34,9 @@ module HoYo (
   , assertVerbose
   ) where
 
-import HoYo.Utils
-import HoYo.Types
 import HoYo.Bookmark
+import HoYo.Command
 import HoYo.Config
 import HoYo.Env
-import HoYo.Command
+import HoYo.Types
+import HoYo.Utils
