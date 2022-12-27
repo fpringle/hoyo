@@ -63,7 +63,7 @@ Available commands:
 
 ```bash
 $ hoyo list
-1. /home/Documents/coding doc
+1. /home/Documents doc
 2. /home/Music/Albums
 ```
 
@@ -72,7 +72,7 @@ $ hoyo list
 ```bash
 $ hoyo move doc
 $ pwd
-/home/Documents/coding
+/home/Documents
 $ hoyo move 2
 $ pwd
 /home/Music/Albums
@@ -83,7 +83,7 @@ $ pwd
 ```bash
 $ hoyo add /home h
 $ hoyo list
-1. /home/Documents/coding doc
+1. /home/Documents doc
 2. /home/Music/Albums
 3. /home h
 $ hoyo move h
@@ -96,7 +96,7 @@ $ pwd
 ```bash
 $ hoyo delete 2
 $ hoyo list
-1. /home/Documents/coding doc
+1. /home/Documents doc
 3. /home h
 ```
 
@@ -105,7 +105,7 @@ $ hoyo list
 ```bash
 $ hoyo refresh
 $ hoyo list
-1. /home/Documents/coding doc
+1. /home/Documents doc
 2. /home h
 ```
 
@@ -125,7 +125,7 @@ enable_reset = true
 ```bash
 $ hoyo config set display_creation_time true
 $ hoyo list
-1. 12/26/22 16:55:13    /home/Documents/coding doc
+1. 12/26/22 16:55:13    /home/Documents doc
 2. 12/27/22 12:01:55    /home h
 ```
 
