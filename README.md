@@ -30,8 +30,8 @@ source path/to/hoyo.sh
 # Usage
 
 ```man
-hoyo [--version] COMMAND [-c|--config FILE] [-b|--bookmarks FILE] 
-            [--fail] [--nofail] [--time] [--notime] [--enable-clear] 
+hoyo [--version] COMMAND [-c|--config FILE] [-b|--bookmarks FILE]
+            [--fail] [--nofail] [--time] [--notime] [--enable-clear]
             [--disable-clear] [--enable-reset] [--disable-reset]
 
   Set directory bookmarks for quick "cd"-like behaviour
