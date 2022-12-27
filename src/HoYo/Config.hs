@@ -1,5 +1,23 @@
 {-# LANGUAGE RankNTypes #-}
-module HoYo.Config where
+-- | Configuration for the hoyo program. This is stored on-disk as a TOML file,
+-- usually at ~/.config/hoyo/config.toml
+module HoYo.Config (
+  Config (..)
+  -- , failOnError
+  -- , displayCreationTime
+  -- , enableClearing
+  -- , enableReset
+  -- , backupBeforeClear
+
+  , defaultConfig
+  , decodeConfig
+  , decodeConfigFile
+  , encodeConfig
+  , encodeConfigFile
+
+  , setConfig
+  , getKeyVals
+  ) where
 
 import HoYo.Types
 import HoYo.Utils
@@ -24,6 +42,7 @@ configCodec = Config
   <*> Toml.bool     "enable_reset"              .== _enableReset
   <*> Toml.bool     "backup_before_clear"       .== _backupBeforeClear
 
+-- | The default config for hoyo.
 defaultConfig :: Config
 defaultConfig = Config {
   _failOnError                = False
@@ -33,21 +52,27 @@ defaultConfig = Config {
   , _backupBeforeClear        = False
   }
 
+-- | Decode a 'Config' from a Text.
 decodeConfig :: T.Text -> Either T.Text Config
 decodeConfig = first Toml.prettyTomlDecodeErrors . Toml.decodeExact configCodec
 
+-- | Decode a 'Config' from a file.
 decodeConfigFile :: MonadIO m => FilePath -> m (Either T.Text Config)
 decodeConfigFile = fmap (first Toml.prettyTomlDecodeErrors) . Toml.decodeFileExact configCodec
 
+-- | Encode a 'Config' to a Text.
 encodeConfig :: Config -> T.Text
 encodeConfig = Toml.encode configCodec
 
+-- | Encode a 'Config' to a file.
 encodeConfigFile :: MonadIO m => FilePath -> Config -> m ()
 encodeConfigFile fp = void . Toml.encodeToFile configCodec fp
 
+-- | Get TOML key-value pairs from a 'Config'.
 getKeyVals :: Config -> [(Toml.Key, Toml.AnyValue)]
 getKeyVals = tomlToKeyVals . Toml.execTomlCodec configCodec
 
+-- | Try to set a key-value pair in the config.
 setConfig :: MonadError String m => String -> String -> Config -> m Config
 setConfig   "fail_on_error"           val cfg = flip (set failOnError) cfg
                                                   <$> liftEither (readBool val)

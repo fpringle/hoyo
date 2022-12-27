@@ -1,12 +1,15 @@
+-- | The read-only hoyo environment.
 module HoYo.Env (
   -- HoYo config
   Env (..)
-  , bookmarks
-  , bookmarksPath
-  , config
-  , configPath
+  -- , bookmarks
+  -- , bookmarksPath
+  -- , config
+  -- , configPath
   , initEnv
   , getEnv
+  , writeEnv
+  , readEnv
   ) where
 
 import HoYo.Types
@@ -25,11 +28,13 @@ import Lens.Simple
 import System.Directory
 import System.FilePath
 
+-- | Write an 'Env' to file.
 writeEnv :: MonadIO m => Env -> m ()
 writeEnv env = do
   encodeBookmarksFile (view bookmarksPath env) (view bookmarks env)
   encodeConfigFile (view configPath env) (view config env)
 
+-- | Read an 'Env' from a file.
 readEnv :: MonadIO m => FilePath -> FilePath -> m (Either String Env)
 readEnv bFp sFp = do
   bs <- first T.unpack <$> decodeBookmarksFile bFp
@@ -46,11 +51,16 @@ initPath fp' = do
   let dir = takeDirectory fp
   liftIO $ createDirectoryIfMissing True dir
 
+emptyBookmarks :: Bookmarks
+emptyBookmarks = Bookmarks []
+
+-- | Given a filepath for the bookmarks file and a filepath for the config file,
+-- initialize the respective TOMLs at those locations.
 initEnv :: MonadIO m => FilePath -> FilePath -> m ()
 initEnv bFp sFp = do
   initPath sFp
   initPath bFp
-  let env = Env defaultBookmarks bFp defaultConfig sFp
+  let env = Env emptyBookmarks bFp defaultConfig sFp
   writeEnv env
 
 initBookmarksIfNotExists :: MonadIO m => FilePath -> m ()
@@ -59,7 +69,7 @@ initBookmarksIfNotExists fp' = do
   ex <- liftIO $ doesFileExist fp
   unless ex $ do
     initPath fp
-    encodeBookmarksFile fp defaultBookmarks
+    encodeBookmarksFile fp emptyBookmarks
 
 initConfigIfNotExists :: MonadIO m => FilePath -> m ()
 initConfigIfNotExists fp' = do
@@ -74,6 +84,7 @@ initEnvIfNotExists bFp sFp = do
   initBookmarksIfNotExists bFp
   initConfigIfNotExists sFp
 
+-- | Retrieve an 'Env' from given bookmark- and config- file locations.
 getEnv :: MonadIO m => FilePath -> FilePath -> m (Either String Env)
 getEnv bFp' sFp' = do
   sFp <- liftIO $ makeAbsolute sFp'

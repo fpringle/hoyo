@@ -2,10 +2,6 @@
 module Main where
 
 import HoYo
-import HoYo.Command
-import HoYo.Env
-import HoYo.Bookmark
-import HoYo.Utils
 
 import Text.Read
 
@@ -17,8 +13,6 @@ import System.Exit
 import System.Directory
 
 import Options.Applicative
-
-import Lens.Simple
 
 import Data.Version.Package
 
@@ -184,7 +178,7 @@ main = withProgName "hoyo" $ do
   getEnv bFp sFp >>= \case
     Left err    -> failure err
     Right env   -> do
-      let overridenEnv = over config (overrideConfig $ overrides globals) env
+      let overridenEnv = overrideEnv (overrides globals) env
       runHoYo (runCommand os) overridenEnv >>= \case
         Left err  -> failure err
         Right _   -> return ()

@@ -20,7 +20,6 @@
 ## In Progress / Selected for development
 
 - [ ] GitHub stuff
-- [ ] Documentation
 
 ## Done ✓
 
@@ -42,3 +41,4 @@
 - [x] search
 - [x] display creation time
 - [x] output on error?
+- [x] Documentation

@@ -35,6 +35,7 @@ import Data.Time
 
 import System.Directory
 
+-- | Given a hoyo 'Env', run a monadic action in IO.
 runHoYo :: HoYoMonad a -> Env -> IO (Either String a)
 runHoYo = runReaderT . runExceptT . unHoYo
 
@@ -45,11 +46,13 @@ maximumDefault :: Ord a => a -> [a] -> a
 maximumDefault def [] = def
 maximumDefault _ xs = maximum xs
 
+-- | Throw an error if a check fails.
 assert :: String -> HoYoMonad Bool -> HoYoMonad ()
 assert err check = do
   res <- check
   unless res $ throwError err
 
+-- | Throw an error if a check fails AND the "fail_on_error" flag is set.
 assertVerbose :: String -> HoYoMonad Bool -> HoYoMonad Bool
 assertVerbose err check = do
   shouldFail <- asks' (config . failOnError)
@@ -148,11 +151,13 @@ getBackupFile fp ext = do
       then getBackupFile' file' (n + 1)
       else return file
 
+-- | Try to back-up a file. Used when the "backup_before_clear" option is set.
 backupFile :: (MonadIO m, MonadError String m) => FilePath -> String -> m ()
 backupFile fp ext = do
   file <- getBackupFile fp ext
   liftIO $ copyFileWithMetadata fp file
 
+-- | Try to read a 'Bool'.
 readBool :: MonadError String m => String -> m Bool
 readBool s = liftEither (
               readEither s
@@ -160,6 +165,7 @@ readBool s = liftEither (
                 <|> Left ("Couldn't parse bool: " <> s)
               )
 
+-- | Try to read an 'Int'.
 readInt :: MonadError String m => String -> m Int
 readInt s = liftEither (
               readEither s
@@ -167,8 +173,10 @@ readInt s = liftEither (
                 <|> Left ("Couldn't parse integer: " <> s)
               )
 
+-- | Print to stderr.
 printStderr :: MonadIO m => String -> m ()
 printStderr = liftIO . hPutStrLn stderr
 
+-- | Print to stdout.
 printStdout :: MonadIO m => String -> m ()
 printStdout = liftIO . putStrLn
