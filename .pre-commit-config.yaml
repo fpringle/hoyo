@@ -12,3 +12,11 @@ repos:
     -   id: check-merge-conflict
     -   id: no-commit-to-branch
         args: [--branch, main]
+-   repo: local
+    hooks:
+    -   id: generate-documentation
+        name: Generate Haddock documentation
+        entry: scripts/generate_docs.sh
+        language: script
+        always_run: true
+        pass_filenames: false
