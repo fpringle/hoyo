@@ -20,3 +20,9 @@ repos:
         language: script
         always_run: true
         pass_filenames: false
+    -   id: lint
+        name: Lint with stylish-haskell
+        entry: scripts/lint.sh
+        language: script
+        always_run: true
+        pass_filenames: false
