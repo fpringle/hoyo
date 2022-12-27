@@ -8,6 +8,11 @@
 - [ ] post-install script
     - nix?
 - [ ] linting (stylish-haskell)
+- [ ] testing
+- [ ] github actions
+    - [ ] test coverage
+    - [ ] documentation coverage
+    - [ ] push documentation to github pages
 
 ### New commands
 
