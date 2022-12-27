@@ -20,3 +20,9 @@ repos:
         language: script
         always_run: true
         pass_filenames: false
+    -   id: run-tests
+        name: Run code tests
+        entry: scripts/run_tests.sh
+        language: script
+        always_run: true
+        pass_filenames: false
