@@ -27,7 +27,7 @@ source path/to/hoyo.sh
 
 # Usage
 
-```bash
+```man
 hoyo [--version] COMMAND [-c|--config FILE] [-b|--bookmarks FILE] 
             [--fail] [--nofail] [--time] [--notime] [--enable-clear] 
             [--disable-clear] [--enable-reset] [--disable-reset]
