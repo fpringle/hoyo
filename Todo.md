@@ -4,7 +4,6 @@
 
 - [ ] verbose output
 - [ ] --quiet option
-- [ ] github releases
 - [ ] post-install script
     - nix?
 - [ ] linting (stylish-haskell)
@@ -12,7 +11,6 @@
 - [ ] github actions
     - [ ] test coverage
     - [ ] documentation coverage
-    - [ ] push documentation to github pages
 
 ### New commands
 
@@ -48,3 +46,5 @@
 - [x] Documentation
 - [x] GitHub stuff
 - [x] instructions
+- [x] push documentation to github pages
+- [x] github releases
