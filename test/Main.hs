@@ -1,3 +1,4 @@
+{-# LANGUAGE TemplateHaskell #-}
 module Main (main) where
 
 import HoYo
@@ -6,10 +7,10 @@ import Gen
 
 import Test.QuickCheck
 
-import Data.Function
 import Control.Monad
-import System.Exit
+import Data.Function
 import Data.List
+import System.Exit
 
 testBookmarkSearch' :: (BookmarkSearchTerm, Bookmarks) -> Property
 testBookmarkSearch' (search, bms) =
@@ -30,11 +31,11 @@ testBookmarkSearchSuccess' (one, Bookmarks rest) = testBookmarkSearch' (search, 
                 Just name   -> SearchName name
                 Nothing     -> SearchIndex (_bookmarkIndex one)
 
-testBookmarkSearch :: Property
-testBookmarkSearch = forAll ((,) <$> genBookmarkSearchTerm <*> genBookmarks) testBookmarkSearch'
+prop_BookmarkSearch :: Property
+prop_BookmarkSearch = forAll ((,) <$> genBookmarkSearchTerm <*> genBookmarks) testBookmarkSearch'
 
-testBookmarkSearchSuccess :: Property
-testBookmarkSearchSuccess = forAll ((,) <$> genBookmark <*> genBookmarks) testBookmarkSearchSuccess'
+prop_BookmarkSearchSuccess :: Property
+prop_BookmarkSearchSuccess = forAll ((,) <$> genBookmark <*> genBookmarks) testBookmarkSearchSuccess'
 
 testBookmarkFilterByName' :: (Bookmark, Bookmark) -> Property
 testBookmarkFilterByName' (bm1, bm2) =
@@ -43,8 +44,8 @@ testBookmarkFilterByName' (bm1, bm2) =
 
   where name = _bookmarkName bm1
 
-testBookmarkFilterByName :: Property
-testBookmarkFilterByName = forAll bookmarksWithDifferentNames testBookmarkFilterByName'
+prop_BookmarkFilterByName :: Property
+prop_BookmarkFilterByName = forAll bookmarksWithDifferentNames testBookmarkFilterByName'
   where
     bookmarksWithDifferentNames = do
       bm1 <- genBookmark
@@ -58,23 +59,19 @@ testBookmarkFilterByDirInfix' (bm1, bm2) =
 
   where dir = _bookmarkDirectory bm1
 
-testBookmarkFilterByDirInfix :: Property
-testBookmarkFilterByDirInfix = forAll bookmarksWithDifferentDirectories testBookmarkFilterByDirInfix'
+prop_BookmarkFilterByDirInfix :: Property
+prop_BookmarkFilterByDirInfix = forAll bookmarksWithDifferentDirectories testBookmarkFilterByDirInfix'
   where
     bookmarksWithDifferentDirectories = do
       bm1 <- suchThat genBookmark ((/= "/") . _bookmarkDirectory)
       bm2 <- suchThat genBookmark (not . on isInfixOf _bookmarkDirectory bm1)
       return (bm1, bm2)
 
-tests :: [Property]
-tests = [
-  testBookmarkSearch
-  , testBookmarkSearchSuccess
-  , testBookmarkFilterByName
-  , testBookmarkFilterByDirInfix
-  ]
+return []
+runTests :: IO Bool
+runTests = $quickCheckAll
 
 main :: IO ()
-main = forM_ tests $ \prop -> do
-  res <- quickCheckResult prop
-  unless (isSuccess res) exitFailure
+main = do
+  res <- runTests
+  unless res exitFailure
