@@ -10,6 +10,10 @@ and this project adheres to the
 
 ### Added
 
+- Start of a test suite.
+- Pre-commit hook to run tests.
+- GitHub Action to run tests.
+
 ### Fixed
 
 ### Changed
