@@ -1,3 +1,3 @@
 #!/usr/bin/bash
 
-gh repo edit fpringle/hoyo --visibility private 
+gh repo edit fpringle/hoyo --visibility private

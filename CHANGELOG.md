@@ -8,7 +8,7 @@ and this project adheres to the
 
 ## [Unreleased]
 
-### Added 
+### Added
 
 ### Fixed
 
