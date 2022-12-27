@@ -1,5 +1,7 @@
 # hoyo
 
+[![MPL-2.0 license](https://img.shields.io/github/license/fpringle/hoyo)](https://github.com/fpringle/hoyo/blob/main/LICENSE)
+
 hoyo is a command-line utility that lets the user save directories as bookmarks (similar to in the browser) and easily `cd` to them.
 
 # Installation
@@ -28,8 +30,8 @@ source path/to/hoyo.sh
 # Usage
 
 ```man
-hoyo [--version] COMMAND [-c|--config FILE] [-b|--bookmarks FILE] 
-            [--fail] [--nofail] [--time] [--notime] [--enable-clear] 
+hoyo [--version] COMMAND [-c|--config FILE] [-b|--bookmarks FILE]
+            [--fail] [--nofail] [--time] [--notime] [--enable-clear]
             [--disable-clear] [--enable-reset] [--disable-reset]
 
   Set directory bookmarks for quick "cd"-like behaviour

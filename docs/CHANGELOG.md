@@ -8,11 +8,13 @@ and this project adheres to the
 
 ## [Unreleased]
 
-### Added 
+### Added
 
 ### Fixed
 
 ### Changed
+
+- Instead of building documentation through a GitHub action (this is slow since the runner needs to re-download Cabal, GHC etc every time), build docs using a pre-commit hook.
 
 ### Removed
 
@@ -30,6 +32,6 @@ and this project adheres to the
 
 - Initial release.
 
-[unreleased]: https://github.com/fpringle/hoyo/compare/v0.1.0.0...HEAD
+[unreleased]: https://github.com/fpringle/hoyo/compare/v0.1.0.1...HEAD
 [0.1.0.1]: https://github.com/fpringle/hoyo/compare/v0.1.0.0...v0.1.0.1
 [0.1.0.0]: https://github.com/fpringle/hoyo/releases/tag/v0.1.0.0
