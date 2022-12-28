@@ -42,6 +42,7 @@ import HoYo.Config
 import HoYo.Types
 import HoYo.Utils
 
+import Data.Char (isDigit)
 import Data.Function
 import Data.List
 
@@ -210,9 +211,10 @@ modifyBookmarksM f = do
 -- | Run the "add" command: add a new bookmark.
 runAdd :: AddOptions -> HoYoMonad ()
 runAdd opts = do
-  -- TODO: verify the nickname isn't a number (messes up parsing for search)
   dir <- liftIO $ canonicalizePath (addDirectory opts)
-  void $ assertVerbose "not a directory" $ liftIO $ doesDirectoryExist dir
+  assertVerbose "not a directory" $ liftIO $ doesDirectoryExist dir
+  assert "bookmark name can't be empty" $ return $ not $ null dir
+  assert "bookmark name can't be a number" $ return $ not $ all isDigit dir
   modifyBookmarksM $ \bms -> do
     -- TODO: also change nickname is unique
     uniq <- assertVerbose "bookmark already exists" $
@@ -286,10 +288,10 @@ runDelete opts = do
   let search = deleteSearch opts
   modifyBookmarksM $ \bms -> do
     let (searchResults, afterDelete) = searchBookmarks search (Bookmarks bms)
-    void $ assertVerbose ("no bookmarks found for search " <> show search)
-                            $ return $ not $ null searchResults
-    void $ assertVerbose ("multiple bookmarks found for search " <> show search)
-                            $ return $ length searchResults == 1
+    assertVerbose ("no bookmarks found for search " <> show search)
+      $ return $ not $ null searchResults
+    assertVerbose ("multiple bookmarks found for search " <> show search)
+      $ return $ length searchResults == 1
     return afterDelete
 
 -- | Run the "refresh" command: re-index bookmarks.
