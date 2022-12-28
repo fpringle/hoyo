@@ -20,9 +20,12 @@ module HoYo.Bookmark (
   , decodeBookmarksFile
   , encodeBookmarks
   , encodeBookmarksFile
+  , formatBookmark
+  , formatBookmarks
   ) where
 
 import HoYo.Types
+import HoYo.Utils
 
 import Data.Bifunctor (first)
 import Data.Char (toLower)

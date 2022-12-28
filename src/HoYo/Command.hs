@@ -212,18 +212,20 @@ modifyBookmarksM f = do
 runAdd :: AddOptions -> HoYoMonad ()
 runAdd opts = do
   dir <- liftIO $ canonicalizePath (addDirectory opts)
+  let name = addName opts
   assertVerbose "not a directory" $ liftIO $ doesDirectoryExist dir
   assert "bookmark name can't be empty" $ return $ not $ null dir
   assert "bookmark name can't be a number" $ return $ not $ all isDigit dir
   modifyBookmarksM $ \bms -> do
-    -- TODO: also change nickname is unique
-    uniq <- assertVerbose "bookmark already exists" $
+    uniqDir <- assertVerbose "directory is already bookmarked" $
       return $ all ((/= dir) . view bookmarkDirectory) bms
-    if uniq
+    uniqName <- assertVerbose "bookmark name already used" $
+      return $ all ((/= name) . view bookmarkName) bms
+    if uniqDir && uniqName
     then do
       let maxIndex = maximumDefault 0 $ map (view bookmarkIndex) bms
       zTime <- liftIO getZonedTime
-      let newBookMark = Bookmark dir (maxIndex + 1) zTime (addName opts)
+      let newBookMark = Bookmark dir (maxIndex + 1) zTime name
       return (newBookMark : bms)
     else return bms
 
@@ -234,13 +236,11 @@ runMove opts = do
   let search = moveSearch opts
   case fst $ searchBookmarks search bms of
     []    -> throwError ("Unknown bookmark: " <> show search)
-    -- TODO
     [bm]  -> do printStdout ("cd " <> view bookmarkDirectory bm)
                 liftIO $ exitWith (ExitFailure 3)
-    _     -> throwError "todo"
-
-pad :: Int -> String -> String
-pad n s = replicate (n - length s) ' ' <> s
+    ms    -> do displayTime <- asks' (config . displayCreationTime)
+                let strs = formatBookmarks displayTime $ sortOn (view bookmarkIndex) ms
+                throwError $ intercalate "\n" ("multiple bookmarks matching search:" : strs)
 
 -- | Run the "list" command: list all the saved bookmarks.
 runList :: ListOptions -> HoYoMonad ()
@@ -248,16 +248,8 @@ runList opts = do
   let filt = filterBookmarks (listFilterName opts) (listFilterDirectoryInfix opts)
   bms' <- asks' bookmarks
   let bms = filter filt $ sortOn (view bookmarkIndex) $ unBookmarks bms'
-  let numberWidth = maximumDefault 1 $ map (length . show . view bookmarkIndex) bms
   displayTime <- asks' (config . displayCreationTime)
-  forM_ bms $ \(Bookmark dir idx zTime mbName) -> do
-    let num = pad numberWidth (show idx)
-    let timeStr = formatTime defaultTimeLocale "%D %T" zTime
-    let d = case mbName of Nothing    -> dir
-                           Just name  -> dir <> " " <> name
-    if displayTime
-    then printStdout (num <> ". " <> timeStr <> "\t" <> d)
-    else printStdout (num <> ". " <> d)
+  mapM_ printStdout (formatBookmarks displayTime bms)
 
 clearDisabledErrMsg :: String
 clearDisabledErrMsg = intercalate "\n" [
