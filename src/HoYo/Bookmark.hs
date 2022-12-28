@@ -7,7 +7,6 @@ module HoYo.Bookmark (
   , Bookmarks (..)
   , BookmarkSearchTerm (..)
   , DefaultBookmark (..)
-  , DefaultBookmarks (..)
 
   -- *  Working with bookmarks
   , searchBookmarks
@@ -107,10 +106,10 @@ filterBookmarks name dirInfix = combAnd
                                     (filterBookmarkByName name)
                                     (filterBookmarkByDirInfix dirInfix)
 
--- | Convert a 'DefaultBookmarks' to a 'Bookmarks', assiging indices and/
+-- | Convert a list of 'DefaultBookmark's to a 'Bookmarks', assiging indices and/
 -- creation times on the fly.
-bookmarksFromDefault :: MonadIO m => DefaultBookmarks -> m Bookmarks
-bookmarksFromDefault (DefaultBookmarks dbms) = Bookmarks <$> bms
+bookmarksFromDefault :: MonadIO m => [DefaultBookmark] -> m Bookmarks
+bookmarksFromDefault dbms = Bookmarks <$> bms
   where
     bms = forM (zip dbms [1..]) $ \(DefaultBookmark dir name, idx) -> do
       zTime <- liftIO getZonedTime
