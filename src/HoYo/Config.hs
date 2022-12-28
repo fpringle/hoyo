@@ -70,7 +70,7 @@ getKeyVals :: Config -> [(Toml.Key, Toml.AnyValue)]
 getKeyVals = tomlToKeyVals . Toml.execTomlCodec configCodec
 
 -- | Try to set a key-value pair in the config.
-setConfig :: MonadError String m => String -> String -> Config -> m Config
+setConfig :: MonadError T.Text m => T.Text -> T.Text -> Config -> m Config
 setConfig   "fail_on_error"           val cfg = flip (set failOnError) cfg
                                                   <$> liftEither (readBool val)
 setConfig   "display_creation_time"   val cfg = flip (set displayCreationTime) cfg

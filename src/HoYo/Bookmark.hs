@@ -52,13 +52,13 @@ bookmarkCodec = Bookmark
   <$> Toml.string     "directory"           .== _bookmarkDirectory
   <*> Toml.int        "index"               .== _bookmarkIndex
   <*> Toml.zonedTime  "created"             .== _bookmarkCreationTime
-  <*> Toml.dioptional (Toml.string "name")  .== _bookmarkName
+  <*> Toml.dioptional (Toml.text   "name")  .== _bookmarkName
 
 -- | A 'TomlCodec' for encoding and decoding 'Bookmark's.
 defaultBookmarkCodec :: TomlCodec DefaultBookmark
 defaultBookmarkCodec = DefaultBookmark
   <$> Toml.string     "directory"           .== _defaultBookmarkDirectory
-  <*> Toml.dioptional (Toml.string "name")  .== _defaultBookmarkName
+  <*> Toml.dioptional (Toml.text   "name")  .== _defaultBookmarkName
 
 -- | A 'TomlCodec' for encoding and decoding 'Bookmarks'.
 bookmarksCodec :: TomlCodec Bookmarks
@@ -86,25 +86,25 @@ searchBookmarks :: BookmarkSearchTerm -> Bookmarks -> ([Bookmark], [Bookmark])
 searchBookmarks (SearchIndex idx) (Bookmarks bms) =
   partition ((== idx) . view bookmarkIndex) bms
 searchBookmarks (SearchName name) (Bookmarks bms) =
-  partition (on (==) (fmap (map toLower)) (Just name) . view bookmarkName) bms
+  partition (on (==) (fmap (T.map toLower)) (Just name) . view bookmarkName) bms
 
 -- | A predicate used by 'filterBookmarks' - match on the bookmark name.
-filterBookmarkByName :: Maybe String -> Bookmark -> Bool
+filterBookmarkByName :: Maybe T.Text -> Bookmark -> Bool
 filterBookmarkByName Nothing = const True
-filterBookmarkByName (Just name) = on (==) (fmap (map toLower)) (Just name) . view bookmarkName
+filterBookmarkByName (Just name) = on (==) (fmap (T.map toLower)) (Just name) . view bookmarkName
 
 -- | A predicate used by 'filterBookmarks' - match on the bookmark directory.
-filterBookmarkByDirInfix :: Maybe String -> Bookmark -> Bool
+filterBookmarkByDirInfix :: Maybe T.Text -> Bookmark -> Bool
 filterBookmarkByDirInfix Nothing = const True
 filterBookmarkByDirInfix (Just pref) =
-  on isInfixOf (dropWhileEnd (== '/')) pref . view bookmarkDirectory
+  on T.isInfixOf (T.dropWhileEnd (== '/')) pref . T.pack . view bookmarkDirectory
 
 combAnd :: (a -> Bool) -> (a -> Bool) -> a -> Bool
 combAnd pred1 pred2 a = on (&&) ($ a) pred1 pred2
 
 -- | Given a bookmark name and a bookmark directory, test if a bookmark matches those
 -- filters.
-filterBookmarks :: Maybe String -> Maybe String -> Bookmark -> Bool
+filterBookmarks :: Maybe T.Text -> Maybe T.Text -> Bookmark -> Bool
 filterBookmarks name dirInfix = combAnd
                                     (filterBookmarkByName name)
                                     (filterBookmarkByDirInfix dirInfix)

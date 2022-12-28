@@ -12,6 +12,7 @@ import Data.List
 import qualified Data.List.NonEmpty as NE
 import Data.Semigroup (stimes)
 import qualified Data.Text as T
+import qualified Data.Text.IO as T
 
 import System.IO
 
@@ -37,7 +38,7 @@ import Data.Time
 import System.Directory
 
 -- | Given a hoyo 'Env', run a monadic action in IO.
-runHoYo :: HoYoMonad a -> Env -> IO (Either String a)
+runHoYo :: HoYoMonad a -> Env -> IO (Either T.Text a)
 runHoYo = runReaderT . runExceptT . unHoYo
 
 asks' :: MonadReader a m => SimpleGetter a b -> m b
@@ -48,13 +49,13 @@ maximumDefault def [] = def
 maximumDefault _ xs = maximum xs
 
 -- | Throw an error if a check fails.
-assert :: String -> HoYoMonad Bool -> HoYoMonad ()
+assert :: T.Text -> HoYoMonad Bool -> HoYoMonad ()
 assert err check = do
   res <- check
   unless res $ throwError err
 
 -- | Throw an error if a check fails AND the "fail_on_error" flag is set.
-assertVerbose :: String -> HoYoMonad Bool -> HoYoMonad Bool
+assertVerbose :: T.Text -> HoYoMonad Bool -> HoYoMonad Bool
 assertVerbose err check = do
   shouldFail <- asks' (config . failOnError)
   res <- check
@@ -133,10 +134,10 @@ valText (Toml.Array arr)   = withLines Toml.defaultOptions valText arr
 showText :: Show a => a -> T.Text
 showText = T.pack . show
 
-getBackupFile :: (MonadIO m, MonadError String m) => FilePath -> String -> m FilePath
+getBackupFile :: (MonadIO m, MonadError T.Text m) => FilePath -> String -> m FilePath
 getBackupFile fp ext = do
   ex <- liftIO $ doesFileExist fp
-  unless ex $ throwError ("not a file: " <> fp)
+  unless ex $ throwError ("not a file: " <> T.pack fp)
   let firstTry = fp <> "." <> ext
   firstExists <- liftIO $ doesFileExist firstTry
   if firstExists
@@ -144,7 +145,7 @@ getBackupFile fp ext = do
   else return firstTry
 
   where
-    getBackupFile' :: (MonadIO m, MonadError String m) => FilePath -> Int -> m FilePath
+    getBackupFile' :: (MonadIO m, MonadError T.Text m) => FilePath -> Int -> m FilePath
     getBackupFile' file' n = do
       let file = file' <> "." <> show n <> ext
       fileExists <- liftIO $ doesFileExist file
@@ -153,37 +154,36 @@ getBackupFile fp ext = do
       else return file
 
 -- | Try to back-up a file. Used when the "backup_before_clear" option is set.
-backupFile :: (MonadIO m, MonadError String m) => FilePath -> String -> m ()
+backupFile :: (MonadIO m, MonadError T.Text m) => FilePath -> String -> m ()
 backupFile fp ext = do
   file <- getBackupFile fp ext
   liftIO $ copyFileWithMetadata fp file
 
 -- | Try to read a 'Bool'.
-readBool :: MonadError String m => String -> m Bool
-readBool s = liftEither (
-              readEither s
-                <|> first Toml.errorBundlePretty (Toml.parse Toml.boolP "" $ T.pack s)
-                <|> Left ("Couldn't parse bool: " <> s)
+readBool :: MonadError T.Text m => T.Text -> m Bool
+readBool s = liftEither $ first T.pack (
+              readEither sStr
+                <|> first Toml.errorBundlePretty (Toml.parse Toml.boolP "" s)
+                <|> Left ("Couldn't parse bool: " <> sStr)
               )
+  where sStr = T.unpack s
 
 -- | Try to read an 'Int'.
-readInt :: MonadError String m => String -> m Int
-readInt s = liftEither (
-              readEither s
-                <|> bimap Toml.errorBundlePretty fromIntegral (Toml.parse Toml.integerP "" $ T.pack s)
-                <|> Left ("Couldn't parse integer: " <> s)
+readInt :: MonadError T.Text m => T.Text -> m Int
+readInt s = liftEither $ first T.pack (
+              readEither sStr
+                <|> bimap Toml.errorBundlePretty fromIntegral (Toml.parse Toml.integerP "" s)
+                <|> Left ("Couldn't parse integer: " <> sStr)
               )
+  where sStr = T.unpack s
 
 -- | Print to stderr.
-printStderr :: MonadIO m => String -> m ()
-printStderr = liftIO . hPutStrLn stderr
+printStderr :: MonadIO m => T.Text -> m ()
+printStderr = liftIO . T.hPutStrLn stderr
 
 -- | Print to stdout.
-printStdout :: MonadIO m => String -> m ()
-printStdout = liftIO . putStrLn
-
-pad :: Int -> String -> String
-pad n s = replicate (n - length s) ' ' <> s
+printStdout :: MonadIO m => T.Text -> m ()
+printStdout = liftIO . T.putStrLn
 
 -- | Format a 'Bookmark'. Used for the "list" command and error reporting
 -- during other commands.
@@ -191,12 +191,13 @@ pad n s = replicate (n - length s) ' ' <> s
 -- @formatBookmark displayTime numberWidth bm@ returns a pretty representation
 -- of @bm@, optionally showing the creation time, and padding the index to a
 -- certain width.
-formatBookmark :: Bool -> Int -> Bookmark -> String
+formatBookmark :: Bool -> Int -> Bookmark -> T.Text
 formatBookmark shouldDisplayTime indexWidth (Bookmark dir idx zTime mbName) =
-  let num = pad indexWidth (show idx)
-      timeStr = formatTime defaultTimeLocale "%D %T" zTime
-      d = case mbName of Nothing    -> dir
-                         Just name  -> dir <> " " <> name
+  let dText = T.pack dir
+      num = T.justifyRight indexWidth ' ' $ tshow idx
+      timeStr = T.pack $ formatTime defaultTimeLocale "%D %T" zTime
+      d = case mbName of Nothing    -> dText
+                         Just name  -> dText <> " " <> name
 
   in if shouldDisplayTime
      then num <> ". " <> timeStr <> "\t" <> d
@@ -208,7 +209,10 @@ formatBookmark shouldDisplayTime indexWidth (Bookmark dir idx zTime mbName) =
 -- @formatBookmark displayTime bms@ returns a pretty representation
 -- of @bms@, optionally showing the creation time, and padding the indices to
 -- line up.
-formatBookmarks :: Bool -> [Bookmark] -> [String]
+formatBookmarks :: Bool -> [Bookmark] -> [T.Text]
 formatBookmarks shouldDisplayTime bms = map (formatBookmark shouldDisplayTime indexWidth) bms
   where
     indexWidth = maximumDefault 1 $ map (length . show . view bookmarkIndex) bms
+
+tshow :: Show a => a -> T.Text
+tshow = T.pack . show
