@@ -15,9 +15,9 @@ import HoYo.Types
 import Data.Bifunctor (first)
 import qualified Data.Text as T
 
+import Control.Monad.Except
 import Control.Monad.IO.Class
-
-import Control.Monad (unless)
+-- import Control.Monad (unless)
 
 import Lens.Micro.Extras
 
@@ -47,43 +47,42 @@ initPath fp' = do
   let dir = takeDirectory fp
   liftIO $ createDirectoryIfMissing True dir
 
-emptyBookmarks :: Bookmarks
-emptyBookmarks = Bookmarks []
-
 -- | Given a filepath for the bookmarks file and a filepath for the config file,
 -- initialize the respective TOMLs at those locations.
 initEnv :: MonadIO m => FilePath -> FilePath -> m ()
 initEnv bFp sFp = do
   initPath sFp
   initPath bFp
-  let env = Env emptyBookmarks bFp defaultConfig sFp
+  let env = Env (view defaultBookmarks defaultConfig) bFp defaultConfig sFp
   writeEnv env
 
-initBookmarksIfNotExists :: MonadIO m => FilePath -> m ()
-initBookmarksIfNotExists fp' = do
+initBookmarksIfNotExists :: (MonadIO m, MonadError String m) => Config -> FilePath -> m Bookmarks
+initBookmarksIfNotExists cfg fp' = do
   fp <- liftIO $ makeAbsolute fp'
   ex <- liftIO $ doesFileExist fp
   unless ex $ do
     initPath fp
-    encodeBookmarksFile fp emptyBookmarks
+    encodeBookmarksFile fp $ view defaultBookmarks cfg
+  decodeBookmarksFile fp >>= liftEither . first T.unpack
 
-initConfigIfNotExists :: MonadIO m => FilePath -> m ()
+initConfigIfNotExists :: (MonadIO m, MonadError String m) => FilePath -> m Config
 initConfigIfNotExists fp' = do
   fp <- liftIO $ makeAbsolute fp'
-  ex <- liftIO $ doesFileExist fp
-  unless ex $ do
+  exists <- liftIO $ doesFileExist fp
+  unless exists $ do
     initPath fp
     encodeConfigFile fp defaultConfig
+  decodeConfigFile fp >>= liftEither . first T.unpack
 
-initEnvIfNotExists :: MonadIO m => FilePath -> FilePath -> m ()
+initEnvIfNotExists :: (MonadIO m, MonadError String m) => FilePath -> FilePath -> m Env
 initEnvIfNotExists bFp sFp = do
-  initBookmarksIfNotExists bFp
-  initConfigIfNotExists sFp
+  cfg <- initConfigIfNotExists sFp
+  bms <- initBookmarksIfNotExists cfg bFp
+  return $ Env bms bFp cfg sFp
 
 -- | Retrieve an 'Env' from given bookmark- and config- file locations.
 getEnv :: MonadIO m => FilePath -> FilePath -> m (Either String Env)
 getEnv bFp' sFp' = do
   sFp <- liftIO $ makeAbsolute sFp'
   bFp <- liftIO $ makeAbsolute bFp'
-  initEnvIfNotExists bFp sFp
-  readEnv bFp sFp
+  runExceptT $ initEnvIfNotExists bFp sFp
