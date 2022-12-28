@@ -273,6 +273,9 @@ runClear _ = do
   when backup $ backupFile path "bkp"
 
   modifyBookmarks $ const []
+  bms <- asks' (config . defaultBookmarks) >>= bookmarksFromDefault
+  fp <- asks' bookmarksPath
+  encodeBookmarksFile fp bms
 
 -- | Run the "delete" command: search for a bookmark and delete it.
 runDelete :: DeleteOptions -> HoYoMonad ()
