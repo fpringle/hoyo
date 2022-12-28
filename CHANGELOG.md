@@ -16,6 +16,16 @@ and this project adheres to the
 
 ### Removed
 
+## [0.1.1.0] - 2022-12-28
+
+### Changed
+
+- Fixed some dependency bounds in hoyo.cabal
+
+### Removed
+
+- Todo.md
+
 ## [0.1.0.2] - 2022-12-27
 
 ### Added
