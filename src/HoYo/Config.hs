@@ -31,12 +31,14 @@ import Lens.Micro
 
 configCodec :: TomlCodec Config
 configCodec = Config
-  <$> Toml.bool   "fail_on_error"                               .== _failOnError
-  <*> Toml.bool   "display_creation_time"                       .== _displayCreationTime
-  <*> Toml.bool   "enable_clearing"                             .== _enableClearing
-  <*> Toml.bool   "enable_reset"                                .== _enableReset
-  <*> Toml.bool   "backup_before_clear"                         .== _backupBeforeClear
-  <*> Toml.diwrap (Toml.list bookmarkCodec "default_bookmark")  .== _defaultBookmarks
+  <$> Toml.bool   "fail_on_error"           .== _failOnError
+  <*> Toml.bool   "display_creation_time"   .== _displayCreationTime
+  <*> Toml.bool   "enable_clearing"         .== _enableClearing
+  <*> Toml.bool   "enable_reset"            .== _enableReset
+  <*> Toml.bool   "backup_before_clear"     .== _backupBeforeClear
+  <*> Toml.diwrap
+          (Toml.list defaultBookmarkCodec "default_bookmark")
+          .== _defaultBookmarks
 
 -- | The default config for hoyo.
 defaultConfig :: Config
@@ -46,7 +48,7 @@ defaultConfig = Config {
   , _enableClearing           = False
   , _enableReset              = False
   , _backupBeforeClear        = False
-  , _defaultBookmarks         = Bookmarks []
+  , _defaultBookmarks         = DefaultBookmarks []
   }
 
 -- | Decode a 'Config' from a Text.

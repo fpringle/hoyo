@@ -38,8 +38,19 @@ data Bookmark = Bookmark {
   , _bookmarkName           :: !(Maybe String)
   } deriving Show
 
+-- | Default bookmarks to save at init. A default bookmark remembers the directory
+-- and optionally a user-specified nickname for the bookmark.
+data DefaultBookmark = DefaultBookmark {
+  _defaultBookmarkDirectory        :: !FilePath
+  , _defaultBookmarkName           :: !(Maybe String)
+  } deriving Show
+
 -- | Wrapper for @['Bookmark']@.
 newtype Bookmarks = Bookmarks { unBookmarks :: [Bookmark] }
+  deriving Show
+
+-- | Wrapper for @['DefaultBookmark']@.
+newtype DefaultBookmarks = DefaultBookmarks { unDefaultBookmarks :: [DefaultBookmark] }
   deriving Show
 
 -- | Data-type for represting a bookmark search. You can either search
@@ -59,7 +70,7 @@ data Config = Config {
   , _enableClearing       :: !Bool
   , _enableReset          :: !Bool
   , _backupBeforeClear    :: !Bool
-  , _defaultBookmarks     :: !Bookmarks
+  , _defaultBookmarks     :: !DefaultBookmarks
   }
 
 -- | 'HoYoMonad' is the main monad stack for the hoyo program. It's essentially a wrapper

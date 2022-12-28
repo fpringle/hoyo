@@ -16,7 +16,7 @@ import Data.Bifunctor (first)
 import qualified Data.Text as T
 
 import Control.Monad.Except
-import Control.Monad.IO.Class
+-- import Control.Monad.IO.Class
 -- import Control.Monad (unless)
 
 import Lens.Micro.Extras
@@ -53,7 +53,8 @@ initEnv :: MonadIO m => FilePath -> FilePath -> m ()
 initEnv bFp sFp = do
   initPath sFp
   initPath bFp
-  let env = Env (view defaultBookmarks defaultConfig) bFp defaultConfig sFp
+  bms <- bookmarksFromDefault $ view defaultBookmarks defaultConfig
+  let env = Env bms bFp defaultConfig sFp
   writeEnv env
 
 initBookmarksIfNotExists :: (MonadIO m, MonadError String m) => Config -> FilePath -> m Bookmarks
@@ -62,7 +63,8 @@ initBookmarksIfNotExists cfg fp' = do
   ex <- liftIO $ doesFileExist fp
   unless ex $ do
     initPath fp
-    encodeBookmarksFile fp $ view defaultBookmarks cfg
+    bms <- bookmarksFromDefault $ view defaultBookmarks cfg
+    encodeBookmarksFile fp bms
   decodeBookmarksFile fp >>= liftEither . first T.unpack
 
 initConfigIfNotExists :: (MonadIO m, MonadError String m) => FilePath -> m Config
