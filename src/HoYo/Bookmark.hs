@@ -6,6 +6,8 @@ module HoYo.Bookmark (
   Bookmark (..)
   , Bookmarks (..)
   , BookmarkSearchTerm (..)
+  , formatBookmark
+  , formatBookmarks
 
   -- *  Working with bookmarks
   , searchBookmarks
@@ -20,8 +22,6 @@ module HoYo.Bookmark (
   , decodeBookmarksFile
   , encodeBookmarks
   , encodeBookmarksFile
-  , formatBookmark
-  , formatBookmarks
   ) where
 
 import HoYo.Types

@@ -202,7 +202,7 @@ formatBookmark shouldDisplayTime indexWidth (Bookmark dir idx zTime mbName) =
      then num <> ". " <> timeStr <> "\t" <> d
      else num <> ". " <> d
 
--- | Format a list of 'Bookmark'. Used for the "list" command and error reporting
+-- | Format a list of 'Bookmark's. Used for the "list" command and error reporting
 -- during other commands
 --
 -- @formatBookmark displayTime bms@ returns a pretty representation
