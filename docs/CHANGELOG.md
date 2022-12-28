@@ -12,12 +12,16 @@ and this project adheres to the
 
 - Added an array table "default_bookmark" to config: these bookmarks
 will be added to the bookmark list on init/clear.
+- Added utility formatting functions for Bookmarks.
 
 ### Fixed
+
+- Add checks in `addMove` to verify bookmark names are valid
 
 ### Changed
 
 - Changed dependency from lens-simple to microlens.
+- Rename "bookmarks" to "bookmark" in bookmarks.toml
 
 ### Removed
 

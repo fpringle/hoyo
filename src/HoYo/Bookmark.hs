@@ -6,6 +6,8 @@ module HoYo.Bookmark (
   Bookmark (..)
   , Bookmarks (..)
   , BookmarkSearchTerm (..)
+  , formatBookmark
+  , formatBookmarks
   , DefaultBookmark (..)
 
   -- *  Working with bookmarks
@@ -26,6 +28,7 @@ module HoYo.Bookmark (
   ) where
 
 import HoYo.Types
+import HoYo.Utils
 
 import Data.Bifunctor (first)
 import Data.Char (toLower)
@@ -59,7 +62,7 @@ defaultBookmarkCodec = DefaultBookmark
 
 -- | A 'TomlCodec' for encoding and decoding 'Bookmarks'.
 bookmarksCodec :: TomlCodec Bookmarks
-bookmarksCodec = Toml.diwrap (Toml.list bookmarkCodec "bookmarks")
+bookmarksCodec = Toml.diwrap (Toml.list bookmarkCodec "bookmark")
 
 -- | Decode a 'Bookmark' from a Text.
 decodeBookmarks :: T.Text -> Either T.Text Bookmarks

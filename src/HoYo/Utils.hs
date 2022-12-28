@@ -181,3 +181,34 @@ printStderr = liftIO . hPutStrLn stderr
 -- | Print to stdout.
 printStdout :: MonadIO m => String -> m ()
 printStdout = liftIO . putStrLn
+
+pad :: Int -> String -> String
+pad n s = replicate (n - length s) ' ' <> s
+
+-- | Format a 'Bookmark'. Used for the "list" command and error reporting
+-- during other commands.
+--
+-- @formatBookmark displayTime numberWidth bm@ returns a pretty representation
+-- of @bm@, optionally showing the creation time, and padding the index to a
+-- certain width.
+formatBookmark :: Bool -> Int -> Bookmark -> String
+formatBookmark shouldDisplayTime indexWidth (Bookmark dir idx zTime mbName) =
+  let num = pad indexWidth (show idx)
+      timeStr = formatTime defaultTimeLocale "%D %T" zTime
+      d = case mbName of Nothing    -> dir
+                         Just name  -> dir <> " " <> name
+
+  in if shouldDisplayTime
+     then num <> ". " <> timeStr <> "\t" <> d
+     else num <> ". " <> d
+
+-- | Format a list of 'Bookmark's. Used for the "list" command and error reporting
+-- during other commands
+--
+-- @formatBookmark displayTime bms@ returns a pretty representation
+-- of @bms@, optionally showing the creation time, and padding the indices to
+-- line up.
+formatBookmarks :: Bool -> [Bookmark] -> [String]
+formatBookmarks shouldDisplayTime bms = map (formatBookmark shouldDisplayTime indexWidth) bms
+  where
+    indexWidth = maximumDefault 1 $ map (length . show . view bookmarkIndex) bms
