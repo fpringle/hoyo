@@ -51,7 +51,7 @@ bookmarkCodec = Bookmark
 
 -- | A 'TomlCodec' for encoding and decoding 'Bookmarks'.
 bookmarksCodec :: TomlCodec Bookmarks
-bookmarksCodec = Toml.diwrap (Toml.list bookmarkCodec "bookmarks")
+bookmarksCodec = Toml.diwrap (Toml.list bookmarkCodec "bookmark")
 
 -- | Decode a 'Bookmark' from a Text.
 decodeBookmarks :: T.Text -> Either T.Text Bookmarks
