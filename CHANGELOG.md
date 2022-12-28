@@ -14,6 +14,8 @@ and this project adheres to the
 
 ### Changed
 
+- Changed dependency from lens-simple to microlens.
+
 ### Removed
 
 ## [0.1.1.0] - 2022-12-28
