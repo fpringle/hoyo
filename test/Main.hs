@@ -9,7 +9,7 @@ import Test.QuickCheck
 
 import Control.Monad
 import Data.Function
-import Data.List
+import qualified Data.Text as T
 import System.Exit
 
 testBookmarkSearch' :: (BookmarkSearchTerm, Bookmarks) -> Property
@@ -64,7 +64,7 @@ prop_BookmarkFilterByDirInfix = forAll bookmarksWithDifferentDirectories testBoo
   where
     bookmarksWithDifferentDirectories = do
       bm1 <- suchThat genBookmark ((/= "/") . _bookmarkDirectory)
-      bm2 <- suchThat genBookmark (not . on isInfixOf _bookmarkDirectory bm1)
+      bm2 <- suchThat genBookmark (not . on T.isInfixOf _bookmarkDirectory bm1)
       return (bm1, bm2)
 
 return []

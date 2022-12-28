@@ -67,8 +67,8 @@ import qualified Toml
 
 -- | Options for the "add" command to be parsed from the command-line.
 data AddOptions = AddOptions {
-  addDirectory  :: FilePath
-  , addName     :: Maybe String
+  addDirectory  :: TFilePath
+  , addName     :: Maybe T.Text
   }
 
 -- | Options for the "move" command to be parsed from the command-line.
@@ -78,8 +78,8 @@ newtype MoveOptions = MoveOptions {
 
 -- | Options for the "list" command to be parsed from the command-line.
 data ListOptions = ListOptions {
-  listFilterName                :: Maybe String
-  , listFilterDirectoryInfix    :: Maybe String
+  listFilterName                :: Maybe T.Text
+  , listFilterDirectoryInfix    :: Maybe T.Text
   }
 
 -- | Options for the "clear" command to be parsed from the command-line.
@@ -105,8 +105,8 @@ data ConfigResetOptions = ConfigResetOptions {
 
 -- | Options for the "config set" command to be parsed from the command-line.
 data ConfigSetOptions = ConfigSetOptions {
-  setKey        :: String
-  , setValue    :: String
+  setKey        :: T.Text
+  , setValue    :: T.Text
   }
 
 -- | Options for the "config" command to be parsed from the command-line.
@@ -168,7 +168,7 @@ overrideEnv :: OverrideOptions -> Env -> Env
 overrideEnv = over config . overrideConfig
 
 -- | Check that there are no conflicting overrides.
-verifyOverrides :: OverrideOptions -> Maybe String
+verifyOverrides :: OverrideOptions -> Maybe T.Text
 verifyOverrides (OverrideOptions o1 o2 o3 o4) = verify o1
                                                   <|> verify o2
                                                   <|> verify o3
@@ -178,8 +178,8 @@ verifyOverrides (OverrideOptions o1 o2 o3 o4) = verify o1
 
 -- | CLI options that can be set regardless of which command is run.
 data GlobalOptions = GlobalOptions {
-  globalConfigPath  :: Maybe FilePath
-  , dataPath        :: Maybe FilePath
+  globalConfigPath  :: Maybe TFilePath
+  , dataPath        :: Maybe TFilePath
   , overrides       :: OverrideOptions
   }
 
@@ -211,21 +211,22 @@ modifyBookmarksM f = do
 -- | Run the "add" command: add a new bookmark.
 runAdd :: AddOptions -> HoYoMonad ()
 runAdd opts = do
-  dir <- liftIO $ canonicalizePath (addDirectory opts)
+  dir <- liftIO $ canonicalizePath $ T.unpack $ addDirectory opts
+  let tDir = T.pack dir
   let name = addName opts
   assertVerbose "not a directory" $ liftIO $ doesDirectoryExist dir
   assert "bookmark name can't be empty" $ return $ not $ null dir
   assert "bookmark name can't be a number" $ return $ not $ all isDigit dir
   modifyBookmarksM $ \bms -> do
     uniqDir <- assertVerbose "directory is already bookmarked" $
-      return $ all ((/= dir) . view bookmarkDirectory) bms
+      return $ all ((/= tDir) . view bookmarkDirectory) bms
     uniqName <- assertVerbose "bookmark name already used" $
       return $ all ((/= name) . view bookmarkName) bms
     if uniqDir && uniqName
     then do
       let maxIndex = maximumDefault 0 $ map (view bookmarkIndex) bms
       zTime <- liftIO getZonedTime
-      let newBookMark = Bookmark dir (maxIndex + 1) zTime name
+      let newBookMark = Bookmark tDir (maxIndex + 1) zTime name
       return (newBookMark : bms)
     else return bms
 
@@ -235,12 +236,12 @@ runMove opts = do
   bms <- asks' bookmarks
   let search = moveSearch opts
   case fst $ searchBookmarks search bms of
-    []    -> throwError ("Unknown bookmark: " <> show search)
+    []    -> throwError ("Unknown bookmark: " <> tshow search)
     [bm]  -> do printStdout ("cd " <> view bookmarkDirectory bm)
                 liftIO $ exitWith (ExitFailure 3)
     ms    -> do displayTime <- asks' (config . displayCreationTime)
                 let strs = formatBookmarks displayTime $ sortOn (view bookmarkIndex) ms
-                throwError $ intercalate "\n" ("multiple bookmarks matching search:" : strs)
+                throwError $ T.intercalate "\n" ("multiple bookmarks matching search:" : strs)
 
 -- | Run the "list" command: list all the saved bookmarks.
 runList :: ListOptions -> HoYoMonad ()
@@ -251,14 +252,14 @@ runList opts = do
   displayTime <- asks' (config . displayCreationTime)
   mapM_ printStdout (formatBookmarks displayTime bms)
 
-clearDisabledErrMsg :: String
-clearDisabledErrMsg = intercalate "\n" [
+clearDisabledErrMsg :: T.Text
+clearDisabledErrMsg = T.intercalate "\n" [
   "The 'clear' command is disabled by default."
   , "To enable, set enable_clear = true in the config or pass the --enable-clear flag."
   ]
 
-resetDisabledErrMsg :: String
-resetDisabledErrMsg = intercalate "\n" [
+resetDisabledErrMsg :: T.Text
+resetDisabledErrMsg = T.intercalate "\n" [
   "The 'config reset' command is disabled by default."
   , "To enable, set enable_reset = true in the config or pass the --enable-reset flag."
   ]
@@ -283,9 +284,9 @@ runDelete opts = do
   let search = deleteSearch opts
   modifyBookmarksM $ \bms -> do
     let (searchResults, afterDelete) = searchBookmarks search (Bookmarks bms)
-    assertVerbose ("no bookmarks found for search " <> show search)
+    assertVerbose ("no bookmarks found for search " <> tshow search)
       $ return $ not $ null searchResults
-    assertVerbose ("multiple bookmarks found for search " <> show search)
+    assertVerbose ("multiple bookmarks found for search " <> tshow search)
       $ return $ length searchResults == 1
     return afterDelete
 
@@ -304,7 +305,7 @@ runConfigPrint _ = do
   forM_ keyVals $ \(k, Toml.AnyValue v) -> do
     let kStr = Toml.prettyKey k
     let vStr = valText v
-    printStdout $ T.unpack (kStr <> " = " <> vStr)
+    printStdout (kStr <> " = " <> vStr)
 
 -- | Run the "config reset" command: reset the config to 'defaultConfig'.
 runConfigReset :: ConfigResetOptions -> HoYoMonad ()

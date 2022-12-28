@@ -12,6 +12,7 @@ import Lens.Micro.TH
 import qualified Toml
 import Toml ((.=))
 
+import qualified Data.Text as T
 import Data.Time
 
 import System.IO.Error
@@ -19,30 +20,33 @@ import System.IO.Error
 (.==) :: Toml.Codec field a -> (object -> field) -> Toml.Codec object a
 (.==) = (Toml..=)
 
+-- | A 'T.Text' version of 'FilePath'.
+type TFilePath = T.Text
+
 -- | The main hoyo read-only environment. Contains the current saved bookmarks,
 -- the current hoyo configuration, and the file locations for each.
 data Env = Env {
   _bookmarks        :: !Bookmarks
-  , _bookmarksPath  :: !FilePath
+  , _bookmarksPath  :: !TFilePath
   , _config         :: !Config
-  , _configPath     :: !FilePath
+  , _configPath     :: !TFilePath
   }
 
 -- | Bookmark a directory for easy @cd@. A bookmark remembers the directory,
 -- the index, the creation time, and optionally a user-specified nickname
 -- for the bookmark.
 data Bookmark = Bookmark {
-  _bookmarkDirectory        :: !FilePath
+  _bookmarkDirectory        :: !TFilePath
   , _bookmarkIndex          :: !Int
   , _bookmarkCreationTime   :: !ZonedTime
-  , _bookmarkName           :: !(Maybe String)
+  , _bookmarkName           :: !(Maybe T.Text)
   } deriving Show
 
 -- | Default bookmarks to save at init. A default bookmark remembers the directory
 -- and optionally a user-specified nickname for the bookmark.
 data DefaultBookmark = DefaultBookmark {
-  _defaultBookmarkDirectory        :: !FilePath
-  , _defaultBookmarkName           :: !(Maybe String)
+  _defaultBookmarkDirectory        :: !TFilePath
+  , _defaultBookmarkName           :: !(Maybe T.Text)
   } deriving Show
 
 -- | Wrapper for @['Bookmark']@.
@@ -53,11 +57,11 @@ newtype Bookmarks = Bookmarks { unBookmarks :: [Bookmark] }
 -- by index or by name. Used by the @delete@ and @move@ commands.
 data BookmarkSearchTerm =
   SearchIndex Int
-  | SearchName String
+  | SearchName T.Text
 
 instance Show BookmarkSearchTerm where
   show (SearchIndex idx) = '#' : show idx
-  show (SearchName name) = name
+  show (SearchName name) = T.unpack name
 
 -- | A representation of hoyo settings.
 data Config = Config {
@@ -70,15 +74,15 @@ data Config = Config {
   }
 
 -- | 'HoYoMonad' is the main monad stack for the hoyo program. It's essentially a wrapper
--- around @ExceptT String (ReaderT Env IO)@: in other words,
--- @HoYoMonad a@ is equivalent to @Env -> IO (Either String a)@
+-- around @ExceptT T.Text (ReaderT Env IO)@: in other words,
+-- @HoYoMonad a@ is equivalent to @Env -> IO (Either T.Text a)@
 newtype HoYoMonad a = HoYoMonad {
-  unHoYo :: ExceptT String (ReaderT Env IO) a
-  } deriving (Functor, Applicative, Monad, MonadError String, MonadReader Env)
+  unHoYo :: ExceptT T.Text (ReaderT Env IO) a
+  } deriving (Functor, Applicative, Monad, MonadError T.Text, MonadReader Env)
 
 instance MonadIO HoYoMonad where
   liftIO m = HoYoMonad (liftIO $ tryIOError m) >>= \case
-    Left err      -> throwError ("IO error: " <> show err)
+    Left err      -> throwError ("IO error: " <> T.pack (show err))
     Right result  -> return result
 
 makeLenses ''Bookmark

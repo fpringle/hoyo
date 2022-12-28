@@ -32,6 +32,9 @@ module HoYo (
   , backupFile
   , assert
   , assertVerbose
+
+  -- * Misc
+  , TFilePath
   ) where
 
 import HoYo.Bookmark

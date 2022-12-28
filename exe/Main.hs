@@ -3,6 +3,7 @@ module Main where
 
 import HoYo
 
+import qualified Data.Text as T
 import Text.Read
 
 import Control.Monad
@@ -72,7 +73,7 @@ addCommand = Add <$> (
 bookmarkSearchTerm :: ReadM BookmarkSearchTerm
 bookmarkSearchTerm = eitherReader $ \s ->
   SearchIndex <$> readEither s
-  <|> Right (SearchName s)
+  <|> Right (SearchName (T.pack s))
 
 moveCommand :: Parser Command
 moveCommand = Move . MoveOptions
@@ -148,7 +149,7 @@ options = info (parseOptions <**> helper) (
           <> progDesc "Set directory bookmarks for quick \"cd\"-like behaviour"
           )
 
-failure :: String -> IO ()
+failure :: T.Text -> IO ()
 failure err = do
   printStderr ("Error: " <> err)
   exitWith (ExitFailure 1)
@@ -169,10 +170,10 @@ main = withProgName "hoyo" $ do
   forM_ (verifyOverrides $ overrides globals) failure
 
   sFp <- case globalConfigPath globals of
-    Nothing -> getXdgDirectory XdgConfig "hoyo/config.toml"
+    Nothing -> T.pack <$> getXdgDirectory XdgConfig "hoyo/config.toml"
     Just d  -> return d
   bFp <- case dataPath globals of
-    Nothing -> getXdgDirectory XdgData "hoyo/bookmarks.toml"
+    Nothing -> T.pack <$> getXdgDirectory XdgData "hoyo/bookmarks.toml"
     Just d  -> return d
 
   getEnv bFp sFp >>= \case

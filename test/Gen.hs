@@ -7,16 +7,20 @@ import Test.QuickCheck
 
 import System.FilePath
 
+import qualified Data.Text as T
 import Data.Time
 
 letter :: Gen Char
 letter = elements (['a'..'z'] <> ['A'..'Z'] <> ['0'..'9'])
 
-word :: Gen String
-word = listOf1 letter
+text :: Gen T.Text
+text = T.pack <$> listOf1 letter
 
-genFilePath :: Gen FilePath
-genFilePath = joinPath . ("/" :) <$> listOf word
+string :: Gen String
+string = listOf1 letter
+
+genFilePath :: Gen TFilePath
+genFilePath = T.pack . joinPath . ("/" :) <$> listOf string
 
 genZonedTime :: Gen ZonedTime
 genZonedTime = ZonedTime <$> genLocalTime <*> genTimeZone
@@ -34,7 +38,7 @@ genBookmark :: Gen Bookmark
 genBookmark = Bookmark <$> genFilePath
                        <*> chooseInt (1, 1000)
                        <*> genZonedTime
-                       <*> liftArbitrary word
+                       <*> liftArbitrary text
 
 genBookmarks :: Gen Bookmarks
 genBookmarks = Bookmarks <$> listOf genBookmark
@@ -42,5 +46,5 @@ genBookmarks = Bookmarks <$> listOf genBookmark
 genBookmarkSearchTerm :: Gen BookmarkSearchTerm
 genBookmarkSearchTerm = oneof [
   SearchIndex <$> chooseInt (1, 1000)
-  , SearchName <$> word
+  , SearchName <$> text
   ]
