@@ -59,6 +59,7 @@ data Config = Config {
   , _enableClearing       :: !Bool
   , _enableReset          :: !Bool
   , _backupBeforeClear    :: !Bool
+  , _defaultBookmarks     :: !Bookmarks
   }
 
 -- | 'HoYoMonad' is the main monad stack for the hoyo program. It's essentially a wrapper
