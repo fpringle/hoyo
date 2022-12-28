@@ -6,16 +6,19 @@ module HoYo.Bookmark (
   Bookmark (..)
   , Bookmarks (..)
   , BookmarkSearchTerm (..)
+  , DefaultBookmark (..)
 
   -- *  Working with bookmarks
   , searchBookmarks
   , filterBookmarks
   , filterBookmarkByName
   , filterBookmarkByDirInfix
+  , bookmarksFromDefault
 
   -- ** Parsing\/encoding bookmarks from\/to TOML
   , bookmarkCodec
   , bookmarksCodec
+  , defaultBookmarkCodec
   , decodeBookmarks
   , decodeBookmarksFile
   , encodeBookmarks
@@ -30,8 +33,10 @@ import Data.Function
 import Data.List
 import qualified Data.Text as T
 
-import Control.Monad (void)
+import Control.Monad (forM, void)
 import Control.Monad.IO.Class
+
+import Data.Time
 
 import qualified Toml
 import Toml (TomlCodec)
@@ -45,6 +50,12 @@ bookmarkCodec = Bookmark
   <*> Toml.int        "index"               .== _bookmarkIndex
   <*> Toml.zonedTime  "created"             .== _bookmarkCreationTime
   <*> Toml.dioptional (Toml.string "name")  .== _bookmarkName
+
+-- | A 'TomlCodec' for encoding and decoding 'Bookmark's.
+defaultBookmarkCodec :: TomlCodec DefaultBookmark
+defaultBookmarkCodec = DefaultBookmark
+  <$> Toml.string     "directory"           .== _defaultBookmarkDirectory
+  <*> Toml.dioptional (Toml.string "name")  .== _defaultBookmarkName
 
 -- | A 'TomlCodec' for encoding and decoding 'Bookmarks'.
 bookmarksCodec :: TomlCodec Bookmarks
@@ -94,3 +105,12 @@ filterBookmarks :: Maybe String -> Maybe String -> Bookmark -> Bool
 filterBookmarks name dirInfix = combAnd
                                     (filterBookmarkByName name)
                                     (filterBookmarkByDirInfix dirInfix)
+
+-- | Convert a list of 'DefaultBookmark's to a 'Bookmarks', assiging indices and/
+-- creation times on the fly.
+bookmarksFromDefault :: MonadIO m => [DefaultBookmark] -> m Bookmarks
+bookmarksFromDefault dbms = Bookmarks <$> bms
+  where
+    bms = forM (zip dbms [1..]) $ \(DefaultBookmark dir name, idx) -> do
+      zTime <- liftIO getZonedTime
+      return $ Bookmark dir idx zTime name
