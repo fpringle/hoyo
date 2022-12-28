@@ -54,7 +54,8 @@ import Control.Monad.Except (throwError)
 import Control.Monad.IO.Class
 import Control.Monad.Reader.Class (ask)
 
-import Lens.Simple
+import Lens.Micro
+import Lens.Micro.Extras
 
 import System.Directory
 import System.Exit
