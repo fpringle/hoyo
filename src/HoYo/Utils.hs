@@ -134,18 +134,19 @@ valText (Toml.Array arr)   = withLines Toml.defaultOptions valText arr
 showText :: Show a => a -> T.Text
 showText = T.pack . show
 
-getBackupFile :: (MonadIO m, MonadError T.Text m) => FilePath -> String -> m FilePath
+getBackupFile :: (MonadIO m, MonadError T.Text m) => TFilePath -> String -> m TFilePath
 getBackupFile fp ext = do
-  ex <- liftIO $ doesFileExist fp
-  unless ex $ throwError ("not a file: " <> T.pack fp)
-  let firstTry = fp <> "." <> ext
+  let fpStr = T.unpack fp
+  ex <- liftIO $ doesFileExist fpStr
+  unless ex $ throwError ("not a file: " <> T.pack fpStr)
+  let firstTry = fpStr <> "." <> ext
   firstExists <- liftIO $ doesFileExist firstTry
   if firstExists
-  then getBackupFile' fp 2
-  else return firstTry
+  then T.pack <$> getBackupFile' fpStr 2
+  else return $ T.pack firstTry
 
   where
-    getBackupFile' :: (MonadIO m, MonadError T.Text m) => FilePath -> Int -> m FilePath
+    getBackupFile' :: (MonadIO m, MonadError T.Text m) => String -> Int -> m String
     getBackupFile' file' n = do
       let file = file' <> "." <> show n <> ext
       fileExists <- liftIO $ doesFileExist file
@@ -154,10 +155,10 @@ getBackupFile fp ext = do
       else return file
 
 -- | Try to back-up a file. Used when the "backup_before_clear" option is set.
-backupFile :: (MonadIO m, MonadError T.Text m) => FilePath -> String -> m ()
+backupFile :: (MonadIO m, MonadError T.Text m) => TFilePath -> String -> m ()
 backupFile fp ext = do
   file <- getBackupFile fp ext
-  liftIO $ copyFileWithMetadata fp file
+  liftIO $ copyFileWithMetadata (T.unpack fp) (T.unpack file)
 
 -- | Try to read a 'Bool'.
 readBool :: MonadError T.Text m => T.Text -> m Bool
@@ -193,11 +194,10 @@ printStdout = liftIO . T.putStrLn
 -- certain width.
 formatBookmark :: Bool -> Int -> Bookmark -> T.Text
 formatBookmark shouldDisplayTime indexWidth (Bookmark dir idx zTime mbName) =
-  let dText = T.pack dir
-      num = T.justifyRight indexWidth ' ' $ tshow idx
+  let num = T.justifyRight indexWidth ' ' $ tshow idx
       timeStr = T.pack $ formatTime defaultTimeLocale "%D %T" zTime
-      d = case mbName of Nothing    -> dText
-                         Just name  -> dText <> " " <> name
+      d = case mbName of Nothing    -> dir
+                         Just name  -> dir <> " " <> name
 
   in if shouldDisplayTime
      then num <> ". " <> timeStr <> "\t" <> d

@@ -30,7 +30,7 @@ writeEnv env = do
   encodeConfigFile (view configPath env) (view config env)
 
 -- | Read an 'Env' from a file.
-readEnv :: MonadIO m => FilePath -> FilePath -> m (Either T.Text Env)
+readEnv :: MonadIO m => TFilePath -> TFilePath -> m (Either T.Text Env)
 readEnv bFp sFp = do
   bs <- decodeBookmarksFile bFp
   se <- decodeConfigFile sFp
@@ -40,15 +40,15 @@ readEnv bFp sFp = do
     (Right _, Left e)   -> return $ Left e
     (Left e1, Left e2)  -> return $ Left (T.unlines [e1, e2])
 
-initPath :: MonadIO m => FilePath -> m ()
+initPath :: MonadIO m => TFilePath -> m ()
 initPath fp' = do
-  fp <- liftIO $ makeAbsolute fp'
+  fp <- liftIO $ makeAbsolute $ T.unpack fp'
   let dir = takeDirectory fp
   liftIO $ createDirectoryIfMissing True dir
 
 -- | Given a filepath for the bookmarks file and a filepath for the config file,
 -- initialize the respective TOMLs at those locations.
-initEnv :: MonadIO m => FilePath -> FilePath -> m ()
+initEnv :: MonadIO m => TFilePath -> TFilePath -> m ()
 initEnv bFp sFp = do
   initPath sFp
   initPath bFp
@@ -56,34 +56,36 @@ initEnv bFp sFp = do
   let env = Env bms bFp defaultConfig sFp
   writeEnv env
 
-initBookmarksIfNotExists :: (MonadIO m, MonadError T.Text m) => Config -> FilePath -> m Bookmarks
+initBookmarksIfNotExists :: (MonadIO m, MonadError T.Text m) => Config -> TFilePath -> m Bookmarks
 initBookmarksIfNotExists cfg fp' = do
-  fp <- liftIO $ makeAbsolute fp'
+  fp <- liftIO $ makeAbsolute $ T.unpack fp'
+  let fpText = T.pack fp
   ex <- liftIO $ doesFileExist fp
   unless ex $ do
-    initPath fp
+    initPath fpText
     bms <- bookmarksFromDefault $ view defaultBookmarks cfg
-    encodeBookmarksFile fp bms
-  decodeBookmarksFile fp >>= liftEither
+    encodeBookmarksFile fpText bms
+  decodeBookmarksFile fpText >>= liftEither
 
-initConfigIfNotExists :: (MonadIO m, MonadError T.Text m) => FilePath -> m Config
+initConfigIfNotExists :: (MonadIO m, MonadError T.Text m) => TFilePath -> m Config
 initConfigIfNotExists fp' = do
-  fp <- liftIO $ makeAbsolute fp'
+  fp <- liftIO $ makeAbsolute $ T.unpack fp'
+  let fpText = T.pack fp
   exists <- liftIO $ doesFileExist fp
   unless exists $ do
-    initPath fp
-    encodeConfigFile fp defaultConfig
-  decodeConfigFile fp >>= liftEither
+    initPath fpText
+    encodeConfigFile fpText defaultConfig
+  decodeConfigFile fpText >>= liftEither
 
-initEnvIfNotExists :: (MonadIO m, MonadError T.Text m) => FilePath -> FilePath -> m Env
+initEnvIfNotExists :: (MonadIO m, MonadError T.Text m) => TFilePath -> TFilePath -> m Env
 initEnvIfNotExists bFp sFp = do
   cfg <- initConfigIfNotExists sFp
   bms <- initBookmarksIfNotExists cfg bFp
   return $ Env bms bFp cfg sFp
 
 -- | Retrieve an 'Env' from given bookmark- and config- file locations.
-getEnv :: MonadIO m => FilePath -> FilePath -> m (Either T.Text Env)
+getEnv :: MonadIO m => TFilePath -> TFilePath -> m (Either T.Text Env)
 getEnv bFp' sFp' = do
-  sFp <- liftIO $ makeAbsolute sFp'
-  bFp <- liftIO $ makeAbsolute bFp'
+  sFp <- T.pack <$> liftIO (makeAbsolute $ T.unpack sFp')
+  bFp <- T.pack <$> liftIO (makeAbsolute $ T.unpack bFp')
   runExceptT $ initEnvIfNotExists bFp sFp

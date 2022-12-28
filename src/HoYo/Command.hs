@@ -67,7 +67,7 @@ import qualified Toml
 
 -- | Options for the "add" command to be parsed from the command-line.
 data AddOptions = AddOptions {
-  addDirectory  :: FilePath
+  addDirectory  :: TFilePath
   , addName     :: Maybe T.Text
   }
 
@@ -178,8 +178,8 @@ verifyOverrides (OverrideOptions o1 o2 o3 o4) = verify o1
 
 -- | CLI options that can be set regardless of which command is run.
 data GlobalOptions = GlobalOptions {
-  globalConfigPath  :: Maybe FilePath
-  , dataPath        :: Maybe FilePath
+  globalConfigPath  :: Maybe TFilePath
+  , dataPath        :: Maybe TFilePath
   , overrides       :: OverrideOptions
   }
 
@@ -211,21 +211,22 @@ modifyBookmarksM f = do
 -- | Run the "add" command: add a new bookmark.
 runAdd :: AddOptions -> HoYoMonad ()
 runAdd opts = do
-  dir <- liftIO $ canonicalizePath (addDirectory opts)
+  dir <- liftIO $ canonicalizePath $ T.unpack $ addDirectory opts
+  let tDir = T.pack dir
   let name = addName opts
   assertVerbose "not a directory" $ liftIO $ doesDirectoryExist dir
   assert "bookmark name can't be empty" $ return $ not $ null dir
   assert "bookmark name can't be a number" $ return $ not $ all isDigit dir
   modifyBookmarksM $ \bms -> do
     uniqDir <- assertVerbose "directory is already bookmarked" $
-      return $ all ((/= dir) . view bookmarkDirectory) bms
+      return $ all ((/= tDir) . view bookmarkDirectory) bms
     uniqName <- assertVerbose "bookmark name already used" $
       return $ all ((/= name) . view bookmarkName) bms
     if uniqDir && uniqName
     then do
       let maxIndex = maximumDefault 0 $ map (view bookmarkIndex) bms
       zTime <- liftIO getZonedTime
-      let newBookMark = Bookmark dir (maxIndex + 1) zTime name
+      let newBookMark = Bookmark tDir (maxIndex + 1) zTime name
       return (newBookMark : bms)
     else return bms
 
@@ -236,7 +237,7 @@ runMove opts = do
   let search = moveSearch opts
   case fst $ searchBookmarks search bms of
     []    -> throwError ("Unknown bookmark: " <> tshow search)
-    [bm]  -> do printStdout ("cd " <> T.pack (view bookmarkDirectory bm))
+    [bm]  -> do printStdout ("cd " <> view bookmarkDirectory bm)
                 liftIO $ exitWith (ExitFailure 3)
     ms    -> do displayTime <- asks' (config . displayCreationTime)
                 let strs = formatBookmarks displayTime $ sortOn (view bookmarkIndex) ms

@@ -170,10 +170,10 @@ main = withProgName "hoyo" $ do
   forM_ (verifyOverrides $ overrides globals) failure
 
   sFp <- case globalConfigPath globals of
-    Nothing -> getXdgDirectory XdgConfig "hoyo/config.toml"
+    Nothing -> T.pack <$> getXdgDirectory XdgConfig "hoyo/config.toml"
     Just d  -> return d
   bFp <- case dataPath globals of
-    Nothing -> getXdgDirectory XdgData "hoyo/bookmarks.toml"
+    Nothing -> T.pack <$> getXdgDirectory XdgData "hoyo/bookmarks.toml"
     Just d  -> return d
 
   getEnv bFp sFp >>= \case

@@ -20,20 +20,23 @@ import System.IO.Error
 (.==) :: Toml.Codec field a -> (object -> field) -> Toml.Codec object a
 (.==) = (Toml..=)
 
+-- | A 'T.Text' version of 'FilePath'.
+type TFilePath = T.Text
+
 -- | The main hoyo read-only environment. Contains the current saved bookmarks,
 -- the current hoyo configuration, and the file locations for each.
 data Env = Env {
   _bookmarks        :: !Bookmarks
-  , _bookmarksPath  :: !FilePath
+  , _bookmarksPath  :: !TFilePath
   , _config         :: !Config
-  , _configPath     :: !FilePath
+  , _configPath     :: !TFilePath
   }
 
 -- | Bookmark a directory for easy @cd@. A bookmark remembers the directory,
 -- the index, the creation time, and optionally a user-specified nickname
 -- for the bookmark.
 data Bookmark = Bookmark {
-  _bookmarkDirectory        :: !FilePath
+  _bookmarkDirectory        :: !TFilePath
   , _bookmarkIndex          :: !Int
   , _bookmarkCreationTime   :: !ZonedTime
   , _bookmarkName           :: !(Maybe T.Text)
@@ -42,7 +45,7 @@ data Bookmark = Bookmark {
 -- | Default bookmarks to save at init. A default bookmark remembers the directory
 -- and optionally a user-specified nickname for the bookmark.
 data DefaultBookmark = DefaultBookmark {
-  _defaultBookmarkDirectory        :: !FilePath
+  _defaultBookmarkDirectory        :: !TFilePath
   , _defaultBookmarkName           :: !(Maybe T.Text)
   } deriving Show
 

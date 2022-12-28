@@ -19,8 +19,8 @@ text = T.pack <$> listOf1 letter
 string :: Gen String
 string = listOf1 letter
 
-genFilePath :: Gen FilePath
-genFilePath = joinPath . ("/" :) <$> listOf string
+genFilePath :: Gen TFilePath
+genFilePath = T.pack . joinPath . ("/" :) <$> listOf string
 
 genZonedTime :: Gen ZonedTime
 genZonedTime = ZonedTime <$> genLocalTime <*> genTimeZone
