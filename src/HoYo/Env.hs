@@ -19,7 +19,7 @@ import Control.Monad.IO.Class
 
 import Control.Monad (unless)
 
-import Lens.Simple
+import Lens.Micro.Extras
 
 import System.Directory
 import System.FilePath

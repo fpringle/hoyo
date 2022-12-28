@@ -25,7 +25,8 @@ import Control.Monad.IO.Class
 import Control.Monad.Reader.Class (MonadReader(ask))
 import Control.Monad.Trans.Reader (runReaderT)
 
-import Lens.Simple
+import Lens.Micro
+import Lens.Micro.Extras
 
 import qualified Toml hiding (parse)
 import qualified Toml.Parser.Core as Toml (errorBundlePretty, parse)
@@ -39,7 +40,7 @@ import System.Directory
 runHoYo :: HoYoMonad a -> Env -> IO (Either String a)
 runHoYo = runReaderT . runExceptT . unHoYo
 
-asks' :: MonadReader a m => Getter a a' b b' -> m b
+asks' :: MonadReader a m => SimpleGetter a b -> m b
 asks' getter = view getter <$> ask
 
 maximumDefault :: Ord a => a -> [a] -> a

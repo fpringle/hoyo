@@ -26,7 +26,7 @@ import Control.Monad.Except
 import qualified Toml
 import Toml (TomlCodec)
 
-import Lens.Simple
+import Lens.Micro
 
 configCodec :: TomlCodec Config
 configCodec = Config

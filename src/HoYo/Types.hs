@@ -7,7 +7,7 @@ import Control.Monad.IO.Class
 import Control.Monad.Reader.Class (MonadReader)
 import Control.Monad.Trans.Reader (ReaderT)
 
-import Lens.Simple
+import Lens.Micro.TH
 
 import qualified Toml
 import Toml ((.=))

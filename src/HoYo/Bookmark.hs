@@ -36,7 +36,7 @@ import Control.Monad.IO.Class
 import qualified Toml
 import Toml (TomlCodec)
 
-import Lens.Simple
+import Lens.Micro.Extras
 
 -- | A 'TomlCodec' for encoding and decoding 'Bookmark's.
 bookmarkCodec :: TomlCodec Bookmark
