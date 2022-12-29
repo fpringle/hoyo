@@ -14,6 +14,7 @@ module HoYo.Command (
   , runDelete
   , runRefresh
   , runConfig
+  , runCheck
 
   -- * Types
   , Options (..)
@@ -28,6 +29,7 @@ module HoYo.Command (
   , ConfigResetOptions (..)
   , ConfigSetOptions (..)
   , ConfigCommand (..)
+  , CheckOptions (..)
   , GlobalOptions (..)
   , OverrideOptions (..)
   , overrideConfig
@@ -115,6 +117,12 @@ data ConfigCommand =
   | Reset ConfigResetOptions
   | Set ConfigSetOptions
 
+-- | Options for the "check" command to be parsed from the command-line.
+data CheckOptions = CheckOptions {
+  checkConfig         :: Bool
+  , checkBookmarks    :: Bool
+  }
+
 -- | The core data-type for the hoyo CLI. The 'Command' is parsed from the command-line,
 -- then 'runCommand' dispatches on the type.
 data Command =
@@ -125,6 +133,7 @@ data Command =
   | Delete DeleteOptions
   | Refresh RefreshOptions
   | ConfigCmd ConfigCommand
+  | Check CheckOptions
 
 -- | Datatype for representing a command-line settings override.
 data MaybeOverride =
@@ -335,6 +344,23 @@ runConfig (Print opts) = runConfigPrint opts
 runConfig (Reset opts) = runConfigReset opts
 runConfig (Set opts) = runConfigSet opts
 
+runCheckConfig :: TFilePath -> IO ()
+runCheckConfig = decodeConfigFile >=> \case
+  Left err  -> printStderr $ tshow err
+  Right _   -> printStdout "Config is good"
+
+runCheckBookmarks :: TFilePath -> IO ()
+runCheckBookmarks = decodeBookmarksFile >=> \case
+  Left err  -> printStderr $ tshow err
+  Right _   -> printStdout "Bookmarks file is good"
+
+-- | Run the "config check" command: validate the current
+-- config and bookmarks files.
+runCheck :: CheckOptions -> TFilePath -> TFilePath -> IO ()
+runCheck opts bFp sFp = do
+  when (checkConfig opts) $ runCheckConfig sFp
+  when (checkBookmarks opts) $ runCheckBookmarks bFp
+
 -- | Run a 'Command' in the hoyo environment.
 runCommand :: Command -> HoYoMonad ()
 runCommand       (Add opts) = runAdd opts
@@ -344,3 +370,4 @@ runCommand     (Clear opts) = runClear opts
 runCommand    (Delete opts) = runDelete opts
 runCommand   (Refresh opts) = runRefresh opts
 runCommand (ConfigCmd opts) = runConfig opts
+runCommand        (Check _) = throwError "The 'check' command needs to be run outside the HoYo monad"

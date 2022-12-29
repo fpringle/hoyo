@@ -85,3 +85,4 @@ getEnvAndRunCommand (Options cmd globals) bFp sFp = case cmd of
   Delete opts     -> getEnvAndRunHoYo globals (runDelete opts) bFp sFp
   Refresh opts    -> getEnvAndRunHoYo globals (runRefresh opts) bFp sFp
   ConfigCmd opts  -> getEnvAndRunHoYo globals (runConfig opts) bFp sFp
+  Check opts      -> runCheck opts bFp sFp
