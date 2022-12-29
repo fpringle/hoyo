@@ -194,9 +194,11 @@ data GlobalOptions = GlobalOptions {
   , overrides       :: OverrideOptions
   }
 
+-- | The default behaviour is to override nothing.
 defaultOverrideOptions :: OverrideOptions
 defaultOverrideOptions = OverrideOptions NoOverride NoOverride NoOverride NoOverride
 
+-- | Default global options. In general this should do nothing.
 defaultGlobalOptions :: GlobalOptions
 defaultGlobalOptions = GlobalOptions Nothing Nothing defaultOverrideOptions
 
