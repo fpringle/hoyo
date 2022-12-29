@@ -126,6 +126,17 @@ configSetCommand = Set <$> (
                       <*> argument str (metavar "VALUE" <> help "Option value")
                     )
 
+noArgs :: CheckOptions -> CheckOptions
+noArgs (CheckOptions False False) = CheckOptions True True
+noArgs opts = opts
+
+checkCommand :: Parser Command
+checkCommand = Check . noArgs <$> (
+                CheckOptions
+                  <$> switch (long "config" <> short 'c' <> help "Check the config file")
+                  <*> switch (long "bookmarks" <> short 'b' <> help "Check the bookmarks file")
+                )
+
 parseCommand :: Parser Command
 parseCommand = versionOption <*> hsubparser (
   command "add" (info addCommand (progDesc "Add a bookmark"))
@@ -135,6 +146,7 @@ parseCommand = versionOption <*> hsubparser (
   <> command "delete" (info deleteCommand (progDesc "Delete a bookmark"))
   <> command "refresh" (info refreshCommand (progDesc "Re-calculate bookmark indices"))
   <> command "config" (info configCommand (progDesc "View/manage hoyo config"))
+  <> command "check" (info checkCommand (progDesc "Verify validity of config and bookmarks"))
   )
 
 parseOptions :: Parser Options
@@ -165,8 +177,7 @@ versionInfo =
 
 main :: IO ()
 main = withProgName "hoyo" $ do
-  -- Options os globals <- getOptions
-  Options os globals <- execParser options
+  opts@(Options _ globals) <- execParser options
   forM_ (verifyOverrides $ overrides globals) failure
 
   sFp <- case globalConfigPath globals of
@@ -176,10 +187,4 @@ main = withProgName "hoyo" $ do
     Nothing -> T.pack <$> getXdgDirectory XdgData "hoyo/bookmarks.toml"
     Just d  -> return d
 
-  getEnv bFp sFp >>= \case
-    Left err    -> failure err
-    Right env   -> do
-      let overridenEnv = overrideEnv (overrides globals) env
-      runHoYo (runCommand os) overridenEnv >>= \case
-        Left err  -> failure err
-        Right _   -> return ()
+  getEnvAndRunCommand opts bFp sFp
