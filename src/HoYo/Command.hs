@@ -31,7 +31,9 @@ module HoYo.Command (
   , ConfigCommand (..)
   , CheckOptions (..)
   , GlobalOptions (..)
+  , defaultGlobalOptions
   , OverrideOptions (..)
+  , defaultOverrideOptions
   , overrideConfig
   , overrideEnv
   , verifyOverrides
@@ -191,6 +193,14 @@ data GlobalOptions = GlobalOptions {
   , dataPath        :: Maybe TFilePath
   , overrides       :: OverrideOptions
   }
+
+-- | The default behaviour is to override nothing.
+defaultOverrideOptions :: OverrideOptions
+defaultOverrideOptions = OverrideOptions NoOverride NoOverride NoOverride NoOverride
+
+-- | Default global options. In general this should do nothing.
+defaultGlobalOptions :: GlobalOptions
+defaultGlobalOptions = GlobalOptions Nothing Nothing defaultOverrideOptions
 
 -- | The final result of parsing the CLI arguments. Contains a command and all
 -- information for that command, and any global options that have been set.

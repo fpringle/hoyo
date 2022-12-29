@@ -13,6 +13,7 @@ and this project adheres to the
 - Added an array table "default_bookmark" to config: these bookmarks
 will be added to the bookmark list on init/clear.
 - Added utility formatting functions for Bookmarks.
+- Added custom Bash completions
 
 ### Fixed
 

@@ -2,10 +2,12 @@ module Main where
 
 import HoYo
 
+import Data.Maybe
 import qualified Data.Text as T
 import Text.Read
 
 import Control.Monad
+import Control.Monad.IO.Class
 
 import System.Environment (withProgName)
 -- import System.IO
@@ -20,12 +22,14 @@ globalOptions = GlobalOptions
                                 <> short 'c'
                                 <> metavar "FILE"
                                 <> help "Override the default config file"
-                                <> showDefault))
+                                <> showDefault
+                                <> action "file"))
                   <*> optional (strOption (long "bookmarks"
                                 <> short 'b'
                                 <> metavar "FILE"
                                 <> help "Override the default bookmarks file"
-                                <> showDefault))
+                                <> showDefault
+                                <> action "file"))
                   <*> overrideOptions
 
 overrideOptions :: Parser OverrideOptions
@@ -63,9 +67,40 @@ parseOverrideEnableReset = parseOverride
 addCommand :: Parser Command
 addCommand = Add <$> (
               AddOptions
-                <$> strArgument (metavar "DIR" <> help "Directory to bookmark")
+                <$> strArgument (metavar "DIR" <> help "Directory to bookmark" <> action "directory")
                 <*> optional (strArgument (metavar "NAME" <> help "Optionally give a name to your bookmark"))
               )
+
+bookmarkCompleter :: Completer
+bookmarkCompleter = listIOCompleter $ do
+  sFp <- defaultConfigPath
+  bFp <- defaultBookmarksPath
+  res <- withFiles defaultGlobalOptions bFp sFp getBookmarks
+  case res of
+    Left err              -> do liftIO $ print err
+                                return []
+    Right (Bookmarks bms) -> do
+      let indices = map (show . _bookmarkIndex) bms
+      let nicknames = mapMaybe (fmap T.unpack . _bookmarkName) bms
+      return (nicknames <> indices)
+
+configKeyCompleter :: Completer
+configKeyCompleter = listCompleter [
+  "fail_on_error"
+  , "display_creation_time"
+  , "enable_clearing"
+  , "enable_reset"
+  , "backup_before_clear"
+  ]
+
+-- TODO: more sophisticated, needs to consider the current key
+configValueCompleter :: Completer
+configValueCompleter = listCompleter [
+  "true"
+  , "True"
+  , "false"
+  , "False"
+  ]
 
 bookmarkSearchTerm :: ReadM BookmarkSearchTerm
 bookmarkSearchTerm = eitherReader $ \s ->
@@ -74,7 +109,11 @@ bookmarkSearchTerm = eitherReader $ \s ->
 
 moveCommand :: Parser Command
 moveCommand = Move . MoveOptions
-                <$> argument bookmarkSearchTerm (metavar "BOOKMARK" <> help "Index or name of the bookmark to move to")
+                <$> argument bookmarkSearchTerm (
+                      metavar "BOOKMARK"
+                      <> help "Index or name of the bookmark to move to"
+                      <> completer bookmarkCompleter
+                    )
 
 listCommand :: Parser Command
 listCommand = List <$> (
@@ -98,7 +137,11 @@ clearCommand = pure (Clear ClearOptions)
 
 deleteCommand :: Parser Command
 deleteCommand =  Delete . DeleteOptions
-                    <$> argument bookmarkSearchTerm (metavar "BOOKMARK" <> help "Index or name of the bookmark to delete")
+                    <$> argument bookmarkSearchTerm (
+                          metavar "BOOKMARK"
+                          <> help "Index or name of the bookmark to delete"
+                          <> completer bookmarkCompleter
+                        )
 
 refreshCommand :: Parser Command
 refreshCommand = pure (Refresh RefreshOptions)
@@ -119,8 +162,16 @@ configResetCommand = pure (Reset ConfigResetOptions)
 configSetCommand :: Parser ConfigCommand
 configSetCommand = Set <$> (
                     ConfigSetOptions
-                      <$> argument str (metavar "KEY" <> help "Option to modify")
-                      <*> argument str (metavar "VALUE" <> help "Option value")
+                      <$> argument str (
+                            metavar "KEY"
+                            <> help "Option to modify"
+                            <> completer configKeyCompleter
+                          )
+                      <*> argument str (
+                            metavar "VALUE"
+                            <> help "Option value"
+                            <> completer configValueCompleter
+                          )
                     )
 
 noArgs :: CheckOptions -> CheckOptions
@@ -169,16 +220,18 @@ versionInfo =
   <> versionString
   <> "\n\nCopyright (c) 2022, Frederick Pringle\n\nAll rights reserved."
 
+defaultConfigPath :: IO TFilePath
+defaultConfigPath = T.pack <$> getXdgDirectory XdgConfig "hoyo/config.toml"
+
+defaultBookmarksPath :: IO TFilePath
+defaultBookmarksPath = T.pack <$> getXdgDirectory XdgData "hoyo/bookmarks.toml"
+
 main :: IO ()
 main = withProgName "hoyo" $ do
   opts@(Options _ globals) <- execParser options
   forM_ (verifyOverrides $ overrides globals) failure
 
-  sFp <- case globalConfigPath globals of
-    Nothing -> T.pack <$> getXdgDirectory XdgConfig "hoyo/config.toml"
-    Just d  -> return d
-  bFp <- case dataPath globals of
-    Nothing -> T.pack <$> getXdgDirectory XdgData "hoyo/bookmarks.toml"
-    Just d  -> return d
+  sFp <- maybe defaultConfigPath return $ globalConfigPath globals
+  bFp <- maybe defaultBookmarksPath return $ dataPath globals
 
   getEnvAndRunCommand opts bFp sFp

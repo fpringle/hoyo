@@ -11,6 +11,7 @@ module HoYo.Bookmark (
   , DefaultBookmark (..)
 
   -- *  Working with bookmarks
+  , getBookmarks
   , searchBookmarks
   , filterBookmarks
   , filterBookmarkByName
@@ -117,3 +118,7 @@ bookmarksFromDefault dbms = Bookmarks <$> bms
     bms = forM (zip dbms [1..]) $ \(DefaultBookmark dir name, idx) -> do
       zTime <- liftIO getZonedTime
       return $ Bookmark dir idx zTime name
+
+-- | Get the bookmarks from the currently used bookmark file.
+getBookmarks :: HoYoMonad Bookmarks
+getBookmarks = asks' bookmarks
