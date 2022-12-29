@@ -22,6 +22,7 @@ module HoYo (
 
   -- * Utility functions
   , runHoYo
+  , withFiles
   , getEnvAndRunHoYo
   , getEnvAndRunCommand
   , HoYoMonad
@@ -57,23 +58,29 @@ import System.Exit
 runHoYo :: HoYoMonad a -> Env -> IO (Either T.Text a)
 runHoYo = runReaderT . runExceptT . unHoYo
 
-failure :: T.Text -> IO ()
+failure :: T.Text -> IO a
 failure err = do
   printStderr ("Error: " <> err)
   exitWith (ExitFailure 1)
 
--- | @getEnvAndRunHoYo globals hoyo bFp sFp@ gets the environment saved in
+-- | @withFiles globals bFp sFp hoyo@ gets the environment saved in
 -- the bookmark path (@bFp@) and the config path (@sFp@), applies the global
--- options and overrides in @globals@, and runs @hoyo@.
-getEnvAndRunHoYo :: GlobalOptions -> HoYoMonad () -> TFilePath -> TFilePath -> IO ()
-getEnvAndRunHoYo globals hoyo bFp sFp =
+-- options and overrides in @globals@, and runs @hoyo@, returning either
+-- the result or an error message.
+withFiles :: GlobalOptions -> TFilePath -> TFilePath -> HoYoMonad a -> IO (Either T.Text a)
+withFiles globals bFp sFp hoyo =
   getEnv bFp sFp >>= \case
     Left err    -> failure err
-    Right env   -> do
-      let overridenEnv = overrideEnv (overrides globals) env
-      runHoYo hoyo overridenEnv >>= \case
-        Left err  -> failure err
-        Right _   -> return ()
+    Right env   -> runHoYo hoyo $ overrideEnv (overrides globals) env
+
+-- | @getEnvAndRunHoYo globals hoyo bFp sFp@ gets the environment saved in
+-- the bookmark path (@bFp@) and the config path (@sFp@), applies the global
+-- options and overrides in @globals@, and runs @hoyo@, either printing an error
+-- message or discarding the result.
+getEnvAndRunHoYo :: GlobalOptions -> HoYoMonad a -> TFilePath -> TFilePath -> IO ()
+getEnvAndRunHoYo globals hoyo bFp sFp = withFiles globals bFp sFp hoyo >>= \case
+  Left err  -> failure err
+  Right _   -> return ()
 
 -- | @getEnvAndRunHoYo opts bFp sFp@ gets the environment saved in
 -- the bookmark path (@bFp@) and the config path (@sFp@), and runs the command
