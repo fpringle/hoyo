@@ -21,10 +21,9 @@ import Text.Printf (printf)
 import Text.Read (readEither)
 
 import Control.Monad (unless, when)
-import Control.Monad.Except (MonadError(..), liftEither, runExceptT, throwError)
+import Control.Monad.Except (MonadError(..), liftEither, throwError)
 import Control.Monad.IO.Class
 import Control.Monad.Reader.Class (MonadReader(ask))
-import Control.Monad.Trans.Reader (runReaderT)
 
 import Lens.Micro
 import Lens.Micro.Extras
@@ -36,10 +35,6 @@ import qualified Toml.Parser.Value as Toml
 import Data.Time
 
 import System.Directory
-
--- | Given a hoyo 'Env', run a monadic action in IO.
-runHoYo :: HoYoMonad a -> Env -> IO (Either T.Text a)
-runHoYo = runReaderT . runExceptT . unHoYo
 
 asks' :: MonadReader a m => SimpleGetter a b -> m b
 asks' getter = view getter <$> ask

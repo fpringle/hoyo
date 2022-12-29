@@ -165,8 +165,7 @@ versionInfo =
 
 main :: IO ()
 main = withProgName "hoyo" $ do
-  -- Options os globals <- getOptions
-  Options os globals <- execParser options
+  opts@(Options _ globals) <- execParser options
   forM_ (verifyOverrides $ overrides globals) failure
 
   sFp <- case globalConfigPath globals of
@@ -176,10 +175,4 @@ main = withProgName "hoyo" $ do
     Nothing -> T.pack <$> getXdgDirectory XdgData "hoyo/bookmarks.toml"
     Just d  -> return d
 
-  getEnv bFp sFp >>= \case
-    Left err    -> failure err
-    Right env   -> do
-      let overridenEnv = overrideEnv (overrides globals) env
-      runHoYo (runCommand os) overridenEnv >>= \case
-        Left err  -> failure err
-        Right _   -> return ()
+  getEnvAndRunCommand opts bFp sFp
