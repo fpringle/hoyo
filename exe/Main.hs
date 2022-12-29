@@ -1,4 +1,3 @@
-{-# LANGUAGE TemplateHaskell #-}
 module Main where
 
 import HoYo
@@ -14,8 +13,6 @@ import System.Directory
 import System.Exit
 
 import Options.Applicative
-
-import Data.Version.Package
 
 globalOptions :: Parser GlobalOptions
 globalOptions = GlobalOptions
@@ -165,9 +162,6 @@ failure :: T.Text -> IO ()
 failure err = do
   printStderr ("Error: " <> err)
   exitWith (ExitFailure 1)
-
-versionString :: String
-versionString = $$(packageVersionStringTH "hoyo.cabal")
 
 versionInfo :: String
 versionInfo =

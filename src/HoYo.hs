@@ -37,6 +37,7 @@ module HoYo (
 
   -- * Misc
   , TFilePath
+  , versionString
   ) where
 
 import HoYo.Bookmark
@@ -45,6 +46,7 @@ import HoYo.Config
 import HoYo.Env
 import HoYo.Types
 import HoYo.Utils
+import HoYo.Version
 
 import Control.Monad.Except (runExceptT)
 import Control.Monad.Trans.Reader (runReaderT)
