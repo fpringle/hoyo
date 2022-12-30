@@ -10,19 +10,33 @@ and this project adheres to the
 
 ### Added
 
+### Fixed
+
+### Changed
+
+### Removed
+
+## [0.2.0.0] - 2022-12-30
+
+### Added
+
 - Added an array table "default_bookmark" to config: these bookmarks
 will be added to the bookmark list on init/clear.
 - Added utility formatting functions for Bookmarks.
-- Added custom Bash completions
+- Added custom Bash completions.
+- `check` command: verify the config and bookmark files.
+- Added withFiles function.
 
 ### Fixed
 
-- Add checks in `addMove` to verify bookmark names are valid
+- Add checks in `addMove` to verify bookmark names are valid.
 
 ### Changed
 
 - Changed dependency from lens-simple to microlens.
-- Rename "bookmarks" to "bookmark" in bookmarks.toml
+- Rename "bookmarks" to "bookmark" in bookmarks.toml.
+- Use Text instead of String everywhere.
+- Move `versionString` to its own module.
 
 ### Removed
 
@@ -30,11 +44,11 @@ will be added to the bookmark list on init/clear.
 
 ### Changed
 
-- Fixed some dependency bounds in hoyo.cabal
+- Fixed some dependency bounds in hoyo.cabal.
 
 ### Removed
 
-- Todo.md
+- Todo.md.
 
 ## [0.1.0.2] - 2022-12-27
 
@@ -43,7 +57,7 @@ will be added to the bookmark list on init/clear.
 - Start of a test suite.
 - Pre-commit hook to run tests.
 - GitHub Action to run tests.
-- Pre-commit hook for linting (scripts/lint.sh)
+- Pre-commit hook for linting (scripts/lint.sh).
 
 ### Changed
 
@@ -70,7 +84,8 @@ build docs using a pre-commit hook.
 
 - Initial release.
 
-[unreleased]: https://github.com/fpringle/hoyo/compare/v0.1.1.0...HEAD
+[unreleased]: https://github.com/fpringle/hoyo/compare/v0.2.0.0...HEAD
+[0.2.0.0]: https://github.com/fpringle/hoyo/compare/v0.1.1.0...v0.2.0.0
 [0.1.1.0]: https://github.com/fpringle/hoyo/compare/v0.1.0.2...v0.1.1.0
 [0.1.0.2]: https://github.com/fpringle/hoyo/compare/v0.1.0.1...v0.1.0.2
 [0.1.0.1]: https://github.com/fpringle/hoyo/compare/v0.1.0.0...v0.1.0.1
