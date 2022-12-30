@@ -15,6 +15,8 @@ and this project adheres to the
 ### Changed
 
 - Split Main.exe into different modules for parsing and completion.
+- Made the parser metavariables a bit nicer in the help text, e.g. <file>
+instead of FILE.
 
 ### Removed
 
