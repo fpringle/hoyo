@@ -14,6 +14,8 @@ and this project adheres to the
 
 ### Changed
 
+- Split Main.exe into different modules for parsing and completion.
+
 ### Removed
 
 ## [0.2.0.0] - 2022-12-30
