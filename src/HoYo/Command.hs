@@ -28,6 +28,7 @@ module HoYo.Command (
   , ConfigPrintOptions (..)
   , ConfigResetOptions (..)
   , ConfigSetOptions (..)
+  , ConfigAddDefaultOptions (..)
   , ConfigCommand (..)
   , CheckOptions (..)
   , GlobalOptions (..)
@@ -113,11 +114,18 @@ data ConfigSetOptions = ConfigSetOptions {
   , setValue    :: T.Text
   }
 
+-- | Options for the "config add-default" command to be parsed from the command-line.
+data ConfigAddDefaultOptions = ConfigAddDefaultOptions {
+  addDefaultDir       :: TFilePath
+  , addDefaultName    :: Maybe T.Text
+  }
+
 -- | Options for the "config" command to be parsed from the command-line.
 data ConfigCommand =
   Print ConfigPrintOptions
   | Reset ConfigResetOptions
   | Set ConfigSetOptions
+  | AddDefaultBookmark ConfigAddDefaultOptions
 
 -- | Options for the "check" command to be parsed from the command-line.
 data CheckOptions = CheckOptions {
@@ -227,25 +235,29 @@ modifyBookmarksM f = do
   newBookmarks <- Bookmarks <$> f bms
   encodeBookmarksFile bFp newBookmarks
 
--- | Run the "add" command: add a new bookmark.
-runAdd :: AddOptions -> HoYoMonad ()
-runAdd opts = do
-  dir <- liftIO $ canonicalizePath $ T.unpack $ addDirectory opts
-  let tDir = T.pack dir
-  let name = addName opts
+normaliseAndVerifyDirectory :: TFilePath -> HoYoMonad TFilePath
+normaliseAndVerifyDirectory d = do
+  dir <- liftIO $ canonicalizePath $ T.unpack d
   assertVerbose "not a directory" $ liftIO $ doesDirectoryExist dir
   assert "bookmark name can't be empty" $ return $ not $ null dir
   assert "bookmark name can't be a number" $ return $ not $ all isDigit dir
+  return $ T.pack dir
+
+-- | Run the "add" command: add a new bookmark.
+runAdd :: AddOptions -> HoYoMonad ()
+runAdd opts = do
+  dir <- normaliseAndVerifyDirectory $ addDirectory opts
+  let name = addName opts
   modifyBookmarksM $ \bms -> do
     uniqDir <- assertVerbose "directory is already bookmarked" $
-      return $ all ((/= tDir) . view bookmarkDirectory) bms
+      return $ all ((/= dir) . view bookmarkDirectory) bms
     uniqName <- assertVerbose "bookmark name already used" $
       return $ all ((/= name) . view bookmarkName) bms
     if uniqDir && uniqName
     then do
       let maxIndex = maximumDefault 0 $ map (view bookmarkIndex) bms
       zTime <- liftIO getZonedTime
-      let newBookMark = Bookmark tDir (maxIndex + 1) zTime name
+      let newBookMark = Bookmark dir (maxIndex + 1) zTime name
       return (newBookMark : bms)
     else return bms
 
@@ -348,11 +360,23 @@ runConfigSet opts = do
     >>= setConfig key val
     >>= encodeConfigFile cfgPath
 
+-- | Run the "config add-default" command: try to set a key-value pair in the config.
+runAddDefault :: ConfigAddDefaultOptions -> HoYoMonad ()
+runAddDefault opts = do
+  dir <- normaliseAndVerifyDirectory $ addDefaultDir opts
+
+  let name = addDefaultName opts
+  let defaultBm = DefaultBookmark dir name
+  cfgPath <- asks' configPath
+  asks' config
+    >>= encodeConfigFile cfgPath . over defaultBookmarks (defaultBm :)
+
 -- | Run the "config" command: dispatch on the given sub-command.
 runConfig :: ConfigCommand -> HoYoMonad ()
 runConfig (Print opts) = runConfigPrint opts
 runConfig (Reset opts) = runConfigReset opts
 runConfig (Set opts) = runConfigSet opts
+runConfig (AddDefaultBookmark opts) = runAddDefault opts
 
 runCheckConfig :: TFilePath -> IO ()
 runCheckConfig = decodeConfigFile >=> \case
