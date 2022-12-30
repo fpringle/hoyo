@@ -10,6 +10,8 @@ and this project adheres to the
 
 ### Added
 
+- Added a new command `config add-default`: add a new default bookmark to the config.
+
 ### Fixed
 
 ### Changed
