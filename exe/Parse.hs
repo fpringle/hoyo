@@ -11,13 +11,13 @@ globalOptions :: Parser GlobalOptions
 globalOptions = GlobalOptions
                   <$> optional (strOption (long "config"
                                 <> short 'c'
-                                <> metavar "FILE"
+                                <> metavar "<file>"
                                 <> help "Override the default config file"
                                 <> showDefault
                                 <> action "file"))
                   <*> optional (strOption (long "bookmarks"
                                 <> short 'b'
-                                <> metavar "FILE"
+                                <> metavar "<file>"
                                 <> help "Override the default bookmarks file"
                                 <> showDefault
                                 <> action "file"))
@@ -58,8 +58,8 @@ parseOverrideEnableReset = parseOverride
 addCommand :: Parser Command
 addCommand = Add <$> (
               AddOptions
-                <$> strArgument (metavar "DIR" <> help "Directory to bookmark" <> action "directory")
-                <*> optional (strArgument (metavar "NAME" <> help "Optionally give a name to your bookmark"))
+                <$> strArgument (metavar "<dir>" <> help "Directory to bookmark" <> action "directory")
+                <*> optional (strArgument (metavar "<name>" <> help "Optionally give a name to your bookmark"))
               )
 
 bookmarkSearchTerm :: ReadM BookmarkSearchTerm
@@ -70,7 +70,7 @@ bookmarkSearchTerm = eitherReader $ \s ->
 moveCommand :: Parser Command
 moveCommand = Move . MoveOptions
                 <$> argument bookmarkSearchTerm (
-                      metavar "BOOKMARK"
+                      metavar "<bookmark>"
                       <> help "Index or name of the bookmark to move to"
                       <> completer bookmarkCompleter
                     )
@@ -81,13 +81,13 @@ listCommand = List <$> (
                     <$> optional (strOption (
                           long "name"
                           <> short 'n'
-                          <> metavar "NAME"
+                          <> metavar "<name>"
                           <> help "Search bookmarks by name"
                         ))
                     <*> optional (strOption (
                           long "dir"
                           <> short 'd'
-                          <> metavar "DIRECTORY"
+                          <> metavar "<directory>"
                           <> help "Search bookmarks by directory"
                         ))
                   )
@@ -98,7 +98,7 @@ clearCommand = pure (Clear ClearOptions)
 deleteCommand :: Parser Command
 deleteCommand =  Delete . DeleteOptions
                     <$> argument bookmarkSearchTerm (
-                          metavar "BOOKMARK"
+                          metavar "<bookmark>"
                           <> help "Index or name of the bookmark to delete"
                           <> completer bookmarkCompleter
                         )
@@ -123,12 +123,12 @@ configSetCommand :: Parser ConfigCommand
 configSetCommand = Set <$> (
                     ConfigSetOptions
                       <$> argument str (
-                            metavar "KEY"
+                            metavar "<key>"
                             <> help "Option to modify"
                             <> completer configKeyCompleter
                           )
                       <*> argument str (
-                            metavar "VALUE"
+                            metavar "<value>"
                             <> help "Option value"
                             <> completer configValueCompleter
                           )
