@@ -111,6 +111,7 @@ configCommand = ConfigCmd <$> hsubparser (
   command "print" (info configPrintCommand (progDesc "Print hoyo config"))
   <> command "reset" (info configResetCommand (progDesc "Reset hoyo config"))
   <> command "set" (info configSetCommand (progDesc "Modify hoyo config"))
+  <> command "add-default" (info configAddDefaultCommand (progDesc "Add a default bookmark"))
   )
 
 configPrintCommand :: Parser ConfigCommand
@@ -122,17 +123,31 @@ configResetCommand = pure (Reset ConfigResetOptions)
 configSetCommand :: Parser ConfigCommand
 configSetCommand = Set <$> (
                     ConfigSetOptions
-                      <$> argument str (
+                      <$> strArgument (
                             metavar "<key>"
                             <> help "Option to modify"
                             <> completer configKeyCompleter
                           )
-                      <*> argument str (
+                      <*> strArgument (
                             metavar "<value>"
                             <> help "Option value"
                             <> completer configValueCompleter
                           )
                     )
+
+configAddDefaultCommand :: Parser ConfigCommand
+configAddDefaultCommand = AddDefaultBookmark <$> (
+                            ConfigAddDefaultOptions
+                              <$> strArgument (
+                                    metavar "<dir>"
+                                    <> help "Directory to bookmark"
+                                    <> action "directory"
+                                  )
+                              <*> optional (strArgument (
+                                    metavar "<name>"
+                                    <> help "Optionally give a name to your bookmark"
+                                  ))
+                          )
 
 noArgs :: CheckOptions -> CheckOptions
 noArgs (CheckOptions False False) = CheckOptions True True
