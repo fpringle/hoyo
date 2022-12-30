@@ -356,12 +356,12 @@ runConfig (Set opts) = runConfigSet opts
 
 runCheckConfig :: TFilePath -> IO ()
 runCheckConfig = decodeConfigFile >=> \case
-  Left err  -> printStderr $ tshow err
+  Left err  -> printStderr err
   Right _   -> printStdout "Config is good"
 
 runCheckBookmarks :: TFilePath -> IO ()
 runCheckBookmarks = decodeBookmarksFile >=> \case
-  Left err  -> printStderr $ tshow err
+  Left err  -> printStderr err
   Right _   -> printStdout "Bookmarks file is good"
 
 -- | Run the "config check" command: validate the current
