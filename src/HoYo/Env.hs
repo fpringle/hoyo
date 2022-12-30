@@ -1,11 +1,15 @@
 -- | The read-only hoyo environment.
 module HoYo.Env (
-  -- HoYo config
+  -- * HoYo config
   Env (..)
   , initEnv
   , getEnv
   , writeEnv
   , readEnv
+
+  -- ** Default file paths
+  , defaultBookmarksPath
+  , defaultConfigPath
   ) where
 
 import HoYo.Bookmark
@@ -89,3 +93,9 @@ getEnv bFp' sFp' = do
   sFp <- T.pack <$> liftIO (makeAbsolute $ T.unpack sFp')
   bFp <- T.pack <$> liftIO (makeAbsolute $ T.unpack bFp')
   runExceptT $ initEnvIfNotExists bFp sFp
+
+defaultConfigPath :: IO TFilePath
+defaultConfigPath = T.pack <$> getXdgDirectory XdgConfig "hoyo/config.toml"
+
+defaultBookmarksPath :: IO TFilePath
+defaultBookmarksPath = T.pack <$> getXdgDirectory XdgData "hoyo/bookmarks.toml"
