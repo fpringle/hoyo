@@ -94,8 +94,10 @@ getEnv bFp' sFp' = do
   bFp <- T.pack <$> liftIO (makeAbsolute $ T.unpack bFp')
   runExceptT $ initEnvIfNotExists bFp sFp
 
+-- | The default path for the hoyo config. Usually $HOME/.config/hoyo/config.toml
 defaultConfigPath :: IO TFilePath
 defaultConfigPath = T.pack <$> getXdgDirectory XdgConfig "hoyo/config.toml"
 
+-- |The default path for hoyo bookmarks. Usually $HOME/.local/share/hoyo/config.toml
 defaultBookmarksPath :: IO TFilePath
 defaultBookmarksPath = T.pack <$> getXdgDirectory XdgData "hoyo/bookmarks.toml"
