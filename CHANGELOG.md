@@ -10,17 +10,23 @@ and this project adheres to the
 
 ### Added
 
-- Added a new command `config add-default`: add a new default bookmark to the config.
-
 ### Fixed
+
+### Changed
+
+### Removed
+
+## [0.2.1.0] - 2022-12-31
+
+### Added
+
+- Added a new command `config add-default`: add a new default bookmark to the config.
 
 ### Changed
 
 - Split Main.exe into different modules for parsing and completion.
 - Made the parser metavariables a bit nicer in the help text, e.g. <file>
 instead of FILE.
-
-### Removed
 
 ## [0.2.0.0] - 2022-12-30
 
@@ -90,7 +96,8 @@ build docs using a pre-commit hook.
 
 - Initial release.
 
-[unreleased]: https://github.com/fpringle/hoyo/compare/v0.2.0.0...HEAD
+[unreleased]: https://github.com/fpringle/hoyo/compare/v0.2.1.0...HEAD
+[0.2.1.0]: https://github.com/fpringle/hoyo/compare/v0.2.0.0...v0.2.1.0
 [0.2.0.0]: https://github.com/fpringle/hoyo/compare/v0.1.1.0...v0.2.0.0
 [0.1.1.0]: https://github.com/fpringle/hoyo/compare/v0.1.0.2...v0.1.1.0
 [0.1.0.2]: https://github.com/fpringle/hoyo/compare/v0.1.0.1...v0.1.0.2
