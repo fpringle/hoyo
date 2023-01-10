@@ -16,6 +16,7 @@ homepage:      https://github.com/fpringle/hoyo
 category:      System
 build-type:    Simple
 extra-doc-files: CHANGELOG.md README.md
+tested-with:   GHC ==8.10.7
 
 source-repository head
   type:     git
