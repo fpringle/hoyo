@@ -161,7 +161,7 @@ checkCommand = Check . noArgs <$> (
                 )
 
 parseCommand :: Parser Command
-parseCommand = versionOption <*> hsubparser (
+parseCommand = (versionOption <*> hsubparser (
   command "add" (info addCommand (progDesc "Add a bookmark"))
   <> command "move" (info moveCommand (progDesc "Change directory using a bookmark"))
   <> command "list" (info listCommand (progDesc "List existing bookmarks"))
@@ -170,7 +170,7 @@ parseCommand = versionOption <*> hsubparser (
   <> command "refresh" (info refreshCommand (progDesc "Re-calculate bookmark indices"))
   <> command "config" (info configCommand (progDesc "View/manage hoyo config"))
   <> command "check" (info checkCommand (progDesc "Verify validity of config and bookmarks"))
-  )
+  )) <|> moveCommand
 
 parseOptions :: Parser Options
 parseOptions = Options <$> parseCommand <*> globalOptions

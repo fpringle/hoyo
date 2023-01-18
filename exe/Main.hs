@@ -18,6 +18,7 @@ failure err = do
 main :: IO ()
 main = withProgName "hoyo" $ do
   opts@(Options _ globals) <- execParser options
+  print opts
   forM_ (verifyOverrides $ overrides globals) failure
 
   sFp <- maybe defaultConfigPath return $ globalConfigPath globals
