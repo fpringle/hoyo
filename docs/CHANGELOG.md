@@ -10,6 +10,8 @@ and this project adheres to the
 
 ### Added
 
+- Show instance for the various command and option types. Mostly for debugging.
+
 ### Fixed
 
 ### Changed

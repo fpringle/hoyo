@@ -74,51 +74,51 @@ import qualified Toml
 data AddOptions = AddOptions {
   addDirectory  :: TFilePath
   , addName     :: Maybe T.Text
-  }
+  } deriving Show
 
 -- | Options for the "move" command to be parsed from the command-line.
 newtype MoveOptions = MoveOptions {
   moveSearch :: BookmarkSearchTerm
-  }
+  } deriving Show
 
 -- | Options for the "list" command to be parsed from the command-line.
 data ListOptions = ListOptions {
   listFilterName                :: Maybe T.Text
   , listFilterDirectoryInfix    :: Maybe T.Text
-  }
+  } deriving Show
 
 -- | Options for the "clear" command to be parsed from the command-line.
 data ClearOptions = ClearOptions {
-  }
+  } deriving Show
 
 -- | Options for the "delete" command to be parsed from the command-line.
 newtype DeleteOptions = DeleteOptions {
   deleteSearch :: BookmarkSearchTerm
-  }
+  } deriving Show
 
 -- | Options for the "refresh" command to be parsed from the command-line.
 data RefreshOptions = RefreshOptions {
-  }
+  } deriving Show
 
 -- | Options for the "config print" command to be parsed from the command-line.
 data ConfigPrintOptions = ConfigPrintOptions {
-  }
+  } deriving Show
 
 -- | Options for the "config reset" command to be parsed from the command-line.
 data ConfigResetOptions = ConfigResetOptions {
-  }
+  } deriving Show
 
 -- | Options for the "config set" command to be parsed from the command-line.
 data ConfigSetOptions = ConfigSetOptions {
   setKey        :: T.Text
   , setValue    :: T.Text
-  }
+  } deriving Show
 
 -- | Options for the "config add-default" command to be parsed from the command-line.
 data ConfigAddDefaultOptions = ConfigAddDefaultOptions {
   addDefaultDir       :: TFilePath
   , addDefaultName    :: Maybe T.Text
-  }
+  } deriving Show
 
 -- | Options for the "config" command to be parsed from the command-line.
 data ConfigCommand =
@@ -126,12 +126,13 @@ data ConfigCommand =
   | Reset ConfigResetOptions
   | Set ConfigSetOptions
   | AddDefaultBookmark ConfigAddDefaultOptions
+  deriving Show
 
 -- | Options for the "check" command to be parsed from the command-line.
 data CheckOptions = CheckOptions {
   checkConfig         :: Bool
   , checkBookmarks    :: Bool
-  }
+  } deriving Show
 
 -- | The core data-type for the hoyo CLI. The 'Command' is parsed from the command-line,
 -- then 'runCommand' dispatches on the type.
@@ -144,6 +145,7 @@ data Command =
   | Refresh RefreshOptions
   | ConfigCmd ConfigCommand
   | Check CheckOptions
+  deriving Show
 
 -- | Datatype for representing a command-line settings override.
 data MaybeOverride =
@@ -151,6 +153,7 @@ data MaybeOverride =
   | OverrideTrue
   | NoOverride
   | Conflict
+  deriving Show
 
 -- | Combine a config flag with a command-line flag, checking for conflicts.
 combOverride :: Bool -> Bool -> MaybeOverride
@@ -165,7 +168,7 @@ data OverrideOptions = OverrideOptions {
   , overrideDisplayCreationTime     :: MaybeOverride
   , overrideEnableClearing          :: MaybeOverride
   , overrideEnableReset             :: MaybeOverride
-  }
+  } deriving Show
 
 -- | Convert a 'MaybeOverride' to a function on 'Bool'.
 overrideFunc :: MaybeOverride -> (Bool -> Bool)
@@ -200,7 +203,7 @@ data GlobalOptions = GlobalOptions {
   globalConfigPath  :: Maybe TFilePath
   , dataPath        :: Maybe TFilePath
   , overrides       :: OverrideOptions
-  }
+  } deriving Show
 
 -- | The default behaviour is to override nothing.
 defaultOverrideOptions :: OverrideOptions
@@ -215,7 +218,7 @@ defaultGlobalOptions = GlobalOptions Nothing Nothing defaultOverrideOptions
 data Options = Options {
   optCommand    :: Command
   , optGlobals  :: GlobalOptions
-  }
+  } deriving Show
 
 -- | Helper function whenever we need to modify the saved bookmarks.
 --
