@@ -67,13 +67,21 @@ bookmarkSearchTerm = eitherReader $ \s ->
   SearchIndex <$> readEither s
   <|> Right (SearchName (T.pack s))
 
+moveCommandMods :: Mod ArgumentFields BookmarkSearchTerm
+moveCommandMods = metavar "<bookmark>"
+                    <> help "Index or name of the bookmark to move to"
+                    <> completer bookmarkCompleter
+
 moveCommand :: Parser Command
 moveCommand = Move . MoveOptions
-                <$> argument bookmarkSearchTerm (
-                      metavar "<bookmark>"
-                      <> help "Index or name of the bookmark to move to"
-                      <> completer bookmarkCompleter
-                    )
+                <$> argument bookmarkSearchTerm moveCommandMods
+
+moveCommandHidden :: Parser Command
+moveCommandHidden = Move . MoveOptions
+                      <$> argument bookmarkSearchTerm (
+                            moveCommandMods
+                            <> internal
+                          )
 
 listCommand :: Parser Command
 listCommand = List <$> (
@@ -170,7 +178,7 @@ parseCommand = (versionOption <*> hsubparser (
   <> command "refresh" (info refreshCommand (progDesc "Re-calculate bookmark indices"))
   <> command "config" (info configCommand (progDesc "View/manage hoyo config"))
   <> command "check" (info checkCommand (progDesc "Verify validity of config and bookmarks"))
-  )) <|> moveCommand
+  )) <|> moveCommandHidden
 
 parseOptions :: Parser Options
 parseOptions = Options <$> parseCommand <*> globalOptions
@@ -182,10 +190,11 @@ versionInfo =
   <> "\n\nCopyright (c) 2022, Frederick Pringle\n\nAll rights reserved."
 
 versionOption :: Parser (a -> a)
-versionOption = infoOption versionInfo (long "version")
+versionOption = infoOption versionInfo (long "version" <> hidden)
 
 options :: ParserInfo Options
 options = info (parseOptions <**> helper) (
           fullDesc
-          <> progDesc "Set directory bookmarks for quick \"cd\"-like behaviour"
+          <> header "Set directory bookmarks for quick \"cd\"-like behaviour"
+          <> progDesc "For more help on a particular sub-command, run `hoyo <cmd> --help`."
           )
