@@ -10,13 +10,20 @@ and this project adheres to the
 
 ### Added
 
-- Show instance for the various command and option types. Mostly for debugging.
-
 ### Fixed
 
 ### Changed
 
 ### Removed
+
+## [0.2.2.0] - 2023-01-19
+
+### Added
+
+- Show instances for the various command and option types. Mostly for debugging.
+- Make `hoyo move` the default command. In other words, if there is an existing bookmark
+    with the nickname `docs`, then running `hoyo docs` is the equivalent to running
+    `hoyo move docs`. Likewise if the bookmark index is used.
 
 ## [0.2.1.0] - 2022-12-31
 
@@ -98,7 +105,8 @@ build docs using a pre-commit hook.
 
 - Initial release.
 
-[unreleased]: https://github.com/fpringle/hoyo/compare/v0.2.1.0...HEAD
+[unreleased]: https://github.com/fpringle/hoyo/compare/v0.2.2.0...HEAD
+[0.2.2.0]: https://github.com/fpringle/hoyo/compare/v0.2.1.0...v0.2.2.0
 [0.2.1.0]: https://github.com/fpringle/hoyo/compare/v0.2.0.0...v0.2.1.0
 [0.2.0.0]: https://github.com/fpringle/hoyo/compare/v0.1.1.0...v0.2.0.0
 [0.1.1.0]: https://github.com/fpringle/hoyo/compare/v0.1.0.2...v0.1.1.0
