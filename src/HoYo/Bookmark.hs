@@ -1,6 +1,13 @@
--- | The 'Bookmark' type provides a representation of bookmarks saved and used
--- by the hoyo program. This module exports some utility datatypes and functions
--- used for working with bookmarks.
+{-|
+Module      : HoYo.Bookmark
+Copyright   : (c) Frederick Pringle, 2023
+License     : BSD-3
+Maintainer  : freddyjepringle@gmail.com
+
+The 'Bookmark' type provides a representation of bookmarks saved and used
+by the hoyo program. This module exports some utility datatypes and functions
+used for working with bookmarks.
+-}
 module HoYo.Bookmark (
   -- * The Bookmark type
   Bookmark (..)
