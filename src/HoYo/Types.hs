@@ -71,6 +71,7 @@ data Config = Config {
   , _enableReset          :: !Bool
   , _backupBeforeClear    :: !Bool
   , _defaultBookmarks     :: ![DefaultBookmark]
+  , _defaultCommand       :: !(Maybe T.Text)
   }
 
 -- | 'HoYoMonad' is the main monad stack for the hoyo program. It's essentially a wrapper
@@ -84,6 +85,13 @@ instance MonadIO HoYoMonad where
   liftIO m = HoYoMonad (liftIO $ tryIOError m) >>= \case
     Left err      -> throwError ("IO error: " <> T.pack (show err))
     Right result  -> return result
+
+-- | The result of executing a command. Currently only used meaningfully
+-- by 'HoYo.Command.runDefaultCommand'.
+data ExecResult =
+  Done
+  | ShowHelp
+  | ReRun T.Text
 
 makeLenses ''Bookmark
 makeLenses ''Config
