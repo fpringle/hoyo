@@ -10,21 +10,27 @@ and this project adheres to the
 
 ### Added
 
+### Fixed
+
+### Changed
+
+### Removed
+
+## [0.2.3.0] - 2023-01-21
+
+### Added
+
 - add haddock module header fields to all exported modules.
 - let the user set a default command. If the user has set
     `default_command = "list"` in their `hoyo.toml` config file,
     then running `hoyo` is equivalent to running `hoyo list`.
     Otherwise, running `hoyo` will show the help screen.
 
-### Fixed
-
 ### Changed
 
 - `getEnvAndRunCommand` now returns `ExecResult` instead of `()`.
 - `Config` has a new field `_defaultCommand` which corresponds to the option
     `default_command` in hoyo.toml.
-
-### Removed
 
 ## [0.2.2.1] - 2023-01-20
 
@@ -121,7 +127,8 @@ build docs using a pre-commit hook.
 
 - Initial release.
 
-[unreleased]: https://github.com/fpringle/hoyo/compare/v0.2.2.1...HEAD
+[unreleased]: https://github.com/fpringle/hoyo/compare/v0.2.3.0...HEAD
+[0.2.3.0]: https://github.com/fpringle/hoyo/compare/v0.2.2.1...v0.2.3.0
 [0.2.2.1]: https://github.com/fpringle/hoyo/compare/v0.2.2.0...v0.2.2.1
 [0.2.2.0]: https://github.com/fpringle/hoyo/compare/v0.2.1.0...v0.2.2.0
 [0.2.1.0]: https://github.com/fpringle/hoyo/compare/v0.2.0.0...v0.2.1.0
