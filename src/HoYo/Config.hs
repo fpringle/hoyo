@@ -37,6 +37,7 @@ configCodec = Config
   <*> Toml.bool                       "enable_reset"            .== _enableReset
   <*> Toml.bool                       "backup_before_clear"     .== _backupBeforeClear
   <*> Toml.list defaultBookmarkCodec  "default_bookmark"        .== _defaultBookmarks
+  <*> Toml.dioptional             (Toml.text "default_command") .== _defaultCommand
 
 -- | The default config for hoyo.
 defaultConfig :: Config
@@ -47,6 +48,7 @@ defaultConfig = Config {
   , _enableReset              = False
   , _backupBeforeClear        = False
   , _defaultBookmarks         = []
+  , _defaultCommand           = Nothing
   }
 
 -- | Decode a 'Config' from a Text.

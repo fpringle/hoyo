@@ -15,6 +15,7 @@ module HoYo.Command (
   , runRefresh
   , runConfig
   , runCheck
+  , runDefaultCommand
 
   -- * Types
   , Options (..)
@@ -145,6 +146,7 @@ data Command =
   | Refresh RefreshOptions
   | ConfigCmd ConfigCommand
   | Check CheckOptions
+  | DefaultCommand
   deriving Show
 
 -- | Datatype for representing a command-line settings override.
@@ -398,6 +400,14 @@ runCheck opts bFp sFp = do
   when (checkConfig opts) $ runCheckConfig sFp
   when (checkBookmarks opts) $ runCheckBookmarks bFp
 
+-- | Run the default command, if it has been specified by the user.
+runDefaultCommand :: HoYoMonad ExecResult
+runDefaultCommand = asks' (config . defaultCommand) >>= \case
+  Nothing   -> return ShowHelp
+  Just cmd
+    | null $ T.words cmd  -> throwError "default command: stuck in a loop!"
+    | otherwise           -> return $ ReRun cmd
+
 -- | Run a 'Command' in the hoyo environment.
 runCommand :: Command -> HoYoMonad ()
 runCommand       (Add opts) = runAdd opts
@@ -407,4 +417,5 @@ runCommand     (Clear opts) = runClear opts
 runCommand    (Delete opts) = runDelete opts
 runCommand   (Refresh opts) = runRefresh opts
 runCommand (ConfigCmd opts) = runConfig opts
+runCommand   DefaultCommand = void runDefaultCommand
 runCommand        (Check _) = throwError "The 'check' command needs to be run outside the HoYo monad"

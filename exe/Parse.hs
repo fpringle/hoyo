@@ -168,6 +168,9 @@ checkCommand = Check . noArgs <$> (
                   <*> switch (long "bookmarks" <> short 'b' <> help "Check the bookmarks file")
                 )
 
+defaultCommand :: Parser Command
+defaultCommand = pure DefaultCommand
+
 parseCommand :: Parser Command
 parseCommand = (versionOption <*> hsubparser (
   command "add" (info addCommand (progDesc "Add a bookmark"))
@@ -179,6 +182,7 @@ parseCommand = (versionOption <*> hsubparser (
   <> command "config" (info configCommand (progDesc "View/manage hoyo config"))
   <> command "check" (info checkCommand (progDesc "Verify validity of config and bookmarks"))
   )) <|> moveCommandHidden
+     <|> defaultCommand
 
 parseOptions :: Parser Options
 parseOptions = Options <$> parseCommand <*> globalOptions
@@ -198,3 +202,22 @@ options = info (parseOptions <**> helper) (
           <> header "Set directory bookmarks for quick \"cd\"-like behaviour"
           <> progDesc "For more help on a particular sub-command, run `hoyo <cmd> --help`."
           )
+
+splitArgs :: T.Text -> [String]
+splitArgs = splitArgs' False False False "" . T.unpack
+  where
+    splitArgs' :: Bool -> Bool -> Bool -> String -> String -> [String]
+    splitArgs' _ _ True res [] = [res]
+    splitArgs' _ _ False _ [] = []
+
+    splitArgs' False _ _ res ('^':rest) = splitArgs' False False True (res <> "^") rest
+
+    splitArgs' quoted True _ res (chr:rest) = splitArgs' quoted False True (res <> [chr]) rest
+
+    splitArgs' quoted escaped _ res ('"':rest) = splitArgs' (not quoted) escaped True res rest
+
+    splitArgs' quoted False started res ('\\':'"':rest) = splitArgs' quoted True started res ('"':rest)
+
+    splitArgs' False escaped started res (' ':rest) = [res | started] <> splitArgs' False escaped False "" rest
+
+    splitArgs' quoted escaped _ res (chr:rest) = splitArgs' quoted escaped True (res <> [chr]) rest
