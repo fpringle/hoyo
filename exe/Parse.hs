@@ -191,10 +191,14 @@ versionInfo :: String
 versionInfo =
   "hoyo "
   <> versionString
-  <> "\n\nCopyright (c) 2022, Frederick Pringle\n\nAll rights reserved."
+  <> "\n\nCopyright (c) 2023, Frederick Pringle\n\nAll rights reserved."
 
 versionOption :: Parser (a -> a)
-versionOption = infoOption versionInfo (long "version" <> hidden)
+versionOption = infoOption versionInfo (
+                  long "version"
+                  <> hidden
+                  <> help "Display version information and exit"
+                )
 
 options :: ParserInfo Options
 options = info (parseOptions <**> helper) (
