@@ -12,7 +12,7 @@ You can download binary directly [from GitHub releases](https://github.com/fprin
 
 After downloading binary, make it executable and copy it under convenient location, for example:
 
-```shell
+```
 chmod +x hoyo-cli
 mv hoyo-cli ~/.local/bin/hoyo-cli
 ```
@@ -23,22 +23,24 @@ Download [this bash script](scripts/hoyo.sh).
 
 Add the following line to your `.bashrc`:
 
-```bash
+```
 source path/to/hoyo.sh
 ```
 
 # Usage
 
-```man
-hoyo [--version] COMMAND [-c|--config FILE] [-b|--bookmarks FILE]
-            [--fail] [--nofail] [--time] [--notime] [--enable-clear]
-            [--disable-clear] [--enable-reset] [--disable-reset]
+```
+Set directory bookmarks for quick "cd"-like behaviour
 
-  Set directory bookmarks for quick "cd"-like behaviour
+Usage: hoyo [COMMAND] [-c|--config <file>] [-b|--bookmarks <file>] [--fail]
+            [--nofail] [--time] [--notime] [--enable-clear] [--disable-clear]
+            [--enable-reset] [--disable-reset]
+
+  For more help on a particular sub-command, run `hoyo <cmd> --help`.
 
 Available options:
-  -c,--config FILE         Override the default config file
-  -b,--bookmarks FILE      Override the default bookmarks file
+  -c,--config <file>       Override the default config file
+  -b,--bookmarks <file>    Override the default bookmarks file
   --fail                   Fail on error
   --nofail                 Disable fail on error
   --time                   Display bookmark creation times
@@ -57,13 +59,14 @@ Available commands:
   delete                   Delete a bookmark
   refresh                  Re-calculate bookmark indices
   config                   View/manage hoyo config
+  check                    Verify validity of config and bookmarks
 ```
 
 ## Examples
 
 ### List the current bookmarks
 
-```bash
+```
 $ hoyo list
 1. /home/Documents doc
 2. /home/Music/Albums
@@ -71,7 +74,7 @@ $ hoyo list
 
 ### `cd` to a bookmark
 
-```bash
+```
 $ hoyo move doc
 $ pwd
 /home/Documents
@@ -82,7 +85,7 @@ $ pwd
 
 ### Add a new bookmark
 
-```bash
+```
 $ hoyo add /home h
 $ hoyo list
 1. /home/Documents doc
@@ -95,7 +98,7 @@ $ pwd
 
 ### Delete a bookmark
 
-```bash
+```
 $ hoyo delete 2
 $ hoyo list
 1. /home/Documents doc
@@ -104,7 +107,7 @@ $ hoyo list
 
 ### Reset bookmark indices
 
-```bash
+```
 $ hoyo refresh
 $ hoyo list
 1. /home/Documents doc
@@ -113,7 +116,7 @@ $ hoyo list
 
 ### View config
 
-```bash
+```
 $ hoyo config print
 fail_on_error = false
 enable_clearing = true
@@ -124,7 +127,7 @@ enable_reset = true
 
 ### Modify config
 
-```bash
+```
 $ hoyo config set display_creation_time true
 $ hoyo list
 1. 12/26/22 16:55:13    /home/Documents doc
@@ -133,7 +136,7 @@ $ hoyo list
 
 ### Reset config
 
-```bash
+```
 $ hoyo config reset
 $ hoyo config print
 fail_on_error = false
@@ -145,8 +148,16 @@ enable_reset = false
 
 ### Clear all bookmarks
 
-```bash
+```
 $ hoyo clear --enable-clear
 $ hoyo list
 [ no output ]
+```
+
+### Validate your config file
+
+```
+$ hoyo check
+Config is good
+Bookmarks file is good
 ```
