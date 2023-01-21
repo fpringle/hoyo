@@ -1,5 +1,12 @@
--- | This module defines data-types and runner functions for the hoyo
--- command-line program.
+{-|
+Module      : HoYo.Command
+Copyright   : (c) Frederick Pringle, 2023
+License     : BSD-3
+Maintainer  : freddyjepringle@gmail.com
+
+This module defines data-types and runner functions for the hoyo
+command-line program.
+-}
 module HoYo.Command (
   -- * Running CLI commands
   runCommand
