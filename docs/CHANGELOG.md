@@ -10,9 +10,19 @@ and this project adheres to the
 
 ### Added
 
+- add haddock module header fields to all exported modules.
+- let the user set a default command. If the user has set
+    `default_command = "list"` in their `hoyo.toml` config file,
+    then running `hoyo` is equivalent to running `hoyo list`.
+    Otherwise, running `hoyo` will show the help screen.
+
 ### Fixed
 
 ### Changed
+
+- `getEnvAndRunCommand` now returns `ExecResult` instead of `()`.
+- `Config` has a new field `_defaultCommand` which corresponds to the option
+    `default_command` in hoyo.toml.
 
 ### Removed
 
