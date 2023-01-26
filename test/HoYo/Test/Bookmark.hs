@@ -17,7 +17,7 @@ testBookmarkSearch' (search, bms) =
   in satGood .&&. notsatGood
 
   where
-    matchBm (SearchName s) = (== Just s) . _bookmarkName
+    matchBm (SearchName s) = (== Just (T.toLower s)) . fmap T.toLower . _bookmarkName
     matchBm (SearchIndex i) = (== i) . _bookmarkIndex
 
 testBookmarkSearchSuccess' :: (Bookmark, Bookmarks) -> Property

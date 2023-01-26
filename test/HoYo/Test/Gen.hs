@@ -5,10 +5,9 @@ import HoYo
 
 import Test.QuickCheck
 
-import System.FilePath
-
 import qualified Data.Text as T
 import Data.Time
+import System.FilePath
 
 letter :: Gen Char
 letter = elements (['a'..'z'] <> ['A'..'Z'] <> ['0'..'9'])

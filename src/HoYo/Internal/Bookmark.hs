@@ -5,7 +5,6 @@ import HoYo.Internal.Types
 import HoYo.Internal.Utils
 
 import Data.Bifunctor (first)
-import Data.Char (toLower)
 import Data.Function
 import Data.List
 import qualified Data.Text as T
@@ -60,12 +59,12 @@ searchBookmarks :: BookmarkSearchTerm -> Bookmarks -> ([Bookmark], [Bookmark])
 searchBookmarks (SearchIndex idx) (Bookmarks bms) =
   partition ((== idx) . view bookmarkIndex) bms
 searchBookmarks (SearchName name) (Bookmarks bms) =
-  partition (on (==) (fmap (T.map toLower)) (Just name) . view bookmarkName) bms
+  partition (on (==) (fmap T.toLower) (Just name) . view bookmarkName) bms
 
 -- | A predicate used by 'filterBookmarks' - match on the bookmark name.
 filterBookmarkByName :: Maybe T.Text -> Bookmark -> Bool
 filterBookmarkByName Nothing = const True
-filterBookmarkByName (Just name) = on (==) (fmap (T.map toLower)) (Just name) . view bookmarkName
+filterBookmarkByName (Just name) = on (==) (fmap T.toLower) (Just name) . view bookmarkName
 
 -- | A predicate used by 'filterBookmarks' - match on the bookmark directory.
 filterBookmarkByDirInfix :: Maybe T.Text -> Bookmark -> Bool
