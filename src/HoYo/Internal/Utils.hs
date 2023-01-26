@@ -1,6 +1,7 @@
 {-# LANGUAGE GADTs           #-}
 {-# LANGUAGE RankNTypes      #-}
 {-# LANGUAGE RecordWildCards #-}
+-- | Utility functions used by all the main HoYo.* modules.
 module HoYo.Internal.Utils where
 
 import HoYo.Internal.Types
@@ -23,7 +24,7 @@ import Text.Read (readEither)
 import Control.Monad (unless, when)
 import Control.Monad.Except (MonadError(..), liftEither, throwError)
 import Control.Monad.IO.Class
-import Control.Monad.Reader.Class (MonadReader(ask))
+import Control.Monad.Reader.Class (MonadReader, asks)
 
 import Lens.Micro
 import Lens.Micro.Extras
@@ -36,9 +37,11 @@ import Data.Time
 
 import System.Directory
 
+-- | A version of the lens "use" function for 'MonadReader'.
 asks' :: MonadReader a m => SimpleGetter a b -> m b
-asks' getter = view getter <$> ask
+asks' = asks . view
 
+-- | Take the maximum of a list, with a default value if the list is empty.
 maximumDefault :: Ord a => a -> [a] -> a
 maximumDefault def [] = def
 maximumDefault _ xs = maximum xs
@@ -57,36 +60,41 @@ assertVerbose err check = do
   when (shouldFail && not res) $ throwError err
   return res
 
+-- | Get a list of the pairs in a Toml hashmap.
 pairsToKeyVals :: HashMap.HashMap Toml.Key Toml.AnyValue -> [(Toml.Key, Toml.AnyValue)]
 pairsToKeyVals = HashMap.toList
 
+-- | Get a list of the pairs in a prefixmap of Toml tables.
 tablesToKeyVals :: Toml.PrefixMap Toml.TOML -> [(Toml.Key, Toml.AnyValue)]
 tablesToKeyVals = concatMap helper . Toml.toList
   where
     helper (k, toml) = [(k <> k2, v) | (k2, v) <- tomlToKeyVals toml]
 
+-- | Get a list of the pairs in a prefixmap of Toml tables arrays.
 tableArraysToKeyVals :: HashMap.HashMap Toml.Key (NE.NonEmpty Toml.TOML) -> [(Toml.Key, Toml.AnyValue)]
 tableArraysToKeyVals = concatMap helper . HashMap.toList
   where
     helper :: (Toml.Key, NE.NonEmpty Toml.TOML) -> [(Toml.Key, Toml.AnyValue)]
     helper (k, ne) = [(k <> k2, v) | toml <- NE.toList ne, (k2, v) <- tomlToKeyVals toml]
 
+-- | Convert a 'Toml.TOML' object to a list of keys and values.
 tomlToKeyVals :: Toml.TOML -> [(Toml.Key, Toml.AnyValue)]
 tomlToKeyVals toml =
   pairsToKeyVals (Toml.tomlPairs toml)
   <> tablesToKeyVals (Toml.tomlTables toml)
   -- <> tableArraysToKeyVals (Toml.tomlTableArrays toml) -- TODO
 
+-- | Text representation of a Toml value. Copied directly from 'Toml.Type.Printer' source code.
 valText :: Toml.Value t -> T.Text
-valText (Toml.Bool b)    = T.toLower $ showText b
-valText (Toml.Integer n) = showText n
+valText (Toml.Bool b)    = T.toLower $ tshow b
+valText (Toml.Integer n) = tshow n
 valText (Toml.Double dub)  = showDouble dub
   where
     showDouble :: Double -> T.Text
     showDouble d | isInfinite d && d < 0 = "-inf"
                  | isInfinite d = "inf"
                  | isNaN d = "nan"
-                 | otherwise = showText d
+                 | otherwise = tshow d
 valText (Toml.Text s)    = showTextUnicode s
   where
     showTextUnicode :: T.Text -> T.Text
@@ -113,9 +121,9 @@ valText (Toml.Zoned zTime)   = showZonedTime zTime
             = (\(x,y) -> x ++ ":" ++ y)
             . (\z -> splitAt (length z - 2) z)
             . formatTime defaultTimeLocale "%z"
-valText (Toml.Local l)   = showText l
-valText (Toml.Day d)     = showText d
-valText (Toml.Hours h)   = showText h
+valText (Toml.Local l)   = tshow l
+valText (Toml.Day d)     = tshow d
+valText (Toml.Hours h)   = tshow h
 valText (Toml.Array arr)   = withLines Toml.defaultOptions valText arr
   where
     withLines :: Toml.PrintOptions -> (Toml.Value t -> T.Text) -> [Toml.Value t] -> T.Text
@@ -126,9 +134,8 @@ valText (Toml.Array arr)   = withLines Toml.defaultOptions valText arr
         off :: T.Text
         off = "\n" <> stimes printOptionsIndent " "
 
-showText :: Show a => a -> T.Text
-showText = T.pack . show
-
+-- | Given a file name and an extension, try to find a suitable path for
+-- backing up that file. Used by 'backupFile'.
 getBackupFile :: (MonadIO m, MonadError T.Text m) => TFilePath -> String -> m TFilePath
 getBackupFile fp ext = do
   let fpStr = T.unpack fp
@@ -209,5 +216,6 @@ formatBookmarks shouldDisplayTime bms = map (formatBookmark shouldDisplayTime in
   where
     indexWidth = maximumDefault 1 $ map (length . show . view bookmarkIndex) bms
 
+-- | Show a value as a 'T.Text' instead of a 'String'.
 tshow :: Show a => a -> T.Text
 tshow = T.pack . show

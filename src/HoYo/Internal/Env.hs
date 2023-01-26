@@ -1,4 +1,3 @@
--- {-# OPTIONS_HADDOCK hide #-}
 -- | Internals used by the HoYo.Internal module.
 module HoYo.Internal.Env where
 

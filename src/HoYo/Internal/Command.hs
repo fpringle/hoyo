@@ -1,4 +1,3 @@
--- {-# OPTIONS_HADDOCK hide #-}
 -- | Internals used by the HoYo.Command module.
 module HoYo.Internal.Command where
 
@@ -199,6 +198,9 @@ modifyBookmarksM f = do
   newBookmarks <- Bookmarks <$> f bms
   encodeBookmarksFile bFp newBookmarks
 
+-- | Normalise a filepath and make sure it's a valid directory.
+--
+-- TODO: some these are name checks, not directory checks
 normaliseAndVerifyDirectory :: TFilePath -> HoYoMonad TFilePath
 normaliseAndVerifyDirectory d = do
   dir <- liftIO $ canonicalizePath $ T.unpack d
@@ -247,12 +249,16 @@ runList opts = do
   displayTime <- asks' (config . displayCreationTime)
   mapM_ printStdout (formatBookmarks displayTime bms)
 
+-- | Help text displayed when the user tries to run "hoyo clear"
+-- when "enable_clear" is set to false.
 clearDisabledErrMsg :: T.Text
 clearDisabledErrMsg = T.intercalate "\n" [
   "The 'clear' command is disabled by default."
   , "To enable, set enable_clear = true in the config or pass the --enable-clear flag."
   ]
 
+-- | Help text displayed when the user tries to run "hoyo config reset"
+-- when "enable_reset" is set to false.
 resetDisabledErrMsg :: T.Text
 resetDisabledErrMsg = T.intercalate "\n" [
   "The 'config reset' command is disabled by default."
@@ -342,11 +348,13 @@ runConfig (Reset opts) = runConfigReset opts
 runConfig (Set opts) = runConfigSet opts
 runConfig (AddDefaultBookmark opts) = runAddDefault opts
 
+-- | Check that the config file is valid.
 runCheckConfig :: TFilePath -> IO ()
 runCheckConfig = decodeConfigFile >=> \case
   Left err  -> printStderr err
   Right _   -> printStdout "Config is good"
 
+-- | Check that the bookmarks file is valid.
 runCheckBookmarks :: TFilePath -> IO ()
 runCheckBookmarks = decodeBookmarksFile >=> \case
   Left err  -> printStderr err

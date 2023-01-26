@@ -1,5 +1,6 @@
 {-# LANGUAGE TemplateHaskell #-}
 {-# OPTIONS -Wno-missing-signatures #-}
+-- | Types used by all the main HoYo.* modules.
 module HoYo.Internal.Types where
 
 import Control.Monad.Except (ExceptT, MonadError(..))

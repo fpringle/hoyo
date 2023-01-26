@@ -1,5 +1,4 @@
 {-# LANGUAGE RankNTypes #-}
--- {-# OPTIONS_HADDOCK hide #-}
 -- | Internals used by the HoYo.Config module.
 module HoYo.Internal.Config where
 

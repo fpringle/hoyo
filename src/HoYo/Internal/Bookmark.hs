@@ -1,4 +1,3 @@
--- {-# OPTIONS_HADDOCK hide #-}
 -- | Internals used by the HoYo.Bookmark module.
 module HoYo.Internal.Bookmark where
 
