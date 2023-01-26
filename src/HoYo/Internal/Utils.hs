@@ -8,7 +8,6 @@ import HoYo.Internal.Types
 
 import Data.Bifunctor (bimap, first)
 import Data.Char (isAscii, ord)
-import Data.Function
 import qualified Data.HashMap.Strict as HashMap
 import Data.List
 import qualified Data.List.NonEmpty as NE
@@ -220,7 +219,3 @@ formatBookmarks shouldDisplayTime bms = map (formatBookmark shouldDisplayTime in
 -- | Show a value as a 'T.Text' instead of a 'String'.
 tshow :: Show a => a -> T.Text
 tshow = T.pack . show
-
--- | Combine 2 predicates with a logical AND.
-combAnd :: (a -> Bool) -> (a -> Bool) -> a -> Bool
-combAnd pred1 pred2 a = on (&&) ($ a) pred1 pred2

@@ -76,9 +76,8 @@ filterBookmarkByDirInfix (Just pref) =
 -- | Given a bookmark name and a bookmark directory, test if a bookmark matches those
 -- filters.
 filterBookmarks :: Maybe T.Text -> Maybe T.Text -> Bookmark -> Bool
-filterBookmarks name dirInfix = combAnd
-                                    (filterBookmarkByName name)
-                                    (filterBookmarkByDirInfix dirInfix)
+filterBookmarks name dirInfix bm = filterBookmarkByName name bm
+                                     && filterBookmarkByDirInfix dirInfix bm
 
 -- | Convert a list of 'DefaultBookmark's to a 'Bookmarks', assiging indices and/
 -- creation times on the fly.
