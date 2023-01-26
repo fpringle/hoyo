@@ -20,6 +20,8 @@ and this project adheres to the
 
 ### Changed
 
+- Refactored uniqueness tests in `hoyo add` to their own functions.
+
 ### Removed
 
 ## [0.2.3.1] - 2023-01-21
