@@ -31,9 +31,13 @@ library
     exposed-modules:
         HoYo
         HoYo.Env
+        HoYo.Env.Internal
         HoYo.Config
+        HoYo.Config.Internal
         HoYo.Command
+        HoYo.Command.Internal
         HoYo.Bookmark
+        HoYo.Bookmark.Internal
 
     hs-source-dirs:     src
     other-modules:
