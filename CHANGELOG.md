@@ -10,7 +10,13 @@ and this project adheres to the
 
 ### Added
 
+- `Arbitrary` instances for test suite.
+- Added property tests for functions in Bookmarks.hs and Utils.hs.
+- Integrate [headroom](https://github.com/vaclavsvejcar/headroom).
+
 ### Fixed
+
+- Make sure that readInt and readBool parse the entire string.
 
 ### Changed
 
