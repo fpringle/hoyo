@@ -2,7 +2,7 @@
 module HoYo.Test.Bookmark where
 
 import HoYo
-import HoYo.Test.Gen
+import HoYo.Test.Gen ()
 
 import Data.Function
 import qualified Data.Text as T
@@ -28,10 +28,10 @@ testBookmarkSearchSuccess' (one, Bookmarks rest) = testBookmarkSearch' (search, 
                 Nothing     -> SearchIndex (_bookmarkIndex one)
 
 prop_BookmarkSearch :: Property
-prop_BookmarkSearch = forAll ((,) <$> genBookmarkSearchTerm <*> genBookmarks) testBookmarkSearch'
+prop_BookmarkSearch = property testBookmarkSearch'
 
 prop_BookmarkSearchSuccess :: Property
-prop_BookmarkSearchSuccess = forAll ((,) <$> genBookmark <*> genBookmarks) testBookmarkSearchSuccess'
+prop_BookmarkSearchSuccess = property testBookmarkSearchSuccess'
 
 testBookmarkFilterByName' :: (Bookmark, Bookmark) -> Property
 testBookmarkFilterByName' (bm1, bm2) =
@@ -44,8 +44,8 @@ prop_BookmarkFilterByName :: Property
 prop_BookmarkFilterByName = forAll bookmarksWithDifferentNames testBookmarkFilterByName'
   where
     bookmarksWithDifferentNames = do
-      bm1 <- genBookmark
-      bm2 <- suchThat genBookmark (on (/=) _bookmarkName bm1)
+      bm1 <- arbitrary
+      bm2 <- suchThat arbitrary (on (/=) _bookmarkName bm1)
       return (bm1, bm2)
 
 testBookmarkFilterByDirInfix' :: (Bookmark, Bookmark) -> Property
@@ -59,8 +59,8 @@ prop_BookmarkFilterByDirInfix :: Property
 prop_BookmarkFilterByDirInfix = forAll bookmarksWithDifferentDirectories testBookmarkFilterByDirInfix'
   where
     bookmarksWithDifferentDirectories = do
-      bm1 <- suchThat genBookmark ((/= "/") . _bookmarkDirectory)
-      bm2 <- suchThat genBookmark (not . on T.isInfixOf _bookmarkDirectory bm1)
+      bm1 <- suchThat arbitrary ((/= "/") . _bookmarkDirectory)
+      bm2 <- suchThat arbitrary (not . on T.isInfixOf _bookmarkDirectory bm1)
       return (bm1, bm2)
 
 return []

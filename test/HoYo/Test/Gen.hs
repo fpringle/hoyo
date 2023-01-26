@@ -33,17 +33,17 @@ genZonedTime = ZonedTime <$> genLocalTime <*> genTimeZone
                            <*> arbitrary
                            <*> vectorOf 3 letter
 
-genBookmark :: Gen Bookmark
-genBookmark = Bookmark <$> genFilePath
+instance Arbitrary Bookmark where
+  arbitrary = Bookmark <$> genFilePath
                        <*> chooseInt (1, 1000)
                        <*> genZonedTime
-                       <*> liftArbitrary text
+                       <*> (Just <$> text)
 
-genBookmarks :: Gen Bookmarks
-genBookmarks = Bookmarks <$> listOf genBookmark
+instance Arbitrary Bookmarks where
+  arbitrary = Bookmarks <$> listOf arbitrary
 
-genBookmarkSearchTerm :: Gen BookmarkSearchTerm
-genBookmarkSearchTerm = oneof [
-  SearchIndex <$> chooseInt (1, 1000)
-  , SearchName <$> text
-  ]
+instance Arbitrary BookmarkSearchTerm where
+  arbitrary = oneof [
+    SearchIndex <$> chooseInt (1, 1000)
+    , SearchName <$> text
+    ]
