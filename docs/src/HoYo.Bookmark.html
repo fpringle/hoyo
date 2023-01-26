@@ -18,23 +18,24 @@ used for working with bookmarks.
 </span><span id="line-18"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#DefaultBookmark"><span class="hs-identifier">DefaultBookmark</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span>
 </span><span id="line-19"></span><span>
 </span><span id="line-20"></span><span>  </span><span class="annot"><span class="hs-comment">-- *  Working with bookmarks</span></span><span>
-</span><span id="line-21"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="HoYo.Internal.Bookmark.html#searchBookmarks"><span class="hs-identifier">searchBookmarks</span></a></span><span>
-</span><span id="line-22"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="HoYo.Internal.Bookmark.html#filterBookmarks"><span class="hs-identifier">filterBookmarks</span></a></span><span>
-</span><span id="line-23"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="HoYo.Internal.Bookmark.html#filterBookmarkByName"><span class="hs-identifier">filterBookmarkByName</span></a></span><span>
-</span><span id="line-24"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="HoYo.Internal.Bookmark.html#filterBookmarkByDirInfix"><span class="hs-identifier">filterBookmarkByDirInfix</span></a></span><span>
-</span><span id="line-25"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="HoYo.Internal.Bookmark.html#bookmarksFromDefault"><span class="hs-identifier">bookmarksFromDefault</span></a></span><span>
-</span><span id="line-26"></span><span>
-</span><span id="line-27"></span><span>  </span><span class="annot"><span class="hs-comment">-- ** Parsing\/encoding bookmarks from\/to TOML</span></span><span>
-</span><span id="line-28"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="HoYo.Internal.Bookmark.html#bookmarkCodec"><span class="hs-identifier">bookmarkCodec</span></a></span><span>
-</span><span id="line-29"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="HoYo.Internal.Bookmark.html#bookmarksCodec"><span class="hs-identifier">bookmarksCodec</span></a></span><span>
-</span><span id="line-30"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="HoYo.Internal.Bookmark.html#defaultBookmarkCodec"><span class="hs-identifier">defaultBookmarkCodec</span></a></span><span>
-</span><span id="line-31"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="HoYo.Internal.Bookmark.html#decodeBookmarks"><span class="hs-identifier">decodeBookmarks</span></a></span><span>
-</span><span id="line-32"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="HoYo.Internal.Bookmark.html#decodeBookmarksFile"><span class="hs-identifier">decodeBookmarksFile</span></a></span><span>
-</span><span id="line-33"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="HoYo.Internal.Bookmark.html#encodeBookmarks"><span class="hs-identifier">encodeBookmarks</span></a></span><span>
-</span><span id="line-34"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="HoYo.Internal.Bookmark.html#encodeBookmarksFile"><span class="hs-identifier">encodeBookmarksFile</span></a></span><span>
-</span><span id="line-35"></span><span>  </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-36"></span><span>
-</span><span id="line-37"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="HoYo.Internal.Bookmark.html"><span class="hs-identifier">HoYo.Internal.Bookmark</span></a></span><span>
-</span><span id="line-38"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html"><span class="hs-identifier">HoYo.Internal.Types</span></a></span><span>
-</span><span id="line-39"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="HoYo.Internal.Utils.html"><span class="hs-identifier">HoYo.Internal.Utils</span></a></span><span>
-</span><span id="line-40"></span></pre></body></html>
+</span><span id="line-21"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="HoYo.Internal.Bookmark.html#getBookmarks"><span class="hs-identifier">getBookmarks</span></a></span><span>
+</span><span id="line-22"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="HoYo.Internal.Bookmark.html#searchBookmarks"><span class="hs-identifier">searchBookmarks</span></a></span><span>
+</span><span id="line-23"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="HoYo.Internal.Bookmark.html#filterBookmarks"><span class="hs-identifier">filterBookmarks</span></a></span><span>
+</span><span id="line-24"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="HoYo.Internal.Bookmark.html#filterBookmarkByName"><span class="hs-identifier">filterBookmarkByName</span></a></span><span>
+</span><span id="line-25"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="HoYo.Internal.Bookmark.html#filterBookmarkByDirInfix"><span class="hs-identifier">filterBookmarkByDirInfix</span></a></span><span>
+</span><span id="line-26"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="HoYo.Internal.Bookmark.html#bookmarksFromDefault"><span class="hs-identifier">bookmarksFromDefault</span></a></span><span>
+</span><span id="line-27"></span><span>
+</span><span id="line-28"></span><span>  </span><span class="annot"><span class="hs-comment">-- ** Parsing\/encoding bookmarks from\/to TOML</span></span><span>
+</span><span id="line-29"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="HoYo.Internal.Bookmark.html#bookmarkCodec"><span class="hs-identifier">bookmarkCodec</span></a></span><span>
+</span><span id="line-30"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="HoYo.Internal.Bookmark.html#bookmarksCodec"><span class="hs-identifier">bookmarksCodec</span></a></span><span>
+</span><span id="line-31"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="HoYo.Internal.Bookmark.html#defaultBookmarkCodec"><span class="hs-identifier">defaultBookmarkCodec</span></a></span><span>
+</span><span id="line-32"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="HoYo.Internal.Bookmark.html#decodeBookmarks"><span class="hs-identifier">decodeBookmarks</span></a></span><span>
+</span><span id="line-33"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="HoYo.Internal.Bookmark.html#decodeBookmarksFile"><span class="hs-identifier">decodeBookmarksFile</span></a></span><span>
+</span><span id="line-34"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="HoYo.Internal.Bookmark.html#encodeBookmarks"><span class="hs-identifier">encodeBookmarks</span></a></span><span>
+</span><span id="line-35"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="HoYo.Internal.Bookmark.html#encodeBookmarksFile"><span class="hs-identifier">encodeBookmarksFile</span></a></span><span>
+</span><span id="line-36"></span><span>  </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-37"></span><span>
+</span><span id="line-38"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="HoYo.Internal.Bookmark.html"><span class="hs-identifier">HoYo.Internal.Bookmark</span></a></span><span>
+</span><span id="line-39"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html"><span class="hs-identifier">HoYo.Internal.Types</span></a></span><span>
+</span><span id="line-40"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="HoYo.Internal.Utils.html"><span class="hs-identifier">HoYo.Internal.Utils</span></a></span><span>
+</span><span id="line-41"></span></pre></body></html>
