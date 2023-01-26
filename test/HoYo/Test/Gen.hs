@@ -39,11 +39,39 @@ instance Arbitrary Bookmark where
                        <*> genZonedTime
                        <*> (Just <$> text)
 
+instance Arbitrary DefaultBookmark where
+  arbitrary = DefaultBookmark <$> genFilePath <*> (Just <$> text)
+
 instance Arbitrary Bookmarks where
   arbitrary = Bookmarks <$> listOf arbitrary
 
 instance Arbitrary BookmarkSearchTerm where
   arbitrary = oneof [
-    SearchIndex <$> chooseInt (1, 1000)
+      SearchIndex <$> chooseInt (1, 1000)
     , SearchName <$> text
+    ]
+
+genCommandText :: Gen T.Text
+genCommandText = error "todo"
+
+instance Arbitrary Config where
+  arbitrary = Config <$> arbitrary
+                     <*> arbitrary
+                     <*> arbitrary
+                     <*> arbitrary
+                     <*> arbitrary
+                     <*> arbitrary
+                     <*> oneof [Just <$> genCommandText, pure Nothing]
+
+instance Arbitrary Env where
+  arbitrary = Env <$> arbitrary
+                  <*> genFilePath
+                  <*> arbitrary
+                  <*> genFilePath
+
+instance Arbitrary ExecResult where
+  arbitrary = oneof [
+      pure Done
+    , pure ShowHelp
+    , ReRun <$> genCommandText
     ]
