@@ -2,7 +2,6 @@
 module HoYo.Internal.Bookmark where
 
 import HoYo.Internal.Types
-import HoYo.Internal.Utils
 
 import Data.Bifunctor (first)
 import Data.Function
@@ -62,6 +61,7 @@ searchBookmarks (SearchName name) (Bookmarks bms) =
   partition (on (==) (fmap T.toLower) (Just name) . view bookmarkName) bms
 
 -- | A predicate used by 'filterBookmarks' - match on the bookmark name.
+-- Note that matching is case-sensitive.
 filterBookmarkByName :: Maybe T.Text -> Bookmark -> Bool
 filterBookmarkByName Nothing = const True
 filterBookmarkByName (Just name) = on (==) (fmap T.toLower) (Just name) . view bookmarkName
@@ -91,7 +91,3 @@ bookmarksFromDefault dbms = Bookmarks <$> bms
     bms = forM (zip dbms [1..]) $ \(DefaultBookmark dir name, idx) -> do
       zTime <- liftIO getZonedTime
       return $ Bookmark dir idx zTime name
-
--- | Get the bookmarks from the currently used bookmark file.
-getBookmarks :: HoYoMonad Bookmarks
-getBookmarks = asks' bookmarks

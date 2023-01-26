@@ -18,7 +18,6 @@ module HoYo.Bookmark (
   , DefaultBookmark (..)
 
   -- *  Working with bookmarks
-  , getBookmarks
   , searchBookmarks
   , filterBookmarks
   , filterBookmarkByName
