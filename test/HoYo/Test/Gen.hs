@@ -1,5 +1,5 @@
 {-# OPTIONS_GHC -fno-warn-orphans #-}
-module Gen where
+module HoYo.Test.Gen where
 
 import HoYo
 
