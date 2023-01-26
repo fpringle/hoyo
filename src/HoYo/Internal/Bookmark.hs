@@ -73,10 +73,6 @@ filterBookmarkByDirInfix Nothing = const True
 filterBookmarkByDirInfix (Just pref) =
   on T.isInfixOf (T.dropWhileEnd (== '/')) pref . view bookmarkDirectory
 
--- | Combine 2 predicates with a logical AND.
-combAnd :: (a -> Bool) -> (a -> Bool) -> a -> Bool
-combAnd pred1 pred2 a = on (&&) ($ a) pred1 pred2
-
 -- | Given a bookmark name and a bookmark directory, test if a bookmark matches those
 -- filters.
 filterBookmarks :: Maybe T.Text -> Maybe T.Text -> Bookmark -> Bool

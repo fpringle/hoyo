@@ -92,6 +92,7 @@ test-suite hoyo-test
         text >=2.0 && <2.1,
         filepath >=1.4 && <1.5,
         time >=1.12 && <1.13,
+        microlens >=0.4.13 && <0.5,
         hoyo
     type:             exitcode-stdio-1.0
     default-extensions: OverloadedStrings

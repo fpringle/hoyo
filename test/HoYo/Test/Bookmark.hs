@@ -2,11 +2,15 @@
 module HoYo.Test.Bookmark where
 
 import HoYo
+import HoYo.Internal.Types
 import HoYo.Test.Gen ()
 
+import Control.Monad
 import Data.Function
 import qualified Data.Text as T
+import Lens.Micro.Extras
 import Test.QuickCheck
+import Test.QuickCheck.Monadic as Q
 
 testBookmarkSearch' :: BookmarkSearchTerm -> Bookmarks -> Property
 testBookmarkSearch' search bms =
@@ -62,6 +66,17 @@ prop_BookmarkFilterByDirInfix = forAll bookmarksWithDifferentDirectories (uncurr
       bm1 <- suchThat arbitrary ((/= "/") . _bookmarkDirectory)
       bm2 <- suchThat arbitrary (not . on T.isInfixOf _bookmarkDirectory bm1)
       return (bm1, bm2)
+
+testBookmarksFromDefault :: [DefaultBookmark] -> Property
+testBookmarksFromDefault defs = monadicIO $ do
+  Bookmarks bms <- run (bookmarksFromDefault defs)
+  Q.assert (length defs == length bms)
+  forM_ (zip defs bms) $ \(def, bm) -> do
+    Q.assert (view defaultBookmarkDirectory def == view bookmarkDirectory bm)
+    Q.assert (view defaultBookmarkName def == view bookmarkName bm)
+
+prop_BookmarksFromDefault :: Property
+prop_BookmarksFromDefault = property testBookmarksFromDefault
 
 return []
 bookmarkTests :: IO Bool
