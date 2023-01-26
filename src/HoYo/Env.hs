@@ -20,4 +20,4 @@ module HoYo.Env (
   ) where
 
 import HoYo.Internal.Env
-import HoYo.Types
+import HoYo.Internal.Types

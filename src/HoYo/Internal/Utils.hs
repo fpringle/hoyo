@@ -1,9 +1,9 @@
 {-# LANGUAGE GADTs           #-}
 {-# LANGUAGE RankNTypes      #-}
 {-# LANGUAGE RecordWildCards #-}
-module HoYo.Utils where
+module HoYo.Internal.Utils where
 
-import HoYo.Types
+import HoYo.Internal.Types
 
 import Data.Bifunctor (bimap, first)
 import Data.Char (isAscii, ord)

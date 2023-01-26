@@ -36,5 +36,5 @@ module HoYo.Bookmark (
   ) where
 
 import HoYo.Internal.Bookmark
-import HoYo.Types
-import HoYo.Utils
+import HoYo.Internal.Types
+import HoYo.Internal.Utils

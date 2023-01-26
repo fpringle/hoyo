@@ -1,6 +1,6 @@
 {-# LANGUAGE TemplateHaskell #-}
 {-# OPTIONS -Wno-missing-signatures #-}
-module HoYo.Types where
+module HoYo.Internal.Types where
 
 import Control.Monad.Except (ExceptT, MonadError(..))
 import Control.Monad.IO.Class
@@ -9,16 +9,10 @@ import Control.Monad.Trans.Reader (ReaderT)
 
 import Lens.Micro.TH
 
-import qualified Toml
-import Toml ((.=))
-
 import qualified Data.Text as T
 import Data.Time
 
 import System.IO.Error
-
-(.==) :: Toml.Codec field a -> (object -> field) -> Toml.Codec object a
-(.==) = (Toml..=)
 
 -- | A 'T.Text' version of 'FilePath'.
 type TFilePath = T.Text

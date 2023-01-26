@@ -22,4 +22,4 @@ module HoYo.Config (
   ) where
 
 import HoYo.Internal.Config
-import HoYo.Types
+import HoYo.Internal.Types

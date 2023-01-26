@@ -1,5 +1,5 @@
 {-# LANGUAGE TemplateHaskell #-}
-module HoYo.Version (
+module HoYo.Internal.Version (
   versionString
   ) where
 
