@@ -1,5 +1,14 @@
+{-|
+Module      : HoYo.Internal.Version
+Copyright   : (c) Frederick Pringle, 2023
+License     : BSD-3
+Maintainer  : freddyjepringle@gmail.com
+
+This module just exports a string containing the current HoYo version.
+-}
+
 {-# LANGUAGE TemplateHaskell #-}
--- | This module just exports a string containing the current HoYo version.
+
 module HoYo.Internal.Version (
   versionString
   ) where

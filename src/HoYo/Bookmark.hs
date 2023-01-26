@@ -8,6 +8,7 @@ The 'Bookmark' type provides a representation of bookmarks saved and used
 by the hoyo program. This module exports some utility datatypes and functions
 used for working with bookmarks.
 -}
+
 module HoYo.Bookmark (
   -- * The Bookmark type
   Bookmark (..)

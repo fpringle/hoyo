@@ -7,6 +7,7 @@ Maintainer  : freddyjepringle@gmail.com
 hoyo is a command-line utility that lets the user save directories
 as bookmarks (similar to in the browser) and easily @cd@ to them.
 -}
+
 module HoYo (
   -- * Bookmarks
   Bookmark (..)

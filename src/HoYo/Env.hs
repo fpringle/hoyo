@@ -6,6 +6,7 @@ Maintainer  : freddyjepringle@gmail.com
 
 The read-only hoyo environment.
 -}
+
 module HoYo.Env (
   -- * HoYo config
   Env (..)

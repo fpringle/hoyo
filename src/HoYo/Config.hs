@@ -1,4 +1,3 @@
-{-# LANGUAGE RankNTypes #-}
 {-|
 Module      : HoYo.Config
 Copyright   : (c) Frederick Pringle, 2023
@@ -8,6 +7,9 @@ Maintainer  : freddyjepringle@gmail.com
 Configuration for the hoyo program. This is stored on-disk as a TOML file,
 usually at ~/.config/hoyo/config.toml
 -}
+
+{-# LANGUAGE RankNTypes #-}
+
 module HoYo.Config (
   Config (..)
 

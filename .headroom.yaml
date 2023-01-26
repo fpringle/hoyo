@@ -2,7 +2,7 @@
 ## See https://github.com/vaclavsvejcar/headroom for more details.
 
 version: 0.4.3.0
-run-mode: add
+run-mode: replace
 source-paths:
     - src
 excluded-paths: []

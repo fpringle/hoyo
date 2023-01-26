@@ -1,4 +1,12 @@
--- | Internals used by the HoYo.Internal module.
+{-|
+Module      : HoYo.Internal.Env
+Copyright   : (c) Frederick Pringle, 2023
+License     : BSD-3
+Maintainer  : freddyjepringle@gmail.com
+
+Internals used by the HoYo.Internal module.
+-}
+
 module HoYo.Internal.Env where
 
 import HoYo.Bookmark

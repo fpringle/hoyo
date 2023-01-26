@@ -1,5 +1,13 @@
+{-|
+Module      : HoYo.Internal.Config
+Copyright   : (c) Frederick Pringle, 2023
+License     : BSD-3
+Maintainer  : freddyjepringle@gmail.com
+
+Internals used by the HoYo.Config module.
+-}
+
 {-# LANGUAGE RankNTypes #-}
--- | Internals used by the HoYo.Config module.
 module HoYo.Internal.Config where
 
 import HoYo.Bookmark

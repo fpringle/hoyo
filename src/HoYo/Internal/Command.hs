@@ -1,4 +1,12 @@
--- | Internals used by the HoYo.Command module.
+{-|
+Module      : HoYo.Internal.Command
+Copyright   : (c) Frederick Pringle, 2023
+License     : BSD-3
+Maintainer  : freddyjepringle@gmail.com
+
+Internals used by the HoYo.Command module.
+-}
+
 module HoYo.Internal.Command where
 
 import HoYo.Bookmark
