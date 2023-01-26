@@ -207,15 +207,35 @@ modifyBookmarksM f = do
   encodeBookmarksFile bFp newBookmarks
 
 -- | Normalise a filepath and make sure it's a valid directory.
---
--- TODO: some these are name checks, not directory checks
 normaliseAndVerifyDirectory :: TFilePath -> HoYoMonad TFilePath
 normaliseAndVerifyDirectory d = do
   dir <- liftIO $ canonicalizePath $ T.unpack d
   assertVerbose "not a directory" $ liftIO $ doesDirectoryExist dir
-  assert "bookmark name can't be empty" $ return $ not $ null dir
-  assert "bookmark name can't be a number" $ return $ not $ all isDigit dir
   return $ T.pack dir
+
+-- | Take a name and make sure it's valid.
+verifyName :: T.Text -> HoYoMonad ()
+verifyName name = do
+  let nameStr = T.unpack name
+  assert "bookmark name can't be empty" $ return $ not $ T.null name
+  assert "bookmark name can't be a number" $ return $ not $ all isDigit nameStr
+
+-- | Given the existing bookmarks and a potential bookmark directory,
+-- test if the new bookmark will have a unique directory.
+--
+-- TODO: Do we actually want this? Shouldn't the user be able to have
+-- multiple bookmarks to the same directory?
+testDirectoryUnique :: [Bookmark] -> TFilePath -> HoYoMonad Bool
+testDirectoryUnique bms dir =
+  assertVerbose "directory is already bookmarked" $
+    return $ all ((/= dir) . view bookmarkDirectory) bms
+
+-- | Given the existing bookmarks and a potential bookmark name,
+-- test if the new bookmark will have a unique name.
+testNameUnique :: [Bookmark] -> T.Text -> HoYoMonad Bool
+testNameUnique bms name =
+  assertVerbose "bookmark name already used" $
+    return $ all ((/= Just name) . view bookmarkName) bms
 
 -- | Run the "add" command: add a new bookmark.
 runAdd :: AddOptions -> HoYoMonad ()
@@ -223,10 +243,8 @@ runAdd opts = do
   dir <- normaliseAndVerifyDirectory $ addDirectory opts
   let name = addName opts
   modifyBookmarksM $ \bms -> do
-    uniqDir <- assertVerbose "directory is already bookmarked" $
-      return $ all ((/= dir) . view bookmarkDirectory) bms
-    uniqName <- assertVerbose "bookmark name already used" $
-      return $ all ((/= name) . view bookmarkName) bms
+    uniqDir <- testDirectoryUnique bms dir
+    uniqName <- testNameUnique bms dir
     if uniqDir && uniqName
     then do
       let maxIndex = maximumDefault 0 $ map (view bookmarkIndex) bms
