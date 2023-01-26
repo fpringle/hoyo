@@ -1,5 +1,6 @@
 {-# LANGUAGE TemplateHaskell #-}
 {-# OPTIONS -Wno-missing-signatures #-}
+{-# OPTIONS_HADDOCK prune #-}
 -- | Types used by all the main HoYo.* modules.
 module HoYo.Internal.Types where
 
@@ -89,5 +90,6 @@ data ExecResult =
   | ReRun T.Text
 
 makeLenses ''Bookmark
+makeLenses ''DefaultBookmark
 makeLenses ''Config
 makeLenses ''Env

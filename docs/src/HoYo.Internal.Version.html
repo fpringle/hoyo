@@ -1,0 +1,13 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE TemplateHaskell #-}</span><span>
+</span><span id="line-2"></span><span class="hs-comment">-- | This module just exports a string containing the current HoYo version.</span><span>
+</span><span id="line-3"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">HoYo.Internal.Version</span><span> </span><span class="hs-special">(</span><span>
+</span><span id="line-4"></span><span>  </span><span class="annot"><a href="HoYo.Internal.Version.html#versionString"><span class="hs-identifier">versionString</span></a></span><span>
+</span><span id="line-5"></span><span>  </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-6"></span><span>
+</span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Version.Package</span></span><span>
+</span><span id="line-8"></span><span>
+</span><span id="line-9"></span><span class="hs-comment">-- | The current @hoyo@ version.</span><span>
+</span><span id="line-10"></span><span class="annot"><a href="HoYo.Internal.Version.html#versionString"><span class="hs-identifier hs-type">versionString</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
+</span><span id="line-11"></span><span id="versionString"><span class="annot"><span class="annottext">versionString :: String
+</span><a href="HoYo.Internal.Version.html#versionString"><span class="hs-identifier hs-var hs-var">versionString</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">$$(</span><span class="annot"><span class="hs-identifier hs-type">packageVersionStringTH</span></span><span> </span><span class="annot"><span class="hs-string">&quot;hoyo.cabal&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-12"></span></pre></body></html>
