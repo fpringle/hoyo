@@ -50,4 +50,4 @@ module HoYo.Command (
   , MaybeOverride (..)
   ) where
 
-import HoYo.Command.Internal
+import HoYo.Internal.Command

@@ -21,5 +21,5 @@ module HoYo.Config (
   , getKeyVals
   ) where
 
-import HoYo.Config.Internal
+import HoYo.Internal.Config
 import HoYo.Types

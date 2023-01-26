@@ -35,6 +35,6 @@ module HoYo.Bookmark (
   , encodeBookmarksFile
   ) where
 
-import HoYo.Bookmark.Internal
+import HoYo.Internal.Bookmark
 import HoYo.Types
 import HoYo.Utils

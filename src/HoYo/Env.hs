@@ -19,5 +19,5 @@ module HoYo.Env (
   , defaultConfigPath
   ) where
 
-import HoYo.Env.Internal
+import HoYo.Internal.Env
 import HoYo.Types
