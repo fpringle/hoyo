@@ -1,7 +1,16 @@
+{-|
+Module      : HoYo.Internal.Utils
+Copyright   : (c) Frederick Pringle, 2023
+License     : BSD-3
+Maintainer  : freddyjepringle@gmail.com
+
+Utility functions used by all the main HoYo.* modules.
+-}
+
 {-# LANGUAGE GADTs           #-}
 {-# LANGUAGE RankNTypes      #-}
 {-# LANGUAGE RecordWildCards #-}
--- | Utility functions used by all the main HoYo.* modules.
+
 module HoYo.Internal.Utils where
 
 import HoYo.Internal.Types

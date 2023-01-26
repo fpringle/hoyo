@@ -1,4 +1,12 @@
--- | Internals used by the HoYo.Bookmark module.
+{-|
+Module      : HoYo.Internal.Bookmark
+Copyright   : (c) Frederick Pringle, 2023
+License     : BSD-3
+Maintainer  : freddyjepringle@gmail.com
+
+Internals used by the HoYo.Bookmark module.
+-}
+
 module HoYo.Internal.Bookmark where
 
 import HoYo.Internal.Types

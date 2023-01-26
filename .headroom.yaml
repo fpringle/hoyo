@@ -1,0 +1,18 @@
+## This is the configuration file for Headroom.
+## See https://github.com/vaclavsvejcar/headroom for more details.
+
+version: 0.4.3.0
+run-mode: replace
+source-paths:
+    - src
+excluded-paths: []
+exclude-ignored-paths: True
+template-paths:
+    - headroom-templates
+license-headers:
+    haskell:
+        put-before: ["^module"]
+        margin-bottom-code: 1
+variables:
+    author: "Frederick Pringle"
+    email: "freddyjepringle@gmail.com"

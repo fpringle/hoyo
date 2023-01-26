@@ -1,7 +1,16 @@
+{-|
+Module      : HoYo.Internal.Types
+Copyright   : (c) Frederick Pringle, 2023
+License     : BSD-3
+Maintainer  : freddyjepringle@gmail.com
+
+Types used by all the main HoYo.* modules.
+-}
+
 {-# LANGUAGE TemplateHaskell #-}
 {-# OPTIONS -Wno-missing-signatures #-}
 {-# OPTIONS_HADDOCK prune #-}
--- | Types used by all the main HoYo.* modules.
+
 module HoYo.Internal.Types where
 
 import Control.Monad.Except (ExceptT, MonadError(..))
