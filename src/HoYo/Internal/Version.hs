@@ -1,5 +1,6 @@
 {-# LANGUAGE TemplateHaskell #-}
-module HoYo.Version (
+-- | This module just exports a string containing the current HoYo version.
+module HoYo.Internal.Version (
   versionString
   ) where
 

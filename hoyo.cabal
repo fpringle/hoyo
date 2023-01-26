@@ -34,12 +34,16 @@ library
         HoYo.Config
         HoYo.Command
         HoYo.Bookmark
+        HoYo.Internal.Env
+        HoYo.Internal.Config
+        HoYo.Internal.Command
+        HoYo.Internal.Bookmark
+        HoYo.Internal.Types
+        HoYo.Internal.Utils
+        HoYo.Internal.Version
 
     hs-source-dirs:     src
-    other-modules:
-        HoYo.Types
-        HoYo.Utils
-        HoYo.Version
+    -- other-modules:
     default-language:   Haskell2010
     default-extensions: OverloadedStrings GeneralizedNewtypeDeriving LambdaCase FlexibleContexts
     ghc-options:        -Wall -Wno-duplicate-exports -Wno-unused-do-bind
@@ -75,6 +79,10 @@ executable hoyo-cli
 
 test-suite hoyo-test
     main-is:          Main.hs
+    other-modules:    HoYo.Test.Gen
+                      HoYo.Test.Bookmark
+                      HoYo.Test.Utils
+    -- other-extensions:
     hs-source-dirs:   test
     default-language: Haskell2010
     ghc-options:      -Wall
@@ -85,8 +93,7 @@ test-suite hoyo-test
         text >=2.0 && <2.1,
         filepath >=1.4 && <1.5,
         time >=1.12 && <1.13,
+        microlens >=0.4.13 && <0.5,
         hoyo
-    other-modules:    Gen
-    -- other-extensions:
     type:             exitcode-stdio-1.0
     default-extensions: OverloadedStrings

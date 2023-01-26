@@ -53,9 +53,9 @@ import HoYo.Bookmark
 import HoYo.Command
 import HoYo.Config
 import HoYo.Env
-import HoYo.Types
-import HoYo.Utils
-import HoYo.Version
+import HoYo.Internal.Types
+import HoYo.Internal.Utils
+import HoYo.Internal.Version
 
 import Control.Monad.Except (runExceptT)
 import Control.Monad.Trans.Reader (runReaderT)
