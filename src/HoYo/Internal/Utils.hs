@@ -31,7 +31,7 @@ import Lens.Micro
 import Lens.Micro.Extras
 
 import qualified Toml hiding (parse)
-import qualified Toml.Parser.Core as Toml (errorBundlePretty, parse)
+import qualified Toml.Parser.Core as Toml (eof, errorBundlePretty, parse)
 import qualified Toml.Parser.Value as Toml
 
 import Data.Time
@@ -167,7 +167,7 @@ backupFile fp ext = do
 readBool :: MonadError T.Text m => T.Text -> m Bool
 readBool s = liftEither $ first T.pack (
               readEither sStr
-                <|> first Toml.errorBundlePretty (Toml.parse Toml.boolP "" s)
+                <|> first Toml.errorBundlePretty (Toml.parse (Toml.boolP <* Toml.eof) "" s)
                 <|> Left ("Couldn't parse bool: " <> sStr)
               )
   where sStr = T.unpack s
@@ -176,7 +176,7 @@ readBool s = liftEither $ first T.pack (
 readInt :: MonadError T.Text m => T.Text -> m Int
 readInt s = liftEither $ first T.pack (
               readEither sStr
-                <|> bimap Toml.errorBundlePretty fromIntegral (Toml.parse Toml.integerP "" s)
+                <|> bimap Toml.errorBundlePretty fromIntegral (Toml.parse (Toml.integerP <* Toml.eof) "" s)
                 <|> Left ("Couldn't parse integer: " <> sStr)
               )
   where sStr = T.unpack s

@@ -81,6 +81,7 @@ test-suite hoyo-test
     main-is:          Main.hs
     other-modules:    HoYo.Test.Gen
                       HoYo.Test.Bookmark
+                      HoYo.Test.Utils
     -- other-extensions:
     hs-source-dirs:   test
     default-language: Haskell2010
