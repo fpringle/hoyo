@@ -13,6 +13,9 @@ and this project adheres to the
 - `Arbitrary` instances for test suite.
 - Added property tests for functions in Bookmarks.hs and Utils.hs.
 - Integrate [headroom](https://github.com/vaclavsvejcar/headroom).
+- Better pretty printing in `hoyo config print` command.
+- Stricter config type safety using GADTs parameterised by `ConfigValueType`.
+- Arbitrary values for `ConfigValue`.
 
 ### Fixed
 
@@ -21,8 +24,11 @@ and this project adheres to the
 ### Changed
 
 - Refactored uniqueness tests in `hoyo add` to their own functions.
+- `Config` now uses `ConfigValue`s instead of raw `Bool`/`Text` etc.
 
 ### Removed
+
+- All the auxiliary pretty-printing functions that operated on Toml values.
 
 ## [0.2.3.1] - 2023-01-21
 
