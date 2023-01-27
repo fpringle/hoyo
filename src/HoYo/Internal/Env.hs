@@ -12,6 +12,7 @@ module HoYo.Internal.Env where
 import HoYo.Bookmark
 import HoYo.Config
 import HoYo.Internal.Types
+import HoYo.Internal.Utils
 
 import qualified Data.Text as T
 

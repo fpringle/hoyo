@@ -7,6 +7,7 @@ Maintainer  : freddyjepringle@gmail.com
 Utility functions used by all the main HoYo.* modules.
 -}
 
+{-# LANGUAGE DataKinds       #-}
 {-# LANGUAGE GADTs           #-}
 {-# LANGUAGE RankNTypes      #-}
 {-# LANGUAGE RecordWildCards #-}
@@ -45,6 +46,93 @@ import qualified Toml.Parser.Value as Toml
 import Data.Time
 
 import System.Directory
+
+
+-----------------------------------------
+-- getters and setter for ConfigValue
+
+getBool :: ConfigValue 'TBool -> Bool
+getBool (BoolV bool) = bool
+
+setBool :: ConfigValue 'TBool -> Bool -> ConfigValue 'TBool
+setBool _ = BoolV
+
+getDefaultBookmark :: ConfigValue 'TDefaultBookmark -> DefaultBookmark
+getDefaultBookmark (DefaultBookmarkV bm) = bm
+
+setDefaultBookmark :: ConfigValue 'TDefaultBookmark -> DefaultBookmark -> ConfigValue 'TDefaultBookmark
+setDefaultBookmark _ = DefaultBookmarkV
+
+getCommand :: ConfigValue 'TCommand -> T.Text
+getCommand (CommandV t) = t
+
+setCommand :: ConfigValue 'TCommand -> T.Text -> ConfigValue 'TCommand
+setCommand _ = CommandV
+
+getList :: ConfigValue ('TList t) -> [ConfigValue t]
+getList (ListOfV xs) = xs
+
+setList :: ConfigValue ('TList t) -> [ConfigValue t] -> ConfigValue ('TList t)
+setList _ = ListOfV
+
+getMaybe :: ConfigValue ('TMaybe t) -> Maybe (ConfigValue t)
+getMaybe (MaybeV val) = val
+
+setMaybe :: ConfigValue ('TMaybe t) -> Maybe (ConfigValue t) -> ConfigValue ('TMaybe t)
+setMaybe _ = MaybeV
+
+-----------------------------------------
+-- Lenses for Config
+
+failOnError :: Lens' Config Bool
+failOnError = lens getter setter
+  where
+    getter = getBool . _failOnError
+    setter cfg bool = cfg { _failOnError = setBool (_failOnError cfg) bool }
+
+displayCreationTime :: Lens' Config Bool
+displayCreationTime = lens getter setter
+  where
+    getter = getBool . _displayCreationTime
+    setter cfg bool = cfg { _displayCreationTime = setBool (_displayCreationTime cfg) bool }
+
+enableClearing :: Lens' Config Bool
+enableClearing = lens getter setter
+  where
+    getter = getBool . _enableClearing
+    setter cfg bool = cfg { _enableClearing = setBool (_enableClearing cfg) bool }
+
+enableReset :: Lens' Config Bool
+enableReset = lens getter setter
+  where
+    getter = getBool . _enableReset
+    setter cfg bool = cfg { _enableReset = setBool (_enableReset cfg) bool }
+
+backupBeforeClear :: Lens' Config Bool
+backupBeforeClear = lens getter setter
+  where
+    getter = getBool . _backupBeforeClear
+    setter cfg bool = cfg { _backupBeforeClear = setBool (_backupBeforeClear cfg) bool }
+
+defaultBookmarks :: Lens' Config [DefaultBookmark]
+defaultBookmarks = lens getter setter
+  where
+    getter :: Config -> [DefaultBookmark]
+    getter = map getDefaultBookmark . getList . _defaultBookmarks
+
+    setter :: Config -> [DefaultBookmark] -> Config
+    setter cfg bms = cfg { _defaultBookmarks = setList (_defaultBookmarks cfg) (fmap DefaultBookmarkV bms)}
+
+defaultCommand :: Lens' Config (Maybe T.Text)
+defaultCommand = lens getter setter
+  where
+    getter :: Config -> Maybe T.Text
+    getter = fmap getCommand . getMaybe . _defaultCommand
+
+    setter :: Config -> Maybe T.Text -> Config
+    setter cfg cmd = cfg { _defaultCommand = setMaybe (_defaultCommand cfg) (fmap CommandV cmd) }
+
+-----------------------------------------
 
 -- | A version of the lens "use" function for 'MonadReader'.
 asks' :: MonadReader a m => SimpleGetter a b -> m b

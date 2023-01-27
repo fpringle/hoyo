@@ -7,6 +7,10 @@ Maintainer  : freddyjepringle@gmail.com
 Types used by all the main HoYo.* modules.
 -}
 
+{-# LANGUAGE DataKinds       #-}
+{-# LANGUAGE GADTs           #-}
+{-# LANGUAGE KindSignatures  #-}
+{-# LANGUAGE RankNTypes      #-}
 {-# LANGUAGE TemplateHaskell #-}
 {-# OPTIONS -Wno-missing-signatures #-}
 {-# OPTIONS_HADDOCK prune #-}
@@ -68,15 +72,30 @@ instance Show BookmarkSearchTerm where
   show (SearchIndex idx) = '#' : show idx
   show (SearchName name) = T.unpack name
 
+data ConfigValueType =
+    TBool
+  | TDefaultBookmark
+  | TCommand
+  | TList ConfigValueType
+  | TMaybe ConfigValueType
+
+data ConfigValue (t :: ConfigValueType) where
+  BoolV             :: Bool -> ConfigValue 'TBool
+  DefaultBookmarkV  :: DefaultBookmark -> ConfigValue 'TDefaultBookmark
+  CommandV          :: T.Text -> ConfigValue 'TCommand
+
+  ListOfV           :: forall (a :: ConfigValueType) . [ConfigValue a] -> ConfigValue ('TList a)
+  MaybeV            :: forall (a :: ConfigValueType) . Maybe (ConfigValue a) -> ConfigValue ('TMaybe a)
+
 -- | A representation of hoyo settings.
 data Config = Config {
-  _failOnError            :: !Bool
-  , _displayCreationTime  :: !Bool
-  , _enableClearing       :: !Bool
-  , _enableReset          :: !Bool
-  , _backupBeforeClear    :: !Bool
-  , _defaultBookmarks     :: ![DefaultBookmark]
-  , _defaultCommand       :: !(Maybe T.Text)
+  _failOnError            :: !(ConfigValue 'TBool)
+  , _displayCreationTime  :: !(ConfigValue 'TBool)
+  , _enableClearing       :: !(ConfigValue 'TBool)
+  , _enableReset          :: !(ConfigValue 'TBool)
+  , _backupBeforeClear    :: !(ConfigValue 'TBool)
+  , _defaultBookmarks     :: !(ConfigValue ('TList 'TDefaultBookmark))
+  , _defaultCommand       :: !(ConfigValue ('TMaybe 'TCommand))
   }
 
 -- | 'HoYoMonad' is the main monad stack for the hoyo program. It's essentially a wrapper
@@ -100,5 +119,4 @@ data ExecResult =
 
 makeLenses ''Bookmark
 makeLenses ''DefaultBookmark
-makeLenses ''Config
 makeLenses ''Env

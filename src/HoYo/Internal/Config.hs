@@ -24,29 +24,30 @@ import qualified Toml
 import Toml (TomlCodec, (.=))
 
 import Lens.Micro
+import Lens.Micro.Extras
 
 -- | A TOML codec describing how to convert a 'Config' to and from its
 -- TOML representation.
 configCodec :: TomlCodec Config
 configCodec = Config
-  <$> Toml.bool                       "fail_on_error"           .= _failOnError
-  <*> Toml.bool                       "display_creation_time"   .= _displayCreationTime
-  <*> Toml.bool                       "enable_clearing"         .= _enableClearing
-  <*> Toml.bool                       "enable_reset"            .= _enableReset
-  <*> Toml.bool                       "backup_before_clear"     .= _backupBeforeClear
-  <*> Toml.list defaultBookmarkCodec  "default_bookmark"        .= _defaultBookmarks
-  <*> Toml.dioptional             (Toml.text "default_command") .= _defaultCommand
+  <$> (BoolV <$> Toml.bool "fail_on_error")           .= view failOnError
+  <*> (BoolV <$> Toml.bool "display_creation_time")   .= view displayCreationTime
+  <*> (BoolV <$> Toml.bool "enable_clearing")         .= view enableClearing
+  <*> (BoolV <$> Toml.bool "enable_reset")            .= view enableReset
+  <*> (BoolV <$> Toml.bool "backup_before_clear")     .= view backupBeforeClear
+  <*> (ListOfV . fmap DefaultBookmarkV <$> Toml.list defaultBookmarkCodec "default_bookmark") .= view defaultBookmarks
+  <*> (MaybeV . fmap CommandV <$> Toml.dioptional (Toml.text "default_command")) .= view defaultCommand
 
 -- | The default config for hoyo.
 defaultConfig :: Config
 defaultConfig = Config {
-  _failOnError                = False
-  , _displayCreationTime      = False
-  , _enableClearing           = False
-  , _enableReset              = False
-  , _backupBeforeClear        = False
-  , _defaultBookmarks         = []
-  , _defaultCommand           = Nothing
+  _failOnError                = BoolV False
+  , _displayCreationTime      = BoolV False
+  , _enableClearing           = BoolV False
+  , _enableReset              = BoolV False
+  , _backupBeforeClear        = BoolV False
+  , _defaultBookmarks         = ListOfV []
+  , _defaultCommand           = MaybeV Nothing
   }
 
 -- | Decode a 'Config' from a Text.
