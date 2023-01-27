@@ -27,6 +27,7 @@ configKeyCompleter = listCompleter [
   , "enable_clearing"
   , "enable_reset"
   , "backup_before_clear"
+  , "default_command"
   ]
 
 -- TODO: more sophisticated, needs to consider the current key
