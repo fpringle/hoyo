@@ -87,6 +87,8 @@ data ConfigValue (t :: ConfigValueType) where
   ListOfV           :: forall (a :: ConfigValueType) . [ConfigValue a] -> ConfigValue ('TList a)
   MaybeV            :: forall (a :: ConfigValueType) . Maybe (ConfigValue a) -> ConfigValue ('TMaybe a)
 
+data AnyConfigValue = forall (t :: ConfigValueType) . AnyConfigValue (ConfigValue t)
+
 -- | A representation of hoyo settings.
 data Config = Config {
   _failOnError            :: !(ConfigValue 'TBool)

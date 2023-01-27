@@ -35,8 +35,6 @@ import System.Exit
 
 import Data.Time
 
-import qualified Toml
-
 -- | Options for the "add" command to be parsed from the command-line.
 data AddOptions = AddOptions {
   addDirectory  :: TFilePath
@@ -329,10 +327,10 @@ runConfigPrint :: ConfigPrintOptions -> HoYoMonad ()
 runConfigPrint _ = do
   s <- asks' config
   let keyVals = getKeyVals s
-  forM_ keyVals $ \(k, Toml.AnyValue v) -> do
-    let kStr = Toml.prettyKey k
-    let vStr = valText v
-    printStdout (kStr <> " = " <> vStr)
+  let keyWidth = maximum $ map (T.length . fst) keyVals
+  forM_ keyVals $ \(key, val) -> do
+    let vStr = formatConfigValue val
+    printStdout (T.justifyLeft keyWidth ' ' key <> " = " <> vStr)
 
 -- | Run the "config reset" command: reset the config to 'defaultConfig'.
 runConfigReset :: ConfigResetOptions -> HoYoMonad ()

@@ -7,7 +7,8 @@ Maintainer  : freddyjepringle@gmail.com
 Internals used by the HoYo.Config module.
 -}
 
-{-# LANGUAGE RankNTypes #-}
+{-# LANGUAGE RankNTypes    #-}
+{-# LANGUAGE TupleSections #-}
 module HoYo.Internal.Config where
 
 import HoYo.Bookmark
@@ -25,6 +26,8 @@ import Toml (TomlCodec, (.=))
 
 import Lens.Micro
 import Lens.Micro.Extras
+
+import Data.Maybe (maybeToList)
 
 -- | A TOML codec describing how to convert a 'Config' to and from its
 -- TOML representation.
@@ -67,8 +70,15 @@ encodeConfigFile :: MonadIO m => TFilePath -> Config -> m ()
 encodeConfigFile fp = void . Toml.encodeToFile configCodec (T.unpack fp)
 
 -- | Get TOML key-value pairs from a 'Config'.
-getKeyVals :: Config -> [(Toml.Key, Toml.AnyValue)]
-getKeyVals = tomlToKeyVals . Toml.execTomlCodec configCodec
+getKeyVals :: Config -> [(T.Text, AnyConfigValue)]
+getKeyVals cfg = [
+    ("fail_on_error",         AnyConfigValue $ _failOnError cfg)
+  , ("display_creation_time", AnyConfigValue $ _displayCreationTime cfg)
+  , ("enable_clearing",       AnyConfigValue $ _enableClearing cfg)
+  , ("enable_reset",          AnyConfigValue $ _enableReset cfg)
+  , ("backup_before_clear",   AnyConfigValue $ _backupBeforeClear cfg)
+    ] <> maybeToList (fmap (("default_command", ) . AnyConfigValue) $ getMaybe $ _defaultCommand cfg)
+      <> [("default_bookmarks", AnyConfigValue $ _defaultBookmarks cfg)]
 
 -- | Try to set a key-value pair in the config.
 setConfig :: MonadError T.Text m => T.Text -> T.Text -> Config -> m Config
