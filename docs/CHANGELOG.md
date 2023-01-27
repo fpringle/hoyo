@@ -22,6 +22,7 @@ and this project adheres to the
 ### Fixed
 
 - Make sure that readInt and readBool parse the entire string.
+- Add "default_command" to list of config keys in `configKeyCompleter`
 
 ### Changed
 
