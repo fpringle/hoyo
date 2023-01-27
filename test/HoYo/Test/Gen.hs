@@ -1,7 +1,12 @@
 {-# OPTIONS_GHC -fno-warn-orphans #-}
+{-# LANGUAGE DataKinds         #-}
+{-# LANGUAGE FlexibleContexts  #-}
+{-# LANGUAGE FlexibleInstances #-}
+
 module HoYo.Test.Gen where
 
 import HoYo
+import HoYo.Internal.Types
 
 import Test.QuickCheck
 
@@ -54,6 +59,21 @@ instance Arbitrary BookmarkSearchTerm where
 genCommandText :: Gen T.Text
 genCommandText = error "todo"
 
+instance Arbitrary (ConfigValue 'TBool) where
+  arbitrary = BoolV <$> arbitrary
+
+instance Arbitrary (ConfigValue 'TDefaultBookmark) where
+  arbitrary = DefaultBookmarkV <$> arbitrary
+
+instance Arbitrary (ConfigValue 'TCommand) where
+  arbitrary = CommandV <$> genCommandText
+
+instance Arbitrary (ConfigValue t) => Arbitrary (ConfigValue ('TMaybe t)) where
+  arbitrary = MaybeV <$> arbitrary
+
+instance Arbitrary (ConfigValue t) => Arbitrary (ConfigValue ('TList t)) where
+  arbitrary = ListOfV <$> arbitrary
+
 instance Arbitrary Config where
   arbitrary = Config <$> arbitrary
                      <*> arbitrary
@@ -61,7 +81,7 @@ instance Arbitrary Config where
                      <*> arbitrary
                      <*> arbitrary
                      <*> arbitrary
-                     <*> oneof [Just <$> genCommandText, pure Nothing]
+                     <*> arbitrary
 
 instance Arbitrary Env where
   arbitrary = Env <$> arbitrary
