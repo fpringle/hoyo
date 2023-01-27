@@ -35,7 +35,7 @@ data Env = Env {
   , _bookmarksPath  :: !TFilePath
   , _config         :: !Config
   , _configPath     :: !TFilePath
-  }
+  } deriving Show
 
 -- | Bookmark a directory for easy @cd@. A bookmark remembers the directory,
 -- the index, the creation time, and optionally a user-specified nickname
@@ -52,7 +52,7 @@ data Bookmark = Bookmark {
 data DefaultBookmark = DefaultBookmark {
   _defaultBookmarkDirectory        :: !TFilePath
   , _defaultBookmarkName           :: !(Maybe T.Text)
-  } deriving Show
+  } deriving (Show, Eq)
 
 -- | Wrapper for @['Bookmark']@.
 newtype Bookmarks = Bookmarks { unBookmarks :: [Bookmark] }
@@ -77,7 +77,7 @@ data Config = Config {
   , _backupBeforeClear    :: !Bool
   , _defaultBookmarks     :: ![DefaultBookmark]
   , _defaultCommand       :: !(Maybe T.Text)
-  }
+  } deriving (Show, Eq)
 
 -- | 'HoYoMonad' is the main monad stack for the hoyo program. It's essentially a wrapper
 -- around @ExceptT T.Text (ReaderT Env IO)@: in other words,

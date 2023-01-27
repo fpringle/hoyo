@@ -1,12 +1,13 @@
 {-# OPTIONS_GHC -fno-warn-orphans #-}
+
 module HoYo.Test.Gen where
 
 import HoYo
 
-import Test.QuickCheck
-
 import qualified Data.Text as T
-import Data.Time
+import Test.QuickCheck
+import Test.QuickCheck.Instances ()
+-- import Data.Time
 import System.FilePath
 
 letter :: Gen Char
@@ -21,22 +22,22 @@ string = listOf1 letter
 genFilePath :: Gen TFilePath
 genFilePath = T.pack . joinPath . ("/" :) <$> listOf string
 
-genZonedTime :: Gen ZonedTime
-genZonedTime = ZonedTime <$> genLocalTime <*> genTimeZone
-  where
-    genLocalTime = LocalTime <$> (ModifiedJulianDay <$> arbitrary)
-                             <*> (TimeOfDay <$> chooseInt (0, 23)
-                                            <*> chooseInt (0, 59)
-                                            <*> arbitrary)
-
-    genTimeZone = TimeZone <$> ((* 60) <$> chooseInt (-12, 12))
-                           <*> arbitrary
-                           <*> vectorOf 3 letter
+-- genZonedTime :: Gen ZonedTime
+-- genZonedTime = ZonedTime <$> genLocalTime <*> genTimeZone
+  -- where
+    -- genLocalTime = LocalTime <$> (ModifiedJulianDay <$> arbitrary)
+                             -- <*> (TimeOfDay <$> chooseInt (0, 23)
+                                            -- <*> chooseInt (0, 59)
+                                            -- <*> arbitrary)
+--
+    -- genTimeZone = TimeZone <$> ((* 60) <$> chooseInt (-12, 12))
+                           -- <*> arbitrary
+                           -- <*> vectorOf 3 letter
 
 instance Arbitrary Bookmark where
   arbitrary = Bookmark <$> genFilePath
                        <*> chooseInt (1, 1000)
-                       <*> genZonedTime
+                       <*> arbitrary
                        <*> (Just <$> text)
 
 instance Arbitrary DefaultBookmark where
@@ -52,7 +53,7 @@ instance Arbitrary BookmarkSearchTerm where
     ]
 
 genCommandText :: Gen T.Text
-genCommandText = error "todo"
+genCommandText = pure ""
 
 instance Arbitrary Config where
   arbitrary = Config <$> arbitrary

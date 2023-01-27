@@ -57,4 +57,4 @@ prop_ReadInt = forAll cases (uncurry testReadInt)
 
 return []
 utilsTests :: IO Bool
-utilsTests = $verboseCheckAll
+utilsTests = $quickCheckAll
