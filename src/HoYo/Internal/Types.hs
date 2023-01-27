@@ -24,6 +24,7 @@ import Control.Monad.Trans.Reader (ReaderT)
 
 import Lens.Micro.TH
 
+import Data.List (intercalate)
 import qualified Data.Text as T
 import Data.Time
 
@@ -39,7 +40,7 @@ data Env = Env {
   , _bookmarksPath  :: !TFilePath
   , _config         :: !Config
   , _configPath     :: !TFilePath
-  }
+  } deriving Show
 
 -- | Bookmark a directory for easy @cd@. A bookmark remembers the directory,
 -- the index, the creation time, and optionally a user-specified nickname
@@ -56,7 +57,7 @@ data Bookmark = Bookmark {
 data DefaultBookmark = DefaultBookmark {
   _defaultBookmarkDirectory        :: !TFilePath
   , _defaultBookmarkName           :: !(Maybe T.Text)
-  } deriving Show
+  } deriving (Show, Eq)
 
 -- | Wrapper for @['Bookmark']@.
 newtype Bookmarks = Bookmarks { unBookmarks :: [Bookmark] }
@@ -90,6 +91,20 @@ data ConfigValue (t :: ConfigValueType) where
   ListOfV           :: forall (a :: ConfigValueType) . [ConfigValue a] -> ConfigValue ('TList a)
   MaybeV            :: forall (a :: ConfigValueType) . Maybe (ConfigValue a) -> ConfigValue ('TMaybe a)
 
+instance Show (ConfigValue (t :: ConfigValueType)) where
+  show (BoolV bool) = show bool
+  show (DefaultBookmarkV bm) = show bm
+  show (CommandV t) = show t
+  show (ListOfV xs) = "[" <> intercalate ", " (map show xs) <> "]"
+  show (MaybeV xs) = show xs
+
+instance Eq (ConfigValue (t :: ConfigValueType)) where
+  BoolV b1            == BoolV b2             = b1 == b2
+  DefaultBookmarkV b1 == DefaultBookmarkV b2  = b1 == b2
+  CommandV b1         == CommandV b2          = b1 == b2
+  ListOfV b1          == ListOfV b2           = b1 == b2
+  MaybeV b1           == MaybeV b2            = b1 == b2
+
 -- | Existential wrapper around 'ConfigValue'.
 data AnyConfigValue = forall (t :: ConfigValueType) . AnyConfigValue (ConfigValue t)
 
@@ -102,7 +117,7 @@ data Config = Config {
   , _backupBeforeClear    :: !(ConfigValue 'TBool)
   , _defaultBookmarks     :: !(ConfigValue ('TList 'TDefaultBookmark))
   , _defaultCommand       :: !(ConfigValue ('TMaybe 'TCommand))
-  }
+  } deriving (Show, Eq)
 
 -- | 'HoYoMonad' is the main monad stack for the hoyo program. It's essentially a wrapper
 -- around @ExceptT T.Text (ReaderT Env IO)@: in other words,

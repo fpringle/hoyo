@@ -13,6 +13,8 @@ and this project adheres to the
 - `Arbitrary` instances for test suite.
 - Added property tests for functions in Bookmarks.hs and Utils.hs.
 - Integrate [headroom](https://github.com/vaclavsvejcar/headroom).
+- Some util functions for testing in HoYo/Test/HoYo.hs.
+- Add more bookmark, utils and env tests.
 - Better pretty printing in `hoyo config print` command.
 - Stricter config type safety using GADTs parameterised by `ConfigValueType`.
 - Arbitrary values for `ConfigValue`.
