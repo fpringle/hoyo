@@ -10,6 +10,7 @@ Utility functions used by all the main HoYo.* modules.
 {-# LANGUAGE DataKinds  #-}
 {-# LANGUAGE GADTs      #-}
 {-# LANGUAGE RankNTypes #-}
+{-# OPTIONS_HADDOCK prune #-}
 
 module HoYo.Internal.Utils where
 
@@ -244,7 +245,7 @@ formatDefaultBookmark (DefaultBookmark dir mbName) =
 tshow :: Show a => a -> T.Text
 tshow = T.pack . show
 
--- Format a config value. Used for the "config print" command.
+-- | Format a config value. Used for the "config print" command.
 formatConfigValue :: AnyConfigValue -> T.Text
 formatConfigValue (AnyConfigValue (BoolV bool)) = tshow bool
 formatConfigValue (AnyConfigValue (DefaultBookmarkV bm)) = formatDefaultBookmark bm

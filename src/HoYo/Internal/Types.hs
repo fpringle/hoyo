@@ -72,6 +72,7 @@ instance Show BookmarkSearchTerm where
   show (SearchIndex idx) = '#' : show idx
   show (SearchName name) = T.unpack name
 
+-- | The types of config values allowed in the HoYo config.
 data ConfigValueType =
     TBool
   | TDefaultBookmark
@@ -79,6 +80,8 @@ data ConfigValueType =
   | TList ConfigValueType
   | TMaybe ConfigValueType
 
+-- | Values in the HoYo config. Using a GADT parameterised by 'ConfigValueType'
+-- gives us stricter type safety.
 data ConfigValue (t :: ConfigValueType) where
   BoolV             :: Bool -> ConfigValue 'TBool
   DefaultBookmarkV  :: DefaultBookmark -> ConfigValue 'TDefaultBookmark
@@ -87,6 +90,7 @@ data ConfigValue (t :: ConfigValueType) where
   ListOfV           :: forall (a :: ConfigValueType) . [ConfigValue a] -> ConfigValue ('TList a)
   MaybeV            :: forall (a :: ConfigValueType) . Maybe (ConfigValue a) -> ConfigValue ('TMaybe a)
 
+-- | Existential wrapper around 'ConfigValue'.
 data AnyConfigValue = forall (t :: ConfigValueType) . AnyConfigValue (ConfigValue t)
 
 -- | A representation of hoyo settings.
