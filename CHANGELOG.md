@@ -13,6 +13,8 @@ and this project adheres to the
 - `Arbitrary` instances for test suite.
 - Added property tests for functions in Bookmarks.hs and Utils.hs.
 - Integrate [headroom](https://github.com/vaclavsvejcar/headroom).
+- Some util functions for testing in HoYo/Test/HoYo.hs.
+- Add more bookmark + env tests.
 
 ### Fixed
 
