@@ -1,10 +1,13 @@
 {-# LANGUAGE TemplateHaskell #-}
 module HoYo.Test.Utils where
 
+import HoYo
 import HoYo.Internal.Utils
 import HoYo.Test.Gen
+import HoYo.Test.HoYo
 
 import qualified Data.Text as T
+import Lens.Micro
 import Test.QuickCheck
 
 testMaximumDefaultInt :: Int -> [Int] -> Property
@@ -55,6 +58,26 @@ prop_ReadInt = forAll cases (uncurry testReadInt)
       let tx = T.pack (lets1 <> [nondig] <> lets2)
       return (tx, Left ("Couldn't parse integer: " <> tx))
 
+prop_Assert :: T.Text -> Bool -> Property
+prop_Assert errMsg True = testHoYoMonadEqWithEnv
+                              (Bookmarks [])
+                              defaultConfig
+                              (assert errMsg (return True))
+                              (Right ())
+prop_Assert errMsg False = testHoYoMonadEqWithEnv
+                              (Bookmarks [])
+                              defaultConfig
+                              (assert errMsg (return False))
+                              (Left errMsg)
+
+prop_AssertVerbose :: T.Text -> Bool -> Bool -> Property
+prop_AssertVerbose errMsg bool verb = testHoYoMonadEqWithEnv
+                                        (Bookmarks [])
+                                        (set failOnError verb defaultConfig)
+                                        (assertVerbose errMsg (return bool))
+                                        (if not bool && verb then Left errMsg else Right bool)
+
 return []
 utilsTests :: IO Bool
 utilsTests = $quickCheckAll
+-- utilsTests = $verboseCheckAll

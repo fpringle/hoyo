@@ -10,7 +10,7 @@ import qualified Data.Text as T
 import Test.QuickCheck
 import Test.QuickCheck.Monadic as Q
 -- import Control.Monad
--- import System.IO.Temp
+import System.IO.Temp
 
 
 envEq :: Env -> Env -> Bool
@@ -38,6 +38,15 @@ testWriteReadEnv bms cfg = monadicIO $ do
 
 prop_WriteReadEnv :: Property
 prop_WriteReadEnv = withMaxSuccess 10 testWriteReadEnv
+
+prop_InitEnv :: Property
+prop_InitEnv = ioProperty $ do
+  bFile <- T.pack <$> emptySystemTempFile "bookmarks.toml"
+  cFile <- T.pack <$> emptySystemTempFile "config.toml"
+  initEnv bFile cFile
+  writtenEnv <- readEnv bFile cFile
+  let expectedEnv = Env (Bookmarks []) bFile defaultConfig cFile
+  return (eitherEnvEq writtenEnv (Right expectedEnv))
 
 return []
 envTests :: IO Bool

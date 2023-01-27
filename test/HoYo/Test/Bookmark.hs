@@ -50,7 +50,7 @@ prop_BookmarkFilterByName = forAll bookmarksWithDifferentNames (uncurry testBook
   where
     bookmarksWithDifferentNames = do
       bm1 <- arbitrary
-      bm2 <- suchThat arbitrary (on (/=) _bookmarkName bm1)
+      bm2 <- suchThat arbitrary (on (/=) (fmap T.toLower . _bookmarkName) bm1)
       return (bm1, bm2)
 
 testBookmarkFilterByDirInfix :: Bookmark -> Bookmark -> Property
