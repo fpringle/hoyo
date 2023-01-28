@@ -15,6 +15,7 @@ hoyo is a command-line utility that lets the user save directories as bookmarks 
     * [Configuration](#configuration)
         * [Default command](#default-command)
         * [Default bookmarks](#default-bookmarks)
+* [Contributing](#contributing)
 
 # Installation
 
@@ -238,3 +239,20 @@ $ hoyo      # no arguments
 
 If the `default_command` option is no set, then running `hoyo` with no arguments
 is equivalent to running `hoyo --help`.
+
+# Contributing
+
+Please submit any bug reports or feature requests on the
+[issues](https://github.com/fpringle/hoyo/issues) page.
+
+When submitting pull requests, make sure you've done a few things first:
+
+- If adding a new feature, make sure to add relevant tests.
+
+- Install [pre-commit](https://pre-commit.com/) and run `pre-commit install`
+inside the root directory of the repository. This sets up pre-commit hooks to
+run useful scripts (in the [scripts](scripts/) directory) like linting, keeping
+documentation up to date, and running tests.
+
+- Update [CHANGELOG.md](CHANGELOG.md) under the
+[Unreleased](CHANGELOG.md#unreleased) section with a short description of your changes.
