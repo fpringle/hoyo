@@ -16,6 +16,8 @@ and this project adheres to the
 
 ### Removed
 
+- `testDirectoryUnique`: allows user to have multiple bookmarks to the same directory.
+
 ## [0.3.0.0] - 2023-01-27
 
 ### Added
