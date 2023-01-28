@@ -1,7 +1,7 @@
 {-|
 Module      : HoYo.Internal.Version
 Copyright   : (c) Frederick Pringle, 2023
-License     : BSD-3
+License     : BSD-3-Clause
 Maintainer  : freddyjepringle@gmail.com
 
 This module just exports a string containing the current HoYo version.
