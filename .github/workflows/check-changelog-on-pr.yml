@@ -19,7 +19,8 @@ jobs:
               uses: tj-actions/changed-files@v35
               with:
                   files: CHANGELOG.md
-            - shell: bash
+            - name: Throw error if CHANGELOG.md has changed
+              shell: bash
               if: steps.changed-changelog.outputs.any_changed == 'false'
               run: |
                   echo "CHANGELOG.md has not changed"
