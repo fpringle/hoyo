@@ -48,6 +48,7 @@ module HoYo (
   -- * Misc
   , TFilePath
   , versionString
+  , testRandom
   ) where
 
 import HoYo.Bookmark
@@ -105,3 +106,7 @@ getEnvAndRunCommand (Options cmd globals) bFp sFp = case cmd of
   ConfigCmd opts  -> getEnvAndRunHoYo globals (runConfig opts) bFp sFp >> pure Done
   DefaultCommand  -> getEnvAndRunHoYo globals runDefaultCommand bFp sFp
   Check opts      -> runCheck opts bFp sFp >> return Done
+
+-- | hello
+testRandom :: IO ()
+testRandom = pure ()
