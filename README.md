@@ -2,8 +2,19 @@
 
 [![BSD-3 license](https://img.shields.io/github/license/fpringle/hoyo)](https://github.com/fpringle/hoyo/blob/main/LICENSE)
 [![Test workflow](https://github.com/fpringle/hoyo/actions/workflows/tests.yml/badge.svg)](https://github.com/fpringle/hoyo/actions/workflows/tests.yml)
+[![GitHub Pages deployment](https://github.com/fpringle/hoyo/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/fpringle/hoyo/actions/workflows/pages/pages-build-deployment)
 
 hoyo is a command-line utility that lets the user save directories as bookmarks (similar to in the browser) and easily `cd` to them.
+
+# Contents
+
+* [Installation](#installation)
+* [Usage](#usage)
+    * [Command-line options](#command-line-options)
+    * [Examples](#examples)
+    * [Configuration](#configuration)
+        * [Default command](#default-command)
+        * [Default bookmarks](#default-bookmarks)
 
 # Installation
 
@@ -30,6 +41,10 @@ source path/to/hoyo.sh
 
 # Usage
 
+## Command-line options
+
+Running `hoyo --help` will display all the global default options, as well
+as the available commands. For command-specific options, run `hoyo <cmd> --help`.
 ```
 Set directory bookmarks for quick "cd"-like behaviour
 
@@ -162,3 +177,64 @@ $ hoyo check
 Config is good
 Bookmarks file is good
 ```
+
+## Configuration
+
+The default config file is at `$XDG_CONFIG_HOME/hoyo/config.toml`, which is normally
+`~/.config/hoyo/config.toml`. To use a different config file, see [Command-line options](#command-line-options).
+
+```toml
+# a sample hoyo config file, with explanations
+
+# whether to backup the bookmarks file before running the `hoyo clear` command
+backup_before_clear     = false
+
+# whether to display bookmark creation time when running the `hoyo list` command
+display_creation_time   = false
+
+# set to False to disable the `hoyo clear` command as a safety mechanism
+enable_clearing         = true
+
+# set to False to disable the `hoyo config reset` command as a safety mechanism
+enable_reset            = false
+
+# whether to fail if we hit a non-fatal error e.g.  adding a bookmark that already exists
+fail_on_error           = false
+
+# optionally set a default command - see section "Default command"
+default_command         = "list"
+
+# optionally set a list of default bookmarks - see section "Default bookmarks"
+[[default_bookmark]]
+  directory             = "/home/me"
+
+[[default_bookmark]]
+  directory             = "/home/me/coding/haskell"
+  name                  = "hask"
+```
+
+### Default bookmarks
+
+You can optionally set a list of default bookmarks. When running `hoyo` for
+the first time, or running `hoyo clear` to delete all the existing bookmarks,
+the bookmarks list will be populated by the bookmarks in this list. A default
+bookmark can have these fields:
+
+- `directory`: required. The directory of the bookmark.
+- `name`: optional. Give the bookmark a nickname for easier cd.
+
+### Default command
+
+If the `default_command` option is set, then running `hoyo` with no arguments
+will actually run the default command.
+
+For example, if `default_command = "list"`:
+
+```bash
+$ hoyo      # no arguments
+1. /home/me
+2. /home/me/coding/haskell      (hask)
+```
+
+If the `default_command` option is no set, then running `hoyo` with no arguments
+is equivalent to running `hoyo --help`.
