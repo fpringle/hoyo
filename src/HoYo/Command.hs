@@ -1,7 +1,7 @@
 {-|
 Module      : HoYo.Command
 Copyright   : (c) Frederick Pringle, 2023
-License     : BSD-3
+License     : BSD-3-Clause
 Maintainer  : freddyjepringle@gmail.com
 
 This module defines data-types and runner functions for the hoyo

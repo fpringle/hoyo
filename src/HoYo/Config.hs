@@ -1,7 +1,7 @@
 {-|
 Module      : HoYo.Config
 Copyright   : (c) Frederick Pringle, 2023
-License     : BSD-3
+License     : BSD-3-Clause
 Maintainer  : freddyjepringle@gmail.com
 
 Configuration for the hoyo program. This is stored on-disk as a TOML file,

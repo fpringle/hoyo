@@ -1,7 +1,7 @@
 {-|
 Module      : HoYo.Internal.Utils
 Copyright   : (c) Frederick Pringle, 2023
-License     : BSD-3
+License     : BSD-3-Clause
 Maintainer  : freddyjepringle@gmail.com
 
 Utility functions used by all the main HoYo.* modules.

@@ -1,7 +1,7 @@
 {-|
 Module      : HoYo.Internal.Config
 Copyright   : (c) Frederick Pringle, 2023
-License     : BSD-3
+License     : BSD-3-Clause
 Maintainer  : freddyjepringle@gmail.com
 
 Internals used by the HoYo.Config module.
