@@ -218,16 +218,6 @@ verifyName name = do
   assert "bookmark name can't be empty" $ return $ not $ T.null name
   assert "bookmark name can't be a number" $ return $ not $ all isDigit nameStr
 
--- | Given the existing bookmarks and a potential bookmark directory,
--- test if the new bookmark will have a unique directory.
---
--- TODO: Do we actually want this? Shouldn't the user be able to have
--- multiple bookmarks to the same directory?
-testDirectoryUnique :: [Bookmark] -> TFilePath -> HoYoMonad Bool
-testDirectoryUnique bms dir =
-  assertVerbose "directory is already bookmarked" $
-    return $ all ((/= dir) . view bookmarkDirectory) bms
-
 -- | Given the existing bookmarks and a potential bookmark name,
 -- test if the new bookmark will have a unique name.
 testNameUnique :: [Bookmark] -> T.Text -> HoYoMonad Bool
@@ -241,9 +231,8 @@ runAdd opts = do
   dir <- normaliseAndVerifyDirectory $ addDirectory opts
   let name = addName opts
   modifyBookmarksM $ \bms -> do
-    uniqDir <- testDirectoryUnique bms dir
     uniqName <- testNameUnique bms dir
-    if uniqDir && uniqName
+    if uniqName
     then do
       let maxIndex = maximumDefault 0 $ map (view bookmarkIndex) bms
       zTime <- liftIO getZonedTime
