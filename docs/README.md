@@ -1,6 +1,7 @@
 # hoyo
 
-[![MPL-2.0 license](https://img.shields.io/github/license/fpringle/hoyo)](https://github.com/fpringle/hoyo/blob/main/LICENSE)
+[![BSD-3 license](https://img.shields.io/github/license/fpringle/hoyo)](https://github.com/fpringle/hoyo/blob/main/LICENSE)
+[![Test workflow](https://github.com/fpringle/hoyo/actions/workflows/tests.yml/badge.svg)](https://github.com/fpringle/hoyo/actions/workflows/tests.yml)
 
 hoyo is a command-line utility that lets the user save directories as bookmarks (similar to in the browser) and easily `cd` to them.
 
