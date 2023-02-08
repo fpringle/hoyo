@@ -1,4 +1,13 @@
-module Complete where
+{-|
+Module      : HoYo.CLI.Complete
+Copyright   : (c) Frederick Pringle, 2023
+License     : BSD-3-Clause
+Maintainer  : freddyjepringle@gmail.com
+
+Bash competion functions used by the CLI.
+-}
+
+module HoYo.CLI.Complete where
 
 import HoYo
 
@@ -7,6 +16,7 @@ import Data.Maybe
 import qualified Data.Text as T
 import Options.Applicative
 
+-- | Fetch existing data file and use it to complete bookmark names.
 bookmarkCompleter :: Completer
 bookmarkCompleter = listIOCompleter $ do
   sFp <- defaultConfigPath
@@ -20,6 +30,7 @@ bookmarkCompleter = listIOCompleter $ do
       let nicknames = mapMaybe (fmap T.unpack . _bookmarkName) bms
       return (nicknames <> indices)
 
+-- | Complete configuration keys.
 configKeyCompleter :: Completer
 configKeyCompleter = listCompleter [
   "fail_on_error"
@@ -30,7 +41,9 @@ configKeyCompleter = listCompleter [
   , "default_command"
   ]
 
--- TODO: more sophisticated, needs to consider the current key
+-- | Complete configuration values.
+--
+-- TODO: could be more sophisticated, considering the current key
 configValueCompleter :: Completer
 configValueCompleter = listCompleter [
   "true"

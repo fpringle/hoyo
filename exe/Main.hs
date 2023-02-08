@@ -1,7 +1,7 @@
 module Main where
 
 import HoYo
-import Parse
+import HoYo.CLI.Parse
 
 import Control.Monad (forM_)
 import qualified Data.Text as T

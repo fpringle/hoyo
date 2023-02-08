@@ -1,7 +1,16 @@
-module Parse where
+{-|
+Module      : HoYo.CLI.Parse
+Copyright   : (c) Frederick Pringle, 2023
+License     : BSD-3-Clause
+Maintainer  : freddyjepringle@gmail.com
 
-import Complete
+Parse CLI arguments.
+-}
+
+module HoYo.CLI.Parse where
+
 import HoYo
+import HoYo.CLI.Complete
 
 import qualified Data.Text as T
 import Options.Applicative
