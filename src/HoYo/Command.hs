@@ -52,3 +52,4 @@ module HoYo.Command (
   ) where
 
 import HoYo.Internal.Command
+import HoYo.Internal.Types
