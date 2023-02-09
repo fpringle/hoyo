@@ -10,9 +10,17 @@ and this project adheres to the
 
 ### Added
 
+- Tests for parsing command-line options (round-trip property)
+
 ### Fixed
 
 ### Changed
+
+- Moved CLI modules "Complete" and "Parse" into the main library.
+    This lets us test the parsing and completion code.
+- Changed global option flags:
+    - [-c|--config]     -> [-C|--config-file]
+    - [-b|--bookmarks]  -> [-B|--bookmarks-file]
 
 ### Removed
 

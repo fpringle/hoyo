@@ -68,10 +68,7 @@ newtype Bookmarks = Bookmarks { unBookmarks :: [Bookmark] }
 data BookmarkSearchTerm =
   SearchIndex Int
   | SearchName T.Text
-
-instance Show BookmarkSearchTerm where
-  show (SearchIndex idx) = '#' : show idx
-  show (SearchName name) = T.unpack name
+  deriving (Show, Eq)
 
 -- | The types of config values allowed in the HoYo config.
 data ConfigValueType =

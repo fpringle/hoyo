@@ -18,14 +18,14 @@ import Text.Read
 
 globalOptions :: Parser GlobalOptions
 globalOptions = GlobalOptions
-                  <$> optional (strOption (long "config"
-                                <> short 'c'
+                  <$> optional (strOption (long "config-file"
+                                <> short 'C'
                                 <> metavar "<file>"
                                 <> help "Override the default config file"
                                 <> showDefault
                                 <> action "file"))
-                  <*> optional (strOption (long "bookmarks"
-                                <> short 'b'
+                  <*> optional (strOption (long "bookmarks-file"
+                                <> short 'B'
                                 <> metavar "<file>"
                                 <> help "Override the default bookmarks file"
                                 <> showDefault

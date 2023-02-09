@@ -84,6 +84,7 @@ test-suite hoyo-test
                       HoYo.Test.Utils
                       HoYo.Test.HoYo
                       HoYo.Test.Env
+                      HoYo.Test.CLI.Parse
     -- other-extensions:
     hs-source-dirs:   test
     default-language: Haskell2010
@@ -99,6 +100,7 @@ test-suite hoyo-test
         microlens >=0.4.13 && <0.5,
         temporary >=1.3 && <2,
         directory >=1.3 && <1.4,
+        optparse-applicative >=0.17 && <0.18,
         hoyo
     type:             exitcode-stdio-1.0
     default-extensions: OverloadedStrings
