@@ -1,6 +1,7 @@
 module Main (main) where
 
 import HoYo.Test.Bookmark
+import HoYo.Test.CLI.Parse
 import HoYo.Test.Env
 import HoYo.Test.Utils
 
@@ -13,5 +14,6 @@ main = do
                             bookmarkTests
                           , utilsTests
                           , envTests
+                          , parseTests
                           ]
   unless res exitFailure

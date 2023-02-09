@@ -254,3 +254,7 @@ formatConfigValue (AnyConfigValue (MaybeV t)) = case t of
                                                   Nothing -> ""
                                                   Just t' -> formatConfigValue (AnyConfigValue t')
 formatConfigValue (AnyConfigValue (ListOfV xs)) = T.intercalate "\n" (["["] <> map (("  " <>) . formatConfigValue . AnyConfigValue) xs <> ["]"])
+
+formatBookmarkSearchTerm :: BookmarkSearchTerm -> T.Text
+formatBookmarkSearchTerm (SearchIndex idx) = "#" <> tshow idx
+formatBookmarkSearchTerm (SearchName name) = name
