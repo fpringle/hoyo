@@ -33,7 +33,6 @@ module HoYo (
   , withFiles
   , getEnvAndRunHoYo
   , getEnvAndRunCommand
-  , ExecResult (..)
   , HoYoMonad
   , modifyBookmarks
   , modifyBookmarksM
@@ -94,14 +93,7 @@ getEnvAndRunHoYo globals hoyo bFp sFp = withFiles globals bFp sFp hoyo >>= \case
 -- | @getEnvAndRunHoYo opts bFp sFp@ gets the environment saved in
 -- the bookmark path (@bFp@) and the config path (@sFp@), and runs the command
 -- specified by @opts@.
-getEnvAndRunCommand :: Options -> TFilePath -> TFilePath -> IO ExecResult
+getEnvAndRunCommand :: Options -> TFilePath -> TFilePath -> IO ()
 getEnvAndRunCommand (Options cmd globals) bFp sFp = case cmd of
-  Add opts        -> getEnvAndRunHoYo globals (runAdd opts) bFp sFp >> pure Done
-  Move opts       -> getEnvAndRunHoYo globals (runMove opts) bFp sFp >> pure Done
-  List opts       -> getEnvAndRunHoYo globals (runList opts) bFp sFp >> pure Done
-  Clear opts      -> getEnvAndRunHoYo globals (runClear opts) bFp sFp >> pure Done
-  Delete opts     -> getEnvAndRunHoYo globals (runDelete opts) bFp sFp >> pure Done
-  Refresh opts    -> getEnvAndRunHoYo globals (runRefresh opts) bFp sFp >> pure Done
-  ConfigCmd opts  -> getEnvAndRunHoYo globals (runConfig opts) bFp sFp >> pure Done
-  DefaultCommand  -> getEnvAndRunHoYo globals runDefaultCommand bFp sFp
-  Check opts      -> runCheck opts bFp sFp >> return Done
+  Check opts  -> runCheck opts bFp sFp
+  otherCmd    -> getEnvAndRunHoYo globals (runCommand otherCmd) bFp sFp

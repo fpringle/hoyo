@@ -196,22 +196,22 @@ forall (f :: * -&gt; *) a b. Applicative f =&gt; f (a -&gt; b) -&gt; f a -&gt; f
 </span><span id="line-75"></span><span>
 </span><span id="line-76"></span><span class="annot"><a href="HoYo.CLI.Parse.html#parseOverride"><span class="hs-identifier hs-type">parseOverride</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Mod</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">FlagFields</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Mod</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">FlagFields</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Parser</span></span><span> </span><span class="annot"><a href="HoYo.Internal.Command.html#MaybeOverride"><span class="hs-identifier hs-type">MaybeOverride</span></a></span><span>
 </span><span id="line-77"></span><span id="parseOverride"><span class="annot"><span class="annottext">parseOverride :: Mod FlagFields Bool -&gt; Mod FlagFields Bool -&gt; Parser MaybeOverride
-</span><a href="HoYo.CLI.Parse.html#parseOverride"><span class="hs-identifier hs-var hs-var">parseOverride</span></a></span></span><span> </span><span id="local-6989586621679103877"><span class="annot"><span class="annottext">Mod FlagFields Bool
-</span><a href="#local-6989586621679103877"><span class="hs-identifier hs-var">posMod</span></a></span></span><span> </span><span id="local-6989586621679103876"><span class="annot"><span class="annottext">Mod FlagFields Bool
-</span><a href="#local-6989586621679103876"><span class="hs-identifier hs-var">negMod</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; MaybeOverride
+</span><a href="HoYo.CLI.Parse.html#parseOverride"><span class="hs-identifier hs-var hs-var">parseOverride</span></a></span></span><span> </span><span id="local-6989586621679103640"><span class="annot"><span class="annottext">Mod FlagFields Bool
+</span><a href="#local-6989586621679103640"><span class="hs-identifier hs-var">posMod</span></a></span></span><span> </span><span id="local-6989586621679103639"><span class="annot"><span class="annottext">Mod FlagFields Bool
+</span><a href="#local-6989586621679103639"><span class="hs-identifier hs-var">negMod</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; MaybeOverride
 </span><a href="HoYo.Internal.Command.html#combOverride"><span class="hs-identifier hs-var">combOverride</span></a></span><span>
 </span><span id="line-78"></span><span>                                </span><span class="annot"><span class="annottext">(Bool -&gt; Bool -&gt; MaybeOverride)
 -&gt; Parser Bool -&gt; Parser (Bool -&gt; MaybeOverride)
 forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
 </span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="annottext">Mod FlagFields Bool -&gt; Parser Bool
 </span><span class="hs-identifier hs-var">switch</span></span><span> </span><span class="annot"><span class="annottext">Mod FlagFields Bool
-</span><a href="#local-6989586621679103877"><span class="hs-identifier hs-var">posMod</span></a></span><span>
+</span><a href="#local-6989586621679103640"><span class="hs-identifier hs-var">posMod</span></a></span><span>
 </span><span id="line-79"></span><span>                                </span><span class="annot"><span class="annottext">Parser (Bool -&gt; MaybeOverride)
 -&gt; Parser Bool -&gt; Parser MaybeOverride
 forall (f :: * -&gt; *) a b. Applicative f =&gt; f (a -&gt; b) -&gt; f a -&gt; f b
 </span><span class="hs-operator hs-var">&lt;*&gt;</span></span><span> </span><span class="annot"><span class="annottext">Mod FlagFields Bool -&gt; Parser Bool
 </span><span class="hs-identifier hs-var">switch</span></span><span> </span><span class="annot"><span class="annottext">Mod FlagFields Bool
-</span><a href="#local-6989586621679103876"><span class="hs-identifier hs-var">negMod</span></a></span><span>
+</span><a href="#local-6989586621679103639"><span class="hs-identifier hs-var">negMod</span></a></span><span>
 </span><span id="line-80"></span><span>
 </span><span id="line-81"></span><span class="annot"><a href="HoYo.CLI.Parse.html#parseOverrideFailOnError"><span class="hs-identifier hs-type">parseOverrideFailOnError</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Parser</span></span><span> </span><span class="annot"><a href="HoYo.Internal.Command.html#MaybeOverride"><span class="hs-identifier hs-type">MaybeOverride</span></a></span><span>
 </span><span id="line-82"></span><span id="parseOverrideFailOnError"><span class="annot"><span class="annottext">parseOverrideFailOnError :: Parser MaybeOverride
@@ -364,8 +364,8 @@ forall a. (String -&gt; Either String a) -&gt; ReadM a
 -&gt; (String -&gt; Either String BookmarkSearchTerm)
 -&gt; ReadM BookmarkSearchTerm
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="hs-glyph">\</span><span id="local-6989586621679103868"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679103868"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span>
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="hs-glyph">\</span><span id="local-6989586621679103631"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679103631"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span>
 </span><span id="line-111"></span><span>  </span><span class="annot"><span class="annottext">Int -&gt; BookmarkSearchTerm
 </span><a href="HoYo.Internal.Types.html#SearchIndex"><span class="hs-identifier hs-var">SearchIndex</span></a></span><span> </span><span class="annot"><span class="annottext">(Int -&gt; BookmarkSearchTerm)
 -&gt; Either String Int -&gt; Either String BookmarkSearchTerm
@@ -373,7 +373,7 @@ forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
 </span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Either String Int
 forall a. Read a =&gt; String -&gt; Either String a
 </span><span class="hs-identifier hs-var">readEither</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679103868"><span class="hs-identifier hs-var">s</span></a></span><span>
+</span><a href="#local-6989586621679103631"><span class="hs-identifier hs-var">s</span></a></span><span>
 </span><span id="line-112"></span><span>  </span><span class="annot"><span class="annottext">Either String BookmarkSearchTerm
 -&gt; Either String BookmarkSearchTerm
 -&gt; Either String BookmarkSearchTerm
@@ -383,7 +383,7 @@ forall a b. b -&gt; Either a b
 </span><span class="hs-identifier hs-var">Right</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">TFilePath -&gt; BookmarkSearchTerm
 </span><a href="HoYo.Internal.Types.html#SearchName"><span class="hs-identifier hs-var">SearchName</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; TFilePath
 </span><span class="hs-identifier hs-var">T.pack</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679103868"><span class="hs-identifier hs-var">s</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679103631"><span class="hs-identifier hs-var">s</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
 </span><span id="line-113"></span><span>
 </span><span id="line-114"></span><span class="annot"><a href="HoYo.CLI.Parse.html#moveCommandMods"><span class="hs-identifier hs-type">moveCommandMods</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Mod</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">ArgumentFields</span></span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#BookmarkSearchTerm"><span class="hs-identifier hs-type">BookmarkSearchTerm</span></a></span><span>
 </span><span id="line-115"></span><span id="moveCommandMods"><span class="annot"><span class="annottext">moveCommandMods :: Mod ArgumentFields BookmarkSearchTerm
@@ -818,9 +818,9 @@ forall (f :: * -&gt; *) a. String -&gt; Mod f a
 </span><a href="HoYo.Internal.Types.html#CheckOptions"><span class="hs-identifier hs-var">CheckOptions</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">True</span></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">True</span></span><span>
-</span><span id="line-216"></span><span class="annot"><a href="HoYo.CLI.Parse.html#noArgs"><span class="hs-identifier hs-var">noArgs</span></a></span><span> </span><span id="local-6989586621679103827"><span class="annot"><span class="annottext">CheckOptions
-</span><a href="#local-6989586621679103827"><span class="hs-identifier hs-var">opts</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CheckOptions
-</span><a href="#local-6989586621679103827"><span class="hs-identifier hs-var">opts</span></a></span><span>
+</span><span id="line-216"></span><span class="annot"><a href="HoYo.CLI.Parse.html#noArgs"><span class="hs-identifier hs-var">noArgs</span></a></span><span> </span><span id="local-6989586621679103590"><span class="annot"><span class="annottext">CheckOptions
+</span><a href="#local-6989586621679103590"><span class="hs-identifier hs-var">opts</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CheckOptions
+</span><a href="#local-6989586621679103590"><span class="hs-identifier hs-var">opts</span></a></span><span>
 </span><span id="line-217"></span><span>
 </span><span id="line-218"></span><span class="hs-comment">-- | Parse options for the @hoyo check@ command.</span><span>
 </span><span id="line-219"></span><span class="annot"><a href="HoYo.CLI.Parse.html#checkCommand"><span class="hs-identifier hs-type">checkCommand</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Parser</span></span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#Command"><span class="hs-identifier hs-type">Command</span></a></span><span>
@@ -1030,7 +1030,7 @@ forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;\n\nCopyright (c) 2023, Frederick Pringle\n\nAll rights reserved.&quot;</span></span><span>
 </span><span id="line-255"></span><span>
-</span><span id="line-256"></span><span id="local-6989586621679103920"><span class="annot"><a href="HoYo.CLI.Parse.html#versionOption"><span class="hs-identifier hs-type">versionOption</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Parser</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="#local-6989586621679103920"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679103920"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span></span><span>
+</span><span id="line-256"></span><span id="local-6989586621679103683"><span class="annot"><a href="HoYo.CLI.Parse.html#versionOption"><span class="hs-identifier hs-type">versionOption</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Parser</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="#local-6989586621679103683"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679103683"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span></span><span>
 </span><span id="line-257"></span><span id="versionOption"><span class="annot"><span class="annottext">versionOption :: Parser (a -&gt; a)
 </span><a href="HoYo.CLI.Parse.html#versionOption"><span class="hs-identifier hs-var hs-var">versionOption</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Mod OptionFields (a -&gt; a) -&gt; Parser (a -&gt; a)
 forall a. String -&gt; Mod OptionFields (a -&gt; a) -&gt; Parser (a -&gt; a)
@@ -1090,7 +1090,7 @@ forall a. String -&gt; InfoMod a
 </span><span id="line-275"></span><span class="annot"><a href="HoYo.CLI.Parse.html#splitArgs"><span class="hs-identifier hs-type">splitArgs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">T.Text</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">]</span><span>
 </span><span id="line-276"></span><span id="splitArgs"><span class="annot"><span class="annottext">splitArgs :: TFilePath -&gt; [String]
 </span><a href="HoYo.CLI.Parse.html#splitArgs"><span class="hs-identifier hs-var hs-var">splitArgs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool -&gt; String -&gt; String -&gt; [String]
-</span><a href="#local-6989586621679103813"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679103576"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">False</span></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">False</span></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">False</span></span><span> </span><span class="annot"><span class="annottext">String
@@ -1100,119 +1100,119 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">TFilePath -&gt; String
 </span><span class="hs-identifier hs-var">T.unpack</span></span><span>
 </span><span id="line-277"></span><span>  </span><span class="hs-keyword">where</span><span>
-</span><span id="line-278"></span><span>    </span><span class="annot"><a href="#local-6989586621679103813"><span class="hs-identifier hs-type">splitArgs'</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">]</span><span>
-</span><span id="line-279"></span><span>    </span><span id="local-6989586621679103813"><span class="annot"><span class="annottext">splitArgs' :: Bool -&gt; Bool -&gt; Bool -&gt; String -&gt; String -&gt; [String]
-</span><a href="#local-6989586621679103813"><span class="hs-identifier hs-var hs-var">splitArgs'</span></a></span></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span id="line-278"></span><span>    </span><span class="annot"><a href="#local-6989586621679103576"><span class="hs-identifier hs-type">splitArgs'</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">]</span><span>
+</span><span id="line-279"></span><span>    </span><span id="local-6989586621679103576"><span class="annot"><span class="annottext">splitArgs' :: Bool -&gt; Bool -&gt; Bool -&gt; String -&gt; String -&gt; [String]
+</span><a href="#local-6989586621679103576"><span class="hs-identifier hs-var hs-var">splitArgs'</span></a></span></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">Bool
-</span><span class="hs-identifier hs-var">True</span></span><span> </span><span id="local-6989586621679103811"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679103811"><span class="hs-identifier hs-var">res</span></a></span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679103811"><span class="hs-identifier hs-var">res</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-280"></span><span>    </span><span class="annot"><a href="#local-6989586621679103813"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-identifier hs-var">True</span></span><span> </span><span id="local-6989586621679103574"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679103574"><span class="hs-identifier hs-var">res</span></a></span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679103574"><span class="hs-identifier hs-var">res</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-280"></span><span>    </span><span class="annot"><a href="#local-6989586621679103576"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">False</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-identifier">_</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
 </span><span id="line-281"></span><span>
-</span><span id="line-282"></span><span>    </span><span class="annot"><a href="#local-6989586621679103813"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span id="line-282"></span><span>    </span><span class="annot"><a href="#local-6989586621679103576"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">False</span></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">Bool
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679103810"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679103810"><span class="hs-identifier hs-var">res</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char
-</span><span class="hs-char">'^'</span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679103809"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679103809"><span class="hs-identifier hs-var">rest</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool -&gt; String -&gt; String -&gt; [String]
-</span><a href="#local-6989586621679103813"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679103573"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679103573"><span class="hs-identifier hs-var">res</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char
+</span><span class="hs-char">'^'</span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679103572"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679103572"><span class="hs-identifier hs-var">rest</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool -&gt; String -&gt; String -&gt; [String]
+</span><a href="#local-6989586621679103576"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">False</span></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">False</span></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">True</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679103810"><span class="hs-identifier hs-var">res</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+</span><a href="#local-6989586621679103573"><span class="hs-identifier hs-var">res</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;^&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679103809"><span class="hs-identifier hs-var">rest</span></a></span><span>
+</span><a href="#local-6989586621679103572"><span class="hs-identifier hs-var">rest</span></a></span><span>
 </span><span id="line-283"></span><span>
-</span><span id="line-284"></span><span>    </span><span class="annot"><a href="#local-6989586621679103813"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span id="local-6989586621679103808"><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679103808"><span class="hs-identifier hs-var">quoted</span></a></span></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span id="line-284"></span><span>    </span><span class="annot"><a href="#local-6989586621679103576"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span id="local-6989586621679103571"><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679103571"><span class="hs-identifier hs-var">quoted</span></a></span></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">True</span></span><span> </span><span class="annot"><span class="annottext">Bool
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679103807"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679103807"><span class="hs-identifier hs-var">res</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679103806"><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679103806"><span class="hs-identifier hs-var">chr</span></a></span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679103805"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679103805"><span class="hs-identifier hs-var">rest</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool -&gt; String -&gt; String -&gt; [String]
-</span><a href="#local-6989586621679103813"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679103808"><span class="hs-identifier hs-var">quoted</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679103570"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679103570"><span class="hs-identifier hs-var">res</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679103569"><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679103569"><span class="hs-identifier hs-var">chr</span></a></span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679103568"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679103568"><span class="hs-identifier hs-var">rest</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool -&gt; String -&gt; String -&gt; [String]
+</span><a href="#local-6989586621679103576"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679103571"><span class="hs-identifier hs-var">quoted</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">False</span></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">True</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679103807"><span class="hs-identifier hs-var">res</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+</span><a href="#local-6989586621679103570"><span class="hs-identifier hs-var">res</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679103806"><span class="hs-identifier hs-var">chr</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679103805"><span class="hs-identifier hs-var">rest</span></a></span><span>
+</span><a href="#local-6989586621679103569"><span class="hs-identifier hs-var">chr</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679103568"><span class="hs-identifier hs-var">rest</span></a></span><span>
 </span><span id="line-285"></span><span>
-</span><span id="line-286"></span><span>    </span><span class="annot"><a href="#local-6989586621679103813"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span id="local-6989586621679103804"><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679103804"><span class="hs-identifier hs-var">quoted</span></a></span></span><span> </span><span id="local-6989586621679103803"><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679103803"><span class="hs-identifier hs-var">escaped</span></a></span></span><span> </span><span class="annot"><span class="annottext">Bool
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679103802"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679103802"><span class="hs-identifier hs-var">res</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char
-</span><span class="hs-char">'&quot;'</span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679103801"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679103801"><span class="hs-identifier hs-var">rest</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool -&gt; String -&gt; String -&gt; [String]
-</span><a href="#local-6989586621679103813"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Bool -&gt; Bool
+</span><span id="line-286"></span><span>    </span><span class="annot"><a href="#local-6989586621679103576"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span id="local-6989586621679103567"><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679103567"><span class="hs-identifier hs-var">quoted</span></a></span></span><span> </span><span id="local-6989586621679103566"><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679103566"><span class="hs-identifier hs-var">escaped</span></a></span></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679103565"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679103565"><span class="hs-identifier hs-var">res</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char
+</span><span class="hs-char">'&quot;'</span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679103564"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679103564"><span class="hs-identifier hs-var">rest</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool -&gt; String -&gt; String -&gt; [String]
+</span><a href="#local-6989586621679103576"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Bool -&gt; Bool
 </span><span class="hs-identifier hs-var">not</span></span><span> </span><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679103804"><span class="hs-identifier hs-var">quoted</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679103803"><span class="hs-identifier hs-var">escaped</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679103567"><span class="hs-identifier hs-var">quoted</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679103566"><span class="hs-identifier hs-var">escaped</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">True</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679103802"><span class="hs-identifier hs-var">res</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679103801"><span class="hs-identifier hs-var">rest</span></a></span><span>
+</span><a href="#local-6989586621679103565"><span class="hs-identifier hs-var">res</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679103564"><span class="hs-identifier hs-var">rest</span></a></span><span>
 </span><span id="line-287"></span><span>
-</span><span id="line-288"></span><span>    </span><span class="annot"><a href="#local-6989586621679103813"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span id="local-6989586621679103799"><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679103799"><span class="hs-identifier hs-var">quoted</span></a></span></span><span> </span><span class="annot"><span class="annottext">Bool
-</span><span class="hs-identifier hs-var">False</span></span><span> </span><span id="local-6989586621679103798"><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679103798"><span class="hs-identifier hs-var">started</span></a></span></span><span> </span><span id="local-6989586621679103797"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679103797"><span class="hs-identifier hs-var">res</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char
+</span><span id="line-288"></span><span>    </span><span class="annot"><a href="#local-6989586621679103576"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span id="local-6989586621679103562"><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679103562"><span class="hs-identifier hs-var">quoted</span></a></span></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-identifier hs-var">False</span></span><span> </span><span id="local-6989586621679103561"><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679103561"><span class="hs-identifier hs-var">started</span></a></span></span><span> </span><span id="local-6989586621679103560"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679103560"><span class="hs-identifier hs-var">res</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char
 </span><span class="hs-char">'\\'</span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span class="annot"><span class="annottext">Char
-</span><span class="hs-char">'&quot;'</span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679103796"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679103796"><span class="hs-identifier hs-var">rest</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool -&gt; String -&gt; String -&gt; [String]
-</span><a href="#local-6989586621679103813"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679103799"><span class="hs-identifier hs-var">quoted</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-char">'&quot;'</span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679103559"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679103559"><span class="hs-identifier hs-var">rest</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool -&gt; String -&gt; String -&gt; [String]
+</span><a href="#local-6989586621679103576"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679103562"><span class="hs-identifier hs-var">quoted</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">True</span></span><span> </span><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679103798"><span class="hs-identifier hs-var">started</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679103797"><span class="hs-identifier hs-var">res</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679103561"><span class="hs-identifier hs-var">started</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679103560"><span class="hs-identifier hs-var">res</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char
 </span><span class="hs-char">'&quot;'</span></span><span class="annot"><span class="annottext">Char -&gt; String -&gt; String
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679103796"><span class="hs-identifier hs-var">rest</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679103559"><span class="hs-identifier hs-var">rest</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-289"></span><span>
-</span><span id="line-290"></span><span>    </span><span class="annot"><a href="#local-6989586621679103813"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
-</span><span class="hs-identifier hs-var">False</span></span><span> </span><span id="local-6989586621679103795"><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679103795"><span class="hs-identifier hs-var">escaped</span></a></span></span><span> </span><span id="local-6989586621679103794"><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679103794"><span class="hs-identifier hs-var">started</span></a></span></span><span> </span><span id="local-6989586621679103793"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679103793"><span class="hs-identifier hs-var">res</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char
-</span><span class="hs-char">' '</span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679103792"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679103792"><span class="hs-identifier hs-var">rest</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679103793"><span class="hs-identifier hs-var">res</span></a></span><span> </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679103794"><span class="hs-identifier hs-var">started</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[String] -&gt; [String] -&gt; [String]
+</span><span id="line-290"></span><span>    </span><span class="annot"><a href="#local-6989586621679103576"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-identifier hs-var">False</span></span><span> </span><span id="local-6989586621679103558"><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679103558"><span class="hs-identifier hs-var">escaped</span></a></span></span><span> </span><span id="local-6989586621679103557"><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679103557"><span class="hs-identifier hs-var">started</span></a></span></span><span> </span><span id="local-6989586621679103556"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679103556"><span class="hs-identifier hs-var">res</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char
+</span><span class="hs-char">' '</span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679103555"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679103555"><span class="hs-identifier hs-var">rest</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679103556"><span class="hs-identifier hs-var">res</span></a></span><span> </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679103557"><span class="hs-identifier hs-var">started</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[String] -&gt; [String] -&gt; [String]
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool -&gt; String -&gt; String -&gt; [String]
-</span><a href="#local-6989586621679103813"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679103576"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">False</span></span><span> </span><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679103795"><span class="hs-identifier hs-var">escaped</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679103558"><span class="hs-identifier hs-var">escaped</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">False</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;&quot;</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679103792"><span class="hs-identifier hs-var">rest</span></a></span><span>
+</span><a href="#local-6989586621679103555"><span class="hs-identifier hs-var">rest</span></a></span><span>
 </span><span id="line-291"></span><span>
-</span><span id="line-292"></span><span>    </span><span class="annot"><a href="#local-6989586621679103813"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span id="local-6989586621679103791"><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679103791"><span class="hs-identifier hs-var">quoted</span></a></span></span><span> </span><span id="local-6989586621679103790"><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679103790"><span class="hs-identifier hs-var">escaped</span></a></span></span><span> </span><span class="annot"><span class="annottext">Bool
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679103789"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679103789"><span class="hs-identifier hs-var">res</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679103788"><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679103788"><span class="hs-identifier hs-var">chr</span></a></span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679103787"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679103787"><span class="hs-identifier hs-var">rest</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool -&gt; String -&gt; String -&gt; [String]
-</span><a href="#local-6989586621679103813"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679103791"><span class="hs-identifier hs-var">quoted</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679103790"><span class="hs-identifier hs-var">escaped</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span id="line-292"></span><span>    </span><span class="annot"><a href="#local-6989586621679103576"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span id="local-6989586621679103554"><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679103554"><span class="hs-identifier hs-var">quoted</span></a></span></span><span> </span><span id="local-6989586621679103553"><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679103553"><span class="hs-identifier hs-var">escaped</span></a></span></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679103552"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679103552"><span class="hs-identifier hs-var">res</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679103551"><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679103551"><span class="hs-identifier hs-var">chr</span></a></span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679103550"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679103550"><span class="hs-identifier hs-var">rest</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool -&gt; String -&gt; String -&gt; [String]
+</span><a href="#local-6989586621679103576"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679103554"><span class="hs-identifier hs-var">quoted</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679103553"><span class="hs-identifier hs-var">escaped</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">True</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679103789"><span class="hs-identifier hs-var">res</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+</span><a href="#local-6989586621679103552"><span class="hs-identifier hs-var">res</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679103788"><span class="hs-identifier hs-var">chr</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679103787"><span class="hs-identifier hs-var">rest</span></a></span><span>
+</span><a href="#local-6989586621679103551"><span class="hs-identifier hs-var">chr</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679103550"><span class="hs-identifier hs-var">rest</span></a></span><span>
 </span><span id="line-293"></span></pre></body></html>

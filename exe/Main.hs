@@ -23,7 +23,7 @@ main = withProgName "hoyo" $ do
   sFp <- maybe defaultConfigPath return $ globalConfigPath globals
   bFp <- maybe defaultBookmarksPath return $ dataPath globals
 
-  getEnvAndRunCommand opts bFp sFp >>= \case
-    Done      -> return ()
-    ShowHelp  -> handleParseResult (Failure $ parserFailure defaultPrefs options (ShowHelpText Nothing) [])
-    ReRun cmd -> withArgs (splitArgs cmd) main
+  getEnvAndRunCommand opts bFp sFp -- >>= \case
+    -- Done      -> return ()
+    -- ShowHelp  -> handleParseResult (Failure $ parserFailure defaultPrefs options (ShowHelpText Nothing) [])
+    -- ReRun cmd -> withArgs (splitArgs cmd) main

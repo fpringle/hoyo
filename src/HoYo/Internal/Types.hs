@@ -128,13 +128,6 @@ instance MonadIO HoYoMonad where
     Left err      -> throwError ("IO error: " <> T.pack (show err))
     Right result  -> return result
 
--- | The result of executing a command. Currently only used meaningfully
--- by 'HoYo.Command.runDefaultCommand'.
-data ExecResult =
-  Done
-  | ShowHelp
-  | ReRun T.Text
-
 -- | Options for the "add" command to be parsed from the command-line.
 data AddOptions = AddOptions {
   addDirectory  :: TFilePath

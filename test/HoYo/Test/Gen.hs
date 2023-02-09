@@ -98,13 +98,6 @@ instance Arbitrary Env where
                   <*> arbitrary
                   <*> genFilePath
 
-instance Arbitrary ExecResult where
-  arbitrary = oneof [
-      pure Done
-    , pure ShowHelp
-    , ReRun <$> genCommandText
-    ]
-
 instance Arbitrary AddOptions where
   arbitrary = AddOptions <$> genFilePath <*> maybeText
 
