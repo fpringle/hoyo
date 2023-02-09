@@ -7,7 +7,33 @@ Maintainer  : freddyjepringle@gmail.com
 Parse CLI arguments.
 -}
 
-module HoYo.CLI.Parse where
+module HoYo.CLI.Parse (
+  -- * Parsing CLI arguments and options
+    options
+  , parseOptions
+  , parseCommand
+  , globalOptions
+  , overrideOptions
+
+  -- * Parsing specific CLI commands
+  , addCommand
+  , moveCommand
+  , listCommand
+  , clearCommand
+  , deleteCommand
+  , checkCommand
+  , defaultCommand
+
+  -- ** Parsing sub-commands for hoyo config
+  , configCommand
+  , configPrintCommand
+  , configResetCommand
+  , configSetCommand
+  , configAddDefaultCommand
+
+  -- * Misc/Utility
+  , splitArgs
+  ) where
 
 import HoYo
 import HoYo.CLI.Complete
@@ -16,6 +42,11 @@ import qualified Data.Text as T
 import Options.Applicative
 import Text.Read
 
+-- | Parse global options: options that can be set on the command line
+-- no matter what sub-command is being run.
+--
+-- For a complete list of the global options, see 'GlobalOptions' or
+-- run @hoyo --help@.
 globalOptions :: Parser GlobalOptions
 globalOptions = GlobalOptions
                   <$> optional (strOption (long "config-file"
@@ -32,6 +63,9 @@ globalOptions = GlobalOptions
                                 <> action "file"))
                   <*> overrideOptions
 
+-- | Parse override options: options that override config settings.
+-- This can be useful when you want to temporarily enable functionality
+-- for one CLI run, but don't want to change it in the config file.
 overrideOptions :: Parser OverrideOptions
 overrideOptions = OverrideOptions
                     <$> parseOverrideFailOnError
@@ -64,6 +98,7 @@ parseOverrideEnableReset = parseOverride
                               (long "enable-reset" <> help "Enable the 'config reset' command")
                               (long "disable-reset" <> help "Disable the 'config reset' command")
 
+-- | Parse options for the @hoyo add@ command.
 addCommand :: Parser Command
 addCommand = Add <$> (
               AddOptions
@@ -81,6 +116,7 @@ moveCommandMods = metavar "<bookmark>"
                     <> help "Index or name of the bookmark to move to"
                     <> completer bookmarkCompleter
 
+-- | Parse options for the @hoyo move@ command.
 moveCommand :: Parser Command
 moveCommand = Move . MoveOptions
                 <$> argument bookmarkSearchTerm moveCommandMods
@@ -92,6 +128,7 @@ moveCommandHidden = Move . MoveOptions
                             <> internal
                           )
 
+-- | Parse options for the @hoyo list@ command.
 listCommand :: Parser Command
 listCommand = List <$> (
                   ListOptions
@@ -109,9 +146,11 @@ listCommand = List <$> (
                         ))
                   )
 
+-- | Parse options for the @hoyo clear@ command.
 clearCommand :: Parser Command
 clearCommand = pure (Clear ClearOptions)
 
+-- | Parse options for the @hoyo delete@ command.
 deleteCommand :: Parser Command
 deleteCommand =  Delete . DeleteOptions
                     <$> argument bookmarkSearchTerm (
@@ -120,9 +159,11 @@ deleteCommand =  Delete . DeleteOptions
                           <> completer bookmarkCompleter
                         )
 
+-- | Parse options for the @hoyo refresh@ command.
 refreshCommand :: Parser Command
 refreshCommand = pure (Refresh RefreshOptions)
 
+-- | Parse options for the @hoyo config@ command.
 configCommand :: Parser Command
 configCommand = ConfigCmd <$> hsubparser (
   command "print" (info configPrintCommand (progDesc "Print hoyo config"))
@@ -131,12 +172,15 @@ configCommand = ConfigCmd <$> hsubparser (
   <> command "add-default" (info configAddDefaultCommand (progDesc "Add a default bookmark"))
   )
 
+-- | Parse options for the @hoyo config print@ sub-command.
 configPrintCommand :: Parser ConfigCommand
 configPrintCommand = pure (Print ConfigPrintOptions)
 
+-- | Parse options for the @hoyo config reset@ sub-command.
 configResetCommand :: Parser ConfigCommand
 configResetCommand = pure (Reset ConfigResetOptions)
 
+-- | Parse options for the @hoyo config set@ sub-command.
 configSetCommand :: Parser ConfigCommand
 configSetCommand = Set <$> (
                     ConfigSetOptions
@@ -152,6 +196,7 @@ configSetCommand = Set <$> (
                           )
                     )
 
+-- | Parse options for the @hoyo config add-default@ sub-command.
 configAddDefaultCommand :: Parser ConfigCommand
 configAddDefaultCommand = AddDefaultBookmark <$> (
                             ConfigAddDefaultOptions
@@ -170,6 +215,7 @@ noArgs :: CheckOptions -> CheckOptions
 noArgs (CheckOptions False False) = CheckOptions True True
 noArgs opts = opts
 
+-- | Parse options for the @hoyo check@ command.
 checkCommand :: Parser Command
 checkCommand = Check . noArgs <$> (
                 CheckOptions
@@ -177,9 +223,12 @@ checkCommand = Check . noArgs <$> (
                   <*> switch (long "bookmarks" <> short 'b' <> help "Check the bookmarks file")
                 )
 
+-- | If hoyo is run with no arguments, we run the "default command" if it's set.
 defaultCommand :: Parser Command
 defaultCommand = pure DefaultCommand
 
+-- | Parse a command and the arguments/options for that
+-- command from the command-line arguments.
 parseCommand :: Parser Command
 parseCommand = (versionOption <*> hsubparser (
   command "add" (info addCommand (progDesc "Add a bookmark"))
@@ -193,6 +242,8 @@ parseCommand = (versionOption <*> hsubparser (
   )) <|> moveCommandHidden
      <|> defaultCommand
 
+-- | Parse an 'Options' argument, which includes the command
+-- to run and any global options.
 parseOptions :: Parser Options
 parseOptions = Options <$> parseCommand <*> globalOptions
 
@@ -209,6 +260,8 @@ versionOption = infoOption versionInfo (
                   <> help "Display version information and exit"
                 )
 
+-- | A 'ParserInfo' object containing the necessary information for parsing
+-- CLI commands and arguments, and displaying useful help text.
 options :: ParserInfo Options
 options = info (parseOptions <**> helper) (
           fullDesc
@@ -216,6 +269,9 @@ options = info (parseOptions <**> helper) (
           <> progDesc "For more help on a particular sub-command, run `hoyo <cmd> --help`."
           )
 
+-- | Split a string into arguments as they would be interpreted on the command line.
+--
+-- Adapted from [this StackOverflow comment](https://stackoverflow.com/a/64236441).
 splitArgs :: T.Text -> [String]
 splitArgs = splitArgs' False False False "" . T.unpack
   where
