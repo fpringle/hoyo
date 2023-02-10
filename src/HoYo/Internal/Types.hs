@@ -83,7 +83,7 @@ data ConfigValueType =
 data ConfigValue (t :: ConfigValueType) where
   BoolV             :: Bool -> ConfigValue 'TBool
   DefaultBookmarkV  :: DefaultBookmark -> ConfigValue 'TDefaultBookmark
-  CommandV          :: T.Text -> ConfigValue 'TCommand
+  CommandV          :: Command -> ConfigValue 'TCommand
 
   ListOfV           :: forall (a :: ConfigValueType) . [ConfigValue a] -> ConfigValue ('TList a)
   MaybeV            :: forall (a :: ConfigValueType) . Maybe (ConfigValue a) -> ConfigValue ('TMaybe a)
@@ -206,6 +206,35 @@ data Command =
   | DefaultCommand
   deriving (Show, Eq)
 
+-- | Datatype for representing a command-line settings override.
+data MaybeOverride =
+  OverrideFalse
+  | OverrideTrue
+  | NoOverride
+  | Conflict
+  deriving (Show, Eq)
+
+-- | Config settings that can be overriden using command-line flags.
+data OverrideOptions = OverrideOptions {
+  overrideFailOnError               :: MaybeOverride
+  , overrideDisplayCreationTime     :: MaybeOverride
+  , overrideEnableClearing          :: MaybeOverride
+  , overrideEnableReset             :: MaybeOverride
+  } deriving (Show, Eq)
+
+-- | CLI options that can be set regardless of which command is run.
+data GlobalOptions = GlobalOptions {
+  globalConfigPath  :: Maybe TFilePath
+  , dataPath        :: Maybe TFilePath
+  , overrides       :: OverrideOptions
+  } deriving (Show, Eq)
+
+-- | The final result of parsing the CLI arguments. Contains a command and all
+-- information for that command, and any global options that have been set.
+data Options = Options {
+  optCommand    :: Command
+  , optGlobals  :: GlobalOptions
+  } deriving (Show, Eq)
 
 makeLenses ''Bookmark
 makeLenses ''DefaultBookmark

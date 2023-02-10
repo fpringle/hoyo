@@ -40,6 +40,7 @@ library
         HoYo.Internal.Config
         HoYo.Internal.Command
         HoYo.Internal.Bookmark
+        HoYo.Internal.Parse
         HoYo.Internal.Types
         HoYo.Internal.Utils
         HoYo.Internal.Version

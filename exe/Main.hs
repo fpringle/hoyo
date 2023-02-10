@@ -6,7 +6,7 @@ import HoYo.CLI.Parse
 import Control.Monad (forM_)
 import qualified Data.Text as T
 import Options.Applicative
-import System.Environment (withArgs, withProgName)
+import System.Environment (withProgName)
 import System.Exit
 
 

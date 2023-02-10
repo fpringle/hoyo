@@ -10,7 +10,7 @@ Internals used by the HoYo.Command module.
 module HoYo.Internal.Command where
 
 import HoYo.Bookmark
-import HoYo.Config
+import HoYo.Internal.Config
 import HoYo.Internal.Types
 import HoYo.Internal.Utils
 
@@ -34,13 +34,6 @@ import System.Directory
 import System.Exit
 
 import Data.Time
--- | Datatype for representing a command-line settings override.
-data MaybeOverride =
-  OverrideFalse
-  | OverrideTrue
-  | NoOverride
-  | Conflict
-  deriving (Show, Eq)
 
 -- | Combine a config flag with a command-line flag, checking for conflicts.
 combOverride :: Bool -> Bool -> MaybeOverride
@@ -48,14 +41,6 @@ combOverride False False = NoOverride
 combOverride True  False = OverrideTrue
 combOverride False True  = OverrideFalse
 combOverride True  True  = Conflict
-
--- | Config settings that can be overriden using command-line flags.
-data OverrideOptions = OverrideOptions {
-  overrideFailOnError               :: MaybeOverride
-  , overrideDisplayCreationTime     :: MaybeOverride
-  , overrideEnableClearing          :: MaybeOverride
-  , overrideEnableReset             :: MaybeOverride
-  } deriving (Show, Eq)
 
 -- | Convert a 'MaybeOverride' to a function on 'Bool'.
 overrideFunc :: MaybeOverride -> (Bool -> Bool)
@@ -85,13 +70,6 @@ verifyOverrides (OverrideOptions o1 o2 o3 o4) = verify o1
   where verify Conflict = Just "conflicting flags"
         verify _ = Nothing
 
--- | CLI options that can be set regardless of which command is run.
-data GlobalOptions = GlobalOptions {
-  globalConfigPath  :: Maybe TFilePath
-  , dataPath        :: Maybe TFilePath
-  , overrides       :: OverrideOptions
-  } deriving (Show, Eq)
-
 -- | The default behaviour is to override nothing.
 defaultOverrideOptions :: OverrideOptions
 defaultOverrideOptions = OverrideOptions NoOverride NoOverride NoOverride NoOverride
@@ -99,13 +77,6 @@ defaultOverrideOptions = OverrideOptions NoOverride NoOverride NoOverride NoOver
 -- | Default global options. In general this should do nothing.
 defaultGlobalOptions :: GlobalOptions
 defaultGlobalOptions = GlobalOptions Nothing Nothing defaultOverrideOptions
-
--- | The final result of parsing the CLI arguments. Contains a command and all
--- information for that command, and any global options that have been set.
-data Options = Options {
-  optCommand    :: Command
-  , optGlobals  :: GlobalOptions
-  } deriving (Show, Eq)
 
 -- | Helper function whenever we need to modify the saved bookmarks.
 --
@@ -305,9 +276,9 @@ runCheck opts bFp sFp = do
 runDefaultCommand :: HoYoMonad ()
 runDefaultCommand = asks' (config . defaultCommand) >>= \case
   Nothing   -> return () -- return ShowHelp
-  Just cmd
-    | null $ T.words cmd  -> throwError "default command: stuck in a loop!"
-    | otherwise           -> return () -- return $ ReRun cmd
+  Just DefaultCommand -> throwError "default command: stuck in a loop!"
+  -- Just otherCommand -> return () -- return $ ReRun cmd
+  Just otherCommand -> runCommand otherCommand
 
 -- | Run a 'Command' in the hoyo environment.
 runCommand :: Command -> HoYoMonad ()

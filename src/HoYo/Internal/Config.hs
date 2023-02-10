@@ -11,15 +11,20 @@ Internals used by the HoYo.Config module.
 {-# LANGUAGE TupleSections #-}
 module HoYo.Internal.Config where
 
-import HoYo.Bookmark
+import HoYo.Internal.Bookmark
 import HoYo.Internal.Types
 import HoYo.Internal.Utils
+
+import {-# SOURCE #-} HoYo.Internal.Parse
 
 import Data.Bifunctor (first)
 import qualified Data.Text as T
 
+import Control.Category ((<<<))
 import Control.Monad
 import Control.Monad.Except
+
+import Options.Applicative
 
 import qualified Toml
 import Toml (TomlCodec, (.=))
@@ -39,7 +44,20 @@ configCodec = Config
   <*> (BoolV <$> Toml.bool "enable_reset")            .= view enableReset
   <*> (BoolV <$> Toml.bool "backup_before_clear")     .= view backupBeforeClear
   <*> (ListOfV . fmap DefaultBookmarkV <$> Toml.list defaultBookmarkCodec "default_bookmark") .= view defaultBookmarks
-  <*> (MaybeV . fmap CommandV <$> Toml.dioptional (Toml.text "default_command")) .= view defaultCommand
+  <*> (MaybeV . fmap CommandV <$> Toml.dioptional (commandCodec "default_command")) .= view defaultCommand
+
+commandCodec :: Toml.Key -> TomlCodec Command
+commandCodec = Toml.match (Toml._Text <<< Toml.invert (Toml.prism fmt prs))
+  where
+    fmt :: Command -> T.Text
+    fmt = formatArgs . formatCommand
+
+    prs :: T.Text -> Either Toml.TomlBiMapError Command
+    prs t = case execParserPure defaultPrefs (info parseCommand mempty) (splitArgs t) of
+      Success cmd -> Right cmd
+      Failure err -> do let (msg, _) = renderFailure err "hoyo"
+                        Left (Toml.ArbitraryError $ T.pack msg)
+      CompletionInvoked res -> Left (Toml.ArbitraryError $ tshow res)
 
 -- | The default config for hoyo.
 defaultConfig :: Config

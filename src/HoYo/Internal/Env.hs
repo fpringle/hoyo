@@ -9,8 +9,8 @@ Internals used by the HoYo.Internal module.
 
 module HoYo.Internal.Env where
 
-import HoYo.Bookmark
-import HoYo.Config
+import HoYo.Internal.Bookmark
+import HoYo.Internal.Config
 import HoYo.Internal.Types
 import HoYo.Internal.Utils
 
