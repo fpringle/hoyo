@@ -53,6 +53,7 @@ Set directory bookmarks for quick "cd"-like behaviour
 Usage: hoyo [COMMAND] [-C|--config-file <file>] [-B|--bookmarks-file <file>]
             [--fail] [--nofail] [--time] [--notime] [--enable-clear]
             [--disable-clear] [--enable-reset] [--disable-reset]
+            [--backup-before-clear] [--no-backup-before-clear]
 
   For more help on a particular sub-command, run `hoyo <cmd> --help`.
 
@@ -69,6 +70,9 @@ Available options:
   --disable-clear          Disable the 'clear' command
   --enable-reset           Enable the 'config reset' command
   --disable-reset          Disable the 'config reset' command
+  --backup-before-clear    Backup the bookmarks file before running `hoyo clear`
+  --no-backup-before-clear Don't backup the bookmarks file before running `hoyo
+                           clear`
   -h,--help                Show this help text
 
 Available commands:
