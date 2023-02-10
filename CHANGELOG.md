@@ -21,10 +21,20 @@ and this project adheres to the
 - Changed global option flags:
     - [-c|--config]     -> [-C|--config-file]
     - [-b|--bookmarks]  -> [-B|--bookmarks-file]
+- Changed the default_command config value from Text to Command.
+    This makes it much cleaner to parse the default command from the
+    config and to run it.
+
+    However this incurs a cyclic dependency (we have to import the optparse parser
+    to decode the defaul command from TOML), which we resolve using
+    [Parse.hs-boot](./src/HoYo/Internal/Parse.hs-boot).
+- Moved all the data definitions in [Command.hs](./src/HoYo/Internal/Command.hs)
+    to [Types.hs](./src/HoYo/Internal/Types.hs)
 
 ### Removed
 
 - `testDirectoryUnique`: allows user to have multiple bookmarks to the same directory.
+- `ExecResult`: no longer needed now that we parse the default command directly.
 
 ## [0.3.0.0] - 2023-01-27
 

@@ -83,7 +83,7 @@ data ConfigValueType =
 data ConfigValue (t :: ConfigValueType) where
   BoolV             :: Bool -> ConfigValue 'TBool
   DefaultBookmarkV  :: DefaultBookmark -> ConfigValue 'TDefaultBookmark
-  CommandV          :: T.Text -> ConfigValue 'TCommand
+  CommandV          :: Command -> ConfigValue 'TCommand
 
   ListOfV           :: forall (a :: ConfigValueType) . [ConfigValue a] -> ConfigValue ('TList a)
   MaybeV            :: forall (a :: ConfigValueType) . Maybe (ConfigValue a) -> ConfigValue ('TMaybe a)
@@ -128,12 +128,113 @@ instance MonadIO HoYoMonad where
     Left err      -> throwError ("IO error: " <> T.pack (show err))
     Right result  -> return result
 
--- | The result of executing a command. Currently only used meaningfully
--- by 'HoYo.Command.runDefaultCommand'.
-data ExecResult =
-  Done
-  | ShowHelp
-  | ReRun T.Text
+-- | Options for the "add" command to be parsed from the command-line.
+data AddOptions = AddOptions {
+  addDirectory  :: TFilePath
+  , addName     :: Maybe T.Text
+  } deriving (Show, Eq)
+
+-- | Options for the "move" command to be parsed from the command-line.
+newtype MoveOptions = MoveOptions {
+  moveSearch :: BookmarkSearchTerm
+  } deriving (Show, Eq)
+
+-- | Options for the "list" command to be parsed from the command-line.
+data ListOptions = ListOptions {
+  listFilterName                :: Maybe T.Text
+  , listFilterDirectoryInfix    :: Maybe T.Text
+  } deriving (Show, Eq)
+
+-- | Options for the "clear" command to be parsed from the command-line.
+data ClearOptions = ClearOptions {
+  } deriving (Show, Eq)
+
+-- | Options for the "delete" command to be parsed from the command-line.
+newtype DeleteOptions = DeleteOptions {
+  deleteSearch :: BookmarkSearchTerm
+  } deriving (Show, Eq)
+
+-- | Options for the "refresh" command to be parsed from the command-line.
+data RefreshOptions = RefreshOptions {
+  } deriving (Show, Eq)
+
+-- | Options for the "config print" command to be parsed from the command-line.
+data ConfigPrintOptions = ConfigPrintOptions {
+  } deriving (Show, Eq)
+
+-- | Options for the "config reset" command to be parsed from the command-line.
+data ConfigResetOptions = ConfigResetOptions {
+  } deriving (Show, Eq)
+
+-- | Options for the "config set" command to be parsed from the command-line.
+data ConfigSetOptions = ConfigSetOptions {
+  setKey        :: T.Text
+  , setValue    :: T.Text
+  } deriving (Show, Eq)
+
+-- | Options for the "config add-default" command to be parsed from the command-line.
+data ConfigAddDefaultOptions = ConfigAddDefaultOptions {
+  addDefaultDir       :: TFilePath
+  , addDefaultName    :: Maybe T.Text
+  } deriving (Show, Eq)
+
+-- | Options for the "config" command to be parsed from the command-line.
+data ConfigCommand =
+  Print ConfigPrintOptions
+  | Reset ConfigResetOptions
+  | Set ConfigSetOptions
+  | AddDefaultBookmark ConfigAddDefaultOptions
+  deriving (Show, Eq)
+
+-- | Options for the "check" command to be parsed from the command-line.
+data CheckOptions = CheckOptions {
+  checkConfig         :: Bool
+  , checkBookmarks    :: Bool
+  } deriving (Show, Eq)
+
+-- | The core data-type for the hoyo CLI. The 'Command' is parsed from the command-line,
+-- then 'HoYo.Command.runCommand' dispatches on the type.
+data Command =
+  Add AddOptions
+  | Move MoveOptions
+  | List ListOptions
+  | Clear ClearOptions
+  | Delete DeleteOptions
+  | Refresh RefreshOptions
+  | ConfigCmd ConfigCommand
+  | Check CheckOptions
+  | DefaultCommand
+  deriving (Show, Eq)
+
+-- | Datatype for representing a command-line settings override.
+data MaybeOverride =
+  OverrideFalse
+  | OverrideTrue
+  | NoOverride
+  | Conflict
+  deriving (Show, Eq)
+
+-- | Config settings that can be overriden using command-line flags.
+data OverrideOptions = OverrideOptions {
+  overrideFailOnError               :: MaybeOverride
+  , overrideDisplayCreationTime     :: MaybeOverride
+  , overrideEnableClearing          :: MaybeOverride
+  , overrideEnableReset             :: MaybeOverride
+  } deriving (Show, Eq)
+
+-- | CLI options that can be set regardless of which command is run.
+data GlobalOptions = GlobalOptions {
+  globalConfigPath  :: Maybe TFilePath
+  , dataPath        :: Maybe TFilePath
+  , overrides       :: OverrideOptions
+  } deriving (Show, Eq)
+
+-- | The final result of parsing the CLI arguments. Contains a command and all
+-- information for that command, and any global options that have been set.
+data Options = Options {
+  optCommand    :: Command
+  , optGlobals  :: GlobalOptions
+  } deriving (Show, Eq)
 
 makeLenses ''Bookmark
 makeLenses ''DefaultBookmark

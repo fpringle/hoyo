@@ -6,7 +6,7 @@ import HoYo.CLI.Parse
 import Control.Monad (forM_)
 import qualified Data.Text as T
 import Options.Applicative
-import System.Environment (withArgs, withProgName)
+import System.Environment (withProgName)
 import System.Exit
 
 
@@ -23,7 +23,7 @@ main = withProgName "hoyo" $ do
   sFp <- maybe defaultConfigPath return $ globalConfigPath globals
   bFp <- maybe defaultBookmarksPath return $ dataPath globals
 
-  getEnvAndRunCommand opts bFp sFp >>= \case
-    Done      -> return ()
-    ShowHelp  -> handleParseResult (Failure $ parserFailure defaultPrefs options (ShowHelpText Nothing) [])
-    ReRun cmd -> withArgs (splitArgs cmd) main
+  getEnvAndRunCommand opts bFp sFp -- >>= \case
+    -- Done      -> return ()
+    -- ShowHelp  -> handleParseResult (Failure $ parserFailure defaultPrefs options (ShowHelpText Nothing) [])
+    -- ReRun cmd -> withArgs (splitArgs cmd) main

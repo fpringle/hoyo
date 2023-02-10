@@ -65,9 +65,6 @@ instance Arbitrary BookmarkSearchTerm where
     , SearchName <$> textNotNumber
     ]
 
-genCommandText :: Gen T.Text
-genCommandText = pure ""
-
 instance Arbitrary (ConfigValue 'TBool) where
   arbitrary = BoolV <$> arbitrary
 
@@ -75,7 +72,7 @@ instance Arbitrary (ConfigValue 'TDefaultBookmark) where
   arbitrary = DefaultBookmarkV <$> arbitrary
 
 instance Arbitrary (ConfigValue 'TCommand) where
-  arbitrary = CommandV <$> genCommandText
+  arbitrary = CommandV <$> arbitrary
 
 instance Arbitrary (ConfigValue t) => Arbitrary (ConfigValue ('TMaybe t)) where
   arbitrary = MaybeV <$> arbitrary
@@ -97,13 +94,6 @@ instance Arbitrary Env where
                   <*> genFilePath
                   <*> arbitrary
                   <*> genFilePath
-
-instance Arbitrary ExecResult where
-  arbitrary = oneof [
-      pure Done
-    , pure ShowHelp
-    , ReRun <$> genCommandText
-    ]
 
 instance Arbitrary AddOptions where
   arbitrary = AddOptions <$> genFilePath <*> maybeText

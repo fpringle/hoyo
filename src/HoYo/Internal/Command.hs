@@ -10,7 +10,7 @@ Internals used by the HoYo.Command module.
 module HoYo.Internal.Command where
 
 import HoYo.Bookmark
-import HoYo.Config
+import HoYo.Internal.Config
 import HoYo.Internal.Types
 import HoYo.Internal.Utils
 
@@ -35,106 +35,12 @@ import System.Exit
 
 import Data.Time
 
--- | Options for the "add" command to be parsed from the command-line.
-data AddOptions = AddOptions {
-  addDirectory  :: TFilePath
-  , addName     :: Maybe T.Text
-  } deriving (Show, Eq)
-
--- | Options for the "move" command to be parsed from the command-line.
-newtype MoveOptions = MoveOptions {
-  moveSearch :: BookmarkSearchTerm
-  } deriving (Show, Eq)
-
--- | Options for the "list" command to be parsed from the command-line.
-data ListOptions = ListOptions {
-  listFilterName                :: Maybe T.Text
-  , listFilterDirectoryInfix    :: Maybe T.Text
-  } deriving (Show, Eq)
-
--- | Options for the "clear" command to be parsed from the command-line.
-data ClearOptions = ClearOptions {
-  } deriving (Show, Eq)
-
--- | Options for the "delete" command to be parsed from the command-line.
-newtype DeleteOptions = DeleteOptions {
-  deleteSearch :: BookmarkSearchTerm
-  } deriving (Show, Eq)
-
--- | Options for the "refresh" command to be parsed from the command-line.
-data RefreshOptions = RefreshOptions {
-  } deriving (Show, Eq)
-
--- | Options for the "config print" command to be parsed from the command-line.
-data ConfigPrintOptions = ConfigPrintOptions {
-  } deriving (Show, Eq)
-
--- | Options for the "config reset" command to be parsed from the command-line.
-data ConfigResetOptions = ConfigResetOptions {
-  } deriving (Show, Eq)
-
--- | Options for the "config set" command to be parsed from the command-line.
-data ConfigSetOptions = ConfigSetOptions {
-  setKey        :: T.Text
-  , setValue    :: T.Text
-  } deriving (Show, Eq)
-
--- | Options for the "config add-default" command to be parsed from the command-line.
-data ConfigAddDefaultOptions = ConfigAddDefaultOptions {
-  addDefaultDir       :: TFilePath
-  , addDefaultName    :: Maybe T.Text
-  } deriving (Show, Eq)
-
--- | Options for the "config" command to be parsed from the command-line.
-data ConfigCommand =
-  Print ConfigPrintOptions
-  | Reset ConfigResetOptions
-  | Set ConfigSetOptions
-  | AddDefaultBookmark ConfigAddDefaultOptions
-  deriving (Show, Eq)
-
--- | Options for the "check" command to be parsed from the command-line.
-data CheckOptions = CheckOptions {
-  checkConfig         :: Bool
-  , checkBookmarks    :: Bool
-  } deriving (Show, Eq)
-
--- | The core data-type for the hoyo CLI. The 'Command' is parsed from the command-line,
--- then 'runCommand' dispatches on the type.
-data Command =
-  Add AddOptions
-  | Move MoveOptions
-  | List ListOptions
-  | Clear ClearOptions
-  | Delete DeleteOptions
-  | Refresh RefreshOptions
-  | ConfigCmd ConfigCommand
-  | Check CheckOptions
-  | DefaultCommand
-  deriving (Show, Eq)
-
--- | Datatype for representing a command-line settings override.
-data MaybeOverride =
-  OverrideFalse
-  | OverrideTrue
-  | NoOverride
-  | Conflict
-  deriving (Show, Eq)
-
 -- | Combine a config flag with a command-line flag, checking for conflicts.
 combOverride :: Bool -> Bool -> MaybeOverride
 combOverride False False = NoOverride
 combOverride True  False = OverrideTrue
 combOverride False True  = OverrideFalse
 combOverride True  True  = Conflict
-
--- | Config settings that can be overriden using command-line flags.
-data OverrideOptions = OverrideOptions {
-  overrideFailOnError               :: MaybeOverride
-  , overrideDisplayCreationTime     :: MaybeOverride
-  , overrideEnableClearing          :: MaybeOverride
-  , overrideEnableReset             :: MaybeOverride
-  } deriving (Show, Eq)
 
 -- | Convert a 'MaybeOverride' to a function on 'Bool'.
 overrideFunc :: MaybeOverride -> (Bool -> Bool)
@@ -164,13 +70,6 @@ verifyOverrides (OverrideOptions o1 o2 o3 o4) = verify o1
   where verify Conflict = Just "conflicting flags"
         verify _ = Nothing
 
--- | CLI options that can be set regardless of which command is run.
-data GlobalOptions = GlobalOptions {
-  globalConfigPath  :: Maybe TFilePath
-  , dataPath        :: Maybe TFilePath
-  , overrides       :: OverrideOptions
-  } deriving (Show, Eq)
-
 -- | The default behaviour is to override nothing.
 defaultOverrideOptions :: OverrideOptions
 defaultOverrideOptions = OverrideOptions NoOverride NoOverride NoOverride NoOverride
@@ -178,13 +77,6 @@ defaultOverrideOptions = OverrideOptions NoOverride NoOverride NoOverride NoOver
 -- | Default global options. In general this should do nothing.
 defaultGlobalOptions :: GlobalOptions
 defaultGlobalOptions = GlobalOptions Nothing Nothing defaultOverrideOptions
-
--- | The final result of parsing the CLI arguments. Contains a command and all
--- information for that command, and any global options that have been set.
-data Options = Options {
-  optCommand    :: Command
-  , optGlobals  :: GlobalOptions
-  } deriving (Show, Eq)
 
 -- | Helper function whenever we need to modify the saved bookmarks.
 --
@@ -381,12 +273,12 @@ runCheck opts bFp sFp = do
   when (checkBookmarks opts) $ runCheckBookmarks bFp
 
 -- | Run the default command, if it has been specified by the user.
-runDefaultCommand :: HoYoMonad ExecResult
+runDefaultCommand :: HoYoMonad ()
 runDefaultCommand = asks' (config . defaultCommand) >>= \case
-  Nothing   -> return ShowHelp
-  Just cmd
-    | null $ T.words cmd  -> throwError "default command: stuck in a loop!"
-    | otherwise           -> return $ ReRun cmd
+  Nothing   -> return () -- return ShowHelp
+  Just DefaultCommand -> throwError "default command: stuck in a loop!"
+  -- Just otherCommand -> return () -- return $ ReRun cmd
+  Just otherCommand -> runCommand otherCommand
 
 -- | Run a 'Command' in the hoyo environment.
 runCommand :: Command -> HoYoMonad ()
@@ -397,5 +289,9 @@ runCommand     (Clear opts) = runClear opts
 runCommand    (Delete opts) = runDelete opts
 runCommand   (Refresh opts) = runRefresh opts
 runCommand (ConfigCmd opts) = runConfig opts
-runCommand   DefaultCommand = void runDefaultCommand
-runCommand        (Check _) = throwError "The 'check' command needs to be run outside the HoYo monad"
+runCommand   DefaultCommand = runDefaultCommand
+runCommand     (Check opts) = do
+  -- printStderr "The 'check' command should be run outside the HoYo monad."
+  printStderr "It's discouraged to set default_command = \"check\" in your hoyo config file."
+  Env _ bFp _ sFp <- ask
+  liftIO $ runCheck opts bFp sFp
