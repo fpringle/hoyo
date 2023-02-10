@@ -14,13 +14,15 @@ Utility functions used by all the main HoYo.* modules.
 
 module HoYo.Internal.Utils where
 
+{- HLINT ignore "Use list comprehension" -}
+
 import HoYo.Internal.Types
 
 import Data.Bifunctor (bimap, first)
 import qualified Data.Text as T
 import qualified Data.Text.IO as T
 
-import System.Console.ANSI
+import System.Console.ANSI hiding (Reset)
 import System.IO
 
 import Control.Applicative
@@ -57,10 +59,10 @@ getDefaultBookmark (DefaultBookmarkV bm) = bm
 setDefaultBookmark :: ConfigValue 'TDefaultBookmark -> DefaultBookmark -> ConfigValue 'TDefaultBookmark
 setDefaultBookmark _ = DefaultBookmarkV
 
-getCommand :: ConfigValue 'TCommand -> T.Text
+getCommand :: ConfigValue 'TCommand -> Command
 getCommand (CommandV t) = t
 
-setCommand :: ConfigValue 'TCommand -> T.Text -> ConfigValue 'TCommand
+setCommand :: ConfigValue 'TCommand -> Command -> ConfigValue 'TCommand
 setCommand _ = CommandV
 
 getList :: ConfigValue ('TList t) -> [ConfigValue t]
@@ -117,13 +119,13 @@ defaultBookmarks = lens getter setter
     setter :: Config -> [DefaultBookmark] -> Config
     setter cfg bms = cfg { _defaultBookmarks = setList (_defaultBookmarks cfg) (fmap DefaultBookmarkV bms)}
 
-defaultCommand :: Lens' Config (Maybe T.Text)
+defaultCommand :: Lens' Config (Maybe Command)
 defaultCommand = lens getter setter
   where
-    getter :: Config -> Maybe T.Text
+    getter :: Config -> Maybe Command
     getter = fmap getCommand . getMaybe . _defaultCommand
 
-    setter :: Config -> Maybe T.Text -> Config
+    setter :: Config -> Maybe Command -> Config
     setter cfg cmd = cfg { _defaultCommand = setMaybe (_defaultCommand cfg) (fmap CommandV cmd) }
 
 -----------------------------------------
@@ -253,7 +255,8 @@ tshow = T.pack . show
 formatConfigValue :: AnyConfigValue -> T.Text
 formatConfigValue (AnyConfigValue (BoolV bool)) = tshow bool
 formatConfigValue (AnyConfigValue (DefaultBookmarkV bm)) = formatDefaultBookmark bm
-formatConfigValue (AnyConfigValue (CommandV t)) = tshow t
+formatConfigValue (AnyConfigValue (CommandV t)) = tshow $ formatArgs $ formatCommand t
+-- formatConfigValue (AnyConfigValue (CommandV t)) = tshow t
 formatConfigValue (AnyConfigValue (MaybeV t)) = case t of
                                                   Nothing -> ""
                                                   Just t' -> formatConfigValue (AnyConfigValue t')
@@ -262,3 +265,67 @@ formatConfigValue (AnyConfigValue (ListOfV xs)) = T.intercalate "\n" (["["] <> m
 formatBookmarkSearchTerm :: BookmarkSearchTerm -> T.Text
 formatBookmarkSearchTerm (SearchIndex idx) = "#" <> tshow idx
 formatBookmarkSearchTerm (SearchName name) = name
+
+formatSearchTerm :: BookmarkSearchTerm -> T.Text
+formatSearchTerm (SearchIndex idx) = tshow idx
+formatSearchTerm (SearchName name) = name
+
+singleton :: T.Text -> [T.Text]
+singleton t = [t]
+
+maybeSingleton :: Maybe T.Text -> [T.Text]
+maybeSingleton = maybe [] singleton
+
+maybeSingletonWithPrefix :: [T.Text] -> Maybe T.Text -> [T.Text]
+maybeSingletonWithPrefix pref = maybe [] (\t -> pref <> [t])
+
+formatCommand :: Command -> [T.Text]
+formatCommand (Add (AddOptions d n)) = "add" : d : maybeSingleton n
+formatCommand (Move opts) = ["move", formatSearchTerm $ moveSearch opts]
+formatCommand (List (ListOptions n d)) = ["list"]
+                                      <> maybeSingletonWithPrefix ["--name"] n
+                                      <> maybeSingletonWithPrefix ["--dir"] d
+formatCommand (Clear ClearOptions) = ["clear"]
+formatCommand (Delete opts) = ["delete", formatSearchTerm $ deleteSearch opts]
+formatCommand (Refresh RefreshOptions) = ["refresh"]
+formatCommand (ConfigCmd cmd) = "config" : formatConfigCommand cmd
+formatCommand (Check (CheckOptions c b)) = ["check"]
+                                        <> (if c then ["--config"] else [])
+                                        <> (if b then ["--bookmarks"] else [])
+formatCommand DefaultCommand = []
+
+formatConfigCommand :: ConfigCommand -> [T.Text]
+formatConfigCommand (Print ConfigPrintOptions) = ["print"]
+formatConfigCommand (Reset ConfigResetOptions) = ["reset"]
+formatConfigCommand (Set opts) = ["set"
+                                , setKey opts
+                                , setValue opts
+                                ]
+formatConfigCommand (AddDefaultBookmark (ConfigAddDefaultOptions d n))
+  = "add-default" : d : maybeSingleton n
+
+formatGlobals :: GlobalOptions -> [T.Text]
+formatGlobals (GlobalOptions c d o) = maybeSingletonWithPrefix ["--config-file"] c
+                                   <> maybeSingletonWithPrefix ["--bookmarks-file"] d
+                                   <> formatOverrides o
+
+formatOverrides :: OverrideOptions -> [T.Text]
+formatOverrides (OverrideOptions f t c r b) = formatOverride "fail" "nofail" f
+                                           <> formatOverride "time" "notime" t
+                                           <> formatOverride "enable-clear" "disable-clear" c
+                                           <> formatOverride "enable-reset" "disable-reset" r
+                                           <> formatOverride "backup-before-clear" "no-backup-before-clear" b
+
+formatOverride :: T.Text -> T.Text -> MaybeOverride -> [T.Text]
+formatOverride _ no OverrideFalse = ["--" <> no]
+formatOverride yes _ OverrideTrue = ["--" <> yes]
+formatOverride _ _ NoOverride     = []
+formatOverride yes no Conflict    = ["--" <> no, "--" <> yes]
+
+formatOptions :: Options -> [T.Text]
+formatOptions (Options c g) = formatCommand c <> formatGlobals g
+
+formatArgs :: [T.Text] -> T.Text
+formatArgs = T.unwords . map quoteStrings
+  where quoteStrings :: T.Text -> T.Text
+        quoteStrings s | T.elem ' ' s = "\"" <> s <> "\"" | otherwise  = s

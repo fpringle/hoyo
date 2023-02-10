@@ -136,9 +136,11 @@ forall (f :: * -&gt; *) a b. Applicative f =&gt; f (a -&gt; b) -&gt; f a -&gt; f
 -&gt; MaybeOverride
 -&gt; MaybeOverride
 -&gt; MaybeOverride
+-&gt; MaybeOverride
 -&gt; OverrideOptions
 </span><a href="HoYo.Internal.Types.html#OverrideOptions"><span class="hs-identifier hs-var">OverrideOptions</span></a></span><span>
 </span><span id="line-47"></span><span>                    </span><span class="annot"><span class="annottext">(MaybeOverride
+ -&gt; MaybeOverride
  -&gt; MaybeOverride
  -&gt; MaybeOverride
  -&gt; MaybeOverride
@@ -146,71 +148,87 @@ forall (f :: * -&gt; *) a b. Applicative f =&gt; f (a -&gt; b) -&gt; f a -&gt; f
 -&gt; Parser MaybeOverride
 -&gt; Parser
      (MaybeOverride
-      -&gt; MaybeOverride -&gt; MaybeOverride -&gt; OverrideOptions)
+      -&gt; MaybeOverride
+      -&gt; MaybeOverride
+      -&gt; MaybeOverride
+      -&gt; OverrideOptions)
 forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
 </span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="annottext">Parser MaybeOverride
 </span><a href="HoYo.Internal.Parse.html#parseOverrideFailOnError"><span class="hs-identifier hs-var">parseOverrideFailOnError</span></a></span><span>
 </span><span id="line-48"></span><span>                    </span><span class="annot"><span class="annottext">Parser
+  (MaybeOverride
+   -&gt; MaybeOverride
+   -&gt; MaybeOverride
+   -&gt; MaybeOverride
+   -&gt; OverrideOptions)
+-&gt; Parser MaybeOverride
+-&gt; Parser
+     (MaybeOverride
+      -&gt; MaybeOverride -&gt; MaybeOverride -&gt; OverrideOptions)
+forall (f :: * -&gt; *) a b. Applicative f =&gt; f (a -&gt; b) -&gt; f a -&gt; f b
+</span><span class="hs-operator hs-var">&lt;*&gt;</span></span><span> </span><span class="annot"><span class="annottext">Parser MaybeOverride
+</span><a href="HoYo.Internal.Parse.html#parseOverrideDisplayCreationTime"><span class="hs-identifier hs-var">parseOverrideDisplayCreationTime</span></a></span><span>
+</span><span id="line-49"></span><span>                    </span><span class="annot"><span class="annottext">Parser
   (MaybeOverride
    -&gt; MaybeOverride -&gt; MaybeOverride -&gt; OverrideOptions)
 -&gt; Parser MaybeOverride
 -&gt; Parser (MaybeOverride -&gt; MaybeOverride -&gt; OverrideOptions)
 forall (f :: * -&gt; *) a b. Applicative f =&gt; f (a -&gt; b) -&gt; f a -&gt; f b
 </span><span class="hs-operator hs-var">&lt;*&gt;</span></span><span> </span><span class="annot"><span class="annottext">Parser MaybeOverride
-</span><a href="HoYo.Internal.Parse.html#parseOverrideDisplayCreationTime"><span class="hs-identifier hs-var">parseOverrideDisplayCreationTime</span></a></span><span>
-</span><span id="line-49"></span><span>                    </span><span class="annot"><span class="annottext">Parser (MaybeOverride -&gt; MaybeOverride -&gt; OverrideOptions)
+</span><a href="HoYo.Internal.Parse.html#parseOverrideEnableClearing"><span class="hs-identifier hs-var">parseOverrideEnableClearing</span></a></span><span>
+</span><span id="line-50"></span><span>                    </span><span class="annot"><span class="annottext">Parser (MaybeOverride -&gt; MaybeOverride -&gt; OverrideOptions)
 -&gt; Parser MaybeOverride
 -&gt; Parser (MaybeOverride -&gt; OverrideOptions)
 forall (f :: * -&gt; *) a b. Applicative f =&gt; f (a -&gt; b) -&gt; f a -&gt; f b
 </span><span class="hs-operator hs-var">&lt;*&gt;</span></span><span> </span><span class="annot"><span class="annottext">Parser MaybeOverride
-</span><a href="HoYo.Internal.Parse.html#parseOverrideEnableClearing"><span class="hs-identifier hs-var">parseOverrideEnableClearing</span></a></span><span>
-</span><span id="line-50"></span><span>                    </span><span class="annot"><span class="annottext">Parser (MaybeOverride -&gt; OverrideOptions)
+</span><a href="HoYo.Internal.Parse.html#parseOverrideEnableReset"><span class="hs-identifier hs-var">parseOverrideEnableReset</span></a></span><span>
+</span><span id="line-51"></span><span>                    </span><span class="annot"><span class="annottext">Parser (MaybeOverride -&gt; OverrideOptions)
 -&gt; Parser MaybeOverride -&gt; Parser OverrideOptions
 forall (f :: * -&gt; *) a b. Applicative f =&gt; f (a -&gt; b) -&gt; f a -&gt; f b
 </span><span class="hs-operator hs-var">&lt;*&gt;</span></span><span> </span><span class="annot"><span class="annottext">Parser MaybeOverride
-</span><a href="HoYo.Internal.Parse.html#parseOverrideEnableReset"><span class="hs-identifier hs-var">parseOverrideEnableReset</span></a></span><span>
-</span><span id="line-51"></span><span>
-</span><span id="line-52"></span><span class="hs-comment">-- | Parse a single override option as a pair of switches.</span><span>
-</span><span id="line-53"></span><span class="hs-comment">-- For example 'parseOverrideFailOnError' is defined as</span><span>
-</span><span id="line-54"></span><span class="hs-comment">--</span><span>
-</span><span id="line-55"></span><span class="hs-comment">-- @</span><span>
-</span><span id="line-56"></span><span class="hs-comment">-- parseOverrideFailOnError :: 'Parser' 'MaybeOverride'</span><span>
-</span><span id="line-57"></span><span class="hs-comment">-- parseOverrideFailOnError = parseOverride</span><span>
-</span><span id="line-58"></span><span class="hs-comment">--                               (long &quot;fail&quot; &lt;&gt; help &quot;Fail on error&quot;)</span><span>
-</span><span id="line-59"></span><span class="hs-comment">--                               (long &quot;nofail&quot; &lt;&gt; help &quot;Disable fail on error&quot;)</span><span>
-</span><span id="line-60"></span><span class="hs-comment">-- @</span><span>
-</span><span id="line-61"></span><span class="hs-comment">--</span><span>
-</span><span id="line-62"></span><span class="hs-comment">-- and results in the pair of switches:</span><span>
-</span><span id="line-63"></span><span class="hs-comment">--</span><span>
-</span><span id="line-64"></span><span class="hs-comment">-- @</span><span>
-</span><span id="line-65"></span><span class="hs-comment">--  --fail                   Fail on error</span><span>
-</span><span id="line-66"></span><span class="hs-comment">--  --nofail                 Disable fail on error</span><span>
-</span><span id="line-67"></span><span class="hs-comment">-- @</span><span>
-</span><span id="line-68"></span><span class="annot"><a href="HoYo.Internal.Parse.html#parseOverride"><span class="hs-identifier hs-type">parseOverride</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Mod</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">FlagFields</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Mod</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">FlagFields</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Parser</span></span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#MaybeOverride"><span class="hs-identifier hs-type">MaybeOverride</span></a></span><span>
-</span><span id="line-69"></span><span id="parseOverride"><span class="annot"><span class="annottext">parseOverride :: Mod FlagFields Bool -&gt; Mod FlagFields Bool -&gt; Parser MaybeOverride
-</span><a href="HoYo.Internal.Parse.html#parseOverride"><span class="hs-identifier hs-var hs-var">parseOverride</span></a></span></span><span> </span><span id="local-6989586621679109069"><span class="annot"><span class="annottext">Mod FlagFields Bool
-</span><a href="#local-6989586621679109069"><span class="hs-identifier hs-var">posMod</span></a></span></span><span> </span><span id="local-6989586621679109068"><span class="annot"><span class="annottext">Mod FlagFields Bool
-</span><a href="#local-6989586621679109068"><span class="hs-identifier hs-var">negMod</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; MaybeOverride
+</span><a href="HoYo.Internal.Parse.html#parseOverrideBackupBeforeClear"><span class="hs-identifier hs-var">parseOverrideBackupBeforeClear</span></a></span><span>
+</span><span id="line-52"></span><span>
+</span><span id="line-53"></span><span class="hs-comment">-- | Parse a single override option as a pair of switches.</span><span>
+</span><span id="line-54"></span><span class="hs-comment">-- For example 'parseOverrideFailOnError' is defined as</span><span>
+</span><span id="line-55"></span><span class="hs-comment">--</span><span>
+</span><span id="line-56"></span><span class="hs-comment">-- @</span><span>
+</span><span id="line-57"></span><span class="hs-comment">-- parseOverrideFailOnError :: 'Parser' 'MaybeOverride'</span><span>
+</span><span id="line-58"></span><span class="hs-comment">-- parseOverrideFailOnError = parseOverride</span><span>
+</span><span id="line-59"></span><span class="hs-comment">--                               (long &quot;fail&quot; &lt;&gt; help &quot;Fail on error&quot;)</span><span>
+</span><span id="line-60"></span><span class="hs-comment">--                               (long &quot;nofail&quot; &lt;&gt; help &quot;Disable fail on error&quot;)</span><span>
+</span><span id="line-61"></span><span class="hs-comment">-- @</span><span>
+</span><span id="line-62"></span><span class="hs-comment">--</span><span>
+</span><span id="line-63"></span><span class="hs-comment">-- and results in the pair of switches:</span><span>
+</span><span id="line-64"></span><span class="hs-comment">--</span><span>
+</span><span id="line-65"></span><span class="hs-comment">-- @</span><span>
+</span><span id="line-66"></span><span class="hs-comment">--  --fail                   Fail on error</span><span>
+</span><span id="line-67"></span><span class="hs-comment">--  --nofail                 Disable fail on error</span><span>
+</span><span id="line-68"></span><span class="hs-comment">-- @</span><span>
+</span><span id="line-69"></span><span class="annot"><a href="HoYo.Internal.Parse.html#parseOverride"><span class="hs-identifier hs-type">parseOverride</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Mod</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">FlagFields</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Mod</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">FlagFields</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Parser</span></span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#MaybeOverride"><span class="hs-identifier hs-type">MaybeOverride</span></a></span><span>
+</span><span id="line-70"></span><span id="parseOverride"><span class="annot"><span class="annottext">parseOverride :: Mod FlagFields Bool -&gt; Mod FlagFields Bool -&gt; Parser MaybeOverride
+</span><a href="HoYo.Internal.Parse.html#parseOverride"><span class="hs-identifier hs-var hs-var">parseOverride</span></a></span></span><span> </span><span id="local-6989586621679110305"><span class="annot"><span class="annottext">Mod FlagFields Bool
+</span><a href="#local-6989586621679110305"><span class="hs-identifier hs-var">posMod</span></a></span></span><span> </span><span id="local-6989586621679110304"><span class="annot"><span class="annottext">Mod FlagFields Bool
+</span><a href="#local-6989586621679110304"><span class="hs-identifier hs-var">negMod</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; MaybeOverride
 </span><a href="HoYo.Internal.Command.html#combOverride"><span class="hs-identifier hs-var">combOverride</span></a></span><span>
-</span><span id="line-70"></span><span>                                </span><span class="annot"><span class="annottext">(Bool -&gt; Bool -&gt; MaybeOverride)
+</span><span id="line-71"></span><span>                                </span><span class="annot"><span class="annottext">(Bool -&gt; Bool -&gt; MaybeOverride)
 -&gt; Parser Bool -&gt; Parser (Bool -&gt; MaybeOverride)
 forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
 </span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="annottext">Mod FlagFields Bool -&gt; Parser Bool
 </span><span class="hs-identifier hs-var">switch</span></span><span> </span><span class="annot"><span class="annottext">Mod FlagFields Bool
-</span><a href="#local-6989586621679109069"><span class="hs-identifier hs-var">posMod</span></a></span><span>
-</span><span id="line-71"></span><span>                                </span><span class="annot"><span class="annottext">Parser (Bool -&gt; MaybeOverride)
+</span><a href="#local-6989586621679110305"><span class="hs-identifier hs-var">posMod</span></a></span><span>
+</span><span id="line-72"></span><span>                                </span><span class="annot"><span class="annottext">Parser (Bool -&gt; MaybeOverride)
 -&gt; Parser Bool -&gt; Parser MaybeOverride
 forall (f :: * -&gt; *) a b. Applicative f =&gt; f (a -&gt; b) -&gt; f a -&gt; f b
 </span><span class="hs-operator hs-var">&lt;*&gt;</span></span><span> </span><span class="annot"><span class="annottext">Mod FlagFields Bool -&gt; Parser Bool
 </span><span class="hs-identifier hs-var">switch</span></span><span> </span><span class="annot"><span class="annottext">Mod FlagFields Bool
-</span><a href="#local-6989586621679109068"><span class="hs-identifier hs-var">negMod</span></a></span><span>
-</span><span id="line-72"></span><span>
-</span><span id="line-73"></span><span class="hs-comment">-- | Parse a 'MaybeOverride' corresponding to the &quot;fail_on_error&quot; config option.</span><span>
-</span><span id="line-74"></span><span class="annot"><a href="HoYo.Internal.Parse.html#parseOverrideFailOnError"><span class="hs-identifier hs-type">parseOverrideFailOnError</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Parser</span></span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#MaybeOverride"><span class="hs-identifier hs-type">MaybeOverride</span></a></span><span>
-</span><span id="line-75"></span><span id="parseOverrideFailOnError"><span class="annot"><span class="annottext">parseOverrideFailOnError :: Parser MaybeOverride
+</span><a href="#local-6989586621679110304"><span class="hs-identifier hs-var">negMod</span></a></span><span>
+</span><span id="line-73"></span><span>
+</span><span id="line-74"></span><span class="hs-comment">-- | Parse a 'MaybeOverride' corresponding to the &quot;fail_on_error&quot; config option.</span><span>
+</span><span id="line-75"></span><span class="annot"><a href="HoYo.Internal.Parse.html#parseOverrideFailOnError"><span class="hs-identifier hs-type">parseOverrideFailOnError</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Parser</span></span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#MaybeOverride"><span class="hs-identifier hs-type">MaybeOverride</span></a></span><span>
+</span><span id="line-76"></span><span id="parseOverrideFailOnError"><span class="annot"><span class="annottext">parseOverrideFailOnError :: Parser MaybeOverride
 </span><a href="HoYo.Internal.Parse.html#parseOverrideFailOnError"><span class="hs-identifier hs-var hs-var">parseOverrideFailOnError</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Mod FlagFields Bool -&gt; Mod FlagFields Bool -&gt; Parser MaybeOverride
 </span><a href="HoYo.Internal.Parse.html#parseOverride"><span class="hs-identifier hs-var">parseOverride</span></a></span><span>
-</span><span id="line-76"></span><span>                              </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Mod FlagFields Bool
+</span><span id="line-77"></span><span>                              </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Mod FlagFields Bool
 forall (f :: * -&gt; *) a. HasName f =&gt; String -&gt; Mod f a
 </span><span class="hs-identifier hs-var">long</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;fail&quot;</span></span><span> </span><span class="annot"><span class="annottext">Mod FlagFields Bool -&gt; Mod FlagFields Bool -&gt; Mod FlagFields Bool
@@ -219,7 +237,7 @@ forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 forall (f :: * -&gt; *) a. String -&gt; Mod f a
 </span><span class="hs-identifier hs-var">help</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Fail on error&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-77"></span><span>                              </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Mod FlagFields Bool
+</span><span id="line-78"></span><span>                              </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Mod FlagFields Bool
 forall (f :: * -&gt; *) a. HasName f =&gt; String -&gt; Mod f a
 </span><span class="hs-identifier hs-var">long</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;nofail&quot;</span></span><span> </span><span class="annot"><span class="annottext">Mod FlagFields Bool -&gt; Mod FlagFields Bool -&gt; Mod FlagFields Bool
@@ -228,13 +246,13 @@ forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 forall (f :: * -&gt; *) a. String -&gt; Mod f a
 </span><span class="hs-identifier hs-var">help</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Disable fail on error&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-78"></span><span>
-</span><span id="line-79"></span><span class="hs-comment">-- | Parse a 'MaybeOverride' corresponding to the &quot;display_creation_time&quot; config option.</span><span>
-</span><span id="line-80"></span><span class="annot"><a href="HoYo.Internal.Parse.html#parseOverrideDisplayCreationTime"><span class="hs-identifier hs-type">parseOverrideDisplayCreationTime</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Parser</span></span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#MaybeOverride"><span class="hs-identifier hs-type">MaybeOverride</span></a></span><span>
-</span><span id="line-81"></span><span id="parseOverrideDisplayCreationTime"><span class="annot"><span class="annottext">parseOverrideDisplayCreationTime :: Parser MaybeOverride
+</span><span id="line-79"></span><span>
+</span><span id="line-80"></span><span class="hs-comment">-- | Parse a 'MaybeOverride' corresponding to the &quot;display_creation_time&quot; config option.</span><span>
+</span><span id="line-81"></span><span class="annot"><a href="HoYo.Internal.Parse.html#parseOverrideDisplayCreationTime"><span class="hs-identifier hs-type">parseOverrideDisplayCreationTime</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Parser</span></span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#MaybeOverride"><span class="hs-identifier hs-type">MaybeOverride</span></a></span><span>
+</span><span id="line-82"></span><span id="parseOverrideDisplayCreationTime"><span class="annot"><span class="annottext">parseOverrideDisplayCreationTime :: Parser MaybeOverride
 </span><a href="HoYo.Internal.Parse.html#parseOverrideDisplayCreationTime"><span class="hs-identifier hs-var hs-var">parseOverrideDisplayCreationTime</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Mod FlagFields Bool -&gt; Mod FlagFields Bool -&gt; Parser MaybeOverride
 </span><a href="HoYo.Internal.Parse.html#parseOverride"><span class="hs-identifier hs-var">parseOverride</span></a></span><span>
-</span><span id="line-82"></span><span>                                    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Mod FlagFields Bool
+</span><span id="line-83"></span><span>                                    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Mod FlagFields Bool
 forall (f :: * -&gt; *) a. HasName f =&gt; String -&gt; Mod f a
 </span><span class="hs-identifier hs-var">long</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;time&quot;</span></span><span> </span><span class="annot"><span class="annottext">Mod FlagFields Bool -&gt; Mod FlagFields Bool -&gt; Mod FlagFields Bool
@@ -243,7 +261,7 @@ forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 forall (f :: * -&gt; *) a. String -&gt; Mod f a
 </span><span class="hs-identifier hs-var">help</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Display bookmark creation times&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-83"></span><span>                                    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Mod FlagFields Bool
+</span><span id="line-84"></span><span>                                    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Mod FlagFields Bool
 forall (f :: * -&gt; *) a. HasName f =&gt; String -&gt; Mod f a
 </span><span class="hs-identifier hs-var">long</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;notime&quot;</span></span><span> </span><span class="annot"><span class="annottext">Mod FlagFields Bool -&gt; Mod FlagFields Bool -&gt; Mod FlagFields Bool
@@ -252,13 +270,13 @@ forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 forall (f :: * -&gt; *) a. String -&gt; Mod f a
 </span><span class="hs-identifier hs-var">help</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Hide bookmark creation times&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-84"></span><span>
-</span><span id="line-85"></span><span class="hs-comment">-- | Parse a 'MaybeOverride' corresponding to the &quot;enable_clear&quot; config option.</span><span>
-</span><span id="line-86"></span><span class="annot"><a href="HoYo.Internal.Parse.html#parseOverrideEnableClearing"><span class="hs-identifier hs-type">parseOverrideEnableClearing</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Parser</span></span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#MaybeOverride"><span class="hs-identifier hs-type">MaybeOverride</span></a></span><span>
-</span><span id="line-87"></span><span id="parseOverrideEnableClearing"><span class="annot"><span class="annottext">parseOverrideEnableClearing :: Parser MaybeOverride
+</span><span id="line-85"></span><span>
+</span><span id="line-86"></span><span class="hs-comment">-- | Parse a 'MaybeOverride' corresponding to the &quot;enable_clear&quot; config option.</span><span>
+</span><span id="line-87"></span><span class="annot"><a href="HoYo.Internal.Parse.html#parseOverrideEnableClearing"><span class="hs-identifier hs-type">parseOverrideEnableClearing</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Parser</span></span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#MaybeOverride"><span class="hs-identifier hs-type">MaybeOverride</span></a></span><span>
+</span><span id="line-88"></span><span id="parseOverrideEnableClearing"><span class="annot"><span class="annottext">parseOverrideEnableClearing :: Parser MaybeOverride
 </span><a href="HoYo.Internal.Parse.html#parseOverrideEnableClearing"><span class="hs-identifier hs-var hs-var">parseOverrideEnableClearing</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Mod FlagFields Bool -&gt; Mod FlagFields Bool -&gt; Parser MaybeOverride
 </span><a href="HoYo.Internal.Parse.html#parseOverride"><span class="hs-identifier hs-var">parseOverride</span></a></span><span>
-</span><span id="line-88"></span><span>                                </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Mod FlagFields Bool
+</span><span id="line-89"></span><span>                                </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Mod FlagFields Bool
 forall (f :: * -&gt; *) a. HasName f =&gt; String -&gt; Mod f a
 </span><span class="hs-identifier hs-var">long</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;enable-clear&quot;</span></span><span> </span><span class="annot"><span class="annottext">Mod FlagFields Bool -&gt; Mod FlagFields Bool -&gt; Mod FlagFields Bool
@@ -267,7 +285,7 @@ forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 forall (f :: * -&gt; *) a. String -&gt; Mod f a
 </span><span class="hs-identifier hs-var">help</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Enable the 'clear' command&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-89"></span><span>                                </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Mod FlagFields Bool
+</span><span id="line-90"></span><span>                                </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Mod FlagFields Bool
 forall (f :: * -&gt; *) a. HasName f =&gt; String -&gt; Mod f a
 </span><span class="hs-identifier hs-var">long</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;disable-clear&quot;</span></span><span> </span><span class="annot"><span class="annottext">Mod FlagFields Bool -&gt; Mod FlagFields Bool -&gt; Mod FlagFields Bool
@@ -276,13 +294,13 @@ forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 forall (f :: * -&gt; *) a. String -&gt; Mod f a
 </span><span class="hs-identifier hs-var">help</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Disable the 'clear' command&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-90"></span><span>
-</span><span id="line-91"></span><span class="hs-comment">-- | Parse a 'MaybeOverride' corresponding to the &quot;enable_reset&quot; config option.</span><span>
-</span><span id="line-92"></span><span class="annot"><a href="HoYo.Internal.Parse.html#parseOverrideEnableReset"><span class="hs-identifier hs-type">parseOverrideEnableReset</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Parser</span></span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#MaybeOverride"><span class="hs-identifier hs-type">MaybeOverride</span></a></span><span>
-</span><span id="line-93"></span><span id="parseOverrideEnableReset"><span class="annot"><span class="annottext">parseOverrideEnableReset :: Parser MaybeOverride
+</span><span id="line-91"></span><span>
+</span><span id="line-92"></span><span class="hs-comment">-- | Parse a 'MaybeOverride' corresponding to the &quot;enable_reset&quot; config option.</span><span>
+</span><span id="line-93"></span><span class="annot"><a href="HoYo.Internal.Parse.html#parseOverrideEnableReset"><span class="hs-identifier hs-type">parseOverrideEnableReset</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Parser</span></span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#MaybeOverride"><span class="hs-identifier hs-type">MaybeOverride</span></a></span><span>
+</span><span id="line-94"></span><span id="parseOverrideEnableReset"><span class="annot"><span class="annottext">parseOverrideEnableReset :: Parser MaybeOverride
 </span><a href="HoYo.Internal.Parse.html#parseOverrideEnableReset"><span class="hs-identifier hs-var hs-var">parseOverrideEnableReset</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Mod FlagFields Bool -&gt; Mod FlagFields Bool -&gt; Parser MaybeOverride
 </span><a href="HoYo.Internal.Parse.html#parseOverride"><span class="hs-identifier hs-var">parseOverride</span></a></span><span>
-</span><span id="line-94"></span><span>                              </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Mod FlagFields Bool
+</span><span id="line-95"></span><span>                              </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Mod FlagFields Bool
 forall (f :: * -&gt; *) a. HasName f =&gt; String -&gt; Mod f a
 </span><span class="hs-identifier hs-var">long</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;enable-reset&quot;</span></span><span> </span><span class="annot"><span class="annottext">Mod FlagFields Bool -&gt; Mod FlagFields Bool -&gt; Mod FlagFields Bool
@@ -291,7 +309,7 @@ forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 forall (f :: * -&gt; *) a. String -&gt; Mod f a
 </span><span class="hs-identifier hs-var">help</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Enable the 'config reset' command&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-95"></span><span>                              </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Mod FlagFields Bool
+</span><span id="line-96"></span><span>                              </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Mod FlagFields Bool
 forall (f :: * -&gt; *) a. HasName f =&gt; String -&gt; Mod f a
 </span><span class="hs-identifier hs-var">long</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;disable-reset&quot;</span></span><span> </span><span class="annot"><span class="annottext">Mod FlagFields Bool -&gt; Mod FlagFields Bool -&gt; Mod FlagFields Bool
@@ -300,17 +318,41 @@ forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 forall (f :: * -&gt; *) a. String -&gt; Mod f a
 </span><span class="hs-identifier hs-var">help</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Disable the 'config reset' command&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-96"></span><span>
-</span><span id="line-97"></span><span class="hs-comment">-- | Parse options for the @hoyo add@ command.</span><span>
-</span><span id="line-98"></span><span class="annot"><a href="HoYo.Internal.Parse.html#addCommand"><span class="hs-identifier hs-type">addCommand</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Parser</span></span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#Command"><span class="hs-identifier hs-type">Command</span></a></span><span>
-</span><span id="line-99"></span><span id="addCommand"><span class="annot"><span class="annottext">addCommand :: Parser Command
+</span><span id="line-97"></span><span>
+</span><span id="line-98"></span><span class="hs-comment">-- | Parse a 'MaybeOverride' corresponding to the &quot;backup_before_clear&quot; config option.</span><span>
+</span><span id="line-99"></span><span class="annot"><a href="HoYo.Internal.Parse.html#parseOverrideBackupBeforeClear"><span class="hs-identifier hs-type">parseOverrideBackupBeforeClear</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Parser</span></span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#MaybeOverride"><span class="hs-identifier hs-type">MaybeOverride</span></a></span><span>
+</span><span id="line-100"></span><span id="parseOverrideBackupBeforeClear"><span class="annot"><span class="annottext">parseOverrideBackupBeforeClear :: Parser MaybeOverride
+</span><a href="HoYo.Internal.Parse.html#parseOverrideBackupBeforeClear"><span class="hs-identifier hs-var hs-var">parseOverrideBackupBeforeClear</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Mod FlagFields Bool -&gt; Mod FlagFields Bool -&gt; Parser MaybeOverride
+</span><a href="HoYo.Internal.Parse.html#parseOverride"><span class="hs-identifier hs-var">parseOverride</span></a></span><span>
+</span><span id="line-101"></span><span>                              </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Mod FlagFields Bool
+forall (f :: * -&gt; *) a. HasName f =&gt; String -&gt; Mod f a
+</span><span class="hs-identifier hs-var">long</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;backup-before-clear&quot;</span></span><span> </span><span class="annot"><span class="annottext">Mod FlagFields Bool -&gt; Mod FlagFields Bool -&gt; Mod FlagFields Bool
+forall a. Semigroup a =&gt; a -&gt; a -&gt; a
+</span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Mod FlagFields Bool
+forall (f :: * -&gt; *) a. String -&gt; Mod f a
+</span><span class="hs-identifier hs-var">help</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;Backup the bookmarks file before running `hoyo clear`&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-102"></span><span>                              </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Mod FlagFields Bool
+forall (f :: * -&gt; *) a. HasName f =&gt; String -&gt; Mod f a
+</span><span class="hs-identifier hs-var">long</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;no-backup-before-clear&quot;</span></span><span> </span><span class="annot"><span class="annottext">Mod FlagFields Bool -&gt; Mod FlagFields Bool -&gt; Mod FlagFields Bool
+forall a. Semigroup a =&gt; a -&gt; a -&gt; a
+</span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Mod FlagFields Bool
+forall (f :: * -&gt; *) a. String -&gt; Mod f a
+</span><span class="hs-identifier hs-var">help</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;Don't backup the bookmarks file before running `hoyo clear`&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-103"></span><span>
+</span><span id="line-104"></span><span class="hs-comment">-- | Parse options for the @hoyo add@ command.</span><span>
+</span><span id="line-105"></span><span class="annot"><a href="HoYo.Internal.Parse.html#addCommand"><span class="hs-identifier hs-type">addCommand</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Parser</span></span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#Command"><span class="hs-identifier hs-type">Command</span></a></span><span>
+</span><span id="line-106"></span><span id="addCommand"><span class="annot"><span class="annottext">addCommand :: Parser Command
 </span><a href="HoYo.Internal.Parse.html#addCommand"><span class="hs-identifier hs-var hs-var">addCommand</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">AddOptions -&gt; Command
 </span><a href="HoYo.Internal.Types.html#Add"><span class="hs-identifier hs-var">Add</span></a></span><span> </span><span class="annot"><span class="annottext">(AddOptions -&gt; Command) -&gt; Parser AddOptions -&gt; Parser Command
 forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
 </span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="hs-special">(</span><span>
-</span><span id="line-100"></span><span>              </span><span class="annot"><span class="annottext">TFilePath -&gt; Maybe TFilePath -&gt; AddOptions
+</span><span id="line-107"></span><span>              </span><span class="annot"><span class="annottext">TFilePath -&gt; Maybe TFilePath -&gt; AddOptions
 </span><a href="HoYo.Internal.Types.html#AddOptions"><span class="hs-identifier hs-var">AddOptions</span></a></span><span>
-</span><span id="line-101"></span><span>                </span><span class="annot"><span class="annottext">(TFilePath -&gt; Maybe TFilePath -&gt; AddOptions)
+</span><span id="line-108"></span><span>                </span><span class="annot"><span class="annottext">(TFilePath -&gt; Maybe TFilePath -&gt; AddOptions)
 -&gt; Parser TFilePath -&gt; Parser (Maybe TFilePath -&gt; AddOptions)
 forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
 </span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="annottext">Mod ArgumentFields TFilePath -&gt; Parser TFilePath
@@ -331,7 +373,7 @@ forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 forall (f :: * -&gt; *) a. HasCompleter f =&gt; String -&gt; Mod f a
 </span><span class="hs-identifier hs-var">action</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;directory&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-102"></span><span>                </span><span class="annot"><span class="annottext">Parser (Maybe TFilePath -&gt; AddOptions)
+</span><span id="line-109"></span><span>                </span><span class="annot"><span class="annottext">Parser (Maybe TFilePath -&gt; AddOptions)
 -&gt; Parser (Maybe TFilePath) -&gt; Parser AddOptions
 forall (f :: * -&gt; *) a b. Applicative f =&gt; f (a -&gt; b) -&gt; f a -&gt; f b
 </span><span class="hs-operator hs-var">&lt;*&gt;</span></span><span> </span><span class="annot"><span class="annottext">Parser TFilePath -&gt; Parser (Maybe TFilePath)
@@ -348,12 +390,12 @@ forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 forall (f :: * -&gt; *) a. String -&gt; Mod f a
 </span><span class="hs-identifier hs-var">help</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Optionally give a name to your bookmark&quot;</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-103"></span><span>              </span><span class="hs-special">)</span><span>
-</span><span id="line-104"></span><span>
-</span><span id="line-105"></span><span class="hs-comment">-- | Parse a 'BookmarkSearchTerm'. First tries to interpret the search term as a number</span><span>
-</span><span id="line-106"></span><span class="hs-comment">-- corresponding to a bookmark index; if that fails, treat the term as a name.</span><span>
-</span><span id="line-107"></span><span class="annot"><a href="HoYo.Internal.Parse.html#bookmarkSearchTerm"><span class="hs-identifier hs-type">bookmarkSearchTerm</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ReadM</span></span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#BookmarkSearchTerm"><span class="hs-identifier hs-type">BookmarkSearchTerm</span></a></span><span>
-</span><span id="line-108"></span><span id="bookmarkSearchTerm"><span class="annot"><span class="annottext">bookmarkSearchTerm :: ReadM BookmarkSearchTerm
+</span><span id="line-110"></span><span>              </span><span class="hs-special">)</span><span>
+</span><span id="line-111"></span><span>
+</span><span id="line-112"></span><span class="hs-comment">-- | Parse a 'BookmarkSearchTerm'. First tries to interpret the search term as a number</span><span>
+</span><span id="line-113"></span><span class="hs-comment">-- corresponding to a bookmark index; if that fails, treat the term as a name.</span><span>
+</span><span id="line-114"></span><span class="annot"><a href="HoYo.Internal.Parse.html#bookmarkSearchTerm"><span class="hs-identifier hs-type">bookmarkSearchTerm</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ReadM</span></span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#BookmarkSearchTerm"><span class="hs-identifier hs-type">BookmarkSearchTerm</span></a></span><span>
+</span><span id="line-115"></span><span id="bookmarkSearchTerm"><span class="annot"><span class="annottext">bookmarkSearchTerm :: ReadM BookmarkSearchTerm
 </span><a href="HoYo.Internal.Parse.html#bookmarkSearchTerm"><span class="hs-identifier hs-var hs-var">bookmarkSearchTerm</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(String -&gt; Either String BookmarkSearchTerm)
 -&gt; ReadM BookmarkSearchTerm
 forall a. (String -&gt; Either String a) -&gt; ReadM a
@@ -362,17 +404,17 @@ forall a. (String -&gt; Either String a) -&gt; ReadM a
 -&gt; (String -&gt; Either String BookmarkSearchTerm)
 -&gt; ReadM BookmarkSearchTerm
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="hs-glyph">\</span><span id="local-6989586621679109059"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679109059"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span>
-</span><span id="line-109"></span><span>  </span><span class="annot"><span class="annottext">Int -&gt; BookmarkSearchTerm
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="hs-glyph">\</span><span id="local-6989586621679110295"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679110295"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span>
+</span><span id="line-116"></span><span>  </span><span class="annot"><span class="annottext">Int -&gt; BookmarkSearchTerm
 </span><a href="HoYo.Internal.Types.html#SearchIndex"><span class="hs-identifier hs-var">SearchIndex</span></a></span><span> </span><span class="annot"><span class="annottext">(Int -&gt; BookmarkSearchTerm)
 -&gt; Either String Int -&gt; Either String BookmarkSearchTerm
 forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
 </span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Either String Int
 forall a. Read a =&gt; String -&gt; Either String a
 </span><span class="hs-identifier hs-var">readEither</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679109059"><span class="hs-identifier hs-var">s</span></a></span><span>
-</span><span id="line-110"></span><span>  </span><span class="annot"><span class="annottext">Either String BookmarkSearchTerm
+</span><a href="#local-6989586621679110295"><span class="hs-identifier hs-var">s</span></a></span><span>
+</span><span id="line-117"></span><span>  </span><span class="annot"><span class="annottext">Either String BookmarkSearchTerm
 -&gt; Either String BookmarkSearchTerm
 -&gt; Either String BookmarkSearchTerm
 forall (f :: * -&gt; *) a. Alternative f =&gt; f a -&gt; f a -&gt; f a
@@ -381,16 +423,16 @@ forall a b. b -&gt; Either a b
 </span><span class="hs-identifier hs-var">Right</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">TFilePath -&gt; BookmarkSearchTerm
 </span><a href="HoYo.Internal.Types.html#SearchName"><span class="hs-identifier hs-var">SearchName</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; TFilePath
 </span><span class="hs-identifier hs-var">T.pack</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679109059"><span class="hs-identifier hs-var">s</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-111"></span><span>
-</span><span id="line-112"></span><span class="hs-comment">-- | Parse mods + bookmark completer used in 'moveCommand' and 'moveCommandHidden'.</span><span>
-</span><span id="line-113"></span><span class="annot"><a href="HoYo.Internal.Parse.html#moveCommandMods"><span class="hs-identifier hs-type">moveCommandMods</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Mod</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">ArgumentFields</span></span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#BookmarkSearchTerm"><span class="hs-identifier hs-type">BookmarkSearchTerm</span></a></span><span>
-</span><span id="line-114"></span><span id="moveCommandMods"><span class="annot"><span class="annottext">moveCommandMods :: Mod ArgumentFields BookmarkSearchTerm
+</span><a href="#local-6989586621679110295"><span class="hs-identifier hs-var">s</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-118"></span><span>
+</span><span id="line-119"></span><span class="hs-comment">-- | Parse mods + bookmark completer used in 'moveCommand' and 'moveCommandHidden'.</span><span>
+</span><span id="line-120"></span><span class="annot"><a href="HoYo.Internal.Parse.html#moveCommandMods"><span class="hs-identifier hs-type">moveCommandMods</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Mod</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">ArgumentFields</span></span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#BookmarkSearchTerm"><span class="hs-identifier hs-type">BookmarkSearchTerm</span></a></span><span>
+</span><span id="line-121"></span><span id="moveCommandMods"><span class="annot"><span class="annottext">moveCommandMods :: Mod ArgumentFields BookmarkSearchTerm
 </span><a href="HoYo.Internal.Parse.html#moveCommandMods"><span class="hs-identifier hs-var hs-var">moveCommandMods</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Mod ArgumentFields BookmarkSearchTerm
 forall (f :: * -&gt; *) a. HasMetavar f =&gt; String -&gt; Mod f a
 </span><span class="hs-identifier hs-var">metavar</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;&lt;bookmark&gt;&quot;</span></span><span>
-</span><span id="line-115"></span><span>                    </span><span class="annot"><span class="annottext">Mod ArgumentFields BookmarkSearchTerm
+</span><span id="line-122"></span><span>                    </span><span class="annot"><span class="annottext">Mod ArgumentFields BookmarkSearchTerm
 -&gt; Mod ArgumentFields BookmarkSearchTerm
 -&gt; Mod ArgumentFields BookmarkSearchTerm
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
@@ -398,7 +440,7 @@ forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 forall (f :: * -&gt; *) a. String -&gt; Mod f a
 </span><span class="hs-identifier hs-var">help</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Index or name of the bookmark to move to&quot;</span></span><span>
-</span><span id="line-116"></span><span>                    </span><span class="annot"><span class="annottext">Mod ArgumentFields BookmarkSearchTerm
+</span><span id="line-123"></span><span>                    </span><span class="annot"><span class="annottext">Mod ArgumentFields BookmarkSearchTerm
 -&gt; Mod ArgumentFields BookmarkSearchTerm
 -&gt; Mod ArgumentFields BookmarkSearchTerm
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
@@ -406,10 +448,10 @@ forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 forall (f :: * -&gt; *) a. HasCompleter f =&gt; Completer -&gt; Mod f a
 </span><span class="hs-identifier hs-var">completer</span></span><span> </span><span class="annot"><span class="annottext">Completer
 </span><a href="HoYo.CLI.Complete.html#bookmarkCompleter"><span class="hs-identifier hs-var">bookmarkCompleter</span></a></span><span>
-</span><span id="line-117"></span><span>
-</span><span id="line-118"></span><span class="hs-comment">-- | Parse options for the @hoyo move@ command.</span><span>
-</span><span id="line-119"></span><span class="annot"><a href="HoYo.Internal.Parse.html#moveCommand"><span class="hs-identifier hs-type">moveCommand</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Parser</span></span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#Command"><span class="hs-identifier hs-type">Command</span></a></span><span>
-</span><span id="line-120"></span><span id="moveCommand"><span class="annot"><span class="annottext">moveCommand :: Parser Command
+</span><span id="line-124"></span><span>
+</span><span id="line-125"></span><span class="hs-comment">-- | Parse options for the @hoyo move@ command.</span><span>
+</span><span id="line-126"></span><span class="annot"><a href="HoYo.Internal.Parse.html#moveCommand"><span class="hs-identifier hs-type">moveCommand</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Parser</span></span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#Command"><span class="hs-identifier hs-type">Command</span></a></span><span>
+</span><span id="line-127"></span><span id="moveCommand"><span class="annot"><span class="annottext">moveCommand :: Parser Command
 </span><a href="HoYo.Internal.Parse.html#moveCommand"><span class="hs-identifier hs-var hs-var">moveCommand</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">MoveOptions -&gt; Command
 </span><a href="HoYo.Internal.Types.html#Move"><span class="hs-identifier hs-var">Move</span></a></span><span> </span><span class="annot"><span class="annottext">(MoveOptions -&gt; Command)
 -&gt; (BookmarkSearchTerm -&gt; MoveOptions)
@@ -418,7 +460,7 @@ forall (f :: * -&gt; *) a. HasCompleter f =&gt; Completer -&gt; Mod f a
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">BookmarkSearchTerm -&gt; MoveOptions
 </span><a href="HoYo.Internal.Types.html#MoveOptions"><span class="hs-identifier hs-var">MoveOptions</span></a></span><span>
-</span><span id="line-121"></span><span>                </span><span class="annot"><span class="annottext">(BookmarkSearchTerm -&gt; Command)
+</span><span id="line-128"></span><span>                </span><span class="annot"><span class="annottext">(BookmarkSearchTerm -&gt; Command)
 -&gt; Parser BookmarkSearchTerm -&gt; Parser Command
 forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
 </span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="annottext">ReadM BookmarkSearchTerm
@@ -428,13 +470,13 @@ forall a. ReadM a -&gt; Mod ArgumentFields a -&gt; Parser a
 </span><span class="hs-identifier hs-var">argument</span></span><span> </span><span class="annot"><span class="annottext">ReadM BookmarkSearchTerm
 </span><a href="HoYo.Internal.Parse.html#bookmarkSearchTerm"><span class="hs-identifier hs-var">bookmarkSearchTerm</span></a></span><span> </span><span class="annot"><span class="annottext">Mod ArgumentFields BookmarkSearchTerm
 </span><a href="HoYo.Internal.Parse.html#moveCommandMods"><span class="hs-identifier hs-var">moveCommandMods</span></a></span><span>
-</span><span id="line-122"></span><span>
-</span><span id="line-123"></span><span class="hs-comment">-- | When hoyo is run without a command but with a search term (e.g. `hoyo docs`),</span><span>
-</span><span id="line-124"></span><span class="hs-comment">-- it is interpreted as a move command - so the example above would be interpreted</span><span>
-</span><span id="line-125"></span><span class="hs-comment">-- as `hoyo move docs`. We hide this from the CLI help message because it's quite</span><span>
-</span><span id="line-126"></span><span class="hs-comment">-- ugly.</span><span>
-</span><span id="line-127"></span><span class="annot"><a href="HoYo.Internal.Parse.html#moveCommandHidden"><span class="hs-identifier hs-type">moveCommandHidden</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Parser</span></span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#Command"><span class="hs-identifier hs-type">Command</span></a></span><span>
-</span><span id="line-128"></span><span id="moveCommandHidden"><span class="annot"><span class="annottext">moveCommandHidden :: Parser Command
+</span><span id="line-129"></span><span>
+</span><span id="line-130"></span><span class="hs-comment">-- | When hoyo is run without a command but with a search term (e.g. `hoyo docs`),</span><span>
+</span><span id="line-131"></span><span class="hs-comment">-- it is interpreted as a move command - so the example above would be interpreted</span><span>
+</span><span id="line-132"></span><span class="hs-comment">-- as `hoyo move docs`. We hide this from the CLI help message because it's quite</span><span>
+</span><span id="line-133"></span><span class="hs-comment">-- ugly.</span><span>
+</span><span id="line-134"></span><span class="annot"><a href="HoYo.Internal.Parse.html#moveCommandHidden"><span class="hs-identifier hs-type">moveCommandHidden</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Parser</span></span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#Command"><span class="hs-identifier hs-type">Command</span></a></span><span>
+</span><span id="line-135"></span><span id="moveCommandHidden"><span class="annot"><span class="annottext">moveCommandHidden :: Parser Command
 </span><a href="HoYo.Internal.Parse.html#moveCommandHidden"><span class="hs-identifier hs-var hs-var">moveCommandHidden</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">MoveOptions -&gt; Command
 </span><a href="HoYo.Internal.Types.html#Move"><span class="hs-identifier hs-var">Move</span></a></span><span> </span><span class="annot"><span class="annottext">(MoveOptions -&gt; Command)
 -&gt; (BookmarkSearchTerm -&gt; MoveOptions)
@@ -443,7 +485,7 @@ forall a. ReadM a -&gt; Mod ArgumentFields a -&gt; Parser a
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">BookmarkSearchTerm -&gt; MoveOptions
 </span><a href="HoYo.Internal.Types.html#MoveOptions"><span class="hs-identifier hs-var">MoveOptions</span></a></span><span>
-</span><span id="line-129"></span><span>                      </span><span class="annot"><span class="annottext">(BookmarkSearchTerm -&gt; Command)
+</span><span id="line-136"></span><span>                      </span><span class="annot"><span class="annottext">(BookmarkSearchTerm -&gt; Command)
 -&gt; Parser BookmarkSearchTerm -&gt; Parser Command
 forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
 </span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="annottext">ReadM BookmarkSearchTerm
@@ -452,27 +494,27 @@ forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
 forall a. ReadM a -&gt; Mod ArgumentFields a -&gt; Parser a
 </span><span class="hs-identifier hs-var">argument</span></span><span> </span><span class="annot"><span class="annottext">ReadM BookmarkSearchTerm
 </span><a href="HoYo.Internal.Parse.html#bookmarkSearchTerm"><span class="hs-identifier hs-var">bookmarkSearchTerm</span></a></span><span> </span><span class="hs-special">(</span><span>
-</span><span id="line-130"></span><span>                            </span><span class="annot"><span class="annottext">Mod ArgumentFields BookmarkSearchTerm
+</span><span id="line-137"></span><span>                            </span><span class="annot"><span class="annottext">Mod ArgumentFields BookmarkSearchTerm
 </span><a href="HoYo.Internal.Parse.html#moveCommandMods"><span class="hs-identifier hs-var">moveCommandMods</span></a></span><span>
-</span><span id="line-131"></span><span>                            </span><span class="annot"><span class="annottext">Mod ArgumentFields BookmarkSearchTerm
+</span><span id="line-138"></span><span>                            </span><span class="annot"><span class="annottext">Mod ArgumentFields BookmarkSearchTerm
 -&gt; Mod ArgumentFields BookmarkSearchTerm
 -&gt; Mod ArgumentFields BookmarkSearchTerm
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">Mod ArgumentFields BookmarkSearchTerm
 forall (f :: * -&gt; *) a. Mod f a
 </span><span class="hs-identifier hs-var">internal</span></span><span>
-</span><span id="line-132"></span><span>                          </span><span class="hs-special">)</span><span>
-</span><span id="line-133"></span><span>
-</span><span id="line-134"></span><span class="hs-comment">-- | Parse options for the @hoyo list@ command.</span><span>
-</span><span id="line-135"></span><span class="annot"><a href="HoYo.Internal.Parse.html#listCommand"><span class="hs-identifier hs-type">listCommand</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Parser</span></span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#Command"><span class="hs-identifier hs-type">Command</span></a></span><span>
-</span><span id="line-136"></span><span id="listCommand"><span class="annot"><span class="annottext">listCommand :: Parser Command
+</span><span id="line-139"></span><span>                          </span><span class="hs-special">)</span><span>
+</span><span id="line-140"></span><span>
+</span><span id="line-141"></span><span class="hs-comment">-- | Parse options for the @hoyo list@ command.</span><span>
+</span><span id="line-142"></span><span class="annot"><a href="HoYo.Internal.Parse.html#listCommand"><span class="hs-identifier hs-type">listCommand</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Parser</span></span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#Command"><span class="hs-identifier hs-type">Command</span></a></span><span>
+</span><span id="line-143"></span><span id="listCommand"><span class="annot"><span class="annottext">listCommand :: Parser Command
 </span><a href="HoYo.Internal.Parse.html#listCommand"><span class="hs-identifier hs-var hs-var">listCommand</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ListOptions -&gt; Command
 </span><a href="HoYo.Internal.Types.html#List"><span class="hs-identifier hs-var">List</span></a></span><span> </span><span class="annot"><span class="annottext">(ListOptions -&gt; Command) -&gt; Parser ListOptions -&gt; Parser Command
 forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
 </span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="hs-special">(</span><span>
-</span><span id="line-137"></span><span>                  </span><span class="annot"><span class="annottext">Maybe TFilePath -&gt; Maybe TFilePath -&gt; ListOptions
+</span><span id="line-144"></span><span>                  </span><span class="annot"><span class="annottext">Maybe TFilePath -&gt; Maybe TFilePath -&gt; ListOptions
 </span><a href="HoYo.Internal.Types.html#ListOptions"><span class="hs-identifier hs-var">ListOptions</span></a></span><span>
-</span><span id="line-138"></span><span>                    </span><span class="annot"><span class="annottext">(Maybe TFilePath -&gt; Maybe TFilePath -&gt; ListOptions)
+</span><span id="line-145"></span><span>                    </span><span class="annot"><span class="annottext">(Maybe TFilePath -&gt; Maybe TFilePath -&gt; ListOptions)
 -&gt; Parser (Maybe TFilePath)
 -&gt; Parser (Maybe TFilePath -&gt; ListOptions)
 forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
@@ -481,33 +523,33 @@ forall (f :: * -&gt; *) a. Alternative f =&gt; f a -&gt; f (Maybe a)
 </span><span class="hs-identifier hs-var">optional</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Mod OptionFields TFilePath -&gt; Parser TFilePath
 forall s. IsString s =&gt; Mod OptionFields s -&gt; Parser s
 </span><span class="hs-identifier hs-var">strOption</span></span><span> </span><span class="hs-special">(</span><span>
-</span><span id="line-139"></span><span>                          </span><span class="annot"><span class="annottext">String -&gt; Mod OptionFields TFilePath
+</span><span id="line-146"></span><span>                          </span><span class="annot"><span class="annottext">String -&gt; Mod OptionFields TFilePath
 forall (f :: * -&gt; *) a. HasName f =&gt; String -&gt; Mod f a
 </span><span class="hs-identifier hs-var">long</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;name&quot;</span></span><span>
-</span><span id="line-140"></span><span>                          </span><span class="annot"><span class="annottext">Mod OptionFields TFilePath
+</span><span id="line-147"></span><span>                          </span><span class="annot"><span class="annottext">Mod OptionFields TFilePath
 -&gt; Mod OptionFields TFilePath -&gt; Mod OptionFields TFilePath
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">Char -&gt; Mod OptionFields TFilePath
 forall (f :: * -&gt; *) a. HasName f =&gt; Char -&gt; Mod f a
 </span><span class="hs-identifier hs-var">short</span></span><span> </span><span class="annot"><span class="annottext">Char
 </span><span class="hs-char">'n'</span></span><span>
-</span><span id="line-141"></span><span>                          </span><span class="annot"><span class="annottext">Mod OptionFields TFilePath
+</span><span id="line-148"></span><span>                          </span><span class="annot"><span class="annottext">Mod OptionFields TFilePath
 -&gt; Mod OptionFields TFilePath -&gt; Mod OptionFields TFilePath
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Mod OptionFields TFilePath
 forall (f :: * -&gt; *) a. HasMetavar f =&gt; String -&gt; Mod f a
 </span><span class="hs-identifier hs-var">metavar</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;&lt;name&gt;&quot;</span></span><span>
-</span><span id="line-142"></span><span>                          </span><span class="annot"><span class="annottext">Mod OptionFields TFilePath
+</span><span id="line-149"></span><span>                          </span><span class="annot"><span class="annottext">Mod OptionFields TFilePath
 -&gt; Mod OptionFields TFilePath -&gt; Mod OptionFields TFilePath
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Mod OptionFields TFilePath
 forall (f :: * -&gt; *) a. String -&gt; Mod f a
 </span><span class="hs-identifier hs-var">help</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Search bookmarks by name&quot;</span></span><span>
-</span><span id="line-143"></span><span>                        </span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-144"></span><span>                    </span><span class="annot"><span class="annottext">Parser (Maybe TFilePath -&gt; ListOptions)
+</span><span id="line-150"></span><span>                        </span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-151"></span><span>                    </span><span class="annot"><span class="annottext">Parser (Maybe TFilePath -&gt; ListOptions)
 -&gt; Parser (Maybe TFilePath) -&gt; Parser ListOptions
 forall (f :: * -&gt; *) a b. Applicative f =&gt; f (a -&gt; b) -&gt; f a -&gt; f b
 </span><span class="hs-operator hs-var">&lt;*&gt;</span></span><span> </span><span class="annot"><span class="annottext">Parser TFilePath -&gt; Parser (Maybe TFilePath)
@@ -515,46 +557,46 @@ forall (f :: * -&gt; *) a. Alternative f =&gt; f a -&gt; f (Maybe a)
 </span><span class="hs-identifier hs-var">optional</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Mod OptionFields TFilePath -&gt; Parser TFilePath
 forall s. IsString s =&gt; Mod OptionFields s -&gt; Parser s
 </span><span class="hs-identifier hs-var">strOption</span></span><span> </span><span class="hs-special">(</span><span>
-</span><span id="line-145"></span><span>                          </span><span class="annot"><span class="annottext">String -&gt; Mod OptionFields TFilePath
+</span><span id="line-152"></span><span>                          </span><span class="annot"><span class="annottext">String -&gt; Mod OptionFields TFilePath
 forall (f :: * -&gt; *) a. HasName f =&gt; String -&gt; Mod f a
 </span><span class="hs-identifier hs-var">long</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;dir&quot;</span></span><span>
-</span><span id="line-146"></span><span>                          </span><span class="annot"><span class="annottext">Mod OptionFields TFilePath
+</span><span id="line-153"></span><span>                          </span><span class="annot"><span class="annottext">Mod OptionFields TFilePath
 -&gt; Mod OptionFields TFilePath -&gt; Mod OptionFields TFilePath
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">Char -&gt; Mod OptionFields TFilePath
 forall (f :: * -&gt; *) a. HasName f =&gt; Char -&gt; Mod f a
 </span><span class="hs-identifier hs-var">short</span></span><span> </span><span class="annot"><span class="annottext">Char
 </span><span class="hs-char">'d'</span></span><span>
-</span><span id="line-147"></span><span>                          </span><span class="annot"><span class="annottext">Mod OptionFields TFilePath
+</span><span id="line-154"></span><span>                          </span><span class="annot"><span class="annottext">Mod OptionFields TFilePath
 -&gt; Mod OptionFields TFilePath -&gt; Mod OptionFields TFilePath
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Mod OptionFields TFilePath
 forall (f :: * -&gt; *) a. HasMetavar f =&gt; String -&gt; Mod f a
 </span><span class="hs-identifier hs-var">metavar</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;&lt;directory&gt;&quot;</span></span><span>
-</span><span id="line-148"></span><span>                          </span><span class="annot"><span class="annottext">Mod OptionFields TFilePath
+</span><span id="line-155"></span><span>                          </span><span class="annot"><span class="annottext">Mod OptionFields TFilePath
 -&gt; Mod OptionFields TFilePath -&gt; Mod OptionFields TFilePath
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Mod OptionFields TFilePath
 forall (f :: * -&gt; *) a. String -&gt; Mod f a
 </span><span class="hs-identifier hs-var">help</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Search bookmarks by directory&quot;</span></span><span>
-</span><span id="line-149"></span><span>                        </span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-150"></span><span>                  </span><span class="hs-special">)</span><span>
-</span><span id="line-151"></span><span>
-</span><span id="line-152"></span><span class="hs-comment">-- | Parse options for the @hoyo clear@ command.</span><span>
-</span><span id="line-153"></span><span class="annot"><a href="HoYo.Internal.Parse.html#clearCommand"><span class="hs-identifier hs-type">clearCommand</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Parser</span></span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#Command"><span class="hs-identifier hs-type">Command</span></a></span><span>
-</span><span id="line-154"></span><span id="clearCommand"><span class="annot"><span class="annottext">clearCommand :: Parser Command
+</span><span id="line-156"></span><span>                        </span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-157"></span><span>                  </span><span class="hs-special">)</span><span>
+</span><span id="line-158"></span><span>
+</span><span id="line-159"></span><span class="hs-comment">-- | Parse options for the @hoyo clear@ command.</span><span>
+</span><span id="line-160"></span><span class="annot"><a href="HoYo.Internal.Parse.html#clearCommand"><span class="hs-identifier hs-type">clearCommand</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Parser</span></span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#Command"><span class="hs-identifier hs-type">Command</span></a></span><span>
+</span><span id="line-161"></span><span id="clearCommand"><span class="annot"><span class="annottext">clearCommand :: Parser Command
 </span><a href="HoYo.Internal.Parse.html#clearCommand"><span class="hs-identifier hs-var hs-var">clearCommand</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Command -&gt; Parser Command
 forall (f :: * -&gt; *) a. Applicative f =&gt; a -&gt; f a
 </span><span class="hs-identifier hs-var">pure</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ClearOptions -&gt; Command
 </span><a href="HoYo.Internal.Types.html#Clear"><span class="hs-identifier hs-var">Clear</span></a></span><span> </span><span class="annot"><span class="annottext">ClearOptions
 </span><a href="HoYo.Internal.Types.html#ClearOptions"><span class="hs-identifier hs-var">ClearOptions</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-155"></span><span>
-</span><span id="line-156"></span><span class="hs-comment">-- | Parse options for the @hoyo delete@ command.</span><span>
-</span><span id="line-157"></span><span class="annot"><a href="HoYo.Internal.Parse.html#deleteCommand"><span class="hs-identifier hs-type">deleteCommand</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Parser</span></span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#Command"><span class="hs-identifier hs-type">Command</span></a></span><span>
-</span><span id="line-158"></span><span id="deleteCommand"><span class="annot"><span class="annottext">deleteCommand :: Parser Command
+</span><span id="line-162"></span><span>
+</span><span id="line-163"></span><span class="hs-comment">-- | Parse options for the @hoyo delete@ command.</span><span>
+</span><span id="line-164"></span><span class="annot"><a href="HoYo.Internal.Parse.html#deleteCommand"><span class="hs-identifier hs-type">deleteCommand</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Parser</span></span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#Command"><span class="hs-identifier hs-type">Command</span></a></span><span>
+</span><span id="line-165"></span><span id="deleteCommand"><span class="annot"><span class="annottext">deleteCommand :: Parser Command
 </span><a href="HoYo.Internal.Parse.html#deleteCommand"><span class="hs-identifier hs-var hs-var">deleteCommand</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>  </span><span class="annot"><span class="annottext">DeleteOptions -&gt; Command
 </span><a href="HoYo.Internal.Types.html#Delete"><span class="hs-identifier hs-var">Delete</span></a></span><span> </span><span class="annot"><span class="annottext">(DeleteOptions -&gt; Command)
 -&gt; (BookmarkSearchTerm -&gt; DeleteOptions)
@@ -563,7 +605,7 @@ forall (f :: * -&gt; *) a. Applicative f =&gt; a -&gt; f a
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">BookmarkSearchTerm -&gt; DeleteOptions
 </span><a href="HoYo.Internal.Types.html#DeleteOptions"><span class="hs-identifier hs-var">DeleteOptions</span></a></span><span>
-</span><span id="line-159"></span><span>                    </span><span class="annot"><span class="annottext">(BookmarkSearchTerm -&gt; Command)
+</span><span id="line-166"></span><span>                    </span><span class="annot"><span class="annottext">(BookmarkSearchTerm -&gt; Command)
 -&gt; Parser BookmarkSearchTerm -&gt; Parser Command
 forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
 </span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="annottext">ReadM BookmarkSearchTerm
@@ -572,11 +614,11 @@ forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
 forall a. ReadM a -&gt; Mod ArgumentFields a -&gt; Parser a
 </span><span class="hs-identifier hs-var">argument</span></span><span> </span><span class="annot"><span class="annottext">ReadM BookmarkSearchTerm
 </span><a href="HoYo.Internal.Parse.html#bookmarkSearchTerm"><span class="hs-identifier hs-var">bookmarkSearchTerm</span></a></span><span> </span><span class="hs-special">(</span><span>
-</span><span id="line-160"></span><span>                          </span><span class="annot"><span class="annottext">String -&gt; Mod ArgumentFields BookmarkSearchTerm
+</span><span id="line-167"></span><span>                          </span><span class="annot"><span class="annottext">String -&gt; Mod ArgumentFields BookmarkSearchTerm
 forall (f :: * -&gt; *) a. HasMetavar f =&gt; String -&gt; Mod f a
 </span><span class="hs-identifier hs-var">metavar</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;&lt;bookmark&gt;&quot;</span></span><span>
-</span><span id="line-161"></span><span>                          </span><span class="annot"><span class="annottext">Mod ArgumentFields BookmarkSearchTerm
+</span><span id="line-168"></span><span>                          </span><span class="annot"><span class="annottext">Mod ArgumentFields BookmarkSearchTerm
 -&gt; Mod ArgumentFields BookmarkSearchTerm
 -&gt; Mod ArgumentFields BookmarkSearchTerm
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
@@ -584,7 +626,7 @@ forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 forall (f :: * -&gt; *) a. String -&gt; Mod f a
 </span><span class="hs-identifier hs-var">help</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Index or name of the bookmark to delete&quot;</span></span><span>
-</span><span id="line-162"></span><span>                          </span><span class="annot"><span class="annottext">Mod ArgumentFields BookmarkSearchTerm
+</span><span id="line-169"></span><span>                          </span><span class="annot"><span class="annottext">Mod ArgumentFields BookmarkSearchTerm
 -&gt; Mod ArgumentFields BookmarkSearchTerm
 -&gt; Mod ArgumentFields BookmarkSearchTerm
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
@@ -592,20 +634,20 @@ forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 forall (f :: * -&gt; *) a. HasCompleter f =&gt; Completer -&gt; Mod f a
 </span><span class="hs-identifier hs-var">completer</span></span><span> </span><span class="annot"><span class="annottext">Completer
 </span><a href="HoYo.CLI.Complete.html#bookmarkCompleter"><span class="hs-identifier hs-var">bookmarkCompleter</span></a></span><span>
-</span><span id="line-163"></span><span>                        </span><span class="hs-special">)</span><span>
-</span><span id="line-164"></span><span>
-</span><span id="line-165"></span><span class="hs-comment">-- | Parse options for the @hoyo refresh@ command.</span><span>
-</span><span id="line-166"></span><span class="annot"><a href="HoYo.Internal.Parse.html#refreshCommand"><span class="hs-identifier hs-type">refreshCommand</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Parser</span></span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#Command"><span class="hs-identifier hs-type">Command</span></a></span><span>
-</span><span id="line-167"></span><span id="refreshCommand"><span class="annot"><span class="annottext">refreshCommand :: Parser Command
+</span><span id="line-170"></span><span>                        </span><span class="hs-special">)</span><span>
+</span><span id="line-171"></span><span>
+</span><span id="line-172"></span><span class="hs-comment">-- | Parse options for the @hoyo refresh@ command.</span><span>
+</span><span id="line-173"></span><span class="annot"><a href="HoYo.Internal.Parse.html#refreshCommand"><span class="hs-identifier hs-type">refreshCommand</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Parser</span></span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#Command"><span class="hs-identifier hs-type">Command</span></a></span><span>
+</span><span id="line-174"></span><span id="refreshCommand"><span class="annot"><span class="annottext">refreshCommand :: Parser Command
 </span><a href="HoYo.Internal.Parse.html#refreshCommand"><span class="hs-identifier hs-var hs-var">refreshCommand</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Command -&gt; Parser Command
 forall (f :: * -&gt; *) a. Applicative f =&gt; a -&gt; f a
 </span><span class="hs-identifier hs-var">pure</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">RefreshOptions -&gt; Command
 </span><a href="HoYo.Internal.Types.html#Refresh"><span class="hs-identifier hs-var">Refresh</span></a></span><span> </span><span class="annot"><span class="annottext">RefreshOptions
 </span><a href="HoYo.Internal.Types.html#RefreshOptions"><span class="hs-identifier hs-var">RefreshOptions</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-168"></span><span>
-</span><span id="line-169"></span><span class="hs-comment">-- | Parse options for the @hoyo config@ command.</span><span>
-</span><span id="line-170"></span><span class="annot"><a href="HoYo.Internal.Parse.html#configCommand"><span class="hs-identifier hs-type">configCommand</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Parser</span></span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#Command"><span class="hs-identifier hs-type">Command</span></a></span><span>
-</span><span id="line-171"></span><span id="configCommand"><span class="annot"><span class="annottext">configCommand :: Parser Command
+</span><span id="line-175"></span><span>
+</span><span id="line-176"></span><span class="hs-comment">-- | Parse options for the @hoyo config@ command.</span><span>
+</span><span id="line-177"></span><span class="annot"><a href="HoYo.Internal.Parse.html#configCommand"><span class="hs-identifier hs-type">configCommand</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Parser</span></span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#Command"><span class="hs-identifier hs-type">Command</span></a></span><span>
+</span><span id="line-178"></span><span id="configCommand"><span class="annot"><span class="annottext">configCommand :: Parser Command
 </span><a href="HoYo.Internal.Parse.html#configCommand"><span class="hs-identifier hs-var hs-var">configCommand</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConfigCommand -&gt; Command
 </span><a href="HoYo.Internal.Types.html#ConfigCmd"><span class="hs-identifier hs-var">ConfigCmd</span></a></span><span> </span><span class="annot"><span class="annottext">(ConfigCommand -&gt; Command)
 -&gt; Parser ConfigCommand -&gt; Parser Command
@@ -613,7 +655,7 @@ forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
 </span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="annottext">Mod CommandFields ConfigCommand -&gt; Parser ConfigCommand
 forall a. Mod CommandFields a -&gt; Parser a
 </span><span class="hs-identifier hs-var">hsubparser</span></span><span> </span><span class="hs-special">(</span><span>
-</span><span id="line-172"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span id="line-179"></span><span>  </span><span class="annot"><span class="annottext">String
 -&gt; ParserInfo ConfigCommand -&gt; Mod CommandFields ConfigCommand
 forall a. String -&gt; ParserInfo a -&gt; Mod CommandFields a
 </span><span class="hs-identifier hs-var">command</span></span><span> </span><span class="annot"><span class="annottext">String
@@ -625,7 +667,7 @@ forall a. Parser a -&gt; InfoMod a -&gt; ParserInfo a
 forall a. String -&gt; InfoMod a
 </span><span class="hs-identifier hs-var">progDesc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Print hoyo config&quot;</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-173"></span><span>  </span><span class="annot"><span class="annottext">Mod CommandFields ConfigCommand
+</span><span id="line-180"></span><span>  </span><span class="annot"><span class="annottext">Mod CommandFields ConfigCommand
 -&gt; Mod CommandFields ConfigCommand
 -&gt; Mod CommandFields ConfigCommand
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
@@ -641,7 +683,7 @@ forall a. Parser a -&gt; InfoMod a -&gt; ParserInfo a
 forall a. String -&gt; InfoMod a
 </span><span class="hs-identifier hs-var">progDesc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Reset hoyo config&quot;</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-174"></span><span>  </span><span class="annot"><span class="annottext">Mod CommandFields ConfigCommand
+</span><span id="line-181"></span><span>  </span><span class="annot"><span class="annottext">Mod CommandFields ConfigCommand
 -&gt; Mod CommandFields ConfigCommand
 -&gt; Mod CommandFields ConfigCommand
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
@@ -657,7 +699,7 @@ forall a. Parser a -&gt; InfoMod a -&gt; ParserInfo a
 forall a. String -&gt; InfoMod a
 </span><span class="hs-identifier hs-var">progDesc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Modify hoyo config&quot;</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-175"></span><span>  </span><span class="annot"><span class="annottext">Mod CommandFields ConfigCommand
+</span><span id="line-182"></span><span>  </span><span class="annot"><span class="annottext">Mod CommandFields ConfigCommand
 -&gt; Mod CommandFields ConfigCommand
 -&gt; Mod CommandFields ConfigCommand
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
@@ -673,125 +715,125 @@ forall a. Parser a -&gt; InfoMod a -&gt; ParserInfo a
 forall a. String -&gt; InfoMod a
 </span><span class="hs-identifier hs-var">progDesc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Add a default bookmark&quot;</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-176"></span><span>  </span><span class="hs-special">)</span><span>
-</span><span id="line-177"></span><span>
-</span><span id="line-178"></span><span class="hs-comment">-- | Parse options for the @hoyo config print@ sub-command.</span><span>
-</span><span id="line-179"></span><span class="annot"><a href="HoYo.Internal.Parse.html#configPrintCommand"><span class="hs-identifier hs-type">configPrintCommand</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Parser</span></span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#ConfigCommand"><span class="hs-identifier hs-type">ConfigCommand</span></a></span><span>
-</span><span id="line-180"></span><span id="configPrintCommand"><span class="annot"><span class="annottext">configPrintCommand :: Parser ConfigCommand
+</span><span id="line-183"></span><span>  </span><span class="hs-special">)</span><span>
+</span><span id="line-184"></span><span>
+</span><span id="line-185"></span><span class="hs-comment">-- | Parse options for the @hoyo config print@ sub-command.</span><span>
+</span><span id="line-186"></span><span class="annot"><a href="HoYo.Internal.Parse.html#configPrintCommand"><span class="hs-identifier hs-type">configPrintCommand</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Parser</span></span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#ConfigCommand"><span class="hs-identifier hs-type">ConfigCommand</span></a></span><span>
+</span><span id="line-187"></span><span id="configPrintCommand"><span class="annot"><span class="annottext">configPrintCommand :: Parser ConfigCommand
 </span><a href="HoYo.Internal.Parse.html#configPrintCommand"><span class="hs-identifier hs-var hs-var">configPrintCommand</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConfigCommand -&gt; Parser ConfigCommand
 forall (f :: * -&gt; *) a. Applicative f =&gt; a -&gt; f a
 </span><span class="hs-identifier hs-var">pure</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConfigPrintOptions -&gt; ConfigCommand
 </span><a href="HoYo.Internal.Types.html#Print"><span class="hs-identifier hs-var">Print</span></a></span><span> </span><span class="annot"><span class="annottext">ConfigPrintOptions
 </span><a href="HoYo.Internal.Types.html#ConfigPrintOptions"><span class="hs-identifier hs-var">ConfigPrintOptions</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-181"></span><span>
-</span><span id="line-182"></span><span class="hs-comment">-- | Parse options for the @hoyo config reset@ sub-command.</span><span>
-</span><span id="line-183"></span><span class="annot"><a href="HoYo.Internal.Parse.html#configResetCommand"><span class="hs-identifier hs-type">configResetCommand</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Parser</span></span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#ConfigCommand"><span class="hs-identifier hs-type">ConfigCommand</span></a></span><span>
-</span><span id="line-184"></span><span id="configResetCommand"><span class="annot"><span class="annottext">configResetCommand :: Parser ConfigCommand
+</span><span id="line-188"></span><span>
+</span><span id="line-189"></span><span class="hs-comment">-- | Parse options for the @hoyo config reset@ sub-command.</span><span>
+</span><span id="line-190"></span><span class="annot"><a href="HoYo.Internal.Parse.html#configResetCommand"><span class="hs-identifier hs-type">configResetCommand</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Parser</span></span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#ConfigCommand"><span class="hs-identifier hs-type">ConfigCommand</span></a></span><span>
+</span><span id="line-191"></span><span id="configResetCommand"><span class="annot"><span class="annottext">configResetCommand :: Parser ConfigCommand
 </span><a href="HoYo.Internal.Parse.html#configResetCommand"><span class="hs-identifier hs-var hs-var">configResetCommand</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConfigCommand -&gt; Parser ConfigCommand
 forall (f :: * -&gt; *) a. Applicative f =&gt; a -&gt; f a
 </span><span class="hs-identifier hs-var">pure</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConfigResetOptions -&gt; ConfigCommand
 </span><a href="HoYo.Internal.Types.html#Reset"><span class="hs-identifier hs-var">Reset</span></a></span><span> </span><span class="annot"><span class="annottext">ConfigResetOptions
 </span><a href="HoYo.Internal.Types.html#ConfigResetOptions"><span class="hs-identifier hs-var">ConfigResetOptions</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-185"></span><span>
-</span><span id="line-186"></span><span class="hs-comment">-- | Parse options for the @hoyo config set@ sub-command.</span><span>
-</span><span id="line-187"></span><span class="annot"><a href="HoYo.Internal.Parse.html#configSetCommand"><span class="hs-identifier hs-type">configSetCommand</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Parser</span></span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#ConfigCommand"><span class="hs-identifier hs-type">ConfigCommand</span></a></span><span>
-</span><span id="line-188"></span><span id="configSetCommand"><span class="annot"><span class="annottext">configSetCommand :: Parser ConfigCommand
+</span><span id="line-192"></span><span>
+</span><span id="line-193"></span><span class="hs-comment">-- | Parse options for the @hoyo config set@ sub-command.</span><span>
+</span><span id="line-194"></span><span class="annot"><a href="HoYo.Internal.Parse.html#configSetCommand"><span class="hs-identifier hs-type">configSetCommand</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Parser</span></span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#ConfigCommand"><span class="hs-identifier hs-type">ConfigCommand</span></a></span><span>
+</span><span id="line-195"></span><span id="configSetCommand"><span class="annot"><span class="annottext">configSetCommand :: Parser ConfigCommand
 </span><a href="HoYo.Internal.Parse.html#configSetCommand"><span class="hs-identifier hs-var hs-var">configSetCommand</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConfigSetOptions -&gt; ConfigCommand
 </span><a href="HoYo.Internal.Types.html#Set"><span class="hs-identifier hs-var">Set</span></a></span><span> </span><span class="annot"><span class="annottext">(ConfigSetOptions -&gt; ConfigCommand)
 -&gt; Parser ConfigSetOptions -&gt; Parser ConfigCommand
 forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
 </span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="hs-special">(</span><span>
-</span><span id="line-189"></span><span>                    </span><span class="annot"><span class="annottext">TFilePath -&gt; TFilePath -&gt; ConfigSetOptions
+</span><span id="line-196"></span><span>                    </span><span class="annot"><span class="annottext">TFilePath -&gt; TFilePath -&gt; ConfigSetOptions
 </span><a href="HoYo.Internal.Types.html#ConfigSetOptions"><span class="hs-identifier hs-var">ConfigSetOptions</span></a></span><span>
-</span><span id="line-190"></span><span>                      </span><span class="annot"><span class="annottext">(TFilePath -&gt; TFilePath -&gt; ConfigSetOptions)
+</span><span id="line-197"></span><span>                      </span><span class="annot"><span class="annottext">(TFilePath -&gt; TFilePath -&gt; ConfigSetOptions)
 -&gt; Parser TFilePath -&gt; Parser (TFilePath -&gt; ConfigSetOptions)
 forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
 </span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="annottext">Mod ArgumentFields TFilePath -&gt; Parser TFilePath
 forall s. IsString s =&gt; Mod ArgumentFields s -&gt; Parser s
 </span><span class="hs-identifier hs-var">strArgument</span></span><span> </span><span class="hs-special">(</span><span>
-</span><span id="line-191"></span><span>                            </span><span class="annot"><span class="annottext">String -&gt; Mod ArgumentFields TFilePath
+</span><span id="line-198"></span><span>                            </span><span class="annot"><span class="annottext">String -&gt; Mod ArgumentFields TFilePath
 forall (f :: * -&gt; *) a. HasMetavar f =&gt; String -&gt; Mod f a
 </span><span class="hs-identifier hs-var">metavar</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;&lt;key&gt;&quot;</span></span><span>
-</span><span id="line-192"></span><span>                            </span><span class="annot"><span class="annottext">Mod ArgumentFields TFilePath
+</span><span id="line-199"></span><span>                            </span><span class="annot"><span class="annottext">Mod ArgumentFields TFilePath
 -&gt; Mod ArgumentFields TFilePath -&gt; Mod ArgumentFields TFilePath
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Mod ArgumentFields TFilePath
 forall (f :: * -&gt; *) a. String -&gt; Mod f a
 </span><span class="hs-identifier hs-var">help</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Option to modify&quot;</span></span><span>
-</span><span id="line-193"></span><span>                            </span><span class="annot"><span class="annottext">Mod ArgumentFields TFilePath
+</span><span id="line-200"></span><span>                            </span><span class="annot"><span class="annottext">Mod ArgumentFields TFilePath
 -&gt; Mod ArgumentFields TFilePath -&gt; Mod ArgumentFields TFilePath
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">Completer -&gt; Mod ArgumentFields TFilePath
 forall (f :: * -&gt; *) a. HasCompleter f =&gt; Completer -&gt; Mod f a
 </span><span class="hs-identifier hs-var">completer</span></span><span> </span><span class="annot"><span class="annottext">Completer
 </span><a href="HoYo.CLI.Complete.html#configKeyCompleter"><span class="hs-identifier hs-var">configKeyCompleter</span></a></span><span>
-</span><span id="line-194"></span><span>                          </span><span class="hs-special">)</span><span>
-</span><span id="line-195"></span><span>                      </span><span class="annot"><span class="annottext">Parser (TFilePath -&gt; ConfigSetOptions)
+</span><span id="line-201"></span><span>                          </span><span class="hs-special">)</span><span>
+</span><span id="line-202"></span><span>                      </span><span class="annot"><span class="annottext">Parser (TFilePath -&gt; ConfigSetOptions)
 -&gt; Parser TFilePath -&gt; Parser ConfigSetOptions
 forall (f :: * -&gt; *) a b. Applicative f =&gt; f (a -&gt; b) -&gt; f a -&gt; f b
 </span><span class="hs-operator hs-var">&lt;*&gt;</span></span><span> </span><span class="annot"><span class="annottext">Mod ArgumentFields TFilePath -&gt; Parser TFilePath
 forall s. IsString s =&gt; Mod ArgumentFields s -&gt; Parser s
 </span><span class="hs-identifier hs-var">strArgument</span></span><span> </span><span class="hs-special">(</span><span>
-</span><span id="line-196"></span><span>                            </span><span class="annot"><span class="annottext">String -&gt; Mod ArgumentFields TFilePath
+</span><span id="line-203"></span><span>                            </span><span class="annot"><span class="annottext">String -&gt; Mod ArgumentFields TFilePath
 forall (f :: * -&gt; *) a. HasMetavar f =&gt; String -&gt; Mod f a
 </span><span class="hs-identifier hs-var">metavar</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;&lt;value&gt;&quot;</span></span><span>
-</span><span id="line-197"></span><span>                            </span><span class="annot"><span class="annottext">Mod ArgumentFields TFilePath
+</span><span id="line-204"></span><span>                            </span><span class="annot"><span class="annottext">Mod ArgumentFields TFilePath
 -&gt; Mod ArgumentFields TFilePath -&gt; Mod ArgumentFields TFilePath
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Mod ArgumentFields TFilePath
 forall (f :: * -&gt; *) a. String -&gt; Mod f a
 </span><span class="hs-identifier hs-var">help</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Option value&quot;</span></span><span>
-</span><span id="line-198"></span><span>                            </span><span class="annot"><span class="annottext">Mod ArgumentFields TFilePath
+</span><span id="line-205"></span><span>                            </span><span class="annot"><span class="annottext">Mod ArgumentFields TFilePath
 -&gt; Mod ArgumentFields TFilePath -&gt; Mod ArgumentFields TFilePath
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">Completer -&gt; Mod ArgumentFields TFilePath
 forall (f :: * -&gt; *) a. HasCompleter f =&gt; Completer -&gt; Mod f a
 </span><span class="hs-identifier hs-var">completer</span></span><span> </span><span class="annot"><span class="annottext">Completer
 </span><a href="HoYo.CLI.Complete.html#configValueCompleter"><span class="hs-identifier hs-var">configValueCompleter</span></a></span><span>
-</span><span id="line-199"></span><span>                          </span><span class="hs-special">)</span><span>
-</span><span id="line-200"></span><span>                    </span><span class="hs-special">)</span><span>
-</span><span id="line-201"></span><span>
-</span><span id="line-202"></span><span class="hs-comment">-- | Parse options for the @hoyo config add-default@ sub-command.</span><span>
-</span><span id="line-203"></span><span class="annot"><a href="HoYo.Internal.Parse.html#configAddDefaultCommand"><span class="hs-identifier hs-type">configAddDefaultCommand</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Parser</span></span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#ConfigCommand"><span class="hs-identifier hs-type">ConfigCommand</span></a></span><span>
-</span><span id="line-204"></span><span id="configAddDefaultCommand"><span class="annot"><span class="annottext">configAddDefaultCommand :: Parser ConfigCommand
+</span><span id="line-206"></span><span>                          </span><span class="hs-special">)</span><span>
+</span><span id="line-207"></span><span>                    </span><span class="hs-special">)</span><span>
+</span><span id="line-208"></span><span>
+</span><span id="line-209"></span><span class="hs-comment">-- | Parse options for the @hoyo config add-default@ sub-command.</span><span>
+</span><span id="line-210"></span><span class="annot"><a href="HoYo.Internal.Parse.html#configAddDefaultCommand"><span class="hs-identifier hs-type">configAddDefaultCommand</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Parser</span></span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#ConfigCommand"><span class="hs-identifier hs-type">ConfigCommand</span></a></span><span>
+</span><span id="line-211"></span><span id="configAddDefaultCommand"><span class="annot"><span class="annottext">configAddDefaultCommand :: Parser ConfigCommand
 </span><a href="HoYo.Internal.Parse.html#configAddDefaultCommand"><span class="hs-identifier hs-var hs-var">configAddDefaultCommand</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConfigAddDefaultOptions -&gt; ConfigCommand
 </span><a href="HoYo.Internal.Types.html#AddDefaultBookmark"><span class="hs-identifier hs-var">AddDefaultBookmark</span></a></span><span> </span><span class="annot"><span class="annottext">(ConfigAddDefaultOptions -&gt; ConfigCommand)
 -&gt; Parser ConfigAddDefaultOptions -&gt; Parser ConfigCommand
 forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
 </span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="hs-special">(</span><span>
-</span><span id="line-205"></span><span>                            </span><span class="annot"><span class="annottext">TFilePath -&gt; Maybe TFilePath -&gt; ConfigAddDefaultOptions
+</span><span id="line-212"></span><span>                            </span><span class="annot"><span class="annottext">TFilePath -&gt; Maybe TFilePath -&gt; ConfigAddDefaultOptions
 </span><a href="HoYo.Internal.Types.html#ConfigAddDefaultOptions"><span class="hs-identifier hs-var">ConfigAddDefaultOptions</span></a></span><span>
-</span><span id="line-206"></span><span>                              </span><span class="annot"><span class="annottext">(TFilePath -&gt; Maybe TFilePath -&gt; ConfigAddDefaultOptions)
+</span><span id="line-213"></span><span>                              </span><span class="annot"><span class="annottext">(TFilePath -&gt; Maybe TFilePath -&gt; ConfigAddDefaultOptions)
 -&gt; Parser TFilePath
 -&gt; Parser (Maybe TFilePath -&gt; ConfigAddDefaultOptions)
 forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
 </span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="annottext">Mod ArgumentFields TFilePath -&gt; Parser TFilePath
 forall s. IsString s =&gt; Mod ArgumentFields s -&gt; Parser s
 </span><span class="hs-identifier hs-var">strArgument</span></span><span> </span><span class="hs-special">(</span><span>
-</span><span id="line-207"></span><span>                                    </span><span class="annot"><span class="annottext">String -&gt; Mod ArgumentFields TFilePath
+</span><span id="line-214"></span><span>                                    </span><span class="annot"><span class="annottext">String -&gt; Mod ArgumentFields TFilePath
 forall (f :: * -&gt; *) a. HasMetavar f =&gt; String -&gt; Mod f a
 </span><span class="hs-identifier hs-var">metavar</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;&lt;dir&gt;&quot;</span></span><span>
-</span><span id="line-208"></span><span>                                    </span><span class="annot"><span class="annottext">Mod ArgumentFields TFilePath
+</span><span id="line-215"></span><span>                                    </span><span class="annot"><span class="annottext">Mod ArgumentFields TFilePath
 -&gt; Mod ArgumentFields TFilePath -&gt; Mod ArgumentFields TFilePath
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Mod ArgumentFields TFilePath
 forall (f :: * -&gt; *) a. String -&gt; Mod f a
 </span><span class="hs-identifier hs-var">help</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Directory to bookmark&quot;</span></span><span>
-</span><span id="line-209"></span><span>                                    </span><span class="annot"><span class="annottext">Mod ArgumentFields TFilePath
+</span><span id="line-216"></span><span>                                    </span><span class="annot"><span class="annottext">Mod ArgumentFields TFilePath
 -&gt; Mod ArgumentFields TFilePath -&gt; Mod ArgumentFields TFilePath
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Mod ArgumentFields TFilePath
 forall (f :: * -&gt; *) a. HasCompleter f =&gt; String -&gt; Mod f a
 </span><span class="hs-identifier hs-var">action</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;directory&quot;</span></span><span>
-</span><span id="line-210"></span><span>                                  </span><span class="hs-special">)</span><span>
-</span><span id="line-211"></span><span>                              </span><span class="annot"><span class="annottext">Parser (Maybe TFilePath -&gt; ConfigAddDefaultOptions)
+</span><span id="line-217"></span><span>                                  </span><span class="hs-special">)</span><span>
+</span><span id="line-218"></span><span>                              </span><span class="annot"><span class="annottext">Parser (Maybe TFilePath -&gt; ConfigAddDefaultOptions)
 -&gt; Parser (Maybe TFilePath) -&gt; Parser ConfigAddDefaultOptions
 forall (f :: * -&gt; *) a b. Applicative f =&gt; f (a -&gt; b) -&gt; f a -&gt; f b
 </span><span class="hs-operator hs-var">&lt;*&gt;</span></span><span> </span><span class="annot"><span class="annottext">Parser TFilePath -&gt; Parser (Maybe TFilePath)
@@ -799,36 +841,36 @@ forall (f :: * -&gt; *) a. Alternative f =&gt; f a -&gt; f (Maybe a)
 </span><span class="hs-identifier hs-var">optional</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Mod ArgumentFields TFilePath -&gt; Parser TFilePath
 forall s. IsString s =&gt; Mod ArgumentFields s -&gt; Parser s
 </span><span class="hs-identifier hs-var">strArgument</span></span><span> </span><span class="hs-special">(</span><span>
-</span><span id="line-212"></span><span>                                    </span><span class="annot"><span class="annottext">String -&gt; Mod ArgumentFields TFilePath
+</span><span id="line-219"></span><span>                                    </span><span class="annot"><span class="annottext">String -&gt; Mod ArgumentFields TFilePath
 forall (f :: * -&gt; *) a. HasMetavar f =&gt; String -&gt; Mod f a
 </span><span class="hs-identifier hs-var">metavar</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;&lt;name&gt;&quot;</span></span><span>
-</span><span id="line-213"></span><span>                                    </span><span class="annot"><span class="annottext">Mod ArgumentFields TFilePath
+</span><span id="line-220"></span><span>                                    </span><span class="annot"><span class="annottext">Mod ArgumentFields TFilePath
 -&gt; Mod ArgumentFields TFilePath -&gt; Mod ArgumentFields TFilePath
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Mod ArgumentFields TFilePath
 forall (f :: * -&gt; *) a. String -&gt; Mod f a
 </span><span class="hs-identifier hs-var">help</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Optionally give a name to your bookmark&quot;</span></span><span>
-</span><span id="line-214"></span><span>                                  </span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-215"></span><span>                          </span><span class="hs-special">)</span><span>
-</span><span id="line-216"></span><span>
-</span><span id="line-217"></span><span class="hs-comment">-- | `hoyo check` should be considered equivalent to `hoyo check --config --bookmarks`</span><span>
-</span><span id="line-218"></span><span class="annot"><a href="HoYo.Internal.Parse.html#noArgs"><span class="hs-identifier hs-type">noArgs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#CheckOptions"><span class="hs-identifier hs-type">CheckOptions</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#CheckOptions"><span class="hs-identifier hs-type">CheckOptions</span></a></span><span>
-</span><span id="line-219"></span><span id="noArgs"><span class="annot"><span class="annottext">noArgs :: CheckOptions -&gt; CheckOptions
+</span><span id="line-221"></span><span>                                  </span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-222"></span><span>                          </span><span class="hs-special">)</span><span>
+</span><span id="line-223"></span><span>
+</span><span id="line-224"></span><span class="hs-comment">-- | `hoyo check` should be considered equivalent to `hoyo check --config --bookmarks`</span><span>
+</span><span id="line-225"></span><span class="annot"><a href="HoYo.Internal.Parse.html#noArgs"><span class="hs-identifier hs-type">noArgs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#CheckOptions"><span class="hs-identifier hs-type">CheckOptions</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#CheckOptions"><span class="hs-identifier hs-type">CheckOptions</span></a></span><span>
+</span><span id="line-226"></span><span id="noArgs"><span class="annot"><span class="annottext">noArgs :: CheckOptions -&gt; CheckOptions
 </span><a href="HoYo.Internal.Parse.html#noArgs"><span class="hs-identifier hs-var hs-var">noArgs</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="HoYo.Internal.Types.html#CheckOptions"><span class="hs-identifier hs-type">CheckOptions</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">False</span></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">False</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; CheckOptions
 </span><a href="HoYo.Internal.Types.html#CheckOptions"><span class="hs-identifier hs-var">CheckOptions</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">True</span></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">True</span></span><span>
-</span><span id="line-220"></span><span class="annot"><a href="HoYo.Internal.Parse.html#noArgs"><span class="hs-identifier hs-var">noArgs</span></a></span><span> </span><span id="local-6989586621679109009"><span class="annot"><span class="annottext">CheckOptions
-</span><a href="#local-6989586621679109009"><span class="hs-identifier hs-var">opts</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CheckOptions
-</span><a href="#local-6989586621679109009"><span class="hs-identifier hs-var">opts</span></a></span><span>
-</span><span id="line-221"></span><span>
-</span><span id="line-222"></span><span class="hs-comment">-- | Parse options for the @hoyo check@ command.</span><span>
-</span><span id="line-223"></span><span class="annot"><a href="HoYo.Internal.Parse.html#checkCommand"><span class="hs-identifier hs-type">checkCommand</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Parser</span></span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#Command"><span class="hs-identifier hs-type">Command</span></a></span><span>
-</span><span id="line-224"></span><span id="checkCommand"><span class="annot"><span class="annottext">checkCommand :: Parser Command
+</span><span id="line-227"></span><span class="annot"><a href="HoYo.Internal.Parse.html#noArgs"><span class="hs-identifier hs-var">noArgs</span></a></span><span> </span><span id="local-6989586621679110245"><span class="annot"><span class="annottext">CheckOptions
+</span><a href="#local-6989586621679110245"><span class="hs-identifier hs-var">opts</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CheckOptions
+</span><a href="#local-6989586621679110245"><span class="hs-identifier hs-var">opts</span></a></span><span>
+</span><span id="line-228"></span><span>
+</span><span id="line-229"></span><span class="hs-comment">-- | Parse options for the @hoyo check@ command.</span><span>
+</span><span id="line-230"></span><span class="annot"><a href="HoYo.Internal.Parse.html#checkCommand"><span class="hs-identifier hs-type">checkCommand</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Parser</span></span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#Command"><span class="hs-identifier hs-type">Command</span></a></span><span>
+</span><span id="line-231"></span><span id="checkCommand"><span class="annot"><span class="annottext">checkCommand :: Parser Command
 </span><a href="HoYo.Internal.Parse.html#checkCommand"><span class="hs-identifier hs-var hs-var">checkCommand</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CheckOptions -&gt; Command
 </span><a href="HoYo.Internal.Types.html#Check"><span class="hs-identifier hs-var">Check</span></a></span><span> </span><span class="annot"><span class="annottext">(CheckOptions -&gt; Command)
 -&gt; (CheckOptions -&gt; CheckOptions) -&gt; CheckOptions -&gt; Command
@@ -837,9 +879,9 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><a href="HoYo.Internal.Parse.html#noArgs"><span class="hs-identifier hs-var">noArgs</span></a></span><span> </span><span class="annot"><span class="annottext">(CheckOptions -&gt; Command) -&gt; Parser CheckOptions -&gt; Parser Command
 forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
 </span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="hs-special">(</span><span>
-</span><span id="line-225"></span><span>                </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; CheckOptions
+</span><span id="line-232"></span><span>                </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; CheckOptions
 </span><a href="HoYo.Internal.Types.html#CheckOptions"><span class="hs-identifier hs-var">CheckOptions</span></a></span><span>
-</span><span id="line-226"></span><span>                  </span><span class="annot"><span class="annottext">(Bool -&gt; Bool -&gt; CheckOptions)
+</span><span id="line-233"></span><span>                  </span><span class="annot"><span class="annottext">(Bool -&gt; Bool -&gt; CheckOptions)
 -&gt; Parser Bool -&gt; Parser (Bool -&gt; CheckOptions)
 forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
 </span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="annottext">Mod FlagFields Bool -&gt; Parser Bool
@@ -857,7 +899,7 @@ forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 forall (f :: * -&gt; *) a. String -&gt; Mod f a
 </span><span class="hs-identifier hs-var">help</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Check the config file&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-227"></span><span>                  </span><span class="annot"><span class="annottext">Parser (Bool -&gt; CheckOptions) -&gt; Parser Bool -&gt; Parser CheckOptions
+</span><span id="line-234"></span><span>                  </span><span class="annot"><span class="annottext">Parser (Bool -&gt; CheckOptions) -&gt; Parser Bool -&gt; Parser CheckOptions
 forall (f :: * -&gt; *) a b. Applicative f =&gt; f (a -&gt; b) -&gt; f a -&gt; f b
 </span><span class="hs-operator hs-var">&lt;*&gt;</span></span><span> </span><span class="annot"><span class="annottext">Mod FlagFields Bool -&gt; Parser Bool
 </span><span class="hs-identifier hs-var">switch</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Mod FlagFields Bool
@@ -874,20 +916,20 @@ forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 forall (f :: * -&gt; *) a. String -&gt; Mod f a
 </span><span class="hs-identifier hs-var">help</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Check the bookmarks file&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-228"></span><span>                </span><span class="hs-special">)</span><span>
-</span><span id="line-229"></span><span>
-</span><span id="line-230"></span><span class="hs-comment">-- | If hoyo is run with no arguments, we run the &quot;default command&quot; if it's set.</span><span>
-</span><span id="line-231"></span><span class="annot"><a href="HoYo.Internal.Parse.html#defaultCommand"><span class="hs-identifier hs-type">defaultCommand</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Parser</span></span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#Command"><span class="hs-identifier hs-type">Command</span></a></span><span>
-</span><span id="line-232"></span><span id="defaultCommand"><span class="annot"><span class="annottext">defaultCommand :: Parser Command
+</span><span id="line-235"></span><span>                </span><span class="hs-special">)</span><span>
+</span><span id="line-236"></span><span>
+</span><span id="line-237"></span><span class="hs-comment">-- | If hoyo is run with no arguments, we run the &quot;default command&quot; if it's set.</span><span>
+</span><span id="line-238"></span><span class="annot"><a href="HoYo.Internal.Parse.html#defaultCommand"><span class="hs-identifier hs-type">defaultCommand</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Parser</span></span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#Command"><span class="hs-identifier hs-type">Command</span></a></span><span>
+</span><span id="line-239"></span><span id="defaultCommand"><span class="annot"><span class="annottext">defaultCommand :: Parser Command
 </span><a href="HoYo.Internal.Parse.html#defaultCommand"><span class="hs-identifier hs-var hs-var">defaultCommand</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Command -&gt; Parser Command
 forall (f :: * -&gt; *) a. Applicative f =&gt; a -&gt; f a
 </span><span class="hs-identifier hs-var">pure</span></span><span> </span><span class="annot"><span class="annottext">Command
 </span><a href="HoYo.Internal.Types.html#DefaultCommand"><span class="hs-identifier hs-var">DefaultCommand</span></a></span><span>
-</span><span id="line-233"></span><span>
-</span><span id="line-234"></span><span class="hs-comment">-- | Parse a command and the arguments/options for that</span><span>
-</span><span id="line-235"></span><span class="hs-comment">-- command from the command-line arguments.</span><span>
-</span><span id="line-236"></span><span class="annot"><a href="HoYo.Internal.Parse.html#parseCommand"><span class="hs-identifier hs-type">parseCommand</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Parser</span></span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#Command"><span class="hs-identifier hs-type">Command</span></a></span><span>
-</span><span id="line-237"></span><span id="parseCommand"><span class="annot"><span class="annottext">parseCommand :: Parser Command
+</span><span id="line-240"></span><span>
+</span><span id="line-241"></span><span class="hs-comment">-- | Parse a command and the arguments/options for that</span><span>
+</span><span id="line-242"></span><span class="hs-comment">-- command from the command-line arguments.</span><span>
+</span><span id="line-243"></span><span class="annot"><a href="HoYo.Internal.Parse.html#parseCommand"><span class="hs-identifier hs-type">parseCommand</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Parser</span></span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#Command"><span class="hs-identifier hs-type">Command</span></a></span><span>
+</span><span id="line-244"></span><span id="parseCommand"><span class="annot"><span class="annottext">parseCommand :: Parser Command
 </span><a href="HoYo.Internal.Parse.html#parseCommand"><span class="hs-identifier hs-var hs-var">parseCommand</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Parser (Command -&gt; Command)
 forall a. Parser (a -&gt; a)
 </span><a href="HoYo.Internal.Parse.html#versionOption"><span class="hs-identifier hs-var">versionOption</span></a></span><span> </span><span class="annot"><span class="annottext">Parser (Command -&gt; Command) -&gt; Parser Command -&gt; Parser Command
@@ -895,7 +937,7 @@ forall (f :: * -&gt; *) a b. Applicative f =&gt; f (a -&gt; b) -&gt; f a -&gt; f
 </span><span class="hs-operator hs-var">&lt;*&gt;</span></span><span> </span><span class="annot"><span class="annottext">Mod CommandFields Command -&gt; Parser Command
 forall a. Mod CommandFields a -&gt; Parser a
 </span><span class="hs-identifier hs-var">hsubparser</span></span><span> </span><span class="hs-special">(</span><span>
-</span><span id="line-238"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; ParserInfo Command -&gt; Mod CommandFields Command
+</span><span id="line-245"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; ParserInfo Command -&gt; Mod CommandFields Command
 forall a. String -&gt; ParserInfo a -&gt; Mod CommandFields a
 </span><span class="hs-identifier hs-var">command</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;add&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Parser Command -&gt; InfoMod Command -&gt; ParserInfo Command
@@ -905,7 +947,7 @@ forall a. Parser a -&gt; InfoMod a -&gt; ParserInfo a
 forall a. String -&gt; InfoMod a
 </span><span class="hs-identifier hs-var">progDesc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Add a bookmark&quot;</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-239"></span><span>  </span><span class="annot"><span class="annottext">Mod CommandFields Command
+</span><span id="line-246"></span><span>  </span><span class="annot"><span class="annottext">Mod CommandFields Command
 -&gt; Mod CommandFields Command -&gt; Mod CommandFields Command
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; ParserInfo Command -&gt; Mod CommandFields Command
@@ -918,7 +960,7 @@ forall a. Parser a -&gt; InfoMod a -&gt; ParserInfo a
 forall a. String -&gt; InfoMod a
 </span><span class="hs-identifier hs-var">progDesc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Change directory using a bookmark&quot;</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-240"></span><span>  </span><span class="annot"><span class="annottext">Mod CommandFields Command
+</span><span id="line-247"></span><span>  </span><span class="annot"><span class="annottext">Mod CommandFields Command
 -&gt; Mod CommandFields Command -&gt; Mod CommandFields Command
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; ParserInfo Command -&gt; Mod CommandFields Command
@@ -931,7 +973,7 @@ forall a. Parser a -&gt; InfoMod a -&gt; ParserInfo a
 forall a. String -&gt; InfoMod a
 </span><span class="hs-identifier hs-var">progDesc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;List existing bookmarks&quot;</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-241"></span><span>  </span><span class="annot"><span class="annottext">Mod CommandFields Command
+</span><span id="line-248"></span><span>  </span><span class="annot"><span class="annottext">Mod CommandFields Command
 -&gt; Mod CommandFields Command -&gt; Mod CommandFields Command
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; ParserInfo Command -&gt; Mod CommandFields Command
@@ -944,7 +986,7 @@ forall a. Parser a -&gt; InfoMod a -&gt; ParserInfo a
 forall a. String -&gt; InfoMod a
 </span><span class="hs-identifier hs-var">progDesc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Clear all bookmarks&quot;</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-242"></span><span>  </span><span class="annot"><span class="annottext">Mod CommandFields Command
+</span><span id="line-249"></span><span>  </span><span class="annot"><span class="annottext">Mod CommandFields Command
 -&gt; Mod CommandFields Command -&gt; Mod CommandFields Command
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; ParserInfo Command -&gt; Mod CommandFields Command
@@ -957,7 +999,7 @@ forall a. Parser a -&gt; InfoMod a -&gt; ParserInfo a
 forall a. String -&gt; InfoMod a
 </span><span class="hs-identifier hs-var">progDesc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Delete a bookmark&quot;</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-243"></span><span>  </span><span class="annot"><span class="annottext">Mod CommandFields Command
+</span><span id="line-250"></span><span>  </span><span class="annot"><span class="annottext">Mod CommandFields Command
 -&gt; Mod CommandFields Command -&gt; Mod CommandFields Command
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; ParserInfo Command -&gt; Mod CommandFields Command
@@ -970,7 +1012,7 @@ forall a. Parser a -&gt; InfoMod a -&gt; ParserInfo a
 forall a. String -&gt; InfoMod a
 </span><span class="hs-identifier hs-var">progDesc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Re-calculate bookmark indices&quot;</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-244"></span><span>  </span><span class="annot"><span class="annottext">Mod CommandFields Command
+</span><span id="line-251"></span><span>  </span><span class="annot"><span class="annottext">Mod CommandFields Command
 -&gt; Mod CommandFields Command -&gt; Mod CommandFields Command
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; ParserInfo Command -&gt; Mod CommandFields Command
@@ -983,7 +1025,7 @@ forall a. Parser a -&gt; InfoMod a -&gt; ParserInfo a
 forall a. String -&gt; InfoMod a
 </span><span class="hs-identifier hs-var">progDesc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;View/manage hoyo config&quot;</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-245"></span><span>  </span><span class="annot"><span class="annottext">Mod CommandFields Command
+</span><span id="line-252"></span><span>  </span><span class="annot"><span class="annottext">Mod CommandFields Command
 -&gt; Mod CommandFields Command -&gt; Mod CommandFields Command
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; ParserInfo Command -&gt; Mod CommandFields Command
@@ -996,19 +1038,19 @@ forall a. Parser a -&gt; InfoMod a -&gt; ParserInfo a
 forall a. String -&gt; InfoMod a
 </span><span class="hs-identifier hs-var">progDesc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Verify validity of config and bookmarks&quot;</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-246"></span><span>  </span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Parser Command -&gt; Parser Command -&gt; Parser Command
+</span><span id="line-253"></span><span>  </span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Parser Command -&gt; Parser Command -&gt; Parser Command
 forall (f :: * -&gt; *) a. Alternative f =&gt; f a -&gt; f a -&gt; f a
 </span><span class="hs-operator hs-var">&lt;|&gt;</span></span><span> </span><span class="annot"><span class="annottext">Parser Command
 </span><a href="HoYo.Internal.Parse.html#moveCommandHidden"><span class="hs-identifier hs-var">moveCommandHidden</span></a></span><span>
-</span><span id="line-247"></span><span>     </span><span class="annot"><span class="annottext">Parser Command -&gt; Parser Command -&gt; Parser Command
+</span><span id="line-254"></span><span>     </span><span class="annot"><span class="annottext">Parser Command -&gt; Parser Command -&gt; Parser Command
 forall (f :: * -&gt; *) a. Alternative f =&gt; f a -&gt; f a -&gt; f a
 </span><span class="hs-operator hs-var">&lt;|&gt;</span></span><span> </span><span class="annot"><span class="annottext">Parser Command
 </span><a href="HoYo.Internal.Parse.html#defaultCommand"><span class="hs-identifier hs-var">defaultCommand</span></a></span><span>
-</span><span id="line-248"></span><span>
-</span><span id="line-249"></span><span class="hs-comment">-- | Parse an 'Options' argument, which includes the command</span><span>
-</span><span id="line-250"></span><span class="hs-comment">-- to run and any global options.</span><span>
-</span><span id="line-251"></span><span class="annot"><a href="HoYo.Internal.Parse.html#parseOptions"><span class="hs-identifier hs-type">parseOptions</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Parser</span></span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#Options"><span class="hs-identifier hs-type">Options</span></a></span><span>
-</span><span id="line-252"></span><span id="parseOptions"><span class="annot"><span class="annottext">parseOptions :: Parser Options
+</span><span id="line-255"></span><span>
+</span><span id="line-256"></span><span class="hs-comment">-- | Parse an 'Options' argument, which includes the command</span><span>
+</span><span id="line-257"></span><span class="hs-comment">-- to run and any global options.</span><span>
+</span><span id="line-258"></span><span class="annot"><a href="HoYo.Internal.Parse.html#parseOptions"><span class="hs-identifier hs-type">parseOptions</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Parser</span></span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#Options"><span class="hs-identifier hs-type">Options</span></a></span><span>
+</span><span id="line-259"></span><span id="parseOptions"><span class="annot"><span class="annottext">parseOptions :: Parser Options
 </span><a href="HoYo.Internal.Parse.html#parseOptions"><span class="hs-identifier hs-var hs-var">parseOptions</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Command -&gt; GlobalOptions -&gt; Options
 </span><a href="HoYo.Internal.Types.html#Options"><span class="hs-identifier hs-var">Options</span></a></span><span> </span><span class="annot"><span class="annottext">(Command -&gt; GlobalOptions -&gt; Options)
 -&gt; Parser Command -&gt; Parser (GlobalOptions -&gt; Options)
@@ -1019,52 +1061,52 @@ forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
 forall (f :: * -&gt; *) a b. Applicative f =&gt; f (a -&gt; b) -&gt; f a -&gt; f b
 </span><span class="hs-operator hs-var">&lt;*&gt;</span></span><span> </span><span class="annot"><span class="annottext">Parser GlobalOptions
 </span><a href="HoYo.Internal.Parse.html#globalOptions"><span class="hs-identifier hs-var">globalOptions</span></a></span><span>
-</span><span id="line-253"></span><span>
-</span><span id="line-254"></span><span class="hs-comment">-- | Version information printed by `hoyo --version`.</span><span>
-</span><span id="line-255"></span><span class="annot"><a href="HoYo.Internal.Parse.html#versionInfo"><span class="hs-identifier hs-type">versionInfo</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
-</span><span id="line-256"></span><span id="versionInfo"><span class="annot"><span class="annottext">versionInfo :: String
+</span><span id="line-260"></span><span>
+</span><span id="line-261"></span><span class="hs-comment">-- | Version information printed by `hoyo --version`.</span><span>
+</span><span id="line-262"></span><span class="annot"><a href="HoYo.Internal.Parse.html#versionInfo"><span class="hs-identifier hs-type">versionInfo</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
+</span><span id="line-263"></span><span id="versionInfo"><span class="annot"><span class="annottext">versionInfo :: String
 </span><a href="HoYo.Internal.Parse.html#versionInfo"><span class="hs-identifier hs-var hs-var">versionInfo</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
-</span><span id="line-257"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span id="line-264"></span><span>  </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;hoyo &quot;</span></span><span>
-</span><span id="line-258"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+</span><span id="line-265"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><a href="HoYo.Internal.Version.html#versionString"><span class="hs-identifier hs-var">versionString</span></a></span><span>
-</span><span id="line-259"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+</span><span id="line-266"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;\n\nCopyright (c) 2023, Frederick Pringle\n\nAll rights reserved.&quot;</span></span><span>
-</span><span id="line-260"></span><span>
-</span><span id="line-261"></span><span class="hs-comment">-- | Add a hidden --version flag to the end of a parser.</span><span>
-</span><span id="line-262"></span><span id="local-6989586621679109096"><span class="annot"><a href="HoYo.Internal.Parse.html#versionOption"><span class="hs-identifier hs-type">versionOption</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Parser</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="#local-6989586621679109096"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679109096"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span></span><span>
-</span><span id="line-263"></span><span id="versionOption"><span class="annot"><span class="annottext">versionOption :: Parser (a -&gt; a)
+</span><span id="line-267"></span><span>
+</span><span id="line-268"></span><span class="hs-comment">-- | Add a hidden --version flag to the end of a parser.</span><span>
+</span><span id="line-269"></span><span id="local-6989586621679110333"><span class="annot"><a href="HoYo.Internal.Parse.html#versionOption"><span class="hs-identifier hs-type">versionOption</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Parser</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="#local-6989586621679110333"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679110333"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span></span><span>
+</span><span id="line-270"></span><span id="versionOption"><span class="annot"><span class="annottext">versionOption :: Parser (a -&gt; a)
 </span><a href="HoYo.Internal.Parse.html#versionOption"><span class="hs-identifier hs-var hs-var">versionOption</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Mod OptionFields (a -&gt; a) -&gt; Parser (a -&gt; a)
 forall a. String -&gt; Mod OptionFields (a -&gt; a) -&gt; Parser (a -&gt; a)
 </span><span class="hs-identifier hs-var">infoOption</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><a href="HoYo.Internal.Parse.html#versionInfo"><span class="hs-identifier hs-var">versionInfo</span></a></span><span> </span><span class="hs-special">(</span><span>
-</span><span id="line-264"></span><span>                  </span><span class="annot"><span class="annottext">String -&gt; Mod OptionFields (a -&gt; a)
+</span><span id="line-271"></span><span>                  </span><span class="annot"><span class="annottext">String -&gt; Mod OptionFields (a -&gt; a)
 forall (f :: * -&gt; *) a. HasName f =&gt; String -&gt; Mod f a
 </span><span class="hs-identifier hs-var">long</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;version&quot;</span></span><span>
-</span><span id="line-265"></span><span>                  </span><span class="annot"><span class="annottext">Mod OptionFields (a -&gt; a)
+</span><span id="line-272"></span><span>                  </span><span class="annot"><span class="annottext">Mod OptionFields (a -&gt; a)
 -&gt; Mod OptionFields (a -&gt; a) -&gt; Mod OptionFields (a -&gt; a)
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">Mod OptionFields (a -&gt; a)
 forall (f :: * -&gt; *) a. Mod f a
 </span><span class="hs-identifier hs-var">hidden</span></span><span>
-</span><span id="line-266"></span><span>                  </span><span class="annot"><span class="annottext">Mod OptionFields (a -&gt; a)
+</span><span id="line-273"></span><span>                  </span><span class="annot"><span class="annottext">Mod OptionFields (a -&gt; a)
 -&gt; Mod OptionFields (a -&gt; a) -&gt; Mod OptionFields (a -&gt; a)
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Mod OptionFields (a -&gt; a)
 forall (f :: * -&gt; *) a. String -&gt; Mod f a
 </span><span class="hs-identifier hs-var">help</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Display version information and exit&quot;</span></span><span>
-</span><span id="line-267"></span><span>                </span><span class="hs-special">)</span><span>
-</span><span id="line-268"></span><span>
-</span><span id="line-269"></span><span class="hs-comment">-- | A 'ParserInfo' object containing the necessary information for parsing</span><span>
-</span><span id="line-270"></span><span class="hs-comment">-- CLI commands and arguments, and displaying useful help text.</span><span>
-</span><span id="line-271"></span><span class="annot"><a href="HoYo.Internal.Parse.html#options"><span class="hs-identifier hs-type">options</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ParserInfo</span></span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#Options"><span class="hs-identifier hs-type">Options</span></a></span><span>
-</span><span id="line-272"></span><span id="options"><span class="annot"><span class="annottext">options :: ParserInfo Options
+</span><span id="line-274"></span><span>                </span><span class="hs-special">)</span><span>
+</span><span id="line-275"></span><span>
+</span><span id="line-276"></span><span class="hs-comment">-- | A 'ParserInfo' object containing the necessary information for parsing</span><span>
+</span><span id="line-277"></span><span class="hs-comment">-- CLI commands and arguments, and displaying useful help text.</span><span>
+</span><span id="line-278"></span><span class="annot"><a href="HoYo.Internal.Parse.html#options"><span class="hs-identifier hs-type">options</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ParserInfo</span></span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#Options"><span class="hs-identifier hs-type">Options</span></a></span><span>
+</span><span id="line-279"></span><span id="options"><span class="annot"><span class="annottext">options :: ParserInfo Options
 </span><a href="HoYo.Internal.Parse.html#options"><span class="hs-identifier hs-var hs-var">options</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Parser Options -&gt; InfoMod Options -&gt; ParserInfo Options
 forall a. Parser a -&gt; InfoMod a -&gt; ParserInfo a
 </span><span class="hs-identifier hs-var">info</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Parser Options
@@ -1073,30 +1115,30 @@ forall (f :: * -&gt; *) a b. Applicative f =&gt; f a -&gt; f (a -&gt; b) -&gt; f
 </span><span class="hs-operator hs-var">&lt;**&gt;</span></span><span> </span><span class="annot"><span class="annottext">Parser (Options -&gt; Options)
 forall a. Parser (a -&gt; a)
 </span><span class="hs-identifier hs-var">helper</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span>
-</span><span id="line-273"></span><span>          </span><span class="annot"><span class="annottext">InfoMod Options
+</span><span id="line-280"></span><span>          </span><span class="annot"><span class="annottext">InfoMod Options
 forall a. InfoMod a
 </span><span class="hs-identifier hs-var">fullDesc</span></span><span>
-</span><span id="line-274"></span><span>          </span><span class="annot"><span class="annottext">InfoMod Options -&gt; InfoMod Options -&gt; InfoMod Options
+</span><span id="line-281"></span><span>          </span><span class="annot"><span class="annottext">InfoMod Options -&gt; InfoMod Options -&gt; InfoMod Options
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; InfoMod Options
 forall a. String -&gt; InfoMod a
 </span><span class="hs-identifier hs-var">header</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;Set directory bookmarks for quick \&quot;cd\&quot;-like behaviour&quot;</span></span><span>
-</span><span id="line-275"></span><span>          </span><span class="annot"><span class="annottext">InfoMod Options -&gt; InfoMod Options -&gt; InfoMod Options
+</span><span id="line-282"></span><span>          </span><span class="annot"><span class="annottext">InfoMod Options -&gt; InfoMod Options -&gt; InfoMod Options
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; InfoMod Options
 forall a. String -&gt; InfoMod a
 </span><span class="hs-identifier hs-var">progDesc</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;For more help on a particular sub-command, run `hoyo &lt;cmd&gt; --help`.&quot;</span></span><span>
-</span><span id="line-276"></span><span>          </span><span class="hs-special">)</span><span>
-</span><span id="line-277"></span><span>
-</span><span id="line-278"></span><span class="hs-comment">-- | Split a string into arguments as they would be interpreted on the command line.</span><span>
-</span><span id="line-279"></span><span class="hs-comment">--</span><span>
-</span><span id="line-280"></span><span class="hs-comment">-- Adapted from [this StackOverflow comment](https://stackoverflow.com/a/64236441).</span><span>
-</span><span id="line-281"></span><span class="annot"><a href="HoYo.Internal.Parse.html#splitArgs"><span class="hs-identifier hs-type">splitArgs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">T.Text</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">]</span><span>
-</span><span id="line-282"></span><span id="splitArgs"><span class="annot"><span class="annottext">splitArgs :: TFilePath -&gt; [String]
+</span><span id="line-283"></span><span>          </span><span class="hs-special">)</span><span>
+</span><span id="line-284"></span><span>
+</span><span id="line-285"></span><span class="hs-comment">-- | Split a string into arguments as they would be interpreted on the command line.</span><span>
+</span><span id="line-286"></span><span class="hs-comment">--</span><span>
+</span><span id="line-287"></span><span class="hs-comment">-- Adapted from [this StackOverflow comment](https://stackoverflow.com/a/64236441).</span><span>
+</span><span id="line-288"></span><span class="annot"><a href="HoYo.Internal.Parse.html#splitArgs"><span class="hs-identifier hs-type">splitArgs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">T.Text</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">]</span><span>
+</span><span id="line-289"></span><span id="splitArgs"><span class="annot"><span class="annottext">splitArgs :: TFilePath -&gt; [String]
 </span><a href="HoYo.Internal.Parse.html#splitArgs"><span class="hs-identifier hs-var hs-var">splitArgs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool -&gt; String -&gt; String -&gt; [String]
-</span><a href="#local-6989586621679108989"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679110225"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">False</span></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">False</span></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">False</span></span><span> </span><span class="annot"><span class="annottext">String
@@ -1105,120 +1147,120 @@ forall a. String -&gt; InfoMod a
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">TFilePath -&gt; String
 </span><span class="hs-identifier hs-var">T.unpack</span></span><span>
-</span><span id="line-283"></span><span>  </span><span class="hs-keyword">where</span><span>
-</span><span id="line-284"></span><span>    </span><span class="annot"><a href="#local-6989586621679108989"><span class="hs-identifier hs-type">splitArgs'</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">]</span><span>
-</span><span id="line-285"></span><span>    </span><span id="local-6989586621679108989"><span class="annot"><span class="annottext">splitArgs' :: Bool -&gt; Bool -&gt; Bool -&gt; String -&gt; String -&gt; [String]
-</span><a href="#local-6989586621679108989"><span class="hs-identifier hs-var hs-var">splitArgs'</span></a></span></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span id="line-290"></span><span>  </span><span class="hs-keyword">where</span><span>
+</span><span id="line-291"></span><span>    </span><span class="annot"><a href="#local-6989586621679110225"><span class="hs-identifier hs-type">splitArgs'</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">]</span><span>
+</span><span id="line-292"></span><span>    </span><span id="local-6989586621679110225"><span class="annot"><span class="annottext">splitArgs' :: Bool -&gt; Bool -&gt; Bool -&gt; String -&gt; String -&gt; [String]
+</span><a href="#local-6989586621679110225"><span class="hs-identifier hs-var hs-var">splitArgs'</span></a></span></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">Bool
-</span><span class="hs-identifier hs-var">True</span></span><span> </span><span id="local-6989586621679108987"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679108987"><span class="hs-identifier hs-var">res</span></a></span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679108987"><span class="hs-identifier hs-var">res</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-286"></span><span>    </span><span class="annot"><a href="#local-6989586621679108989"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-identifier hs-var">True</span></span><span> </span><span id="local-6989586621679110223"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679110223"><span class="hs-identifier hs-var">res</span></a></span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679110223"><span class="hs-identifier hs-var">res</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-293"></span><span>    </span><span class="annot"><a href="#local-6989586621679110225"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">False</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-identifier">_</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-287"></span><span>
-</span><span id="line-288"></span><span>    </span><span class="annot"><a href="#local-6989586621679108989"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span id="line-294"></span><span>
+</span><span id="line-295"></span><span>    </span><span class="annot"><a href="#local-6989586621679110225"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">False</span></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">Bool
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679108986"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679108986"><span class="hs-identifier hs-var">res</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char
-</span><span class="hs-char">'^'</span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679108985"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679108985"><span class="hs-identifier hs-var">rest</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool -&gt; String -&gt; String -&gt; [String]
-</span><a href="#local-6989586621679108989"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679110222"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679110222"><span class="hs-identifier hs-var">res</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char
+</span><span class="hs-char">'^'</span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679110221"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679110221"><span class="hs-identifier hs-var">rest</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool -&gt; String -&gt; String -&gt; [String]
+</span><a href="#local-6989586621679110225"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">False</span></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">False</span></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">True</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679108986"><span class="hs-identifier hs-var">res</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+</span><a href="#local-6989586621679110222"><span class="hs-identifier hs-var">res</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;^&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679108985"><span class="hs-identifier hs-var">rest</span></a></span><span>
-</span><span id="line-289"></span><span>
-</span><span id="line-290"></span><span>    </span><span class="annot"><a href="#local-6989586621679108989"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span id="local-6989586621679108984"><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679108984"><span class="hs-identifier hs-var">quoted</span></a></span></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679110221"><span class="hs-identifier hs-var">rest</span></a></span><span>
+</span><span id="line-296"></span><span>
+</span><span id="line-297"></span><span>    </span><span class="annot"><a href="#local-6989586621679110225"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span id="local-6989586621679110220"><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679110220"><span class="hs-identifier hs-var">quoted</span></a></span></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">True</span></span><span> </span><span class="annot"><span class="annottext">Bool
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679108983"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679108983"><span class="hs-identifier hs-var">res</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679108982"><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679108982"><span class="hs-identifier hs-var">chr</span></a></span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679108981"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679108981"><span class="hs-identifier hs-var">rest</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool -&gt; String -&gt; String -&gt; [String]
-</span><a href="#local-6989586621679108989"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679108984"><span class="hs-identifier hs-var">quoted</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679110219"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679110219"><span class="hs-identifier hs-var">res</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679110218"><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679110218"><span class="hs-identifier hs-var">chr</span></a></span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679110217"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679110217"><span class="hs-identifier hs-var">rest</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool -&gt; String -&gt; String -&gt; [String]
+</span><a href="#local-6989586621679110225"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679110220"><span class="hs-identifier hs-var">quoted</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">False</span></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">True</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679108983"><span class="hs-identifier hs-var">res</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+</span><a href="#local-6989586621679110219"><span class="hs-identifier hs-var">res</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679108982"><span class="hs-identifier hs-var">chr</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679108981"><span class="hs-identifier hs-var">rest</span></a></span><span>
-</span><span id="line-291"></span><span>
-</span><span id="line-292"></span><span>    </span><span class="annot"><a href="#local-6989586621679108989"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span id="local-6989586621679108980"><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679108980"><span class="hs-identifier hs-var">quoted</span></a></span></span><span> </span><span id="local-6989586621679108979"><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679108979"><span class="hs-identifier hs-var">escaped</span></a></span></span><span> </span><span class="annot"><span class="annottext">Bool
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679108978"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679108978"><span class="hs-identifier hs-var">res</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char
-</span><span class="hs-char">'&quot;'</span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679108977"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679108977"><span class="hs-identifier hs-var">rest</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool -&gt; String -&gt; String -&gt; [String]
-</span><a href="#local-6989586621679108989"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Bool -&gt; Bool
+</span><a href="#local-6989586621679110218"><span class="hs-identifier hs-var">chr</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679110217"><span class="hs-identifier hs-var">rest</span></a></span><span>
+</span><span id="line-298"></span><span>
+</span><span id="line-299"></span><span>    </span><span class="annot"><a href="#local-6989586621679110225"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span id="local-6989586621679110216"><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679110216"><span class="hs-identifier hs-var">quoted</span></a></span></span><span> </span><span id="local-6989586621679110215"><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679110215"><span class="hs-identifier hs-var">escaped</span></a></span></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679110214"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679110214"><span class="hs-identifier hs-var">res</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char
+</span><span class="hs-char">'&quot;'</span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679110213"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679110213"><span class="hs-identifier hs-var">rest</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool -&gt; String -&gt; String -&gt; [String]
+</span><a href="#local-6989586621679110225"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Bool -&gt; Bool
 </span><span class="hs-identifier hs-var">not</span></span><span> </span><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679108980"><span class="hs-identifier hs-var">quoted</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679108979"><span class="hs-identifier hs-var">escaped</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679110216"><span class="hs-identifier hs-var">quoted</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679110215"><span class="hs-identifier hs-var">escaped</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">True</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679108978"><span class="hs-identifier hs-var">res</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679108977"><span class="hs-identifier hs-var">rest</span></a></span><span>
-</span><span id="line-293"></span><span>
-</span><span id="line-294"></span><span>    </span><span class="annot"><a href="#local-6989586621679108989"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span id="local-6989586621679108975"><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679108975"><span class="hs-identifier hs-var">quoted</span></a></span></span><span> </span><span class="annot"><span class="annottext">Bool
-</span><span class="hs-identifier hs-var">False</span></span><span> </span><span id="local-6989586621679108974"><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679108974"><span class="hs-identifier hs-var">started</span></a></span></span><span> </span><span id="local-6989586621679108973"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679108973"><span class="hs-identifier hs-var">res</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679110214"><span class="hs-identifier hs-var">res</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679110213"><span class="hs-identifier hs-var">rest</span></a></span><span>
+</span><span id="line-300"></span><span>
+</span><span id="line-301"></span><span>    </span><span class="annot"><a href="#local-6989586621679110225"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span id="local-6989586621679110211"><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679110211"><span class="hs-identifier hs-var">quoted</span></a></span></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-identifier hs-var">False</span></span><span> </span><span id="local-6989586621679110210"><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679110210"><span class="hs-identifier hs-var">started</span></a></span></span><span> </span><span id="local-6989586621679110209"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679110209"><span class="hs-identifier hs-var">res</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char
 </span><span class="hs-char">'\\'</span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span class="annot"><span class="annottext">Char
-</span><span class="hs-char">'&quot;'</span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679108972"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679108972"><span class="hs-identifier hs-var">rest</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool -&gt; String -&gt; String -&gt; [String]
-</span><a href="#local-6989586621679108989"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679108975"><span class="hs-identifier hs-var">quoted</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-char">'&quot;'</span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679110208"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679110208"><span class="hs-identifier hs-var">rest</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool -&gt; String -&gt; String -&gt; [String]
+</span><a href="#local-6989586621679110225"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679110211"><span class="hs-identifier hs-var">quoted</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">True</span></span><span> </span><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679108974"><span class="hs-identifier hs-var">started</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679108973"><span class="hs-identifier hs-var">res</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679110210"><span class="hs-identifier hs-var">started</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679110209"><span class="hs-identifier hs-var">res</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char
 </span><span class="hs-char">'&quot;'</span></span><span class="annot"><span class="annottext">Char -&gt; String -&gt; String
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679108972"><span class="hs-identifier hs-var">rest</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-295"></span><span>
-</span><span id="line-296"></span><span>    </span><span class="annot"><a href="#local-6989586621679108989"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
-</span><span class="hs-identifier hs-var">False</span></span><span> </span><span id="local-6989586621679108971"><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679108971"><span class="hs-identifier hs-var">escaped</span></a></span></span><span> </span><span id="local-6989586621679108970"><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679108970"><span class="hs-identifier hs-var">started</span></a></span></span><span> </span><span id="local-6989586621679108969"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679108969"><span class="hs-identifier hs-var">res</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char
-</span><span class="hs-char">' '</span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679108968"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679108968"><span class="hs-identifier hs-var">rest</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679108969"><span class="hs-identifier hs-var">res</span></a></span><span> </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679108970"><span class="hs-identifier hs-var">started</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[String] -&gt; [String] -&gt; [String]
+</span><a href="#local-6989586621679110208"><span class="hs-identifier hs-var">rest</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-302"></span><span>
+</span><span id="line-303"></span><span>    </span><span class="annot"><a href="#local-6989586621679110225"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-identifier hs-var">False</span></span><span> </span><span id="local-6989586621679110207"><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679110207"><span class="hs-identifier hs-var">escaped</span></a></span></span><span> </span><span id="local-6989586621679110206"><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679110206"><span class="hs-identifier hs-var">started</span></a></span></span><span> </span><span id="local-6989586621679110205"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679110205"><span class="hs-identifier hs-var">res</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char
+</span><span class="hs-char">' '</span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679110204"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679110204"><span class="hs-identifier hs-var">rest</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679110205"><span class="hs-identifier hs-var">res</span></a></span><span> </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679110206"><span class="hs-identifier hs-var">started</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[String] -&gt; [String] -&gt; [String]
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool -&gt; String -&gt; String -&gt; [String]
-</span><a href="#local-6989586621679108989"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679110225"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">False</span></span><span> </span><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679108971"><span class="hs-identifier hs-var">escaped</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679110207"><span class="hs-identifier hs-var">escaped</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">False</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;&quot;</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679108968"><span class="hs-identifier hs-var">rest</span></a></span><span>
-</span><span id="line-297"></span><span>
-</span><span id="line-298"></span><span>    </span><span class="annot"><a href="#local-6989586621679108989"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span id="local-6989586621679108967"><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679108967"><span class="hs-identifier hs-var">quoted</span></a></span></span><span> </span><span id="local-6989586621679108966"><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679108966"><span class="hs-identifier hs-var">escaped</span></a></span></span><span> </span><span class="annot"><span class="annottext">Bool
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679108965"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679108965"><span class="hs-identifier hs-var">res</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679108964"><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679108964"><span class="hs-identifier hs-var">chr</span></a></span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679108963"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679108963"><span class="hs-identifier hs-var">rest</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool -&gt; String -&gt; String -&gt; [String]
-</span><a href="#local-6989586621679108989"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679108967"><span class="hs-identifier hs-var">quoted</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679108966"><span class="hs-identifier hs-var">escaped</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679110204"><span class="hs-identifier hs-var">rest</span></a></span><span>
+</span><span id="line-304"></span><span>
+</span><span id="line-305"></span><span>    </span><span class="annot"><a href="#local-6989586621679110225"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span id="local-6989586621679110203"><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679110203"><span class="hs-identifier hs-var">quoted</span></a></span></span><span> </span><span id="local-6989586621679110202"><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679110202"><span class="hs-identifier hs-var">escaped</span></a></span></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679110201"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679110201"><span class="hs-identifier hs-var">res</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679110200"><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679110200"><span class="hs-identifier hs-var">chr</span></a></span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679110199"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679110199"><span class="hs-identifier hs-var">rest</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool -&gt; String -&gt; String -&gt; [String]
+</span><a href="#local-6989586621679110225"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679110203"><span class="hs-identifier hs-var">quoted</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679110202"><span class="hs-identifier hs-var">escaped</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">True</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679108965"><span class="hs-identifier hs-var">res</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+</span><a href="#local-6989586621679110201"><span class="hs-identifier hs-var">res</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679108964"><span class="hs-identifier hs-var">chr</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679108963"><span class="hs-identifier hs-var">rest</span></a></span><span>
-</span><span id="line-299"></span></pre></body></html>
+</span><a href="#local-6989586621679110200"><span class="hs-identifier hs-var">chr</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679110199"><span class="hs-identifier hs-var">rest</span></a></span><span>
+</span><span id="line-306"></span></pre></body></html>
