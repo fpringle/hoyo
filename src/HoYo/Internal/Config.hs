@@ -46,6 +46,8 @@ configCodec = Config
   <*> (ListOfV . fmap DefaultBookmarkV <$> Toml.list defaultBookmarkCodec "default_bookmark") .= view defaultBookmarks
   <*> (MaybeV . fmap CommandV <$> Toml.dioptional (commandCodec "default_command")) .= view defaultCommand
 
+-- | Toml codec using optparse-applicative to parse a default command. Incurs a cyclic
+-- dependency which is resolved using Parse.hs-boot.
 commandCodec :: Toml.Key -> TomlCodec Command
 commandCodec = Toml.match (Toml._Text <<< Toml.invert (Toml.prism fmt prs))
   where

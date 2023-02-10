@@ -49,26 +49,46 @@ overrideOptions = OverrideOptions
                     <*> parseOverrideEnableClearing
                     <*> parseOverrideEnableReset
 
+-- | Parse a single override option as a pair of switches.
+-- For example 'parseOverrideFailOnError' is defined as
+--
+-- @
+-- parseOverrideFailOnError :: 'Parser' 'MaybeOverride'
+-- parseOverrideFailOnError = parseOverride
+--                               (long "fail" <> help "Fail on error")
+--                               (long "nofail" <> help "Disable fail on error")
+-- @
+--
+-- and results in the pair of switches:
+--
+-- @
+--  --fail                   Fail on error
+--  --nofail                 Disable fail on error
+-- @
 parseOverride :: Mod FlagFields Bool -> Mod FlagFields Bool -> Parser MaybeOverride
 parseOverride posMod negMod = combOverride
                                 <$> switch posMod
                                 <*> switch negMod
 
+-- | Parse a 'MaybeOverride' corresponding to the "fail_on_error" config option.
 parseOverrideFailOnError :: Parser MaybeOverride
 parseOverrideFailOnError = parseOverride
                               (long "fail" <> help "Fail on error")
                               (long "nofail" <> help "Disable fail on error")
 
+-- | Parse a 'MaybeOverride' corresponding to the "display_creation_time" config option.
 parseOverrideDisplayCreationTime :: Parser MaybeOverride
 parseOverrideDisplayCreationTime = parseOverride
                                     (long "time" <> help "Display bookmark creation times")
                                     (long "notime" <> help "Hide bookmark creation times")
 
+-- | Parse a 'MaybeOverride' corresponding to the "enable_clear" config option.
 parseOverrideEnableClearing :: Parser MaybeOverride
 parseOverrideEnableClearing = parseOverride
                                 (long "enable-clear" <> help "Enable the 'clear' command")
                                 (long "disable-clear" <> help "Disable the 'clear' command")
 
+-- | Parse a 'MaybeOverride' corresponding to the "enable_reset" config option.
 parseOverrideEnableReset :: Parser MaybeOverride
 parseOverrideEnableReset = parseOverride
                               (long "enable-reset" <> help "Enable the 'config reset' command")
@@ -82,11 +102,14 @@ addCommand = Add <$> (
                 <*> optional (strArgument (metavar "<name>" <> help "Optionally give a name to your bookmark"))
               )
 
+-- | Parse a 'BookmarkSearchTerm'. First tries to interpret the search term as a number
+-- corresponding to a bookmark index; if that fails, treat the term as a name.
 bookmarkSearchTerm :: ReadM BookmarkSearchTerm
 bookmarkSearchTerm = eitherReader $ \s ->
   SearchIndex <$> readEither s
   <|> Right (SearchName (T.pack s))
 
+-- | Parse mods + bookmark completer used in 'moveCommand' and 'moveCommandHidden'.
 moveCommandMods :: Mod ArgumentFields BookmarkSearchTerm
 moveCommandMods = metavar "<bookmark>"
                     <> help "Index or name of the bookmark to move to"
@@ -97,6 +120,10 @@ moveCommand :: Parser Command
 moveCommand = Move . MoveOptions
                 <$> argument bookmarkSearchTerm moveCommandMods
 
+-- | When hoyo is run without a command but with a search term (e.g. `hoyo docs`),
+-- it is interpreted as a move command - so the example above would be interpreted
+-- as `hoyo move docs`. We hide this from the CLI help message because it's quite
+-- ugly.
 moveCommandHidden :: Parser Command
 moveCommandHidden = Move . MoveOptions
                       <$> argument bookmarkSearchTerm (
@@ -187,6 +214,7 @@ configAddDefaultCommand = AddDefaultBookmark <$> (
                                   ))
                           )
 
+-- | `hoyo check` should be considered equivalent to `hoyo check --config --bookmarks`
 noArgs :: CheckOptions -> CheckOptions
 noArgs (CheckOptions False False) = CheckOptions True True
 noArgs opts = opts
@@ -223,12 +251,14 @@ parseCommand = (versionOption <*> hsubparser (
 parseOptions :: Parser Options
 parseOptions = Options <$> parseCommand <*> globalOptions
 
+-- | Version information printed by `hoyo --version`.
 versionInfo :: String
 versionInfo =
   "hoyo "
   <> versionString
   <> "\n\nCopyright (c) 2023, Frederick Pringle\n\nAll rights reserved."
 
+-- | Add a hidden --version flag to the end of a parser.
 versionOption :: Parser (a -> a)
 versionOption = infoOption versionInfo (
                   long "version"
