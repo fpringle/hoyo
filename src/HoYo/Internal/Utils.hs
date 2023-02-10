@@ -22,6 +22,7 @@ import Data.Bifunctor (bimap, first)
 import qualified Data.Text as T
 import qualified Data.Text.IO as T
 
+import System.Console.ANSI hiding (Reset)
 import System.IO
 
 import Control.Applicative
@@ -200,7 +201,10 @@ readInt s = liftEither $ first T.pack (
 
 -- | Print to stderr.
 printStderr :: MonadIO m => T.Text -> m ()
-printStderr = liftIO . T.hPutStrLn stderr
+printStderr msg = liftIO $ do
+  hSetSGR stderr [SetColor Foreground Vivid Red]
+  T.hPutStrLn stderr msg
+  hSetSGR stderr []
 
 -- | Print to stdout.
 printStdout :: MonadIO m => T.Text -> m ()
