@@ -290,4 +290,8 @@ runCommand    (Delete opts) = runDelete opts
 runCommand   (Refresh opts) = runRefresh opts
 runCommand (ConfigCmd opts) = runConfig opts
 runCommand   DefaultCommand = runDefaultCommand
-runCommand        (Check _) = throwError "The 'check' command needs to be run outside the HoYo monad"
+runCommand     (Check opts) = do
+  -- printStderr "The 'check' command should be run outside the HoYo monad."
+  printStderr "It's discouraged to set default_command = \"check\" in your hoyo config file."
+  Env _ bFp _ sFp <- ask
+  liftIO $ runCheck opts bFp sFp
