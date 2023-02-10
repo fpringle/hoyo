@@ -155,6 +155,7 @@ instance Arbitrary OverrideOptions where
                               <*> arbitrary
                               <*> arbitrary
                               <*> arbitrary
+                              <*> arbitrary
 
 instance Arbitrary GlobalOptions where
   arbitrary = GlobalOptions <$> liftArbitrary genFilePath

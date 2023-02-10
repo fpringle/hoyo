@@ -220,6 +220,7 @@ data OverrideOptions = OverrideOptions {
   , overrideDisplayCreationTime     :: MaybeOverride
   , overrideEnableClearing          :: MaybeOverride
   , overrideEnableReset             :: MaybeOverride
+  , overrideBackupBeforeClear       :: MaybeOverride
   } deriving (Show, Eq)
 
 -- | CLI options that can be set regardless of which command is run.
