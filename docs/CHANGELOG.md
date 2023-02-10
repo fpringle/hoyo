@@ -10,7 +10,8 @@ and this project adheres to the
 
 ### Added
 
-- Tests for parsing command-line options (round-trip property)
+- Tests for parsing command-line options (round-trip property).
+- Added command-line flags to override the "backup_before_clear" config option.
 
 ### Fixed
 

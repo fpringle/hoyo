@@ -48,6 +48,7 @@ overrideOptions = OverrideOptions
                     <*> parseOverrideDisplayCreationTime
                     <*> parseOverrideEnableClearing
                     <*> parseOverrideEnableReset
+                    <*> parseOverrideBackupBeforeClear
 
 -- | Parse a single override option as a pair of switches.
 -- For example 'parseOverrideFailOnError' is defined as
@@ -93,6 +94,12 @@ parseOverrideEnableReset :: Parser MaybeOverride
 parseOverrideEnableReset = parseOverride
                               (long "enable-reset" <> help "Enable the 'config reset' command")
                               (long "disable-reset" <> help "Disable the 'config reset' command")
+
+-- | Parse a 'MaybeOverride' corresponding to the "backup_before_clear" config option.
+parseOverrideBackupBeforeClear :: Parser MaybeOverride
+parseOverrideBackupBeforeClear = parseOverride
+                              (long "backup-before-clear" <> help "Backup the bookmarks file before running `hoyo clear`")
+                              (long "no-backup-before-clear" <> help "Don't backup the bookmarks file before running `hoyo clear`")
 
 -- | Parse options for the @hoyo add@ command.
 addCommand :: Parser Command

@@ -56,6 +56,7 @@ overrideConfig opts =
   . over displayCreationTime  (overrideFunc $ overrideDisplayCreationTime opts)
   . over enableClearing       (overrideFunc $      overrideEnableClearing opts)
   . over enableReset          (overrideFunc $         overrideEnableReset opts)
+  . over backupBeforeClear    (overrideFunc $   overrideBackupBeforeClear opts)
 
 -- | Apply the override options to an 'Env'.
 overrideEnv :: OverrideOptions -> Env -> Env
@@ -63,16 +64,21 @@ overrideEnv = over config . overrideConfig
 
 -- | Check that there are no conflicting overrides.
 verifyOverrides :: OverrideOptions -> Maybe T.Text
-verifyOverrides (OverrideOptions o1 o2 o3 o4) = verify o1
-                                                  <|> verify o2
-                                                  <|> verify o3
-                                                  <|> verify o4
+verifyOverrides (OverrideOptions o1 o2 o3 o4 o5) = verify o1
+                                               <|> verify o2
+                                               <|> verify o3
+                                               <|> verify o4
+                                               <|> verify o5
   where verify Conflict = Just "conflicting flags"
         verify _ = Nothing
 
 -- | The default behaviour is to override nothing.
 defaultOverrideOptions :: OverrideOptions
-defaultOverrideOptions = OverrideOptions NoOverride NoOverride NoOverride NoOverride
+defaultOverrideOptions = OverrideOptions NoOverride
+                                         NoOverride
+                                         NoOverride
+                                         NoOverride
+                                         NoOverride
 
 -- | Default global options. In general this should do nothing.
 defaultGlobalOptions :: GlobalOptions

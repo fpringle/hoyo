@@ -306,10 +306,11 @@ formatGlobals (GlobalOptions c d o) = maybeSingletonWithPrefix ["--config-file"]
                                    <> formatOverrides o
 
 formatOverrides :: OverrideOptions -> [T.Text]
-formatOverrides (OverrideOptions f t c r) = formatOverride "fail" "nofail" f
-                                         <> formatOverride "time" "notime" t
-                                         <> formatOverride "enable-clear" "disable-clear" c
-                                         <> formatOverride "enable-reset" "disable-reset" r
+formatOverrides (OverrideOptions f t c r b) = formatOverride "fail" "nofail" f
+                                           <> formatOverride "time" "notime" t
+                                           <> formatOverride "enable-clear" "disable-clear" c
+                                           <> formatOverride "enable-reset" "disable-reset" r
+                                           <> formatOverride "backup-before-clear" "no-backup-before-clear" b
 
 formatOverride :: T.Text -> T.Text -> MaybeOverride -> [T.Text]
 formatOverride _ no OverrideFalse = ["--" <> no]
