@@ -62,7 +62,8 @@ library
         time >=1.12 && <1.13,
         package-version >=0.3 && <1,
         optparse-applicative >=0.17 && <0.18,
-        unordered-containers >=0.2.19 && <0.3
+        unordered-containers >=0.2.19 && <0.3,
+        ansi-terminal
 
 executable hoyo-cli
     main-is:          Main.hs
