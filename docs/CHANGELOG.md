@@ -10,11 +10,19 @@ and this project adheres to the
 
 ### Added
 
+### Fixed
+
+### Changed
+
+### Removed
+
+## [0.4.0.0] - 2023-02-10
+
+### Added
+
 - Tests for parsing command-line options (round-trip property).
 - Prints to stderr are now colorised red.
 - Added command-line flags to override the "backup_before_clear" config option.
-
-### Fixed
 
 ### Changed
 
@@ -183,7 +191,8 @@ build docs using a pre-commit hook.
 
 - Initial release.
 
-[unreleased]: https://github.com/fpringle/hoyo/compare/v0.3.0.0...HEAD
+[unreleased]: https://github.com/fpringle/hoyo/compare/v0.4.0.0...HEAD
+[0.4.0.0]: https://github.com/fpringle/hoyo/compare/v0.3.0.0...v0.4.0.0
 [0.3.0.0]: https://github.com/fpringle/hoyo/compare/v0.2.3.1...v0.3.0.0
 [0.2.3.1]: https://github.com/fpringle/hoyo/compare/v0.2.3.0...v0.2.3.1
 [0.2.3.0]: https://github.com/fpringle/hoyo/compare/v0.2.2.1...v0.2.3.0
