@@ -10,7 +10,8 @@ and this project adheres to the
 
 ### Added
 
-- Tests for parsing command-line options (round-trip property)
+- Tests for parsing command-line options (round-trip property).
+- Prints to stderr are now colorised red.
 
 ### Fixed
 
