@@ -1,0 +1,1303 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-comment">{-|
+Module      : HoYo.Internal.Command
+Copyright   : (c) Frederick Pringle, 2023
+License     : BSD-3-Clause
+Maintainer  : freddyjepringle@gmail.com
+
+Internals used by the HoYo.Command module.
+-}</span><span>
+</span><span id="line-9"></span><span>
+</span><span id="line-10"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">HoYo.Internal.Command</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-11"></span><span>
+</span><span id="line-12"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="HoYo.Bookmark.html"><span class="hs-identifier">HoYo.Bookmark</span></a></span><span>
+</span><span id="line-13"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="HoYo.Internal.Config.html"><span class="hs-identifier">HoYo.Internal.Config</span></a></span><span>
+</span><span id="line-14"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html"><span class="hs-identifier">HoYo.Internal.Types</span></a></span><span>
+</span><span id="line-15"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="HoYo.Internal.Utils.html"><span class="hs-identifier">HoYo.Internal.Utils</span></a></span><span>
+</span><span id="line-16"></span><span>
+</span><span id="line-17"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Char</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">isDigit</span></span><span class="hs-special">)</span><span>
+</span><span id="line-18"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Function</span></span><span>
+</span><span id="line-19"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.List</span></span><span>
+</span><span id="line-20"></span><span>
+</span><span id="line-21"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Control.Applicative</span></span><span>
+</span><span id="line-22"></span><span>
+</span><span id="line-23"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Data.Text</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">T</span></span><span>
+</span><span id="line-24"></span><span>
+</span><span id="line-25"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Control.Monad</span></span><span>
+</span><span id="line-26"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Control.Monad.Except</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">throwError</span></span><span class="hs-special">)</span><span>
+</span><span id="line-27"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Control.Monad.IO.Class</span></span><span>
+</span><span id="line-28"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Control.Monad.Reader.Class</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">ask</span></span><span class="hs-special">)</span><span>
+</span><span id="line-29"></span><span>
+</span><span id="line-30"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Lens.Micro</span></span><span>
+</span><span id="line-31"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Lens.Micro.Extras</span></span><span>
+</span><span id="line-32"></span><span>
+</span><span id="line-33"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">System.Directory</span></span><span>
+</span><span id="line-34"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">System.Exit</span></span><span>
+</span><span id="line-35"></span><span>
+</span><span id="line-36"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Time</span></span><span>
+</span><span id="line-37"></span><span>
+</span><span id="line-38"></span><span class="hs-comment">-- | Combine a config flag with a command-line flag, checking for conflicts.</span><span>
+</span><span id="line-39"></span><span class="annot"><a href="HoYo.Internal.Command.html#combOverride"><span class="hs-identifier hs-type">combOverride</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#MaybeOverride"><span class="hs-identifier hs-type">MaybeOverride</span></a></span><span>
+</span><span id="line-40"></span><span id="combOverride"><span class="annot"><span class="annottext">combOverride :: Bool -&gt; Bool -&gt; MaybeOverride
+</span><a href="HoYo.Internal.Command.html#combOverride"><span class="hs-identifier hs-var hs-var">combOverride</span></a></span></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-identifier hs-var">False</span></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-identifier hs-var">False</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">MaybeOverride
+</span><a href="HoYo.Internal.Types.html#NoOverride"><span class="hs-identifier hs-var">NoOverride</span></a></span><span>
+</span><span id="line-41"></span><span class="annot"><a href="HoYo.Internal.Command.html#combOverride"><span class="hs-identifier hs-var">combOverride</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-identifier hs-var">True</span></span><span>  </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-identifier hs-var">False</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">MaybeOverride
+</span><a href="HoYo.Internal.Types.html#OverrideTrue"><span class="hs-identifier hs-var">OverrideTrue</span></a></span><span>
+</span><span id="line-42"></span><span class="annot"><a href="HoYo.Internal.Command.html#combOverride"><span class="hs-identifier hs-var">combOverride</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-identifier hs-var">False</span></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-identifier hs-var">True</span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">MaybeOverride
+</span><a href="HoYo.Internal.Types.html#OverrideFalse"><span class="hs-identifier hs-var">OverrideFalse</span></a></span><span>
+</span><span id="line-43"></span><span class="annot"><a href="HoYo.Internal.Command.html#combOverride"><span class="hs-identifier hs-var">combOverride</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-identifier hs-var">True</span></span><span>  </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-identifier hs-var">True</span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">MaybeOverride
+</span><a href="HoYo.Internal.Types.html#Conflict"><span class="hs-identifier hs-var">Conflict</span></a></span><span>
+</span><span id="line-44"></span><span>
+</span><span id="line-45"></span><span class="hs-comment">-- | Convert a 'MaybeOverride' to a function on 'Bool'.</span><span>
+</span><span id="line-46"></span><span class="annot"><a href="HoYo.Internal.Command.html#overrideFunc"><span class="hs-identifier hs-type">overrideFunc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#MaybeOverride"><span class="hs-identifier hs-type">MaybeOverride</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span class="hs-special">)</span><span>
+</span><span id="line-47"></span><span id="overrideFunc"><span class="annot"><span class="annottext">overrideFunc :: MaybeOverride -&gt; Bool -&gt; Bool
+</span><a href="HoYo.Internal.Command.html#overrideFunc"><span class="hs-identifier hs-var hs-var">overrideFunc</span></a></span></span><span> </span><span class="annot"><span class="annottext">MaybeOverride
+</span><a href="HoYo.Internal.Types.html#NoOverride"><span class="hs-identifier hs-var">NoOverride</span></a></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool
+forall a. a -&gt; a
+</span><span class="hs-identifier hs-var">id</span></span><span>
+</span><span id="line-48"></span><span class="annot"><a href="HoYo.Internal.Command.html#overrideFunc"><span class="hs-identifier hs-var">overrideFunc</span></a></span><span> </span><span class="annot"><span class="annottext">MaybeOverride
+</span><a href="HoYo.Internal.Types.html#OverrideTrue"><span class="hs-identifier hs-var">OverrideTrue</span></a></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
+forall a b. a -&gt; b -&gt; a
+</span><span class="hs-identifier hs-var">const</span></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-identifier hs-var">True</span></span><span>
+</span><span id="line-49"></span><span class="annot"><a href="HoYo.Internal.Command.html#overrideFunc"><span class="hs-identifier hs-var">overrideFunc</span></a></span><span> </span><span class="annot"><span class="annottext">MaybeOverride
+</span><a href="HoYo.Internal.Types.html#OverrideFalse"><span class="hs-identifier hs-var">OverrideFalse</span></a></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
+forall a b. a -&gt; b -&gt; a
+</span><span class="hs-identifier hs-var">const</span></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-identifier hs-var">False</span></span><span>
+</span><span id="line-50"></span><span class="annot"><a href="HoYo.Internal.Command.html#overrideFunc"><span class="hs-identifier hs-var">overrideFunc</span></a></span><span> </span><span class="annot"><span class="annottext">MaybeOverride
+</span><a href="HoYo.Internal.Types.html#Conflict"><span class="hs-identifier hs-var">Conflict</span></a></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; Bool -&gt; Bool
+forall a. HasCallStack =&gt; [Char] -&gt; a
+</span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="annottext">[Char]
+</span><span class="hs-string">&quot;override conflict!&quot;</span></span><span>
+</span><span id="line-51"></span><span>
+</span><span id="line-52"></span><span class="hs-comment">-- | Apply the override options to a 'Config'.</span><span>
+</span><span id="line-53"></span><span class="annot"><a href="HoYo.Internal.Command.html#overrideConfig"><span class="hs-identifier hs-type">overrideConfig</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#OverrideOptions"><span class="hs-identifier hs-type">OverrideOptions</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#Config"><span class="hs-identifier hs-type">Config</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#Config"><span class="hs-identifier hs-type">Config</span></a></span><span>
+</span><span id="line-54"></span><span id="overrideConfig"><span class="annot"><span class="annottext">overrideConfig :: OverrideOptions -&gt; Config -&gt; Config
+</span><a href="HoYo.Internal.Command.html#overrideConfig"><span class="hs-identifier hs-var hs-var">overrideConfig</span></a></span></span><span> </span><span id="local-6989586621679109683"><span class="annot"><span class="annottext">OverrideOptions
+</span><a href="#local-6989586621679109683"><span class="hs-identifier hs-var">opts</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
+</span><span id="line-55"></span><span>  </span><span class="annot"><span class="annottext">ASetter Config Config Bool Bool
+-&gt; (Bool -&gt; Bool) -&gt; Config -&gt; Config
+forall s t a b. ASetter s t a b -&gt; (a -&gt; b) -&gt; s -&gt; t
+</span><span class="hs-identifier hs-var">over</span></span><span> </span><span class="annot"><span class="annottext">ASetter Config Config Bool Bool
+Lens' Config Bool
+</span><a href="HoYo.Internal.Utils.html#failOnError"><span class="hs-identifier hs-var">failOnError</span></a></span><span>            </span><span class="hs-special">(</span><span class="annot"><span class="annottext">MaybeOverride -&gt; Bool -&gt; Bool
+</span><a href="HoYo.Internal.Command.html#overrideFunc"><span class="hs-identifier hs-var">overrideFunc</span></a></span><span> </span><span class="annot"><span class="annottext">(MaybeOverride -&gt; Bool -&gt; Bool) -&gt; MaybeOverride -&gt; Bool -&gt; Bool
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span>         </span><span class="annot"><span class="annottext">OverrideOptions -&gt; MaybeOverride
+</span><a href="HoYo.Internal.Types.html#overrideFailOnError"><span class="hs-identifier hs-var hs-var">overrideFailOnError</span></a></span><span> </span><span class="annot"><span class="annottext">OverrideOptions
+</span><a href="#local-6989586621679109683"><span class="hs-identifier hs-var">opts</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-56"></span><span>  </span><span class="annot"><span class="annottext">(Config -&gt; Config) -&gt; (Config -&gt; Config) -&gt; Config -&gt; Config
+forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">ASetter Config Config Bool Bool
+-&gt; (Bool -&gt; Bool) -&gt; Config -&gt; Config
+forall s t a b. ASetter s t a b -&gt; (a -&gt; b) -&gt; s -&gt; t
+</span><span class="hs-identifier hs-var">over</span></span><span> </span><span class="annot"><span class="annottext">ASetter Config Config Bool Bool
+Lens' Config Bool
+</span><a href="HoYo.Internal.Utils.html#displayCreationTime"><span class="hs-identifier hs-var">displayCreationTime</span></a></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">MaybeOverride -&gt; Bool -&gt; Bool
+</span><a href="HoYo.Internal.Command.html#overrideFunc"><span class="hs-identifier hs-var">overrideFunc</span></a></span><span> </span><span class="annot"><span class="annottext">(MaybeOverride -&gt; Bool -&gt; Bool) -&gt; MaybeOverride -&gt; Bool -&gt; Bool
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">OverrideOptions -&gt; MaybeOverride
+</span><a href="HoYo.Internal.Types.html#overrideDisplayCreationTime"><span class="hs-identifier hs-var hs-var">overrideDisplayCreationTime</span></a></span><span> </span><span class="annot"><span class="annottext">OverrideOptions
+</span><a href="#local-6989586621679109683"><span class="hs-identifier hs-var">opts</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-57"></span><span>  </span><span class="annot"><span class="annottext">(Config -&gt; Config) -&gt; (Config -&gt; Config) -&gt; Config -&gt; Config
+forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">ASetter Config Config Bool Bool
+-&gt; (Bool -&gt; Bool) -&gt; Config -&gt; Config
+forall s t a b. ASetter s t a b -&gt; (a -&gt; b) -&gt; s -&gt; t
+</span><span class="hs-identifier hs-var">over</span></span><span> </span><span class="annot"><span class="annottext">ASetter Config Config Bool Bool
+Lens' Config Bool
+</span><a href="HoYo.Internal.Utils.html#enableClearing"><span class="hs-identifier hs-var">enableClearing</span></a></span><span>       </span><span class="hs-special">(</span><span class="annot"><span class="annottext">MaybeOverride -&gt; Bool -&gt; Bool
+</span><a href="HoYo.Internal.Command.html#overrideFunc"><span class="hs-identifier hs-var">overrideFunc</span></a></span><span> </span><span class="annot"><span class="annottext">(MaybeOverride -&gt; Bool -&gt; Bool) -&gt; MaybeOverride -&gt; Bool -&gt; Bool
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span>      </span><span class="annot"><span class="annottext">OverrideOptions -&gt; MaybeOverride
+</span><a href="HoYo.Internal.Types.html#overrideEnableClearing"><span class="hs-identifier hs-var hs-var">overrideEnableClearing</span></a></span><span> </span><span class="annot"><span class="annottext">OverrideOptions
+</span><a href="#local-6989586621679109683"><span class="hs-identifier hs-var">opts</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-58"></span><span>  </span><span class="annot"><span class="annottext">(Config -&gt; Config) -&gt; (Config -&gt; Config) -&gt; Config -&gt; Config
+forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">ASetter Config Config Bool Bool
+-&gt; (Bool -&gt; Bool) -&gt; Config -&gt; Config
+forall s t a b. ASetter s t a b -&gt; (a -&gt; b) -&gt; s -&gt; t
+</span><span class="hs-identifier hs-var">over</span></span><span> </span><span class="annot"><span class="annottext">ASetter Config Config Bool Bool
+Lens' Config Bool
+</span><a href="HoYo.Internal.Utils.html#enableReset"><span class="hs-identifier hs-var">enableReset</span></a></span><span>          </span><span class="hs-special">(</span><span class="annot"><span class="annottext">MaybeOverride -&gt; Bool -&gt; Bool
+</span><a href="HoYo.Internal.Command.html#overrideFunc"><span class="hs-identifier hs-var">overrideFunc</span></a></span><span> </span><span class="annot"><span class="annottext">(MaybeOverride -&gt; Bool -&gt; Bool) -&gt; MaybeOverride -&gt; Bool -&gt; Bool
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span>         </span><span class="annot"><span class="annottext">OverrideOptions -&gt; MaybeOverride
+</span><a href="HoYo.Internal.Types.html#overrideEnableReset"><span class="hs-identifier hs-var hs-var">overrideEnableReset</span></a></span><span> </span><span class="annot"><span class="annottext">OverrideOptions
+</span><a href="#local-6989586621679109683"><span class="hs-identifier hs-var">opts</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-59"></span><span>  </span><span class="annot"><span class="annottext">(Config -&gt; Config) -&gt; (Config -&gt; Config) -&gt; Config -&gt; Config
+forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">ASetter Config Config Bool Bool
+-&gt; (Bool -&gt; Bool) -&gt; Config -&gt; Config
+forall s t a b. ASetter s t a b -&gt; (a -&gt; b) -&gt; s -&gt; t
+</span><span class="hs-identifier hs-var">over</span></span><span> </span><span class="annot"><span class="annottext">ASetter Config Config Bool Bool
+Lens' Config Bool
+</span><a href="HoYo.Internal.Utils.html#backupBeforeClear"><span class="hs-identifier hs-var">backupBeforeClear</span></a></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">MaybeOverride -&gt; Bool -&gt; Bool
+</span><a href="HoYo.Internal.Command.html#overrideFunc"><span class="hs-identifier hs-var">overrideFunc</span></a></span><span> </span><span class="annot"><span class="annottext">(MaybeOverride -&gt; Bool -&gt; Bool) -&gt; MaybeOverride -&gt; Bool -&gt; Bool
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span>   </span><span class="annot"><span class="annottext">OverrideOptions -&gt; MaybeOverride
+</span><a href="HoYo.Internal.Types.html#overrideBackupBeforeClear"><span class="hs-identifier hs-var hs-var">overrideBackupBeforeClear</span></a></span><span> </span><span class="annot"><span class="annottext">OverrideOptions
+</span><a href="#local-6989586621679109683"><span class="hs-identifier hs-var">opts</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-60"></span><span>
+</span><span id="line-61"></span><span class="hs-comment">-- | Apply the override options to an 'Env'.</span><span>
+</span><span id="line-62"></span><span class="annot"><a href="HoYo.Internal.Command.html#overrideEnv"><span class="hs-identifier hs-type">overrideEnv</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#OverrideOptions"><span class="hs-identifier hs-type">OverrideOptions</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#Env"><span class="hs-identifier hs-type">Env</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#Env"><span class="hs-identifier hs-type">Env</span></a></span><span>
+</span><span id="line-63"></span><span id="overrideEnv"><span class="annot"><span class="annottext">overrideEnv :: OverrideOptions -&gt; Env -&gt; Env
+</span><a href="HoYo.Internal.Command.html#overrideEnv"><span class="hs-identifier hs-var hs-var">overrideEnv</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ASetter Env Env Config Config -&gt; (Config -&gt; Config) -&gt; Env -&gt; Env
+forall s t a b. ASetter s t a b -&gt; (a -&gt; b) -&gt; s -&gt; t
+</span><span class="hs-identifier hs-var">over</span></span><span> </span><span class="annot"><span class="annottext">ASetter Env Env Config Config
+Lens' Env Config
+</span><a href="HoYo.Internal.Types.html#config"><span class="hs-identifier hs-var">config</span></a></span><span> </span><span class="annot"><span class="annottext">((Config -&gt; Config) -&gt; Env -&gt; Env)
+-&gt; (OverrideOptions -&gt; Config -&gt; Config)
+-&gt; OverrideOptions
+-&gt; Env
+-&gt; Env
+forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">OverrideOptions -&gt; Config -&gt; Config
+</span><a href="HoYo.Internal.Command.html#overrideConfig"><span class="hs-identifier hs-var">overrideConfig</span></a></span><span>
+</span><span id="line-64"></span><span>
+</span><span id="line-65"></span><span class="hs-comment">-- | Check that there are no conflicting overrides.</span><span>
+</span><span id="line-66"></span><span class="annot"><a href="HoYo.Internal.Command.html#verifyOverrides"><span class="hs-identifier hs-type">verifyOverrides</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#OverrideOptions"><span class="hs-identifier hs-type">OverrideOptions</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">T.Text</span></span><span>
+</span><span id="line-67"></span><span id="verifyOverrides"><span class="annot"><span class="annottext">verifyOverrides :: OverrideOptions -&gt; Maybe Text
+</span><a href="HoYo.Internal.Command.html#verifyOverrides"><span class="hs-identifier hs-var hs-var">verifyOverrides</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="HoYo.Internal.Types.html#OverrideOptions"><span class="hs-identifier hs-type">OverrideOptions</span></a></span><span> </span><span id="local-6989586621679109666"><span class="annot"><span class="annottext">MaybeOverride
+</span><a href="#local-6989586621679109666"><span class="hs-identifier hs-var">o1</span></a></span></span><span> </span><span id="local-6989586621679109665"><span class="annot"><span class="annottext">MaybeOverride
+</span><a href="#local-6989586621679109665"><span class="hs-identifier hs-var">o2</span></a></span></span><span> </span><span id="local-6989586621679109664"><span class="annot"><span class="annottext">MaybeOverride
+</span><a href="#local-6989586621679109664"><span class="hs-identifier hs-var">o3</span></a></span></span><span> </span><span id="local-6989586621679109663"><span class="annot"><span class="annottext">MaybeOverride
+</span><a href="#local-6989586621679109663"><span class="hs-identifier hs-var">o4</span></a></span></span><span> </span><span id="local-6989586621679109662"><span class="annot"><span class="annottext">MaybeOverride
+</span><a href="#local-6989586621679109662"><span class="hs-identifier hs-var">o5</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">MaybeOverride -&gt; Maybe Text
+forall a. IsString a =&gt; MaybeOverride -&gt; Maybe a
+</span><a href="#local-6989586621679109661"><span class="hs-identifier hs-var">verify</span></a></span><span> </span><span class="annot"><span class="annottext">MaybeOverride
+</span><a href="#local-6989586621679109666"><span class="hs-identifier hs-var">o1</span></a></span><span>
+</span><span id="line-68"></span><span>                                               </span><span class="annot"><span class="annottext">Maybe Text -&gt; Maybe Text -&gt; Maybe Text
+forall (f :: * -&gt; *) a. Alternative f =&gt; f a -&gt; f a -&gt; f a
+</span><span class="hs-operator hs-var">&lt;|&gt;</span></span><span> </span><span class="annot"><span class="annottext">MaybeOverride -&gt; Maybe Text
+forall a. IsString a =&gt; MaybeOverride -&gt; Maybe a
+</span><a href="#local-6989586621679109661"><span class="hs-identifier hs-var">verify</span></a></span><span> </span><span class="annot"><span class="annottext">MaybeOverride
+</span><a href="#local-6989586621679109665"><span class="hs-identifier hs-var">o2</span></a></span><span>
+</span><span id="line-69"></span><span>                                               </span><span class="annot"><span class="annottext">Maybe Text -&gt; Maybe Text -&gt; Maybe Text
+forall (f :: * -&gt; *) a. Alternative f =&gt; f a -&gt; f a -&gt; f a
+</span><span class="hs-operator hs-var">&lt;|&gt;</span></span><span> </span><span class="annot"><span class="annottext">MaybeOverride -&gt; Maybe Text
+forall a. IsString a =&gt; MaybeOverride -&gt; Maybe a
+</span><a href="#local-6989586621679109661"><span class="hs-identifier hs-var">verify</span></a></span><span> </span><span class="annot"><span class="annottext">MaybeOverride
+</span><a href="#local-6989586621679109664"><span class="hs-identifier hs-var">o3</span></a></span><span>
+</span><span id="line-70"></span><span>                                               </span><span class="annot"><span class="annottext">Maybe Text -&gt; Maybe Text -&gt; Maybe Text
+forall (f :: * -&gt; *) a. Alternative f =&gt; f a -&gt; f a -&gt; f a
+</span><span class="hs-operator hs-var">&lt;|&gt;</span></span><span> </span><span class="annot"><span class="annottext">MaybeOverride -&gt; Maybe Text
+forall a. IsString a =&gt; MaybeOverride -&gt; Maybe a
+</span><a href="#local-6989586621679109661"><span class="hs-identifier hs-var">verify</span></a></span><span> </span><span class="annot"><span class="annottext">MaybeOverride
+</span><a href="#local-6989586621679109663"><span class="hs-identifier hs-var">o4</span></a></span><span>
+</span><span id="line-71"></span><span>                                               </span><span class="annot"><span class="annottext">Maybe Text -&gt; Maybe Text -&gt; Maybe Text
+forall (f :: * -&gt; *) a. Alternative f =&gt; f a -&gt; f a -&gt; f a
+</span><span class="hs-operator hs-var">&lt;|&gt;</span></span><span> </span><span class="annot"><span class="annottext">MaybeOverride -&gt; Maybe Text
+forall a. IsString a =&gt; MaybeOverride -&gt; Maybe a
+</span><a href="#local-6989586621679109661"><span class="hs-identifier hs-var">verify</span></a></span><span> </span><span class="annot"><span class="annottext">MaybeOverride
+</span><a href="#local-6989586621679109662"><span class="hs-identifier hs-var">o5</span></a></span><span>
+</span><span id="line-72"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679109661"><span class="annot"><span class="annottext">verify :: MaybeOverride -&gt; Maybe a
+</span><a href="#local-6989586621679109661"><span class="hs-identifier hs-var hs-var">verify</span></a></span></span><span> </span><span class="annot"><span class="annottext">MaybeOverride
+</span><a href="HoYo.Internal.Types.html#Conflict"><span class="hs-identifier hs-var">Conflict</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">a -&gt; Maybe a
+forall a. a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">a
+</span><span class="hs-string">&quot;conflicting flags&quot;</span></span><span>
+</span><span id="line-73"></span><span>        </span><span class="annot"><a href="#local-6989586621679109661"><span class="hs-identifier hs-var">verify</span></a></span><span> </span><span class="annot"><span class="annottext">MaybeOverride
+</span><span class="hs-identifier">_</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe a
+forall a. Maybe a
+</span><span class="hs-identifier hs-var">Nothing</span></span><span>
+</span><span id="line-74"></span><span>
+</span><span id="line-75"></span><span class="hs-comment">-- | The default behaviour is to override nothing.</span><span>
+</span><span id="line-76"></span><span class="annot"><a href="HoYo.Internal.Command.html#defaultOverrideOptions"><span class="hs-identifier hs-type">defaultOverrideOptions</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#OverrideOptions"><span class="hs-identifier hs-type">OverrideOptions</span></a></span><span>
+</span><span id="line-77"></span><span id="defaultOverrideOptions"><span class="annot"><span class="annottext">defaultOverrideOptions :: OverrideOptions
+</span><a href="HoYo.Internal.Command.html#defaultOverrideOptions"><span class="hs-identifier hs-var hs-var">defaultOverrideOptions</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">MaybeOverride
+-&gt; MaybeOverride
+-&gt; MaybeOverride
+-&gt; MaybeOverride
+-&gt; MaybeOverride
+-&gt; OverrideOptions
+</span><a href="HoYo.Internal.Types.html#OverrideOptions"><span class="hs-identifier hs-var">OverrideOptions</span></a></span><span> </span><span class="annot"><span class="annottext">MaybeOverride
+</span><a href="HoYo.Internal.Types.html#NoOverride"><span class="hs-identifier hs-var">NoOverride</span></a></span><span>
+</span><span id="line-78"></span><span>                                         </span><span class="annot"><span class="annottext">MaybeOverride
+</span><a href="HoYo.Internal.Types.html#NoOverride"><span class="hs-identifier hs-var">NoOverride</span></a></span><span>
+</span><span id="line-79"></span><span>                                         </span><span class="annot"><span class="annottext">MaybeOverride
+</span><a href="HoYo.Internal.Types.html#NoOverride"><span class="hs-identifier hs-var">NoOverride</span></a></span><span>
+</span><span id="line-80"></span><span>                                         </span><span class="annot"><span class="annottext">MaybeOverride
+</span><a href="HoYo.Internal.Types.html#NoOverride"><span class="hs-identifier hs-var">NoOverride</span></a></span><span>
+</span><span id="line-81"></span><span>                                         </span><span class="annot"><span class="annottext">MaybeOverride
+</span><a href="HoYo.Internal.Types.html#NoOverride"><span class="hs-identifier hs-var">NoOverride</span></a></span><span>
+</span><span id="line-82"></span><span>
+</span><span id="line-83"></span><span class="hs-comment">-- | Default global options. In general this should do nothing.</span><span>
+</span><span id="line-84"></span><span class="annot"><a href="HoYo.Internal.Command.html#defaultGlobalOptions"><span class="hs-identifier hs-type">defaultGlobalOptions</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#GlobalOptions"><span class="hs-identifier hs-type">GlobalOptions</span></a></span><span>
+</span><span id="line-85"></span><span id="defaultGlobalOptions"><span class="annot"><span class="annottext">defaultGlobalOptions :: GlobalOptions
+</span><a href="HoYo.Internal.Command.html#defaultGlobalOptions"><span class="hs-identifier hs-var hs-var">defaultGlobalOptions</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe Text -&gt; Maybe Text -&gt; OverrideOptions -&gt; GlobalOptions
+</span><a href="HoYo.Internal.Types.html#GlobalOptions"><span class="hs-identifier hs-var">GlobalOptions</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe Text
+forall a. Maybe a
+</span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="annot"><span class="annottext">Maybe Text
+forall a. Maybe a
+</span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="annot"><span class="annottext">OverrideOptions
+</span><a href="HoYo.Internal.Command.html#defaultOverrideOptions"><span class="hs-identifier hs-var">defaultOverrideOptions</span></a></span><span>
+</span><span id="line-86"></span><span>
+</span><span id="line-87"></span><span class="hs-comment">-- | Helper function whenever we need to modify the saved bookmarks.</span><span>
+</span><span id="line-88"></span><span class="hs-comment">--</span><span>
+</span><span id="line-89"></span><span class="hs-comment">-- @modifyBookmarks f@ retrieves the current bookmarks, applies @f@,</span><span>
+</span><span id="line-90"></span><span class="hs-comment">-- and saves them back to file.</span><span>
+</span><span id="line-91"></span><span class="annot"><a href="HoYo.Internal.Command.html#modifyBookmarks"><span class="hs-identifier hs-type">modifyBookmarks</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="annot"><a href="HoYo.Internal.Types.html#Bookmark"><span class="hs-identifier hs-type">Bookmark</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="HoYo.Internal.Types.html#Bookmark"><span class="hs-identifier hs-type">Bookmark</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#HoYoMonad"><span class="hs-identifier hs-type">HoYoMonad</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><span id="line-92"></span><span id="modifyBookmarks"><span class="annot"><span class="annottext">modifyBookmarks :: ([Bookmark] -&gt; [Bookmark]) -&gt; HoYoMonad ()
+</span><a href="HoYo.Internal.Command.html#modifyBookmarks"><span class="hs-identifier hs-var hs-var">modifyBookmarks</span></a></span></span><span> </span><span id="local-6989586621679109655"><span class="annot"><span class="annottext">[Bookmark] -&gt; [Bookmark]
+</span><a href="#local-6989586621679109655"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">([Bookmark] -&gt; HoYoMonad [Bookmark]) -&gt; HoYoMonad ()
+</span><a href="HoYo.Internal.Command.html#modifyBookmarksM"><span class="hs-identifier hs-var">modifyBookmarksM</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Bookmark] -&gt; HoYoMonad [Bookmark]
+forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
+</span><span class="hs-identifier hs-var">return</span></span><span> </span><span class="annot"><span class="annottext">([Bookmark] -&gt; HoYoMonad [Bookmark])
+-&gt; ([Bookmark] -&gt; [Bookmark]) -&gt; [Bookmark] -&gt; HoYoMonad [Bookmark]
+forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">[Bookmark] -&gt; [Bookmark]
+</span><a href="#local-6989586621679109655"><span class="hs-identifier hs-var">f</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-93"></span><span>
+</span><span id="line-94"></span><span class="hs-comment">-- | Helper function twhenever we need to modify the saved bookmarks,</span><span>
+</span><span id="line-95"></span><span class="hs-comment">-- and need access to the hoyo environment.</span><span>
+</span><span id="line-96"></span><span class="hs-comment">--</span><span>
+</span><span id="line-97"></span><span class="hs-comment">-- @modifyBookmarks f@ retrieves the current bookmarks, applies @f@</span><span>
+</span><span id="line-98"></span><span class="hs-comment">-- in the hoyo environment, and saves them back to file.</span><span>
+</span><span id="line-99"></span><span class="annot"><a href="HoYo.Internal.Command.html#modifyBookmarksM"><span class="hs-identifier hs-type">modifyBookmarksM</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="annot"><a href="HoYo.Internal.Types.html#Bookmark"><span class="hs-identifier hs-type">Bookmark</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#HoYoMonad"><span class="hs-identifier hs-type">HoYoMonad</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><a href="HoYo.Internal.Types.html#Bookmark"><span class="hs-identifier hs-type">Bookmark</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#HoYoMonad"><span class="hs-identifier hs-type">HoYoMonad</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><span id="line-100"></span><span id="modifyBookmarksM"><span class="annot"><span class="annottext">modifyBookmarksM :: ([Bookmark] -&gt; HoYoMonad [Bookmark]) -&gt; HoYoMonad ()
+</span><a href="HoYo.Internal.Command.html#modifyBookmarksM"><span class="hs-identifier hs-var hs-var">modifyBookmarksM</span></a></span></span><span> </span><span id="local-6989586621679109653"><span class="annot"><span class="annottext">[Bookmark] -&gt; HoYoMonad [Bookmark]
+</span><a href="#local-6989586621679109653"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-101"></span><span>  </span><span class="annot"><a href="HoYo.Internal.Types.html#Env"><span class="hs-identifier hs-type">Env</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="HoYo.Internal.Types.html#Bookmarks"><span class="hs-identifier hs-type">Bookmarks</span></a></span><span> </span><span id="local-6989586621679109650"><span class="annot"><span class="annottext">[Bookmark]
+</span><a href="#local-6989586621679109650"><span class="hs-identifier hs-var">bms</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679109649"><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679109649"><span class="hs-identifier hs-var">bFp</span></a></span></span><span> </span><span class="annot"><span class="annottext">Config
+</span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-identifier">_</span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">HoYoMonad Env
+forall r (m :: * -&gt; *). MonadReader r m =&gt; m r
+</span><span class="hs-identifier hs-var">ask</span></span><span>
+</span><span id="line-102"></span><span>  </span><span id="local-6989586621679109648"><span class="annot"><span class="annottext">Bookmarks
+</span><a href="#local-6989586621679109648"><span class="hs-identifier hs-var">newBookmarks</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">[Bookmark] -&gt; Bookmarks
+</span><a href="HoYo.Internal.Types.html#Bookmarks"><span class="hs-identifier hs-var">Bookmarks</span></a></span><span> </span><span class="annot"><span class="annottext">([Bookmark] -&gt; Bookmarks)
+-&gt; HoYoMonad [Bookmark] -&gt; HoYoMonad Bookmarks
+forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
+</span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="annottext">[Bookmark] -&gt; HoYoMonad [Bookmark]
+</span><a href="#local-6989586621679109653"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">[Bookmark]
+</span><a href="#local-6989586621679109650"><span class="hs-identifier hs-var">bms</span></a></span><span>
+</span><span id="line-103"></span><span>  </span><span class="annot"><span class="annottext">Text -&gt; Bookmarks -&gt; HoYoMonad ()
+forall (m :: * -&gt; *). MonadIO m =&gt; Text -&gt; Bookmarks -&gt; m ()
+</span><a href="HoYo.Internal.Bookmark.html#encodeBookmarksFile"><span class="hs-identifier hs-var">encodeBookmarksFile</span></a></span><span> </span><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679109649"><span class="hs-identifier hs-var">bFp</span></a></span><span> </span><span class="annot"><span class="annottext">Bookmarks
+</span><a href="#local-6989586621679109648"><span class="hs-identifier hs-var">newBookmarks</span></a></span><span>
+</span><span id="line-104"></span><span>
+</span><span id="line-105"></span><span class="hs-comment">-- | Normalise a filepath and make sure it's a valid directory.</span><span>
+</span><span id="line-106"></span><span class="annot"><a href="HoYo.Internal.Command.html#normaliseAndVerifyDirectory"><span class="hs-identifier hs-type">normaliseAndVerifyDirectory</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#TFilePath"><span class="hs-identifier hs-type">TFilePath</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#HoYoMonad"><span class="hs-identifier hs-type">HoYoMonad</span></a></span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#TFilePath"><span class="hs-identifier hs-type">TFilePath</span></a></span><span>
+</span><span id="line-107"></span><span id="normaliseAndVerifyDirectory"><span class="annot"><span class="annottext">normaliseAndVerifyDirectory :: Text -&gt; HoYoMonad Text
+</span><a href="HoYo.Internal.Command.html#normaliseAndVerifyDirectory"><span class="hs-identifier hs-var hs-var">normaliseAndVerifyDirectory</span></a></span></span><span> </span><span id="local-6989586621679109643"><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679109643"><span class="hs-identifier hs-var">d</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-108"></span><span>  </span><span id="local-6989586621679109642"><span class="annot"><span class="annottext">[Char]
+</span><a href="#local-6989586621679109642"><span class="hs-identifier hs-var">dir</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">IO [Char] -&gt; HoYoMonad [Char]
+forall (m :: * -&gt; *) a. MonadIO m =&gt; IO a -&gt; m a
+</span><span class="hs-identifier hs-var">liftIO</span></span><span> </span><span class="annot"><span class="annottext">(IO [Char] -&gt; HoYoMonad [Char]) -&gt; IO [Char] -&gt; HoYoMonad [Char]
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; IO [Char]
+</span><span class="hs-identifier hs-var">canonicalizePath</span></span><span> </span><span class="annot"><span class="annottext">([Char] -&gt; IO [Char]) -&gt; [Char] -&gt; IO [Char]
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Text -&gt; [Char]
+</span><span class="hs-identifier hs-var">T.unpack</span></span><span> </span><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679109643"><span class="hs-identifier hs-var">d</span></a></span><span>
+</span><span id="line-109"></span><span>  </span><span class="annot"><span class="annottext">Text -&gt; HoYoMonad Bool -&gt; HoYoMonad Bool
+</span><a href="HoYo.Internal.Utils.html#assertVerbose"><span class="hs-identifier hs-var">assertVerbose</span></a></span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;not a directory&quot;</span></span><span> </span><span class="annot"><span class="annottext">(HoYoMonad Bool -&gt; HoYoMonad Bool)
+-&gt; HoYoMonad Bool -&gt; HoYoMonad Bool
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">IO Bool -&gt; HoYoMonad Bool
+forall (m :: * -&gt; *) a. MonadIO m =&gt; IO a -&gt; m a
+</span><span class="hs-identifier hs-var">liftIO</span></span><span> </span><span class="annot"><span class="annottext">(IO Bool -&gt; HoYoMonad Bool) -&gt; IO Bool -&gt; HoYoMonad Bool
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; IO Bool
+</span><span class="hs-identifier hs-var">doesDirectoryExist</span></span><span> </span><span class="annot"><span class="annottext">[Char]
+</span><a href="#local-6989586621679109642"><span class="hs-identifier hs-var">dir</span></a></span><span>
+</span><span id="line-110"></span><span>  </span><span class="annot"><span class="annottext">Text -&gt; HoYoMonad Text
+forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
+</span><span class="hs-identifier hs-var">return</span></span><span> </span><span class="annot"><span class="annottext">(Text -&gt; HoYoMonad Text) -&gt; Text -&gt; HoYoMonad Text
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; Text
+</span><span class="hs-identifier hs-var">T.pack</span></span><span> </span><span class="annot"><span class="annottext">[Char]
+</span><a href="#local-6989586621679109642"><span class="hs-identifier hs-var">dir</span></a></span><span>
+</span><span id="line-111"></span><span>
+</span><span id="line-112"></span><span class="hs-comment">-- | Take a name and make sure it's valid.</span><span>
+</span><span id="line-113"></span><span class="annot"><a href="HoYo.Internal.Command.html#verifyName"><span class="hs-identifier hs-type">verifyName</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">T.Text</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#HoYoMonad"><span class="hs-identifier hs-type">HoYoMonad</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><span id="line-114"></span><span id="verifyName"><span class="annot"><span class="annottext">verifyName :: Text -&gt; HoYoMonad ()
+</span><a href="HoYo.Internal.Command.html#verifyName"><span class="hs-identifier hs-var hs-var">verifyName</span></a></span></span><span> </span><span id="local-6989586621679109634"><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679109634"><span class="hs-identifier hs-var">name</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-115"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679109633"><span class="annot"><span class="annottext">nameStr :: [Char]
+</span><a href="#local-6989586621679109633"><span class="hs-identifier hs-var hs-var">nameStr</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Text -&gt; [Char]
+</span><span class="hs-identifier hs-var">T.unpack</span></span><span> </span><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679109634"><span class="hs-identifier hs-var">name</span></a></span><span>
+</span><span id="line-116"></span><span>  </span><span class="annot"><span class="annottext">Text -&gt; HoYoMonad Bool -&gt; HoYoMonad ()
+</span><a href="HoYo.Internal.Utils.html#assert"><span class="hs-identifier hs-var">assert</span></a></span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;bookmark name can't be empty&quot;</span></span><span> </span><span class="annot"><span class="annottext">(HoYoMonad Bool -&gt; HoYoMonad ()) -&gt; HoYoMonad Bool -&gt; HoYoMonad ()
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; HoYoMonad Bool
+forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
+</span><span class="hs-identifier hs-var">return</span></span><span> </span><span class="annot"><span class="annottext">(Bool -&gt; HoYoMonad Bool) -&gt; Bool -&gt; HoYoMonad Bool
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool
+</span><span class="hs-identifier hs-var">not</span></span><span> </span><span class="annot"><span class="annottext">(Bool -&gt; Bool) -&gt; Bool -&gt; Bool
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Text -&gt; Bool
+</span><span class="hs-identifier hs-var">T.null</span></span><span> </span><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679109634"><span class="hs-identifier hs-var">name</span></a></span><span>
+</span><span id="line-117"></span><span>  </span><span class="annot"><span class="annottext">Text -&gt; HoYoMonad Bool -&gt; HoYoMonad ()
+</span><a href="HoYo.Internal.Utils.html#assert"><span class="hs-identifier hs-var">assert</span></a></span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;bookmark name can't be a number&quot;</span></span><span> </span><span class="annot"><span class="annottext">(HoYoMonad Bool -&gt; HoYoMonad ()) -&gt; HoYoMonad Bool -&gt; HoYoMonad ()
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; HoYoMonad Bool
+forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
+</span><span class="hs-identifier hs-var">return</span></span><span> </span><span class="annot"><span class="annottext">(Bool -&gt; HoYoMonad Bool) -&gt; Bool -&gt; HoYoMonad Bool
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool
+</span><span class="hs-identifier hs-var">not</span></span><span> </span><span class="annot"><span class="annottext">(Bool -&gt; Bool) -&gt; Bool -&gt; Bool
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Char -&gt; Bool) -&gt; [Char] -&gt; Bool
+forall (t :: * -&gt; *) a. Foldable t =&gt; (a -&gt; Bool) -&gt; t a -&gt; Bool
+</span><span class="hs-identifier hs-var">all</span></span><span> </span><span class="annot"><span class="annottext">Char -&gt; Bool
+</span><span class="hs-identifier hs-var">isDigit</span></span><span> </span><span class="annot"><span class="annottext">[Char]
+</span><a href="#local-6989586621679109633"><span class="hs-identifier hs-var">nameStr</span></a></span><span>
+</span><span id="line-118"></span><span>
+</span><span id="line-119"></span><span class="hs-comment">-- | Given the existing bookmarks and a potential bookmark name,</span><span>
+</span><span id="line-120"></span><span class="hs-comment">-- test if the new bookmark will have a unique name.</span><span>
+</span><span id="line-121"></span><span class="annot"><a href="HoYo.Internal.Command.html#testNameUnique"><span class="hs-identifier hs-type">testNameUnique</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="HoYo.Internal.Types.html#Bookmark"><span class="hs-identifier hs-type">Bookmark</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">T.Text</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#HoYoMonad"><span class="hs-identifier hs-type">HoYoMonad</span></a></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span>
+</span><span id="line-122"></span><span id="testNameUnique"><span class="annot"><span class="annottext">testNameUnique :: [Bookmark] -&gt; Text -&gt; HoYoMonad Bool
+</span><a href="HoYo.Internal.Command.html#testNameUnique"><span class="hs-identifier hs-var hs-var">testNameUnique</span></a></span></span><span> </span><span id="local-6989586621679109627"><span class="annot"><span class="annottext">[Bookmark]
+</span><a href="#local-6989586621679109627"><span class="hs-identifier hs-var">bms</span></a></span></span><span> </span><span id="local-6989586621679109626"><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679109626"><span class="hs-identifier hs-var">name</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
+</span><span id="line-123"></span><span>  </span><span class="annot"><span class="annottext">Text -&gt; HoYoMonad Bool -&gt; HoYoMonad Bool
+</span><a href="HoYo.Internal.Utils.html#assertVerbose"><span class="hs-identifier hs-var">assertVerbose</span></a></span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;bookmark name already used&quot;</span></span><span> </span><span class="annot"><span class="annottext">(HoYoMonad Bool -&gt; HoYoMonad Bool)
+-&gt; HoYoMonad Bool -&gt; HoYoMonad Bool
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span>
+</span><span id="line-124"></span><span>    </span><span class="annot"><span class="annottext">Bool -&gt; HoYoMonad Bool
+forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
+</span><span class="hs-identifier hs-var">return</span></span><span> </span><span class="annot"><span class="annottext">(Bool -&gt; HoYoMonad Bool) -&gt; Bool -&gt; HoYoMonad Bool
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Bookmark -&gt; Bool) -&gt; [Bookmark] -&gt; Bool
+forall (t :: * -&gt; *) a. Foldable t =&gt; (a -&gt; Bool) -&gt; t a -&gt; Bool
+</span><span class="hs-identifier hs-var">all</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">Maybe Text -&gt; Maybe Text -&gt; Bool
+forall a. Eq a =&gt; a -&gt; a -&gt; Bool
+</span><span class="hs-operator hs-var">/=</span></span><span> </span><span class="annot"><span class="annottext">Text -&gt; Maybe Text
+forall a. a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679109626"><span class="hs-identifier hs-var">name</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Maybe Text -&gt; Bool)
+-&gt; (Bookmark -&gt; Maybe Text) -&gt; Bookmark -&gt; Bool
+forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Getting (Maybe Text) Bookmark (Maybe Text)
+-&gt; Bookmark -&gt; Maybe Text
+forall a s. Getting a s a -&gt; s -&gt; a
+</span><span class="hs-identifier hs-var">view</span></span><span> </span><span class="annot"><span class="annottext">Getting (Maybe Text) Bookmark (Maybe Text)
+Lens' Bookmark (Maybe Text)
+</span><a href="HoYo.Internal.Types.html#bookmarkName"><span class="hs-identifier hs-var">bookmarkName</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Bookmark]
+</span><a href="#local-6989586621679109627"><span class="hs-identifier hs-var">bms</span></a></span><span>
+</span><span id="line-125"></span><span>
+</span><span id="line-126"></span><span class="hs-comment">-- | Run the &quot;add&quot; command: add a new bookmark.</span><span>
+</span><span id="line-127"></span><span class="annot"><a href="HoYo.Internal.Command.html#runAdd"><span class="hs-identifier hs-type">runAdd</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#AddOptions"><span class="hs-identifier hs-type">AddOptions</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#HoYoMonad"><span class="hs-identifier hs-type">HoYoMonad</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><span id="line-128"></span><span id="runAdd"><span class="annot"><span class="annottext">runAdd :: AddOptions -&gt; HoYoMonad ()
+</span><a href="HoYo.Internal.Command.html#runAdd"><span class="hs-identifier hs-var hs-var">runAdd</span></a></span></span><span> </span><span id="local-6989586621679109621"><span class="annot"><span class="annottext">AddOptions
+</span><a href="#local-6989586621679109621"><span class="hs-identifier hs-var">opts</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-129"></span><span>  </span><span id="local-6989586621679109620"><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679109620"><span class="hs-identifier hs-var">dir</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">Text -&gt; HoYoMonad Text
+</span><a href="HoYo.Internal.Command.html#normaliseAndVerifyDirectory"><span class="hs-identifier hs-var">normaliseAndVerifyDirectory</span></a></span><span> </span><span class="annot"><span class="annottext">(Text -&gt; HoYoMonad Text) -&gt; Text -&gt; HoYoMonad Text
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">AddOptions -&gt; Text
+</span><a href="HoYo.Internal.Types.html#addDirectory"><span class="hs-identifier hs-var hs-var">addDirectory</span></a></span><span> </span><span class="annot"><span class="annottext">AddOptions
+</span><a href="#local-6989586621679109621"><span class="hs-identifier hs-var">opts</span></a></span><span>
+</span><span id="line-130"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679109618"><span class="annot"><span class="annottext">name :: Maybe Text
+</span><a href="#local-6989586621679109618"><span class="hs-identifier hs-var hs-var">name</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">AddOptions -&gt; Maybe Text
+</span><a href="HoYo.Internal.Types.html#addName"><span class="hs-identifier hs-var hs-var">addName</span></a></span><span> </span><span class="annot"><span class="annottext">AddOptions
+</span><a href="#local-6989586621679109621"><span class="hs-identifier hs-var">opts</span></a></span><span>
+</span><span id="line-131"></span><span>  </span><span class="annot"><span class="annottext">([Bookmark] -&gt; HoYoMonad [Bookmark]) -&gt; HoYoMonad ()
+</span><a href="HoYo.Internal.Command.html#modifyBookmarksM"><span class="hs-identifier hs-var">modifyBookmarksM</span></a></span><span> </span><span class="annot"><span class="annottext">(([Bookmark] -&gt; HoYoMonad [Bookmark]) -&gt; HoYoMonad ())
+-&gt; ([Bookmark] -&gt; HoYoMonad [Bookmark]) -&gt; HoYoMonad ()
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="hs-glyph">\</span><span id="local-6989586621679109616"><span class="annot"><span class="annottext">[Bookmark]
+</span><a href="#local-6989586621679109616"><span class="hs-identifier hs-var">bms</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-132"></span><span>    </span><span id="local-6989586621679109615"><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679109615"><span class="hs-identifier hs-var">uniqName</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">[Bookmark] -&gt; Text -&gt; HoYoMonad Bool
+</span><a href="HoYo.Internal.Command.html#testNameUnique"><span class="hs-identifier hs-var">testNameUnique</span></a></span><span> </span><span class="annot"><span class="annottext">[Bookmark]
+</span><a href="#local-6989586621679109616"><span class="hs-identifier hs-var">bms</span></a></span><span> </span><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679109620"><span class="hs-identifier hs-var">dir</span></a></span><span>
+</span><span id="line-133"></span><span>    </span><span class="hs-keyword">if</span><span> </span><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679109615"><span class="hs-identifier hs-var">uniqName</span></a></span><span>
+</span><span id="line-134"></span><span>    </span><span class="hs-keyword">then</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-135"></span><span>      </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679109614"><span class="annot"><span class="annottext">maxIndex :: Int
+</span><a href="#local-6989586621679109614"><span class="hs-identifier hs-var hs-var">maxIndex</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int -&gt; [Int] -&gt; Int
+forall a. Ord a =&gt; a -&gt; [a] -&gt; a
+</span><a href="HoYo.Internal.Utils.html#maximumDefault"><span class="hs-identifier hs-var">maximumDefault</span></a></span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">([Int] -&gt; Int) -&gt; [Int] -&gt; Int
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Bookmark -&gt; Int) -&gt; [Bookmark] -&gt; [Int]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Getting Int Bookmark Int -&gt; Bookmark -&gt; Int
+forall a s. Getting a s a -&gt; s -&gt; a
+</span><span class="hs-identifier hs-var">view</span></span><span> </span><span class="annot"><span class="annottext">Getting Int Bookmark Int
+Lens' Bookmark Int
+</span><a href="HoYo.Internal.Types.html#bookmarkIndex"><span class="hs-identifier hs-var">bookmarkIndex</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Bookmark]
+</span><a href="#local-6989586621679109616"><span class="hs-identifier hs-var">bms</span></a></span><span>
+</span><span id="line-136"></span><span>      </span><span id="local-6989586621679109611"><span class="annot"><span class="annottext">ZonedTime
+</span><a href="#local-6989586621679109611"><span class="hs-identifier hs-var">zTime</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">IO ZonedTime -&gt; HoYoMonad ZonedTime
+forall (m :: * -&gt; *) a. MonadIO m =&gt; IO a -&gt; m a
+</span><span class="hs-identifier hs-var">liftIO</span></span><span> </span><span class="annot"><span class="annottext">IO ZonedTime
+</span><span class="hs-identifier hs-var">getZonedTime</span></span><span>
+</span><span id="line-137"></span><span>      </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679109609"><span class="annot"><span class="annottext">newBookMark :: Bookmark
+</span><a href="#local-6989586621679109609"><span class="hs-identifier hs-var hs-var">newBookMark</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Text -&gt; Int -&gt; ZonedTime -&gt; Maybe Text -&gt; Bookmark
+</span><a href="HoYo.Internal.Types.html#Bookmark"><span class="hs-identifier hs-var">Bookmark</span></a></span><span> </span><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679109620"><span class="hs-identifier hs-var">dir</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679109614"><span class="hs-identifier hs-var">maxIndex</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
+forall a. Num a =&gt; a -&gt; a -&gt; a
+</span><span class="hs-operator hs-var">+</span></span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">1</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ZonedTime
+</span><a href="#local-6989586621679109611"><span class="hs-identifier hs-var">zTime</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe Text
+</span><a href="#local-6989586621679109618"><span class="hs-identifier hs-var">name</span></a></span><span>
+</span><span id="line-138"></span><span>      </span><span class="annot"><span class="annottext">[Bookmark] -&gt; HoYoMonad [Bookmark]
+forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
+</span><span class="hs-identifier hs-var">return</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Bookmark
+</span><a href="#local-6989586621679109609"><span class="hs-identifier hs-var">newBookMark</span></a></span><span> </span><span class="annot"><span class="annottext">Bookmark -&gt; [Bookmark] -&gt; [Bookmark]
+forall a. a -&gt; [a] -&gt; [a]
+</span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">[Bookmark]
+</span><a href="#local-6989586621679109616"><span class="hs-identifier hs-var">bms</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-139"></span><span>    </span><span class="hs-keyword">else</span><span> </span><span class="annot"><span class="annottext">[Bookmark] -&gt; HoYoMonad [Bookmark]
+forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
+</span><span class="hs-identifier hs-var">return</span></span><span> </span><span class="annot"><span class="annottext">[Bookmark]
+</span><a href="#local-6989586621679109616"><span class="hs-identifier hs-var">bms</span></a></span><span>
+</span><span id="line-140"></span><span>
+</span><span id="line-141"></span><span class="hs-comment">-- | Run the &quot;move&quot; command: search for a bookmark and @cd@ to it.</span><span>
+</span><span id="line-142"></span><span class="annot"><a href="HoYo.Internal.Command.html#runMove"><span class="hs-identifier hs-type">runMove</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#MoveOptions"><span class="hs-identifier hs-type">MoveOptions</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#HoYoMonad"><span class="hs-identifier hs-type">HoYoMonad</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><span id="line-143"></span><span id="runMove"><span class="annot"><span class="annottext">runMove :: MoveOptions -&gt; HoYoMonad ()
+</span><a href="HoYo.Internal.Command.html#runMove"><span class="hs-identifier hs-var hs-var">runMove</span></a></span></span><span> </span><span id="local-6989586621679109605"><span class="annot"><span class="annottext">MoveOptions
+</span><a href="#local-6989586621679109605"><span class="hs-identifier hs-var">opts</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-144"></span><span>  </span><span id="local-6989586621679109604"><span class="annot"><span class="annottext">Bookmarks
+</span><a href="#local-6989586621679109604"><span class="hs-identifier hs-var">bms</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">SimpleGetter Env Bookmarks -&gt; HoYoMonad Bookmarks
+forall a (m :: * -&gt; *) b.
+MonadReader a m =&gt;
+SimpleGetter a b -&gt; m b
+</span><a href="HoYo.Internal.Utils.html#asks%27"><span class="hs-identifier hs-var">asks'</span></a></span><span> </span><span class="annot"><span class="annottext">SimpleGetter Env Bookmarks
+Lens' Env Bookmarks
+</span><a href="HoYo.Internal.Types.html#bookmarks"><span class="hs-identifier hs-var">bookmarks</span></a></span><span>
+</span><span id="line-145"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679109601"><span class="annot"><span class="annottext">search :: BookmarkSearchTerm
+</span><a href="#local-6989586621679109601"><span class="hs-identifier hs-var hs-var">search</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">MoveOptions -&gt; BookmarkSearchTerm
+</span><a href="HoYo.Internal.Types.html#moveSearch"><span class="hs-identifier hs-var hs-var">moveSearch</span></a></span><span> </span><span class="annot"><span class="annottext">MoveOptions
+</span><a href="#local-6989586621679109605"><span class="hs-identifier hs-var">opts</span></a></span><span>
+</span><span id="line-146"></span><span>  </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">([Bookmark], [Bookmark]) -&gt; [Bookmark]
+forall a b. (a, b) -&gt; a
+</span><span class="hs-identifier hs-var">fst</span></span><span> </span><span class="annot"><span class="annottext">(([Bookmark], [Bookmark]) -&gt; [Bookmark])
+-&gt; ([Bookmark], [Bookmark]) -&gt; [Bookmark]
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">BookmarkSearchTerm -&gt; Bookmarks -&gt; ([Bookmark], [Bookmark])
+</span><a href="HoYo.Internal.Bookmark.html#searchBookmarks"><span class="hs-identifier hs-var">searchBookmarks</span></a></span><span> </span><span class="annot"><span class="annottext">BookmarkSearchTerm
+</span><a href="#local-6989586621679109601"><span class="hs-identifier hs-var">search</span></a></span><span> </span><span class="annot"><span class="annottext">Bookmarks
+</span><a href="#local-6989586621679109604"><span class="hs-identifier hs-var">bms</span></a></span><span> </span><span class="hs-keyword">of</span><span>
+</span><span id="line-147"></span><span>    </span><span class="hs-special">[</span><span class="hs-special">]</span><span>    </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text -&gt; HoYoMonad ()
+forall e (m :: * -&gt; *) a. MonadError e m =&gt; e -&gt; m a
+</span><span class="hs-identifier hs-var">throwError</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;Unknown bookmark: &quot;</span></span><span> </span><span class="annot"><span class="annottext">Text -&gt; Text -&gt; Text
+forall a. Semigroup a =&gt; a -&gt; a -&gt; a
+</span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">BookmarkSearchTerm -&gt; Text
+forall a. Show a =&gt; a -&gt; Text
+</span><a href="HoYo.Internal.Utils.html#tshow"><span class="hs-identifier hs-var">tshow</span></a></span><span> </span><span class="annot"><span class="annottext">BookmarkSearchTerm
+</span><a href="#local-6989586621679109601"><span class="hs-identifier hs-var">search</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-148"></span><span>    </span><span class="hs-special">[</span><span id="local-6989586621679109597"><span class="annot"><span class="annottext">Bookmark
+</span><a href="#local-6989586621679109597"><span class="hs-identifier hs-var">bm</span></a></span></span><span class="hs-special">]</span><span>  </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">do</span><span> </span><span class="annot"><span class="annottext">Text -&gt; HoYoMonad ()
+forall (m :: * -&gt; *). MonadIO m =&gt; Text -&gt; m ()
+</span><a href="HoYo.Internal.Utils.html#printStdout"><span class="hs-identifier hs-var">printStdout</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;cd &quot;</span></span><span> </span><span class="annot"><span class="annottext">Text -&gt; Text -&gt; Text
+forall a. Semigroup a =&gt; a -&gt; a -&gt; a
+</span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">Getting Text Bookmark Text -&gt; Bookmark -&gt; Text
+forall a s. Getting a s a -&gt; s -&gt; a
+</span><span class="hs-identifier hs-var">view</span></span><span> </span><span class="annot"><span class="annottext">Getting Text Bookmark Text
+Lens' Bookmark Text
+</span><a href="HoYo.Internal.Types.html#bookmarkDirectory"><span class="hs-identifier hs-var">bookmarkDirectory</span></a></span><span> </span><span class="annot"><span class="annottext">Bookmark
+</span><a href="#local-6989586621679109597"><span class="hs-identifier hs-var">bm</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-149"></span><span>                </span><span class="annot"><span class="annottext">IO () -&gt; HoYoMonad ()
+forall (m :: * -&gt; *) a. MonadIO m =&gt; IO a -&gt; m a
+</span><span class="hs-identifier hs-var">liftIO</span></span><span> </span><span class="annot"><span class="annottext">(IO () -&gt; HoYoMonad ()) -&gt; IO () -&gt; HoYoMonad ()
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">ExitCode -&gt; IO ()
+forall a. ExitCode -&gt; IO a
+</span><span class="hs-identifier hs-var">exitWith</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int -&gt; ExitCode
+</span><span class="hs-identifier hs-var">ExitFailure</span></span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">3</span></span><span class="hs-special">)</span><span>
+</span><span id="line-150"></span><span>    </span><span id="local-6989586621679109592"><span class="annot"><span class="annottext">[Bookmark]
+</span><a href="#local-6989586621679109592"><span class="hs-identifier hs-var">ms</span></a></span></span><span>    </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">do</span><span> </span><span id="local-6989586621679109591"><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679109591"><span class="hs-identifier hs-var">displayTime</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">SimpleGetter Env Bool -&gt; HoYoMonad Bool
+forall a (m :: * -&gt; *) b.
+MonadReader a m =&gt;
+SimpleGetter a b -&gt; m b
+</span><a href="HoYo.Internal.Utils.html#asks%27"><span class="hs-identifier hs-var">asks'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(Config -&gt; Const r Config) -&gt; Env -&gt; Const r Env
+Lens' Env Config
+</span><a href="HoYo.Internal.Types.html#config"><span class="hs-identifier hs-var">config</span></a></span><span> </span><span class="annot"><span class="annottext">((Config -&gt; Const r Config) -&gt; Env -&gt; Const r Env)
+-&gt; ((Bool -&gt; Const r Bool) -&gt; Config -&gt; Const r Config)
+-&gt; (Bool -&gt; Const r Bool)
+-&gt; Env
+-&gt; Const r Env
+forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">(Bool -&gt; Const r Bool) -&gt; Config -&gt; Const r Config
+Lens' Config Bool
+</span><a href="HoYo.Internal.Utils.html#displayCreationTime"><span class="hs-identifier hs-var">displayCreationTime</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-151"></span><span>                </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679109590"><span class="annot"><span class="annottext">strs :: [Text]
+</span><a href="#local-6989586621679109590"><span class="hs-identifier hs-var hs-var">strs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; [Bookmark] -&gt; [Text]
+</span><a href="HoYo.Internal.Utils.html#formatBookmarks"><span class="hs-identifier hs-var">formatBookmarks</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679109591"><span class="hs-identifier hs-var">displayTime</span></a></span><span> </span><span class="annot"><span class="annottext">([Bookmark] -&gt; [Text]) -&gt; [Bookmark] -&gt; [Text]
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Bookmark -&gt; Int) -&gt; [Bookmark] -&gt; [Bookmark]
+forall b a. Ord b =&gt; (a -&gt; b) -&gt; [a] -&gt; [a]
+</span><span class="hs-identifier hs-var">sortOn</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Getting Int Bookmark Int -&gt; Bookmark -&gt; Int
+forall a s. Getting a s a -&gt; s -&gt; a
+</span><span class="hs-identifier hs-var">view</span></span><span> </span><span class="annot"><span class="annottext">Getting Int Bookmark Int
+Lens' Bookmark Int
+</span><a href="HoYo.Internal.Types.html#bookmarkIndex"><span class="hs-identifier hs-var">bookmarkIndex</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Bookmark]
+</span><a href="#local-6989586621679109592"><span class="hs-identifier hs-var">ms</span></a></span><span>
+</span><span id="line-152"></span><span>                </span><span class="annot"><span class="annottext">Text -&gt; HoYoMonad ()
+forall e (m :: * -&gt; *) a. MonadError e m =&gt; e -&gt; m a
+</span><span class="hs-identifier hs-var">throwError</span></span><span> </span><span class="annot"><span class="annottext">(Text -&gt; HoYoMonad ()) -&gt; Text -&gt; HoYoMonad ()
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Text -&gt; [Text] -&gt; Text
+</span><span class="hs-identifier hs-var">T.intercalate</span></span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;\n&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;multiple bookmarks matching search:&quot;</span></span><span> </span><span class="annot"><span class="annottext">Text -&gt; [Text] -&gt; [Text]
+forall a. a -&gt; [a] -&gt; [a]
+</span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">[Text]
+</span><a href="#local-6989586621679109590"><span class="hs-identifier hs-var">strs</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-153"></span><span>
+</span><span id="line-154"></span><span class="hs-comment">-- | Run the &quot;list&quot; command: list all the saved bookmarks.</span><span>
+</span><span id="line-155"></span><span class="annot"><a href="HoYo.Internal.Command.html#runList"><span class="hs-identifier hs-type">runList</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#ListOptions"><span class="hs-identifier hs-type">ListOptions</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#HoYoMonad"><span class="hs-identifier hs-type">HoYoMonad</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><span id="line-156"></span><span id="runList"><span class="annot"><span class="annottext">runList :: ListOptions -&gt; HoYoMonad ()
+</span><a href="HoYo.Internal.Command.html#runList"><span class="hs-identifier hs-var hs-var">runList</span></a></span></span><span> </span><span id="local-6989586621679109585"><span class="annot"><span class="annottext">ListOptions
+</span><a href="#local-6989586621679109585"><span class="hs-identifier hs-var">opts</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-157"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679109584"><span class="annot"><span class="annottext">filt :: Bookmark -&gt; Bool
+</span><a href="#local-6989586621679109584"><span class="hs-identifier hs-var hs-var">filt</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe Text -&gt; Maybe Text -&gt; Bookmark -&gt; Bool
+</span><a href="HoYo.Internal.Bookmark.html#filterBookmarks"><span class="hs-identifier hs-var">filterBookmarks</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ListOptions -&gt; Maybe Text
+</span><a href="HoYo.Internal.Types.html#listFilterName"><span class="hs-identifier hs-var hs-var">listFilterName</span></a></span><span> </span><span class="annot"><span class="annottext">ListOptions
+</span><a href="#local-6989586621679109585"><span class="hs-identifier hs-var">opts</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ListOptions -&gt; Maybe Text
+</span><a href="HoYo.Internal.Types.html#listFilterDirectoryInfix"><span class="hs-identifier hs-var hs-var">listFilterDirectoryInfix</span></a></span><span> </span><span class="annot"><span class="annottext">ListOptions
+</span><a href="#local-6989586621679109585"><span class="hs-identifier hs-var">opts</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-158"></span><span>  </span><span id="local-6989586621679109580"><span class="annot"><span class="annottext">Bookmarks
+</span><a href="#local-6989586621679109580"><span class="hs-identifier hs-var">bms'</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">SimpleGetter Env Bookmarks -&gt; HoYoMonad Bookmarks
+forall a (m :: * -&gt; *) b.
+MonadReader a m =&gt;
+SimpleGetter a b -&gt; m b
+</span><a href="HoYo.Internal.Utils.html#asks%27"><span class="hs-identifier hs-var">asks'</span></a></span><span> </span><span class="annot"><span class="annottext">SimpleGetter Env Bookmarks
+Lens' Env Bookmarks
+</span><a href="HoYo.Internal.Types.html#bookmarks"><span class="hs-identifier hs-var">bookmarks</span></a></span><span>
+</span><span id="line-159"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679109579"><span class="annot"><span class="annottext">bms :: [Bookmark]
+</span><a href="#local-6989586621679109579"><span class="hs-identifier hs-var hs-var">bms</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Bookmark -&gt; Bool) -&gt; [Bookmark] -&gt; [Bookmark]
+forall a. (a -&gt; Bool) -&gt; [a] -&gt; [a]
+</span><span class="hs-identifier hs-var">filter</span></span><span> </span><span class="annot"><span class="annottext">Bookmark -&gt; Bool
+</span><a href="#local-6989586621679109584"><span class="hs-identifier hs-var">filt</span></a></span><span> </span><span class="annot"><span class="annottext">([Bookmark] -&gt; [Bookmark]) -&gt; [Bookmark] -&gt; [Bookmark]
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Bookmark -&gt; Int) -&gt; [Bookmark] -&gt; [Bookmark]
+forall b a. Ord b =&gt; (a -&gt; b) -&gt; [a] -&gt; [a]
+</span><span class="hs-identifier hs-var">sortOn</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Getting Int Bookmark Int -&gt; Bookmark -&gt; Int
+forall a s. Getting a s a -&gt; s -&gt; a
+</span><span class="hs-identifier hs-var">view</span></span><span> </span><span class="annot"><span class="annottext">Getting Int Bookmark Int
+Lens' Bookmark Int
+</span><a href="HoYo.Internal.Types.html#bookmarkIndex"><span class="hs-identifier hs-var">bookmarkIndex</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">([Bookmark] -&gt; [Bookmark]) -&gt; [Bookmark] -&gt; [Bookmark]
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Bookmarks -&gt; [Bookmark]
+</span><a href="HoYo.Internal.Types.html#unBookmarks"><span class="hs-identifier hs-var hs-var">unBookmarks</span></a></span><span> </span><span class="annot"><span class="annottext">Bookmarks
+</span><a href="#local-6989586621679109580"><span class="hs-identifier hs-var">bms'</span></a></span><span>
+</span><span id="line-160"></span><span>  </span><span id="local-6989586621679109577"><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679109577"><span class="hs-identifier hs-var">displayTime</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">SimpleGetter Env Bool -&gt; HoYoMonad Bool
+forall a (m :: * -&gt; *) b.
+MonadReader a m =&gt;
+SimpleGetter a b -&gt; m b
+</span><a href="HoYo.Internal.Utils.html#asks%27"><span class="hs-identifier hs-var">asks'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(Config -&gt; Const r Config) -&gt; Env -&gt; Const r Env
+Lens' Env Config
+</span><a href="HoYo.Internal.Types.html#config"><span class="hs-identifier hs-var">config</span></a></span><span> </span><span class="annot"><span class="annottext">((Config -&gt; Const r Config) -&gt; Env -&gt; Const r Env)
+-&gt; ((Bool -&gt; Const r Bool) -&gt; Config -&gt; Const r Config)
+-&gt; (Bool -&gt; Const r Bool)
+-&gt; Env
+-&gt; Const r Env
+forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">(Bool -&gt; Const r Bool) -&gt; Config -&gt; Const r Config
+Lens' Config Bool
+</span><a href="HoYo.Internal.Utils.html#displayCreationTime"><span class="hs-identifier hs-var">displayCreationTime</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-161"></span><span>  </span><span class="annot"><span class="annottext">(Text -&gt; HoYoMonad ()) -&gt; [Text] -&gt; HoYoMonad ()
+forall (t :: * -&gt; *) (m :: * -&gt; *) a b.
+(Foldable t, Monad m) =&gt;
+(a -&gt; m b) -&gt; t a -&gt; m ()
+</span><span class="hs-identifier hs-var">mapM_</span></span><span> </span><span class="annot"><span class="annottext">Text -&gt; HoYoMonad ()
+forall (m :: * -&gt; *). MonadIO m =&gt; Text -&gt; m ()
+</span><a href="HoYo.Internal.Utils.html#printStdout"><span class="hs-identifier hs-var">printStdout</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Bool -&gt; [Bookmark] -&gt; [Text]
+</span><a href="HoYo.Internal.Utils.html#formatBookmarks"><span class="hs-identifier hs-var">formatBookmarks</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679109577"><span class="hs-identifier hs-var">displayTime</span></a></span><span> </span><span class="annot"><span class="annottext">[Bookmark]
+</span><a href="#local-6989586621679109579"><span class="hs-identifier hs-var">bms</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-162"></span><span>
+</span><span id="line-163"></span><span class="hs-comment">-- | Help text displayed when the user tries to run &quot;hoyo clear&quot;</span><span>
+</span><span id="line-164"></span><span class="hs-comment">-- when &quot;enable_clear&quot; is set to false.</span><span>
+</span><span id="line-165"></span><span class="annot"><a href="HoYo.Internal.Command.html#clearDisabledErrMsg"><span class="hs-identifier hs-type">clearDisabledErrMsg</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">T.Text</span></span><span>
+</span><span id="line-166"></span><span id="clearDisabledErrMsg"><span class="annot"><span class="annottext">clearDisabledErrMsg :: Text
+</span><a href="HoYo.Internal.Command.html#clearDisabledErrMsg"><span class="hs-identifier hs-var hs-var">clearDisabledErrMsg</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Text -&gt; [Text] -&gt; Text
+</span><span class="hs-identifier hs-var">T.intercalate</span></span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;\n&quot;</span></span><span> </span><span class="hs-special">[</span><span>
+</span><span id="line-167"></span><span>  </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;The 'clear' command is disabled by default.&quot;</span></span><span>
+</span><span id="line-168"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;To enable, set enable_clear = true in the config or pass the --enable-clear flag.&quot;</span></span><span>
+</span><span id="line-169"></span><span>  </span><span class="hs-special">]</span><span>
+</span><span id="line-170"></span><span>
+</span><span id="line-171"></span><span class="hs-comment">-- | Help text displayed when the user tries to run &quot;hoyo config reset&quot;</span><span>
+</span><span id="line-172"></span><span class="hs-comment">-- when &quot;enable_reset&quot; is set to false.</span><span>
+</span><span id="line-173"></span><span class="annot"><a href="HoYo.Internal.Command.html#resetDisabledErrMsg"><span class="hs-identifier hs-type">resetDisabledErrMsg</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">T.Text</span></span><span>
+</span><span id="line-174"></span><span id="resetDisabledErrMsg"><span class="annot"><span class="annottext">resetDisabledErrMsg :: Text
+</span><a href="HoYo.Internal.Command.html#resetDisabledErrMsg"><span class="hs-identifier hs-var hs-var">resetDisabledErrMsg</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Text -&gt; [Text] -&gt; Text
+</span><span class="hs-identifier hs-var">T.intercalate</span></span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;\n&quot;</span></span><span> </span><span class="hs-special">[</span><span>
+</span><span id="line-175"></span><span>  </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;The 'config reset' command is disabled by default.&quot;</span></span><span>
+</span><span id="line-176"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;To enable, set enable_reset = true in the config or pass the --enable-reset flag.&quot;</span></span><span>
+</span><span id="line-177"></span><span>  </span><span class="hs-special">]</span><span>
+</span><span id="line-178"></span><span>
+</span><span id="line-179"></span><span class="hs-comment">-- | Run the &quot;clear&quot; command: delete all the saved bookmarks.</span><span>
+</span><span id="line-180"></span><span class="annot"><a href="HoYo.Internal.Command.html#runClear"><span class="hs-identifier hs-type">runClear</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#ClearOptions"><span class="hs-identifier hs-type">ClearOptions</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#HoYoMonad"><span class="hs-identifier hs-type">HoYoMonad</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><span id="line-181"></span><span id="runClear"><span class="annot"><span class="annottext">runClear :: ClearOptions -&gt; HoYoMonad ()
+</span><a href="HoYo.Internal.Command.html#runClear"><span class="hs-identifier hs-var hs-var">runClear</span></a></span></span><span> </span><span class="annot"><span class="annottext">ClearOptions
+</span><span class="hs-identifier">_</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-182"></span><span>  </span><span class="annot"><span class="annottext">Text -&gt; HoYoMonad Bool -&gt; HoYoMonad ()
+</span><a href="HoYo.Internal.Utils.html#assert"><span class="hs-identifier hs-var">assert</span></a></span><span> </span><span class="annot"><span class="annottext">Text
+</span><a href="HoYo.Internal.Command.html#clearDisabledErrMsg"><span class="hs-identifier hs-var">clearDisabledErrMsg</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">SimpleGetter Env Bool -&gt; HoYoMonad Bool
+forall a (m :: * -&gt; *) b.
+MonadReader a m =&gt;
+SimpleGetter a b -&gt; m b
+</span><a href="HoYo.Internal.Utils.html#asks%27"><span class="hs-identifier hs-var">asks'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(Config -&gt; Const r Config) -&gt; Env -&gt; Const r Env
+Lens' Env Config
+</span><a href="HoYo.Internal.Types.html#config"><span class="hs-identifier hs-var">config</span></a></span><span> </span><span class="annot"><span class="annottext">((Config -&gt; Const r Config) -&gt; Env -&gt; Const r Env)
+-&gt; ((Bool -&gt; Const r Bool) -&gt; Config -&gt; Const r Config)
+-&gt; (Bool -&gt; Const r Bool)
+-&gt; Env
+-&gt; Const r Env
+forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">(Bool -&gt; Const r Bool) -&gt; Config -&gt; Const r Config
+Lens' Config Bool
+</span><a href="HoYo.Internal.Utils.html#enableClearing"><span class="hs-identifier hs-var">enableClearing</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-183"></span><span>
+</span><span id="line-184"></span><span>  </span><span id="local-6989586621679109572"><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679109572"><span class="hs-identifier hs-var">path</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">SimpleGetter Env Text -&gt; HoYoMonad Text
+forall a (m :: * -&gt; *) b.
+MonadReader a m =&gt;
+SimpleGetter a b -&gt; m b
+</span><a href="HoYo.Internal.Utils.html#asks%27"><span class="hs-identifier hs-var">asks'</span></a></span><span> </span><span class="annot"><span class="annottext">SimpleGetter Env Text
+Lens' Env Text
+</span><a href="HoYo.Internal.Types.html#bookmarksPath"><span class="hs-identifier hs-var">bookmarksPath</span></a></span><span>
+</span><span id="line-185"></span><span>  </span><span id="local-6989586621679109570"><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679109570"><span class="hs-identifier hs-var">backup</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">SimpleGetter Env Bool -&gt; HoYoMonad Bool
+forall a (m :: * -&gt; *) b.
+MonadReader a m =&gt;
+SimpleGetter a b -&gt; m b
+</span><a href="HoYo.Internal.Utils.html#asks%27"><span class="hs-identifier hs-var">asks'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(Config -&gt; Const r Config) -&gt; Env -&gt; Const r Env
+Lens' Env Config
+</span><a href="HoYo.Internal.Types.html#config"><span class="hs-identifier hs-var">config</span></a></span><span> </span><span class="annot"><span class="annottext">((Config -&gt; Const r Config) -&gt; Env -&gt; Const r Env)
+-&gt; ((Bool -&gt; Const r Bool) -&gt; Config -&gt; Const r Config)
+-&gt; (Bool -&gt; Const r Bool)
+-&gt; Env
+-&gt; Const r Env
+forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">(Bool -&gt; Const r Bool) -&gt; Config -&gt; Const r Config
+Lens' Config Bool
+</span><a href="HoYo.Internal.Utils.html#backupBeforeClear"><span class="hs-identifier hs-var">backupBeforeClear</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-186"></span><span>  </span><span class="annot"><span class="annottext">Bool -&gt; HoYoMonad () -&gt; HoYoMonad ()
+forall (f :: * -&gt; *). Applicative f =&gt; Bool -&gt; f () -&gt; f ()
+</span><span class="hs-identifier hs-var">when</span></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679109570"><span class="hs-identifier hs-var">backup</span></a></span><span> </span><span class="annot"><span class="annottext">(HoYoMonad () -&gt; HoYoMonad ()) -&gt; HoYoMonad () -&gt; HoYoMonad ()
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Text -&gt; [Char] -&gt; HoYoMonad ()
+forall (m :: * -&gt; *).
+(MonadIO m, MonadError Text m) =&gt;
+Text -&gt; [Char] -&gt; m ()
+</span><a href="HoYo.Internal.Utils.html#backupFile"><span class="hs-identifier hs-var">backupFile</span></a></span><span> </span><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679109572"><span class="hs-identifier hs-var">path</span></a></span><span> </span><span class="annot"><span class="annottext">[Char]
+</span><span class="hs-string">&quot;bkp&quot;</span></span><span>
+</span><span id="line-187"></span><span>
+</span><span id="line-188"></span><span>  </span><span class="annot"><span class="annottext">([Bookmark] -&gt; [Bookmark]) -&gt; HoYoMonad ()
+</span><a href="HoYo.Internal.Command.html#modifyBookmarks"><span class="hs-identifier hs-var">modifyBookmarks</span></a></span><span> </span><span class="annot"><span class="annottext">(([Bookmark] -&gt; [Bookmark]) -&gt; HoYoMonad ())
+-&gt; ([Bookmark] -&gt; [Bookmark]) -&gt; HoYoMonad ()
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[Bookmark] -&gt; [Bookmark] -&gt; [Bookmark]
+forall a b. a -&gt; b -&gt; a
+</span><span class="hs-identifier hs-var">const</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
+</span><span id="line-189"></span><span>  </span><span id="local-6989586621679109567"><span class="annot"><span class="annottext">Bookmarks
+</span><a href="#local-6989586621679109567"><span class="hs-identifier hs-var">bms</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">SimpleGetter Env [DefaultBookmark] -&gt; HoYoMonad [DefaultBookmark]
+forall a (m :: * -&gt; *) b.
+MonadReader a m =&gt;
+SimpleGetter a b -&gt; m b
+</span><a href="HoYo.Internal.Utils.html#asks%27"><span class="hs-identifier hs-var">asks'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(Config -&gt; Const r Config) -&gt; Env -&gt; Const r Env
+Lens' Env Config
+</span><a href="HoYo.Internal.Types.html#config"><span class="hs-identifier hs-var">config</span></a></span><span> </span><span class="annot"><span class="annottext">((Config -&gt; Const r Config) -&gt; Env -&gt; Const r Env)
+-&gt; (([DefaultBookmark] -&gt; Const r [DefaultBookmark])
+    -&gt; Config -&gt; Const r Config)
+-&gt; ([DefaultBookmark] -&gt; Const r [DefaultBookmark])
+-&gt; Env
+-&gt; Const r Env
+forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">([DefaultBookmark] -&gt; Const r [DefaultBookmark])
+-&gt; Config -&gt; Const r Config
+Lens' Config [DefaultBookmark]
+</span><a href="HoYo.Internal.Utils.html#defaultBookmarks"><span class="hs-identifier hs-var">defaultBookmarks</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">HoYoMonad [DefaultBookmark]
+-&gt; ([DefaultBookmark] -&gt; HoYoMonad Bookmarks)
+-&gt; HoYoMonad Bookmarks
+forall (m :: * -&gt; *) a b. Monad m =&gt; m a -&gt; (a -&gt; m b) -&gt; m b
+</span><span class="hs-operator hs-var">&gt;&gt;=</span></span><span> </span><span class="annot"><span class="annottext">[DefaultBookmark] -&gt; HoYoMonad Bookmarks
+forall (m :: * -&gt; *). MonadIO m =&gt; [DefaultBookmark] -&gt; m Bookmarks
+</span><a href="HoYo.Internal.Bookmark.html#bookmarksFromDefault"><span class="hs-identifier hs-var">bookmarksFromDefault</span></a></span><span>
+</span><span id="line-190"></span><span>  </span><span id="local-6989586621679109564"><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679109564"><span class="hs-identifier hs-var">fp</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">SimpleGetter Env Text -&gt; HoYoMonad Text
+forall a (m :: * -&gt; *) b.
+MonadReader a m =&gt;
+SimpleGetter a b -&gt; m b
+</span><a href="HoYo.Internal.Utils.html#asks%27"><span class="hs-identifier hs-var">asks'</span></a></span><span> </span><span class="annot"><span class="annottext">SimpleGetter Env Text
+Lens' Env Text
+</span><a href="HoYo.Internal.Types.html#bookmarksPath"><span class="hs-identifier hs-var">bookmarksPath</span></a></span><span>
+</span><span id="line-191"></span><span>  </span><span class="annot"><span class="annottext">Text -&gt; Bookmarks -&gt; HoYoMonad ()
+forall (m :: * -&gt; *). MonadIO m =&gt; Text -&gt; Bookmarks -&gt; m ()
+</span><a href="HoYo.Internal.Bookmark.html#encodeBookmarksFile"><span class="hs-identifier hs-var">encodeBookmarksFile</span></a></span><span> </span><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679109564"><span class="hs-identifier hs-var">fp</span></a></span><span> </span><span class="annot"><span class="annottext">Bookmarks
+</span><a href="#local-6989586621679109567"><span class="hs-identifier hs-var">bms</span></a></span><span>
+</span><span id="line-192"></span><span>
+</span><span id="line-193"></span><span class="hs-comment">-- | Run the &quot;delete&quot; command: search for a bookmark and delete it.</span><span>
+</span><span id="line-194"></span><span class="annot"><a href="HoYo.Internal.Command.html#runDelete"><span class="hs-identifier hs-type">runDelete</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#DeleteOptions"><span class="hs-identifier hs-type">DeleteOptions</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#HoYoMonad"><span class="hs-identifier hs-type">HoYoMonad</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><span id="line-195"></span><span id="runDelete"><span class="annot"><span class="annottext">runDelete :: DeleteOptions -&gt; HoYoMonad ()
+</span><a href="HoYo.Internal.Command.html#runDelete"><span class="hs-identifier hs-var hs-var">runDelete</span></a></span></span><span> </span><span id="local-6989586621679109562"><span class="annot"><span class="annottext">DeleteOptions
+</span><a href="#local-6989586621679109562"><span class="hs-identifier hs-var">opts</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-196"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679109561"><span class="annot"><span class="annottext">search :: BookmarkSearchTerm
+</span><a href="#local-6989586621679109561"><span class="hs-identifier hs-var hs-var">search</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DeleteOptions -&gt; BookmarkSearchTerm
+</span><a href="HoYo.Internal.Types.html#deleteSearch"><span class="hs-identifier hs-var hs-var">deleteSearch</span></a></span><span> </span><span class="annot"><span class="annottext">DeleteOptions
+</span><a href="#local-6989586621679109562"><span class="hs-identifier hs-var">opts</span></a></span><span>
+</span><span id="line-197"></span><span>  </span><span class="annot"><span class="annottext">([Bookmark] -&gt; HoYoMonad [Bookmark]) -&gt; HoYoMonad ()
+</span><a href="HoYo.Internal.Command.html#modifyBookmarksM"><span class="hs-identifier hs-var">modifyBookmarksM</span></a></span><span> </span><span class="annot"><span class="annottext">(([Bookmark] -&gt; HoYoMonad [Bookmark]) -&gt; HoYoMonad ())
+-&gt; ([Bookmark] -&gt; HoYoMonad [Bookmark]) -&gt; HoYoMonad ()
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="hs-glyph">\</span><span id="local-6989586621679109559"><span class="annot"><span class="annottext">[Bookmark]
+</span><a href="#local-6989586621679109559"><span class="hs-identifier hs-var">bms</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-198"></span><span>    </span><span class="hs-keyword">let</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679109558"><span class="annot"><span class="annottext">[Bookmark]
+</span><a href="#local-6989586621679109558"><span class="hs-identifier hs-var">searchResults</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679109557"><span class="annot"><span class="annottext">[Bookmark]
+</span><a href="#local-6989586621679109557"><span class="hs-identifier hs-var">afterDelete</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">BookmarkSearchTerm -&gt; Bookmarks -&gt; ([Bookmark], [Bookmark])
+</span><a href="HoYo.Internal.Bookmark.html#searchBookmarks"><span class="hs-identifier hs-var">searchBookmarks</span></a></span><span> </span><span class="annot"><span class="annottext">BookmarkSearchTerm
+</span><a href="#local-6989586621679109561"><span class="hs-identifier hs-var">search</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Bookmark] -&gt; Bookmarks
+</span><a href="HoYo.Internal.Types.html#Bookmarks"><span class="hs-identifier hs-var">Bookmarks</span></a></span><span> </span><span class="annot"><span class="annottext">[Bookmark]
+</span><a href="#local-6989586621679109559"><span class="hs-identifier hs-var">bms</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-199"></span><span>    </span><span class="annot"><span class="annottext">Text -&gt; HoYoMonad Bool -&gt; HoYoMonad Bool
+</span><a href="HoYo.Internal.Utils.html#assertVerbose"><span class="hs-identifier hs-var">assertVerbose</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;no bookmarks found for search &quot;</span></span><span> </span><span class="annot"><span class="annottext">Text -&gt; Text -&gt; Text
+forall a. Semigroup a =&gt; a -&gt; a -&gt; a
+</span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">BookmarkSearchTerm -&gt; Text
+forall a. Show a =&gt; a -&gt; Text
+</span><a href="HoYo.Internal.Utils.html#tshow"><span class="hs-identifier hs-var">tshow</span></a></span><span> </span><span class="annot"><span class="annottext">BookmarkSearchTerm
+</span><a href="#local-6989586621679109561"><span class="hs-identifier hs-var">search</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-200"></span><span>      </span><span class="annot"><span class="annottext">(HoYoMonad Bool -&gt; HoYoMonad Bool)
+-&gt; HoYoMonad Bool -&gt; HoYoMonad Bool
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; HoYoMonad Bool
+forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
+</span><span class="hs-identifier hs-var">return</span></span><span> </span><span class="annot"><span class="annottext">(Bool -&gt; HoYoMonad Bool) -&gt; Bool -&gt; HoYoMonad Bool
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool
+</span><span class="hs-identifier hs-var">not</span></span><span> </span><span class="annot"><span class="annottext">(Bool -&gt; Bool) -&gt; Bool -&gt; Bool
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[Bookmark] -&gt; Bool
+forall (t :: * -&gt; *) a. Foldable t =&gt; t a -&gt; Bool
+</span><span class="hs-identifier hs-var">null</span></span><span> </span><span class="annot"><span class="annottext">[Bookmark]
+</span><a href="#local-6989586621679109558"><span class="hs-identifier hs-var">searchResults</span></a></span><span>
+</span><span id="line-201"></span><span>    </span><span class="annot"><span class="annottext">Text -&gt; HoYoMonad Bool -&gt; HoYoMonad Bool
+</span><a href="HoYo.Internal.Utils.html#assertVerbose"><span class="hs-identifier hs-var">assertVerbose</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;multiple bookmarks found for search &quot;</span></span><span> </span><span class="annot"><span class="annottext">Text -&gt; Text -&gt; Text
+forall a. Semigroup a =&gt; a -&gt; a -&gt; a
+</span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">BookmarkSearchTerm -&gt; Text
+forall a. Show a =&gt; a -&gt; Text
+</span><a href="HoYo.Internal.Utils.html#tshow"><span class="hs-identifier hs-var">tshow</span></a></span><span> </span><span class="annot"><span class="annottext">BookmarkSearchTerm
+</span><a href="#local-6989586621679109561"><span class="hs-identifier hs-var">search</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-202"></span><span>      </span><span class="annot"><span class="annottext">(HoYoMonad Bool -&gt; HoYoMonad Bool)
+-&gt; HoYoMonad Bool -&gt; HoYoMonad Bool
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; HoYoMonad Bool
+forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
+</span><span class="hs-identifier hs-var">return</span></span><span> </span><span class="annot"><span class="annottext">(Bool -&gt; HoYoMonad Bool) -&gt; Bool -&gt; HoYoMonad Bool
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[Bookmark] -&gt; Int
+forall (t :: * -&gt; *) a. Foldable t =&gt; t a -&gt; Int
+</span><span class="hs-identifier hs-var">length</span></span><span> </span><span class="annot"><span class="annottext">[Bookmark]
+</span><a href="#local-6989586621679109558"><span class="hs-identifier hs-var">searchResults</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Bool
+forall a. Eq a =&gt; a -&gt; a -&gt; Bool
+</span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">1</span></span><span>
+</span><span id="line-203"></span><span>    </span><span class="annot"><span class="annottext">[Bookmark] -&gt; HoYoMonad [Bookmark]
+forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
+</span><span class="hs-identifier hs-var">return</span></span><span> </span><span class="annot"><span class="annottext">[Bookmark]
+</span><a href="#local-6989586621679109557"><span class="hs-identifier hs-var">afterDelete</span></a></span><span>
+</span><span id="line-204"></span><span>
+</span><span id="line-205"></span><span class="hs-comment">-- | Run the &quot;refresh&quot; command: re-index bookmarks.</span><span>
+</span><span id="line-206"></span><span class="annot"><a href="HoYo.Internal.Command.html#runRefresh"><span class="hs-identifier hs-type">runRefresh</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#RefreshOptions"><span class="hs-identifier hs-type">RefreshOptions</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#HoYoMonad"><span class="hs-identifier hs-type">HoYoMonad</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><span id="line-207"></span><span id="runRefresh"><span class="annot"><span class="annottext">runRefresh :: RefreshOptions -&gt; HoYoMonad ()
+</span><a href="HoYo.Internal.Command.html#runRefresh"><span class="hs-identifier hs-var hs-var">runRefresh</span></a></span></span><span> </span><span class="annot"><span class="annottext">RefreshOptions
+</span><span class="hs-identifier">_</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">([Bookmark] -&gt; [Bookmark]) -&gt; HoYoMonad ()
+</span><a href="HoYo.Internal.Command.html#modifyBookmarks"><span class="hs-identifier hs-var">modifyBookmarks</span></a></span><span> </span><span class="annot"><span class="annottext">(([Bookmark] -&gt; [Bookmark]) -&gt; HoYoMonad ())
+-&gt; ([Bookmark] -&gt; [Bookmark]) -&gt; HoYoMonad ()
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span>
+</span><span id="line-208"></span><span>  </span><span class="annot"><span class="annottext">(Int -&gt; Bookmark -&gt; Bookmark) -&gt; [Int] -&gt; [Bookmark] -&gt; [Bookmark]
+forall a b c. (a -&gt; b -&gt; c) -&gt; [a] -&gt; [b] -&gt; [c]
+</span><span class="hs-identifier hs-var">zipWith</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ASetter Bookmark Bookmark Int Int -&gt; Int -&gt; Bookmark -&gt; Bookmark
+forall s t a b. ASetter s t a b -&gt; b -&gt; s -&gt; t
+</span><span class="hs-identifier hs-var">set</span></span><span> </span><span class="annot"><span class="annottext">ASetter Bookmark Bookmark Int Int
+Lens' Bookmark Int
+</span><a href="HoYo.Internal.Types.html#bookmarkIndex"><span class="hs-identifier hs-var">bookmarkIndex</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">1</span></span><span class="hs-glyph">..</span><span class="hs-special">]</span><span>                           </span><span class="hs-comment">-- re-index from 1</span><span>
+</span><span id="line-209"></span><span>    </span><span class="annot"><span class="annottext">([Bookmark] -&gt; [Bookmark])
+-&gt; ([Bookmark] -&gt; [Bookmark]) -&gt; [Bookmark] -&gt; [Bookmark]
+forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">(Bookmark -&gt; Bookmark -&gt; Bool) -&gt; [Bookmark] -&gt; [Bookmark]
+forall a. (a -&gt; a -&gt; Bool) -&gt; [a] -&gt; [a]
+</span><span class="hs-identifier hs-var">nubBy</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Text -&gt; Text -&gt; Bool
+forall a. Eq a =&gt; a -&gt; a -&gt; Bool
+</span><span class="hs-operator hs-var">(==)</span></span><span> </span><span class="annot"><span class="annottext">(Text -&gt; Text -&gt; Bool)
+-&gt; (Bookmark -&gt; Text) -&gt; Bookmark -&gt; Bookmark -&gt; Bool
+forall b c a. (b -&gt; b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">`on`</span></span><span> </span><span class="annot"><span class="annottext">Getting Text Bookmark Text -&gt; Bookmark -&gt; Text
+forall a s. Getting a s a -&gt; s -&gt; a
+</span><span class="hs-identifier hs-var">view</span></span><span> </span><span class="annot"><span class="annottext">Getting Text Bookmark Text
+Lens' Bookmark Text
+</span><a href="HoYo.Internal.Types.html#bookmarkDirectory"><span class="hs-identifier hs-var">bookmarkDirectory</span></a></span><span class="hs-special">)</span><span>                </span><span class="hs-comment">-- remove duplicate directories</span><span>
+</span><span id="line-210"></span><span>    </span><span class="annot"><span class="annottext">([Bookmark] -&gt; [Bookmark])
+-&gt; ([Bookmark] -&gt; [Bookmark]) -&gt; [Bookmark] -&gt; [Bookmark]
+forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">(Bookmark -&gt; UTCTime) -&gt; [Bookmark] -&gt; [Bookmark]
+forall b a. Ord b =&gt; (a -&gt; b) -&gt; [a] -&gt; [a]
+</span><span class="hs-identifier hs-var">sortOn</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ZonedTime -&gt; UTCTime
+</span><span class="hs-identifier hs-var">zonedTimeToUTC</span></span><span> </span><span class="annot"><span class="annottext">(ZonedTime -&gt; UTCTime)
+-&gt; (Bookmark -&gt; ZonedTime) -&gt; Bookmark -&gt; UTCTime
+forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Getting ZonedTime Bookmark ZonedTime -&gt; Bookmark -&gt; ZonedTime
+forall a s. Getting a s a -&gt; s -&gt; a
+</span><span class="hs-identifier hs-var">view</span></span><span> </span><span class="annot"><span class="annottext">Getting ZonedTime Bookmark ZonedTime
+Lens' Bookmark ZonedTime
+</span><a href="HoYo.Internal.Types.html#bookmarkCreationTime"><span class="hs-identifier hs-var">bookmarkCreationTime</span></a></span><span class="hs-special">)</span><span>     </span><span class="hs-comment">-- sort by creation time</span><span>
+</span><span id="line-211"></span><span>
+</span><span id="line-212"></span><span class="hs-comment">-- | Run the &quot;config print&quot; command: print the current config.</span><span>
+</span><span id="line-213"></span><span class="annot"><a href="HoYo.Internal.Command.html#runConfigPrint"><span class="hs-identifier hs-type">runConfigPrint</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#ConfigPrintOptions"><span class="hs-identifier hs-type">ConfigPrintOptions</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#HoYoMonad"><span class="hs-identifier hs-type">HoYoMonad</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><span id="line-214"></span><span id="runConfigPrint"><span class="annot"><span class="annottext">runConfigPrint :: ConfigPrintOptions -&gt; HoYoMonad ()
+</span><a href="HoYo.Internal.Command.html#runConfigPrint"><span class="hs-identifier hs-var hs-var">runConfigPrint</span></a></span></span><span> </span><span class="annot"><span class="annottext">ConfigPrintOptions
+</span><span class="hs-identifier">_</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-215"></span><span>  </span><span id="local-6989586621679109546"><span class="annot"><span class="annottext">Config
+</span><a href="#local-6989586621679109546"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">SimpleGetter Env Config -&gt; HoYoMonad Config
+forall a (m :: * -&gt; *) b.
+MonadReader a m =&gt;
+SimpleGetter a b -&gt; m b
+</span><a href="HoYo.Internal.Utils.html#asks%27"><span class="hs-identifier hs-var">asks'</span></a></span><span> </span><span class="annot"><span class="annottext">SimpleGetter Env Config
+Lens' Env Config
+</span><a href="HoYo.Internal.Types.html#config"><span class="hs-identifier hs-var">config</span></a></span><span>
+</span><span id="line-216"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679109545"><span class="annot"><span class="annottext">keyVals :: [(Text, AnyConfigValue)]
+</span><a href="#local-6989586621679109545"><span class="hs-identifier hs-var hs-var">keyVals</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Config -&gt; [(Text, AnyConfigValue)]
+</span><a href="HoYo.Internal.Config.html#getKeyVals"><span class="hs-identifier hs-var">getKeyVals</span></a></span><span> </span><span class="annot"><span class="annottext">Config
+</span><a href="#local-6989586621679109546"><span class="hs-identifier hs-var">s</span></a></span><span>
+</span><span id="line-217"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679109543"><span class="annot"><span class="annottext">keyWidth :: Int
+</span><a href="#local-6989586621679109543"><span class="hs-identifier hs-var hs-var">keyWidth</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Int] -&gt; Int
+forall (t :: * -&gt; *) a. (Foldable t, Ord a) =&gt; t a -&gt; a
+</span><span class="hs-identifier hs-var">maximum</span></span><span> </span><span class="annot"><span class="annottext">([Int] -&gt; Int) -&gt; [Int] -&gt; Int
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">((Text, AnyConfigValue) -&gt; Int)
+-&gt; [(Text, AnyConfigValue)] -&gt; [Int]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Text -&gt; Int
+</span><span class="hs-identifier hs-var">T.length</span></span><span> </span><span class="annot"><span class="annottext">(Text -&gt; Int)
+-&gt; ((Text, AnyConfigValue) -&gt; Text)
+-&gt; (Text, AnyConfigValue)
+-&gt; Int
+forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">(Text, AnyConfigValue) -&gt; Text
+forall a b. (a, b) -&gt; a
+</span><span class="hs-identifier hs-var">fst</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[(Text, AnyConfigValue)]
+</span><a href="#local-6989586621679109545"><span class="hs-identifier hs-var">keyVals</span></a></span><span>
+</span><span id="line-218"></span><span>  </span><span class="annot"><span class="annottext">[(Text, AnyConfigValue)]
+-&gt; ((Text, AnyConfigValue) -&gt; HoYoMonad ()) -&gt; HoYoMonad ()
+forall (t :: * -&gt; *) (m :: * -&gt; *) a b.
+(Foldable t, Monad m) =&gt;
+t a -&gt; (a -&gt; m b) -&gt; m ()
+</span><span class="hs-identifier hs-var">forM_</span></span><span> </span><span class="annot"><span class="annottext">[(Text, AnyConfigValue)]
+</span><a href="#local-6989586621679109545"><span class="hs-identifier hs-var">keyVals</span></a></span><span> </span><span class="annot"><span class="annottext">(((Text, AnyConfigValue) -&gt; HoYoMonad ()) -&gt; HoYoMonad ())
+-&gt; ((Text, AnyConfigValue) -&gt; HoYoMonad ()) -&gt; HoYoMonad ()
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="hs-glyph">\</span><span class="hs-special">(</span><span id="local-6989586621679109539"><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679109539"><span class="hs-identifier hs-var">key</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679109538"><span class="annot"><span class="annottext">AnyConfigValue
+</span><a href="#local-6989586621679109538"><span class="hs-identifier hs-var">val</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-219"></span><span>    </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679109537"><span class="annot"><span class="annottext">vStr :: Text
+</span><a href="#local-6989586621679109537"><span class="hs-identifier hs-var hs-var">vStr</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">AnyConfigValue -&gt; Text
+</span><a href="HoYo.Internal.Utils.html#formatConfigValue"><span class="hs-identifier hs-var">formatConfigValue</span></a></span><span> </span><span class="annot"><span class="annottext">AnyConfigValue
+</span><a href="#local-6989586621679109538"><span class="hs-identifier hs-var">val</span></a></span><span>
+</span><span id="line-220"></span><span>    </span><span class="annot"><span class="annottext">Text -&gt; HoYoMonad ()
+forall (m :: * -&gt; *). MonadIO m =&gt; Text -&gt; m ()
+</span><a href="HoYo.Internal.Utils.html#printStdout"><span class="hs-identifier hs-var">printStdout</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int -&gt; Char -&gt; Text -&gt; Text
+</span><span class="hs-identifier hs-var">T.justifyLeft</span></span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679109543"><span class="hs-identifier hs-var">keyWidth</span></a></span><span> </span><span class="annot"><span class="annottext">Char
+</span><span class="hs-char">' '</span></span><span> </span><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679109539"><span class="hs-identifier hs-var">key</span></a></span><span> </span><span class="annot"><span class="annottext">Text -&gt; Text -&gt; Text
+forall a. Semigroup a =&gt; a -&gt; a -&gt; a
+</span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot; = &quot;</span></span><span> </span><span class="annot"><span class="annottext">Text -&gt; Text -&gt; Text
+forall a. Semigroup a =&gt; a -&gt; a -&gt; a
+</span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679109537"><span class="hs-identifier hs-var">vStr</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-221"></span><span>
+</span><span id="line-222"></span><span class="hs-comment">-- | Run the &quot;config reset&quot; command: reset the config to 'defaultConfig'.</span><span>
+</span><span id="line-223"></span><span class="annot"><a href="HoYo.Internal.Command.html#runConfigReset"><span class="hs-identifier hs-type">runConfigReset</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#ConfigResetOptions"><span class="hs-identifier hs-type">ConfigResetOptions</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#HoYoMonad"><span class="hs-identifier hs-type">HoYoMonad</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><span id="line-224"></span><span id="runConfigReset"><span class="annot"><span class="annottext">runConfigReset :: ConfigResetOptions -&gt; HoYoMonad ()
+</span><a href="HoYo.Internal.Command.html#runConfigReset"><span class="hs-identifier hs-var hs-var">runConfigReset</span></a></span></span><span> </span><span class="annot"><span class="annottext">ConfigResetOptions
+</span><span class="hs-identifier">_</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-225"></span><span>  </span><span class="annot"><span class="annottext">Text -&gt; HoYoMonad Bool -&gt; HoYoMonad ()
+</span><a href="HoYo.Internal.Utils.html#assert"><span class="hs-identifier hs-var">assert</span></a></span><span> </span><span class="annot"><span class="annottext">Text
+</span><a href="HoYo.Internal.Command.html#resetDisabledErrMsg"><span class="hs-identifier hs-var">resetDisabledErrMsg</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">SimpleGetter Env Bool -&gt; HoYoMonad Bool
+forall a (m :: * -&gt; *) b.
+MonadReader a m =&gt;
+SimpleGetter a b -&gt; m b
+</span><a href="HoYo.Internal.Utils.html#asks%27"><span class="hs-identifier hs-var">asks'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(Config -&gt; Const r Config) -&gt; Env -&gt; Const r Env
+Lens' Env Config
+</span><a href="HoYo.Internal.Types.html#config"><span class="hs-identifier hs-var">config</span></a></span><span> </span><span class="annot"><span class="annottext">((Config -&gt; Const r Config) -&gt; Env -&gt; Const r Env)
+-&gt; ((Bool -&gt; Const r Bool) -&gt; Config -&gt; Const r Config)
+-&gt; (Bool -&gt; Const r Bool)
+-&gt; Env
+-&gt; Const r Env
+forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">(Bool -&gt; Const r Bool) -&gt; Config -&gt; Const r Config
+Lens' Config Bool
+</span><a href="HoYo.Internal.Utils.html#enableReset"><span class="hs-identifier hs-var">enableReset</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-226"></span><span>
+</span><span id="line-227"></span><span>  </span><span id="local-6989586621679109533"><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679109533"><span class="hs-identifier hs-var">path</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">SimpleGetter Env Text -&gt; HoYoMonad Text
+forall a (m :: * -&gt; *) b.
+MonadReader a m =&gt;
+SimpleGetter a b -&gt; m b
+</span><a href="HoYo.Internal.Utils.html#asks%27"><span class="hs-identifier hs-var">asks'</span></a></span><span> </span><span class="annot"><span class="annottext">SimpleGetter Env Text
+Lens' Env Text
+</span><a href="HoYo.Internal.Types.html#configPath"><span class="hs-identifier hs-var">configPath</span></a></span><span>
+</span><span id="line-228"></span><span>
+</span><span id="line-229"></span><span>  </span><span id="local-6989586621679109531"><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679109531"><span class="hs-identifier hs-var">backup</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">SimpleGetter Env Bool -&gt; HoYoMonad Bool
+forall a (m :: * -&gt; *) b.
+MonadReader a m =&gt;
+SimpleGetter a b -&gt; m b
+</span><a href="HoYo.Internal.Utils.html#asks%27"><span class="hs-identifier hs-var">asks'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(Config -&gt; Const r Config) -&gt; Env -&gt; Const r Env
+Lens' Env Config
+</span><a href="HoYo.Internal.Types.html#config"><span class="hs-identifier hs-var">config</span></a></span><span> </span><span class="annot"><span class="annottext">((Config -&gt; Const r Config) -&gt; Env -&gt; Const r Env)
+-&gt; ((Bool -&gt; Const r Bool) -&gt; Config -&gt; Const r Config)
+-&gt; (Bool -&gt; Const r Bool)
+-&gt; Env
+-&gt; Const r Env
+forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">(Bool -&gt; Const r Bool) -&gt; Config -&gt; Const r Config
+Lens' Config Bool
+</span><a href="HoYo.Internal.Utils.html#backupBeforeClear"><span class="hs-identifier hs-var">backupBeforeClear</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-230"></span><span>  </span><span class="annot"><span class="annottext">Bool -&gt; HoYoMonad () -&gt; HoYoMonad ()
+forall (f :: * -&gt; *). Applicative f =&gt; Bool -&gt; f () -&gt; f ()
+</span><span class="hs-identifier hs-var">when</span></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679109531"><span class="hs-identifier hs-var">backup</span></a></span><span> </span><span class="annot"><span class="annottext">(HoYoMonad () -&gt; HoYoMonad ()) -&gt; HoYoMonad () -&gt; HoYoMonad ()
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Text -&gt; [Char] -&gt; HoYoMonad ()
+forall (m :: * -&gt; *).
+(MonadIO m, MonadError Text m) =&gt;
+Text -&gt; [Char] -&gt; m ()
+</span><a href="HoYo.Internal.Utils.html#backupFile"><span class="hs-identifier hs-var">backupFile</span></a></span><span> </span><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679109533"><span class="hs-identifier hs-var">path</span></a></span><span> </span><span class="annot"><span class="annottext">[Char]
+</span><span class="hs-string">&quot;bkp&quot;</span></span><span>
+</span><span id="line-231"></span><span>
+</span><span id="line-232"></span><span>  </span><span class="annot"><span class="annottext">Text -&gt; Config -&gt; HoYoMonad ()
+forall (m :: * -&gt; *). MonadIO m =&gt; Text -&gt; Config -&gt; m ()
+</span><a href="HoYo.Internal.Config.html#encodeConfigFile"><span class="hs-identifier hs-var">encodeConfigFile</span></a></span><span> </span><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679109533"><span class="hs-identifier hs-var">path</span></a></span><span> </span><span class="annot"><span class="annottext">Config
+</span><a href="HoYo.Internal.Config.html#defaultConfig"><span class="hs-identifier hs-var">defaultConfig</span></a></span><span>
+</span><span id="line-233"></span><span>
+</span><span id="line-234"></span><span class="hs-comment">-- | Run the &quot;config set&quot; command: try to set a key-value pair in the config.</span><span>
+</span><span id="line-235"></span><span class="annot"><a href="HoYo.Internal.Command.html#runConfigSet"><span class="hs-identifier hs-type">runConfigSet</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#ConfigSetOptions"><span class="hs-identifier hs-type">ConfigSetOptions</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#HoYoMonad"><span class="hs-identifier hs-type">HoYoMonad</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><span id="line-236"></span><span id="runConfigSet"><span class="annot"><span class="annottext">runConfigSet :: ConfigSetOptions -&gt; HoYoMonad ()
+</span><a href="HoYo.Internal.Command.html#runConfigSet"><span class="hs-identifier hs-var hs-var">runConfigSet</span></a></span></span><span> </span><span id="local-6989586621679109527"><span class="annot"><span class="annottext">ConfigSetOptions
+</span><a href="#local-6989586621679109527"><span class="hs-identifier hs-var">opts</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-237"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679109526"><span class="annot"><span class="annottext">key :: Text
+</span><a href="#local-6989586621679109526"><span class="hs-identifier hs-var hs-var">key</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConfigSetOptions -&gt; Text
+</span><a href="HoYo.Internal.Types.html#setKey"><span class="hs-identifier hs-var hs-var">setKey</span></a></span><span> </span><span class="annot"><span class="annottext">ConfigSetOptions
+</span><a href="#local-6989586621679109527"><span class="hs-identifier hs-var">opts</span></a></span><span>
+</span><span id="line-238"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679109524"><span class="annot"><span class="annottext">val :: Text
+</span><a href="#local-6989586621679109524"><span class="hs-identifier hs-var hs-var">val</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConfigSetOptions -&gt; Text
+</span><a href="HoYo.Internal.Types.html#setValue"><span class="hs-identifier hs-var hs-var">setValue</span></a></span><span> </span><span class="annot"><span class="annottext">ConfigSetOptions
+</span><a href="#local-6989586621679109527"><span class="hs-identifier hs-var">opts</span></a></span><span>
+</span><span id="line-239"></span><span>  </span><span id="local-6989586621679109522"><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679109522"><span class="hs-identifier hs-var">cfgPath</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">SimpleGetter Env Text -&gt; HoYoMonad Text
+forall a (m :: * -&gt; *) b.
+MonadReader a m =&gt;
+SimpleGetter a b -&gt; m b
+</span><a href="HoYo.Internal.Utils.html#asks%27"><span class="hs-identifier hs-var">asks'</span></a></span><span> </span><span class="annot"><span class="annottext">SimpleGetter Env Text
+Lens' Env Text
+</span><a href="HoYo.Internal.Types.html#configPath"><span class="hs-identifier hs-var">configPath</span></a></span><span>
+</span><span id="line-240"></span><span>  </span><span class="annot"><span class="annottext">SimpleGetter Env Config -&gt; HoYoMonad Config
+forall a (m :: * -&gt; *) b.
+MonadReader a m =&gt;
+SimpleGetter a b -&gt; m b
+</span><a href="HoYo.Internal.Utils.html#asks%27"><span class="hs-identifier hs-var">asks'</span></a></span><span> </span><span class="annot"><span class="annottext">SimpleGetter Env Config
+Lens' Env Config
+</span><a href="HoYo.Internal.Types.html#config"><span class="hs-identifier hs-var">config</span></a></span><span>
+</span><span id="line-241"></span><span>    </span><span class="annot"><span class="annottext">HoYoMonad Config
+-&gt; (Config -&gt; HoYoMonad Config) -&gt; HoYoMonad Config
+forall (m :: * -&gt; *) a b. Monad m =&gt; m a -&gt; (a -&gt; m b) -&gt; m b
+</span><span class="hs-operator hs-var">&gt;&gt;=</span></span><span> </span><span class="annot"><span class="annottext">Text -&gt; Text -&gt; Config -&gt; HoYoMonad Config
+forall (m :: * -&gt; *).
+MonadError Text m =&gt;
+Text -&gt; Text -&gt; Config -&gt; m Config
+</span><a href="HoYo.Internal.Config.html#setConfig"><span class="hs-identifier hs-var">setConfig</span></a></span><span> </span><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679109526"><span class="hs-identifier hs-var">key</span></a></span><span> </span><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679109524"><span class="hs-identifier hs-var">val</span></a></span><span>
+</span><span id="line-242"></span><span>    </span><span class="annot"><span class="annottext">HoYoMonad Config -&gt; (Config -&gt; HoYoMonad ()) -&gt; HoYoMonad ()
+forall (m :: * -&gt; *) a b. Monad m =&gt; m a -&gt; (a -&gt; m b) -&gt; m b
+</span><span class="hs-operator hs-var">&gt;&gt;=</span></span><span> </span><span class="annot"><span class="annottext">Text -&gt; Config -&gt; HoYoMonad ()
+forall (m :: * -&gt; *). MonadIO m =&gt; Text -&gt; Config -&gt; m ()
+</span><a href="HoYo.Internal.Config.html#encodeConfigFile"><span class="hs-identifier hs-var">encodeConfigFile</span></a></span><span> </span><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679109522"><span class="hs-identifier hs-var">cfgPath</span></a></span><span>
+</span><span id="line-243"></span><span>
+</span><span id="line-244"></span><span class="hs-comment">-- | Run the &quot;config add-default&quot; command: try to set a key-value pair in the config.</span><span>
+</span><span id="line-245"></span><span class="annot"><a href="HoYo.Internal.Command.html#runAddDefault"><span class="hs-identifier hs-type">runAddDefault</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#ConfigAddDefaultOptions"><span class="hs-identifier hs-type">ConfigAddDefaultOptions</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#HoYoMonad"><span class="hs-identifier hs-type">HoYoMonad</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><span id="line-246"></span><span id="runAddDefault"><span class="annot"><span class="annottext">runAddDefault :: ConfigAddDefaultOptions -&gt; HoYoMonad ()
+</span><a href="HoYo.Internal.Command.html#runAddDefault"><span class="hs-identifier hs-var hs-var">runAddDefault</span></a></span></span><span> </span><span id="local-6989586621679109519"><span class="annot"><span class="annottext">ConfigAddDefaultOptions
+</span><a href="#local-6989586621679109519"><span class="hs-identifier hs-var">opts</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-247"></span><span>  </span><span id="local-6989586621679109518"><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679109518"><span class="hs-identifier hs-var">dir</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">Text -&gt; HoYoMonad Text
+</span><a href="HoYo.Internal.Command.html#normaliseAndVerifyDirectory"><span class="hs-identifier hs-var">normaliseAndVerifyDirectory</span></a></span><span> </span><span class="annot"><span class="annottext">(Text -&gt; HoYoMonad Text) -&gt; Text -&gt; HoYoMonad Text
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">ConfigAddDefaultOptions -&gt; Text
+</span><a href="HoYo.Internal.Types.html#addDefaultDir"><span class="hs-identifier hs-var hs-var">addDefaultDir</span></a></span><span> </span><span class="annot"><span class="annottext">ConfigAddDefaultOptions
+</span><a href="#local-6989586621679109519"><span class="hs-identifier hs-var">opts</span></a></span><span>
+</span><span id="line-248"></span><span>
+</span><span id="line-249"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679109516"><span class="annot"><span class="annottext">name :: Maybe Text
+</span><a href="#local-6989586621679109516"><span class="hs-identifier hs-var hs-var">name</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConfigAddDefaultOptions -&gt; Maybe Text
+</span><a href="HoYo.Internal.Types.html#addDefaultName"><span class="hs-identifier hs-var hs-var">addDefaultName</span></a></span><span> </span><span class="annot"><span class="annottext">ConfigAddDefaultOptions
+</span><a href="#local-6989586621679109519"><span class="hs-identifier hs-var">opts</span></a></span><span>
+</span><span id="line-250"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679109514"><span class="annot"><span class="annottext">defaultBm :: DefaultBookmark
+</span><a href="#local-6989586621679109514"><span class="hs-identifier hs-var hs-var">defaultBm</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Text -&gt; Maybe Text -&gt; DefaultBookmark
+</span><a href="HoYo.Internal.Types.html#DefaultBookmark"><span class="hs-identifier hs-var">DefaultBookmark</span></a></span><span> </span><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679109518"><span class="hs-identifier hs-var">dir</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe Text
+</span><a href="#local-6989586621679109516"><span class="hs-identifier hs-var">name</span></a></span><span>
+</span><span id="line-251"></span><span>  </span><span id="local-6989586621679109512"><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679109512"><span class="hs-identifier hs-var">cfgPath</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">SimpleGetter Env Text -&gt; HoYoMonad Text
+forall a (m :: * -&gt; *) b.
+MonadReader a m =&gt;
+SimpleGetter a b -&gt; m b
+</span><a href="HoYo.Internal.Utils.html#asks%27"><span class="hs-identifier hs-var">asks'</span></a></span><span> </span><span class="annot"><span class="annottext">SimpleGetter Env Text
+Lens' Env Text
+</span><a href="HoYo.Internal.Types.html#configPath"><span class="hs-identifier hs-var">configPath</span></a></span><span>
+</span><span id="line-252"></span><span>  </span><span class="annot"><span class="annottext">SimpleGetter Env Config -&gt; HoYoMonad Config
+forall a (m :: * -&gt; *) b.
+MonadReader a m =&gt;
+SimpleGetter a b -&gt; m b
+</span><a href="HoYo.Internal.Utils.html#asks%27"><span class="hs-identifier hs-var">asks'</span></a></span><span> </span><span class="annot"><span class="annottext">SimpleGetter Env Config
+Lens' Env Config
+</span><a href="HoYo.Internal.Types.html#config"><span class="hs-identifier hs-var">config</span></a></span><span>
+</span><span id="line-253"></span><span>    </span><span class="annot"><span class="annottext">HoYoMonad Config -&gt; (Config -&gt; HoYoMonad ()) -&gt; HoYoMonad ()
+forall (m :: * -&gt; *) a b. Monad m =&gt; m a -&gt; (a -&gt; m b) -&gt; m b
+</span><span class="hs-operator hs-var">&gt;&gt;=</span></span><span> </span><span class="annot"><span class="annottext">Text -&gt; Config -&gt; HoYoMonad ()
+forall (m :: * -&gt; *). MonadIO m =&gt; Text -&gt; Config -&gt; m ()
+</span><a href="HoYo.Internal.Config.html#encodeConfigFile"><span class="hs-identifier hs-var">encodeConfigFile</span></a></span><span> </span><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679109512"><span class="hs-identifier hs-var">cfgPath</span></a></span><span> </span><span class="annot"><span class="annottext">(Config -&gt; HoYoMonad ())
+-&gt; (Config -&gt; Config) -&gt; Config -&gt; HoYoMonad ()
+forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">ASetter Config Config [DefaultBookmark] [DefaultBookmark]
+-&gt; ([DefaultBookmark] -&gt; [DefaultBookmark]) -&gt; Config -&gt; Config
+forall s t a b. ASetter s t a b -&gt; (a -&gt; b) -&gt; s -&gt; t
+</span><span class="hs-identifier hs-var">over</span></span><span> </span><span class="annot"><span class="annottext">ASetter Config Config [DefaultBookmark] [DefaultBookmark]
+Lens' Config [DefaultBookmark]
+</span><a href="HoYo.Internal.Utils.html#defaultBookmarks"><span class="hs-identifier hs-var">defaultBookmarks</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefaultBookmark
+</span><a href="#local-6989586621679109514"><span class="hs-identifier hs-var">defaultBm</span></a></span><span> </span><span class="annot"><span class="annottext">DefaultBookmark -&gt; [DefaultBookmark] -&gt; [DefaultBookmark]
+forall a. a -&gt; [a] -&gt; [a]
+</span><span class="hs-glyph hs-var">:</span></span><span class="hs-special">)</span><span>
+</span><span id="line-254"></span><span>
+</span><span id="line-255"></span><span class="hs-comment">-- | Run the &quot;config&quot; command: dispatch on the given sub-command.</span><span>
+</span><span id="line-256"></span><span class="annot"><a href="HoYo.Internal.Command.html#runConfig"><span class="hs-identifier hs-type">runConfig</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#ConfigCommand"><span class="hs-identifier hs-type">ConfigCommand</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#HoYoMonad"><span class="hs-identifier hs-type">HoYoMonad</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><span id="line-257"></span><span id="runConfig"><span class="annot"><span class="annottext">runConfig :: ConfigCommand -&gt; HoYoMonad ()
+</span><a href="HoYo.Internal.Command.html#runConfig"><span class="hs-identifier hs-var hs-var">runConfig</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="HoYo.Internal.Types.html#Print"><span class="hs-identifier hs-type">Print</span></a></span><span> </span><span id="local-6989586621679109509"><span class="annot"><span class="annottext">ConfigPrintOptions
+</span><a href="#local-6989586621679109509"><span class="hs-identifier hs-var">opts</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConfigPrintOptions -&gt; HoYoMonad ()
+</span><a href="HoYo.Internal.Command.html#runConfigPrint"><span class="hs-identifier hs-var">runConfigPrint</span></a></span><span> </span><span class="annot"><span class="annottext">ConfigPrintOptions
+</span><a href="#local-6989586621679109509"><span class="hs-identifier hs-var">opts</span></a></span><span>
+</span><span id="line-258"></span><span class="annot"><a href="HoYo.Internal.Command.html#runConfig"><span class="hs-identifier hs-var">runConfig</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="HoYo.Internal.Types.html#Reset"><span class="hs-identifier hs-type">Reset</span></a></span><span> </span><span id="local-6989586621679109507"><span class="annot"><span class="annottext">ConfigResetOptions
+</span><a href="#local-6989586621679109507"><span class="hs-identifier hs-var">opts</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConfigResetOptions -&gt; HoYoMonad ()
+</span><a href="HoYo.Internal.Command.html#runConfigReset"><span class="hs-identifier hs-var">runConfigReset</span></a></span><span> </span><span class="annot"><span class="annottext">ConfigResetOptions
+</span><a href="#local-6989586621679109507"><span class="hs-identifier hs-var">opts</span></a></span><span>
+</span><span id="line-259"></span><span class="annot"><a href="HoYo.Internal.Command.html#runConfig"><span class="hs-identifier hs-var">runConfig</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="HoYo.Internal.Types.html#Set"><span class="hs-identifier hs-type">Set</span></a></span><span> </span><span id="local-6989586621679109505"><span class="annot"><span class="annottext">ConfigSetOptions
+</span><a href="#local-6989586621679109505"><span class="hs-identifier hs-var">opts</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConfigSetOptions -&gt; HoYoMonad ()
+</span><a href="HoYo.Internal.Command.html#runConfigSet"><span class="hs-identifier hs-var">runConfigSet</span></a></span><span> </span><span class="annot"><span class="annottext">ConfigSetOptions
+</span><a href="#local-6989586621679109505"><span class="hs-identifier hs-var">opts</span></a></span><span>
+</span><span id="line-260"></span><span class="annot"><a href="HoYo.Internal.Command.html#runConfig"><span class="hs-identifier hs-var">runConfig</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="HoYo.Internal.Types.html#AddDefaultBookmark"><span class="hs-identifier hs-type">AddDefaultBookmark</span></a></span><span> </span><span id="local-6989586621679109503"><span class="annot"><span class="annottext">ConfigAddDefaultOptions
+</span><a href="#local-6989586621679109503"><span class="hs-identifier hs-var">opts</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConfigAddDefaultOptions -&gt; HoYoMonad ()
+</span><a href="HoYo.Internal.Command.html#runAddDefault"><span class="hs-identifier hs-var">runAddDefault</span></a></span><span> </span><span class="annot"><span class="annottext">ConfigAddDefaultOptions
+</span><a href="#local-6989586621679109503"><span class="hs-identifier hs-var">opts</span></a></span><span>
+</span><span id="line-261"></span><span>
+</span><span id="line-262"></span><span class="hs-comment">-- | Check that the config file is valid.</span><span>
+</span><span id="line-263"></span><span class="annot"><a href="HoYo.Internal.Command.html#runCheckConfig"><span class="hs-identifier hs-type">runCheckConfig</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#TFilePath"><span class="hs-identifier hs-type">TFilePath</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IO</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><span id="line-264"></span><span id="runCheckConfig"><span class="annot"><span class="annottext">runCheckConfig :: Text -&gt; IO ()
+</span><a href="HoYo.Internal.Command.html#runCheckConfig"><span class="hs-identifier hs-var hs-var">runCheckConfig</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Text -&gt; IO (Either Text Config)
+forall (m :: * -&gt; *). MonadIO m =&gt; Text -&gt; m (Either Text Config)
+</span><a href="HoYo.Internal.Config.html#decodeConfigFile"><span class="hs-identifier hs-var">decodeConfigFile</span></a></span><span> </span><span class="annot"><span class="annottext">(Text -&gt; IO (Either Text Config))
+-&gt; (Either Text Config -&gt; IO ()) -&gt; Text -&gt; IO ()
+forall (m :: * -&gt; *) a b c.
+Monad m =&gt;
+(a -&gt; m b) -&gt; (b -&gt; m c) -&gt; a -&gt; m c
+</span><span class="hs-operator hs-var">&gt;=&gt;</span></span><span> </span><span class="hs-glyph">\</span><span class="hs-glyph">case</span><span>
+</span><span id="line-265"></span><span>  </span><span class="annot"><span class="hs-identifier hs-type">Left</span></span><span> </span><span id="local-6989586621679109499"><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679109499"><span class="hs-identifier hs-var">err</span></a></span></span><span>  </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text -&gt; IO ()
+forall (m :: * -&gt; *). MonadIO m =&gt; Text -&gt; m ()
+</span><a href="HoYo.Internal.Utils.html#printStderr"><span class="hs-identifier hs-var">printStderr</span></a></span><span> </span><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679109499"><span class="hs-identifier hs-var">err</span></a></span><span>
+</span><span id="line-266"></span><span>  </span><span class="annot"><span class="hs-identifier hs-type">Right</span></span><span> </span><span class="annot"><span class="annottext">Config
+</span><span class="hs-identifier">_</span></span><span>   </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text -&gt; IO ()
+forall (m :: * -&gt; *). MonadIO m =&gt; Text -&gt; m ()
+</span><a href="HoYo.Internal.Utils.html#printStdout"><span class="hs-identifier hs-var">printStdout</span></a></span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;Config is good&quot;</span></span><span>
+</span><span id="line-267"></span><span>
+</span><span id="line-268"></span><span class="hs-comment">-- | Check that the bookmarks file is valid.</span><span>
+</span><span id="line-269"></span><span class="annot"><a href="HoYo.Internal.Command.html#runCheckBookmarks"><span class="hs-identifier hs-type">runCheckBookmarks</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#TFilePath"><span class="hs-identifier hs-type">TFilePath</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IO</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><span id="line-270"></span><span id="runCheckBookmarks"><span class="annot"><span class="annottext">runCheckBookmarks :: Text -&gt; IO ()
+</span><a href="HoYo.Internal.Command.html#runCheckBookmarks"><span class="hs-identifier hs-var hs-var">runCheckBookmarks</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Text -&gt; IO (Either Text Bookmarks)
+forall (m :: * -&gt; *).
+MonadIO m =&gt;
+Text -&gt; m (Either Text Bookmarks)
+</span><a href="HoYo.Internal.Bookmark.html#decodeBookmarksFile"><span class="hs-identifier hs-var">decodeBookmarksFile</span></a></span><span> </span><span class="annot"><span class="annottext">(Text -&gt; IO (Either Text Bookmarks))
+-&gt; (Either Text Bookmarks -&gt; IO ()) -&gt; Text -&gt; IO ()
+forall (m :: * -&gt; *) a b c.
+Monad m =&gt;
+(a -&gt; m b) -&gt; (b -&gt; m c) -&gt; a -&gt; m c
+</span><span class="hs-operator hs-var">&gt;=&gt;</span></span><span> </span><span class="hs-glyph">\</span><span class="hs-glyph">case</span><span>
+</span><span id="line-271"></span><span>  </span><span class="annot"><span class="hs-identifier hs-type">Left</span></span><span> </span><span id="local-6989586621679109495"><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679109495"><span class="hs-identifier hs-var">err</span></a></span></span><span>  </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text -&gt; IO ()
+forall (m :: * -&gt; *). MonadIO m =&gt; Text -&gt; m ()
+</span><a href="HoYo.Internal.Utils.html#printStderr"><span class="hs-identifier hs-var">printStderr</span></a></span><span> </span><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679109495"><span class="hs-identifier hs-var">err</span></a></span><span>
+</span><span id="line-272"></span><span>  </span><span class="annot"><span class="hs-identifier hs-type">Right</span></span><span> </span><span class="annot"><span class="annottext">Bookmarks
+</span><span class="hs-identifier">_</span></span><span>   </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text -&gt; IO ()
+forall (m :: * -&gt; *). MonadIO m =&gt; Text -&gt; m ()
+</span><a href="HoYo.Internal.Utils.html#printStdout"><span class="hs-identifier hs-var">printStdout</span></a></span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;Bookmarks file is good&quot;</span></span><span>
+</span><span id="line-273"></span><span>
+</span><span id="line-274"></span><span class="hs-comment">-- | Run the &quot;config check&quot; command: validate the current</span><span>
+</span><span id="line-275"></span><span class="hs-comment">-- config and bookmarks files.</span><span>
+</span><span id="line-276"></span><span class="annot"><a href="HoYo.Internal.Command.html#runCheck"><span class="hs-identifier hs-type">runCheck</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#CheckOptions"><span class="hs-identifier hs-type">CheckOptions</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#TFilePath"><span class="hs-identifier hs-type">TFilePath</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#TFilePath"><span class="hs-identifier hs-type">TFilePath</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IO</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><span id="line-277"></span><span id="runCheck"><span class="annot"><span class="annottext">runCheck :: CheckOptions -&gt; Text -&gt; Text -&gt; IO ()
+</span><a href="HoYo.Internal.Command.html#runCheck"><span class="hs-identifier hs-var hs-var">runCheck</span></a></span></span><span> </span><span id="local-6989586621679109493"><span class="annot"><span class="annottext">CheckOptions
+</span><a href="#local-6989586621679109493"><span class="hs-identifier hs-var">opts</span></a></span></span><span> </span><span id="local-6989586621679109492"><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679109492"><span class="hs-identifier hs-var">bFp</span></a></span></span><span> </span><span id="local-6989586621679109491"><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679109491"><span class="hs-identifier hs-var">sFp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-278"></span><span>  </span><span class="annot"><span class="annottext">Bool -&gt; IO () -&gt; IO ()
+forall (f :: * -&gt; *). Applicative f =&gt; Bool -&gt; f () -&gt; f ()
+</span><span class="hs-identifier hs-var">when</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CheckOptions -&gt; Bool
+</span><a href="HoYo.Internal.Types.html#checkConfig"><span class="hs-identifier hs-var hs-var">checkConfig</span></a></span><span> </span><span class="annot"><span class="annottext">CheckOptions
+</span><a href="#local-6989586621679109493"><span class="hs-identifier hs-var">opts</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(IO () -&gt; IO ()) -&gt; IO () -&gt; IO ()
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Text -&gt; IO ()
+</span><a href="HoYo.Internal.Command.html#runCheckConfig"><span class="hs-identifier hs-var">runCheckConfig</span></a></span><span> </span><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679109491"><span class="hs-identifier hs-var">sFp</span></a></span><span>
+</span><span id="line-279"></span><span>  </span><span class="annot"><span class="annottext">Bool -&gt; IO () -&gt; IO ()
+forall (f :: * -&gt; *). Applicative f =&gt; Bool -&gt; f () -&gt; f ()
+</span><span class="hs-identifier hs-var">when</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CheckOptions -&gt; Bool
+</span><a href="HoYo.Internal.Types.html#checkBookmarks"><span class="hs-identifier hs-var hs-var">checkBookmarks</span></a></span><span> </span><span class="annot"><span class="annottext">CheckOptions
+</span><a href="#local-6989586621679109493"><span class="hs-identifier hs-var">opts</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(IO () -&gt; IO ()) -&gt; IO () -&gt; IO ()
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Text -&gt; IO ()
+</span><a href="HoYo.Internal.Command.html#runCheckBookmarks"><span class="hs-identifier hs-var">runCheckBookmarks</span></a></span><span> </span><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679109492"><span class="hs-identifier hs-var">bFp</span></a></span><span>
+</span><span id="line-280"></span><span>
+</span><span id="line-281"></span><span class="hs-comment">-- | Run the default command, if it has been specified by the user.</span><span>
+</span><span id="line-282"></span><span class="annot"><a href="HoYo.Internal.Command.html#runDefaultCommand"><span class="hs-identifier hs-type">runDefaultCommand</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#HoYoMonad"><span class="hs-identifier hs-type">HoYoMonad</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><span id="line-283"></span><span id="runDefaultCommand"><span class="annot"><span class="annottext">runDefaultCommand :: HoYoMonad ()
+</span><a href="HoYo.Internal.Command.html#runDefaultCommand"><span class="hs-identifier hs-var hs-var">runDefaultCommand</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SimpleGetter Env (Maybe Command) -&gt; HoYoMonad (Maybe Command)
+forall a (m :: * -&gt; *) b.
+MonadReader a m =&gt;
+SimpleGetter a b -&gt; m b
+</span><a href="HoYo.Internal.Utils.html#asks%27"><span class="hs-identifier hs-var">asks'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(Config -&gt; Const r Config) -&gt; Env -&gt; Const r Env
+Lens' Env Config
+</span><a href="HoYo.Internal.Types.html#config"><span class="hs-identifier hs-var">config</span></a></span><span> </span><span class="annot"><span class="annottext">((Config -&gt; Const r Config) -&gt; Env -&gt; Const r Env)
+-&gt; ((Maybe Command -&gt; Const r (Maybe Command))
+    -&gt; Config -&gt; Const r Config)
+-&gt; (Maybe Command -&gt; Const r (Maybe Command))
+-&gt; Env
+-&gt; Const r Env
+forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">(Maybe Command -&gt; Const r (Maybe Command))
+-&gt; Config -&gt; Const r Config
+Lens' Config (Maybe Command)
+</span><a href="HoYo.Internal.Utils.html#defaultCommand"><span class="hs-identifier hs-var">defaultCommand</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">HoYoMonad (Maybe Command)
+-&gt; (Maybe Command -&gt; HoYoMonad ()) -&gt; HoYoMonad ()
+forall (m :: * -&gt; *) a b. Monad m =&gt; m a -&gt; (a -&gt; m b) -&gt; m b
+</span><span class="hs-operator hs-var">&gt;&gt;=</span></span><span> </span><span class="hs-glyph">\</span><span class="hs-glyph">case</span><span>
+</span><span id="line-284"></span><span>  </span><span class="annot"><span class="annottext">Maybe Command
+</span><span class="hs-identifier hs-var">Nothing</span></span><span>   </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">() -&gt; HoYoMonad ()
+forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
+</span><span class="hs-identifier hs-var">return</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span> </span><span class="hs-comment">-- return ShowHelp</span><span>
+</span><span id="line-285"></span><span>  </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="annot"><span class="annottext">Command
+</span><a href="HoYo.Internal.Types.html#DefaultCommand"><span class="hs-identifier hs-var">DefaultCommand</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text -&gt; HoYoMonad ()
+forall e (m :: * -&gt; *) a. MonadError e m =&gt; e -&gt; m a
+</span><span class="hs-identifier hs-var">throwError</span></span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;default command: stuck in a loop!&quot;</span></span><span>
+</span><span id="line-286"></span><span>  </span><span class="hs-comment">-- Just otherCommand -&gt; return () -- return $ ReRun cmd</span><span>
+</span><span id="line-287"></span><span>  </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span id="local-6989586621679109485"><span class="annot"><span class="annottext">Command
+</span><a href="#local-6989586621679109485"><span class="hs-identifier hs-var">otherCommand</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Command -&gt; HoYoMonad ()
+</span><a href="HoYo.Internal.Command.html#runCommand"><span class="hs-identifier hs-var">runCommand</span></a></span><span> </span><span class="annot"><span class="annottext">Command
+</span><a href="#local-6989586621679109485"><span class="hs-identifier hs-var">otherCommand</span></a></span><span>
+</span><span id="line-288"></span><span>
+</span><span id="line-289"></span><span class="hs-comment">-- | Run a 'Command' in the hoyo environment.</span><span>
+</span><span id="line-290"></span><span class="annot"><a href="HoYo.Internal.Command.html#runCommand"><span class="hs-identifier hs-type">runCommand</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#Command"><span class="hs-identifier hs-type">Command</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#HoYoMonad"><span class="hs-identifier hs-type">HoYoMonad</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><span id="line-291"></span><span id="runCommand"><span class="annot"><span class="annottext">runCommand :: Command -&gt; HoYoMonad ()
+</span><a href="HoYo.Internal.Command.html#runCommand"><span class="hs-identifier hs-var hs-var">runCommand</span></a></span></span><span>       </span><span class="hs-special">(</span><span class="annot"><a href="HoYo.Internal.Types.html#Add"><span class="hs-identifier hs-type">Add</span></a></span><span> </span><span id="local-6989586621679109482"><span class="annot"><span class="annottext">AddOptions
+</span><a href="#local-6989586621679109482"><span class="hs-identifier hs-var">opts</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">AddOptions -&gt; HoYoMonad ()
+</span><a href="HoYo.Internal.Command.html#runAdd"><span class="hs-identifier hs-var">runAdd</span></a></span><span> </span><span class="annot"><span class="annottext">AddOptions
+</span><a href="#local-6989586621679109482"><span class="hs-identifier hs-var">opts</span></a></span><span>
+</span><span id="line-292"></span><span class="annot"><a href="HoYo.Internal.Command.html#runCommand"><span class="hs-identifier hs-var">runCommand</span></a></span><span>      </span><span class="hs-special">(</span><span class="annot"><a href="HoYo.Internal.Types.html#Move"><span class="hs-identifier hs-type">Move</span></a></span><span> </span><span id="local-6989586621679109480"><span class="annot"><span class="annottext">MoveOptions
+</span><a href="#local-6989586621679109480"><span class="hs-identifier hs-var">opts</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">MoveOptions -&gt; HoYoMonad ()
+</span><a href="HoYo.Internal.Command.html#runMove"><span class="hs-identifier hs-var">runMove</span></a></span><span> </span><span class="annot"><span class="annottext">MoveOptions
+</span><a href="#local-6989586621679109480"><span class="hs-identifier hs-var">opts</span></a></span><span>
+</span><span id="line-293"></span><span class="annot"><a href="HoYo.Internal.Command.html#runCommand"><span class="hs-identifier hs-var">runCommand</span></a></span><span>      </span><span class="hs-special">(</span><span class="annot"><a href="HoYo.Internal.Types.html#List"><span class="hs-identifier hs-type">List</span></a></span><span> </span><span id="local-6989586621679109478"><span class="annot"><span class="annottext">ListOptions
+</span><a href="#local-6989586621679109478"><span class="hs-identifier hs-var">opts</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ListOptions -&gt; HoYoMonad ()
+</span><a href="HoYo.Internal.Command.html#runList"><span class="hs-identifier hs-var">runList</span></a></span><span> </span><span class="annot"><span class="annottext">ListOptions
+</span><a href="#local-6989586621679109478"><span class="hs-identifier hs-var">opts</span></a></span><span>
+</span><span id="line-294"></span><span class="annot"><a href="HoYo.Internal.Command.html#runCommand"><span class="hs-identifier hs-var">runCommand</span></a></span><span>     </span><span class="hs-special">(</span><span class="annot"><a href="HoYo.Internal.Types.html#Clear"><span class="hs-identifier hs-type">Clear</span></a></span><span> </span><span id="local-6989586621679109476"><span class="annot"><span class="annottext">ClearOptions
+</span><a href="#local-6989586621679109476"><span class="hs-identifier hs-var">opts</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ClearOptions -&gt; HoYoMonad ()
+</span><a href="HoYo.Internal.Command.html#runClear"><span class="hs-identifier hs-var">runClear</span></a></span><span> </span><span class="annot"><span class="annottext">ClearOptions
+</span><a href="#local-6989586621679109476"><span class="hs-identifier hs-var">opts</span></a></span><span>
+</span><span id="line-295"></span><span class="annot"><a href="HoYo.Internal.Command.html#runCommand"><span class="hs-identifier hs-var">runCommand</span></a></span><span>    </span><span class="hs-special">(</span><span class="annot"><a href="HoYo.Internal.Types.html#Delete"><span class="hs-identifier hs-type">Delete</span></a></span><span> </span><span id="local-6989586621679109474"><span class="annot"><span class="annottext">DeleteOptions
+</span><a href="#local-6989586621679109474"><span class="hs-identifier hs-var">opts</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DeleteOptions -&gt; HoYoMonad ()
+</span><a href="HoYo.Internal.Command.html#runDelete"><span class="hs-identifier hs-var">runDelete</span></a></span><span> </span><span class="annot"><span class="annottext">DeleteOptions
+</span><a href="#local-6989586621679109474"><span class="hs-identifier hs-var">opts</span></a></span><span>
+</span><span id="line-296"></span><span class="annot"><a href="HoYo.Internal.Command.html#runCommand"><span class="hs-identifier hs-var">runCommand</span></a></span><span>   </span><span class="hs-special">(</span><span class="annot"><a href="HoYo.Internal.Types.html#Refresh"><span class="hs-identifier hs-type">Refresh</span></a></span><span> </span><span id="local-6989586621679109472"><span class="annot"><span class="annottext">RefreshOptions
+</span><a href="#local-6989586621679109472"><span class="hs-identifier hs-var">opts</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">RefreshOptions -&gt; HoYoMonad ()
+</span><a href="HoYo.Internal.Command.html#runRefresh"><span class="hs-identifier hs-var">runRefresh</span></a></span><span> </span><span class="annot"><span class="annottext">RefreshOptions
+</span><a href="#local-6989586621679109472"><span class="hs-identifier hs-var">opts</span></a></span><span>
+</span><span id="line-297"></span><span class="annot"><a href="HoYo.Internal.Command.html#runCommand"><span class="hs-identifier hs-var">runCommand</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="HoYo.Internal.Types.html#ConfigCmd"><span class="hs-identifier hs-type">ConfigCmd</span></a></span><span> </span><span id="local-6989586621679109470"><span class="annot"><span class="annottext">ConfigCommand
+</span><a href="#local-6989586621679109470"><span class="hs-identifier hs-var">opts</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConfigCommand -&gt; HoYoMonad ()
+</span><a href="HoYo.Internal.Command.html#runConfig"><span class="hs-identifier hs-var">runConfig</span></a></span><span> </span><span class="annot"><span class="annottext">ConfigCommand
+</span><a href="#local-6989586621679109470"><span class="hs-identifier hs-var">opts</span></a></span><span>
+</span><span id="line-298"></span><span class="annot"><a href="HoYo.Internal.Command.html#runCommand"><span class="hs-identifier hs-var">runCommand</span></a></span><span>   </span><span class="annot"><span class="annottext">Command
+</span><a href="HoYo.Internal.Types.html#DefaultCommand"><span class="hs-identifier hs-var">DefaultCommand</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">HoYoMonad ()
+</span><a href="HoYo.Internal.Command.html#runDefaultCommand"><span class="hs-identifier hs-var">runDefaultCommand</span></a></span><span>
+</span><span id="line-299"></span><span class="annot"><a href="HoYo.Internal.Command.html#runCommand"><span class="hs-identifier hs-var">runCommand</span></a></span><span>     </span><span class="hs-special">(</span><span class="annot"><a href="HoYo.Internal.Types.html#Check"><span class="hs-identifier hs-type">Check</span></a></span><span> </span><span id="local-6989586621679109468"><span class="annot"><span class="annottext">CheckOptions
+</span><a href="#local-6989586621679109468"><span class="hs-identifier hs-var">opts</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-300"></span><span>  </span><span class="hs-comment">-- printStderr &quot;The 'check' command should be run outside the HoYo monad.&quot;</span><span>
+</span><span id="line-301"></span><span>  </span><span class="annot"><span class="annottext">Text -&gt; HoYoMonad ()
+forall (m :: * -&gt; *). MonadIO m =&gt; Text -&gt; m ()
+</span><a href="HoYo.Internal.Utils.html#printStderr"><span class="hs-identifier hs-var">printStderr</span></a></span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;It's discouraged to set default_command = \&quot;check\&quot; in your hoyo config file.&quot;</span></span><span>
+</span><span id="line-302"></span><span>  </span><span class="annot"><a href="HoYo.Internal.Types.html#Env"><span class="hs-identifier hs-type">Env</span></a></span><span> </span><span class="annot"><span class="annottext">Bookmarks
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679109467"><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679109467"><span class="hs-identifier hs-var">bFp</span></a></span></span><span> </span><span class="annot"><span class="annottext">Config
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679109466"><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679109466"><span class="hs-identifier hs-var">sFp</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">HoYoMonad Env
+forall r (m :: * -&gt; *). MonadReader r m =&gt; m r
+</span><span class="hs-identifier hs-var">ask</span></span><span>
+</span><span id="line-303"></span><span>  </span><span class="annot"><span class="annottext">IO () -&gt; HoYoMonad ()
+forall (m :: * -&gt; *) a. MonadIO m =&gt; IO a -&gt; m a
+</span><span class="hs-identifier hs-var">liftIO</span></span><span> </span><span class="annot"><span class="annottext">(IO () -&gt; HoYoMonad ()) -&gt; IO () -&gt; HoYoMonad ()
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">CheckOptions -&gt; Text -&gt; Text -&gt; IO ()
+</span><a href="HoYo.Internal.Command.html#runCheck"><span class="hs-identifier hs-var">runCheck</span></a></span><span> </span><span class="annot"><span class="annottext">CheckOptions
+</span><a href="#local-6989586621679109468"><span class="hs-identifier hs-var">opts</span></a></span><span> </span><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679109467"><span class="hs-identifier hs-var">bFp</span></a></span><span> </span><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679109466"><span class="hs-identifier hs-var">sFp</span></a></span><span>
+</span><span id="line-304"></span></pre></body></html>

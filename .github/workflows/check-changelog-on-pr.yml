@@ -1,0 +1,27 @@
+# Ensure that if any source files change, that CHANGELOG.ms has also change
+name: Check CHANGELOG.md on PR
+
+on:
+    pull_request:
+        branches:
+            - main
+        paths:
+            - '**.hs'
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout repo
+              uses: actions/checkout@v3
+            - name: Check if CHANGELOG.md has changed
+              id: changed-changelog
+              uses: tj-actions/changed-files@v35
+              with:
+                  files: CHANGELOG.md
+            - name: Throw error if CHANGELOG.md has changed
+              shell: bash
+              if: steps.changed-changelog.outputs.any_changed == 'false'
+              run: |
+                  echo "CHANGELOG.md has not changed"
+                  exit 1
