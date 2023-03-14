@@ -327,4 +327,4 @@ formatOptions (Options c g) = formatCommand c <> formatGlobals g
 formatArgs :: [T.Text] -> T.Text
 formatArgs = T.unwords . map quoteStrings
   where quoteStrings :: T.Text -> T.Text
-        quoteStrings s | T.elem ' ' s = "\"" <> s <> "\"" | otherwise  = s
+        quoteStrings s | ' ' `elem` T.unpack s = "\"" <> s <> "\"" | otherwise  = s
