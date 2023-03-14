@@ -9,16 +9,18 @@ Parse CLI arguments.
 
 module HoYo.Internal.Parse where
 
-import HoYo.CLI.Complete
-import HoYo.Internal.Command
-import HoYo.Internal.Types
-import HoYo.Internal.Version
+import qualified Data.Text                       as T
 
-import qualified Data.Text as T
-import Options.Applicative
-import Options.Applicative.Help.Chunk
-import Options.Applicative.Help.Pretty
-import Text.Read
+import           HoYo.CLI.Complete
+import           HoYo.Internal.Command
+import           HoYo.Internal.Types
+import           HoYo.Internal.Version
+
+import           Options.Applicative
+import           Options.Applicative.Help.Chunk
+import           Options.Applicative.Help.Pretty
+
+import           Text.Read
 
 -- | Parse global options: options that can be set on the command line
 -- no matter what sub-command is being run.
@@ -213,7 +215,7 @@ configAddDefaultCommand = AddDefaultBookmark <$> (
 -- | `hoyo check` should be considered equivalent to `hoyo check --config --bookmarks`
 noArgs :: CheckOptions -> CheckOptions
 noArgs (CheckOptions False False) = CheckOptions True True
-noArgs opts = opts
+noArgs opts                       = opts
 
 -- | Parse options for the @hoyo check@ command.
 checkCommand :: Parser Command

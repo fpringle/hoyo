@@ -16,33 +16,39 @@ module HoYo.Internal.Utils where
 
 {- HLINT ignore "Use list comprehension" -}
 
-import HoYo.Internal.Types
+import           Control.Applicative
+import           Control.Monad              (unless, when)
+import           Control.Monad.Except
+                 ( MonadError (..)
+                 , liftEither
+                 , throwError
+                 )
+import           Control.Monad.IO.Class
+import           Control.Monad.Reader.Class (MonadReader, asks)
 
-import Data.Bifunctor (bimap, first)
-import qualified Data.Text as T
-import qualified Data.Text.IO as T
+import           Data.Bifunctor             (bimap, first)
+import           Data.Maybe
+import qualified Data.Text                  as T
+import qualified Data.Text.IO               as T
+import           Data.Time
 
-import System.Console.ANSI hiding (Reset)
-import System.IO
+import           HoYo.Internal.Types
 
-import Control.Applicative
-import Text.Read (readEither)
+import           Lens.Micro
+import           Lens.Micro.Extras
 
-import Control.Monad (unless, when)
-import Control.Monad.Except (MonadError(..), liftEither, throwError)
-import Control.Monad.IO.Class
-import Control.Monad.Reader.Class (MonadReader, asks)
+import           System.Console.ANSI        hiding (Reset)
+import           System.Directory
+import           System.IO
 
-import Lens.Micro
-import Lens.Micro.Extras
+import           Text.Read                  (readEither)
 
-import qualified Toml.Parser.Core as Toml (eof, errorBundlePretty, parse)
-import qualified Toml.Parser.Value as Toml
-
-import Data.Maybe
-import Data.Time
-
-import System.Directory
+import qualified Toml.Parser.Core           as Toml
+                 ( eof
+                 , errorBundlePretty
+                 , parse
+                 )
+import qualified Toml.Parser.Value          as Toml
 
 
 -----------------------------------------
@@ -138,7 +144,7 @@ asks' = asks . view
 -- | Take the maximum of a list, with a default value if the list is empty.
 maximumDefault :: Ord a => a -> [a] -> a
 maximumDefault def [] = def
-maximumDefault _ xs = maximum xs
+maximumDefault _ xs   = maximum xs
 
 -- | Throw an error if a check fails.
 assert :: T.Text -> HoYoMonad Bool -> HoYoMonad ()
@@ -220,8 +226,8 @@ formatBookmark :: Bool -> Int -> Bookmark -> T.Text
 formatBookmark shouldDisplayTime indexWidth (Bookmark dir idx zTime mbName) =
   let num = T.justifyRight indexWidth ' ' $ tshow idx
       timeStr = T.pack $ formatTime defaultTimeLocale "%D %T" zTime
-      d = case mbName of Nothing    -> T.pack dir
-                         Just name  -> T.pack dir <> "\t(" <> name <> ")"
+      d = case mbName of Nothing   -> T.pack dir
+                         Just name -> T.pack dir <> "\t(" <> name <> ")"
 
   in if shouldDisplayTime
      then num <> ". " <> timeStr <> "\t" <> d
@@ -244,8 +250,8 @@ formatBookmarks shouldDisplayTime bms = map (formatBookmark shouldDisplayTime in
 -- @formatDefaultBookmark bm@ returns a pretty representation of @bm@.
 formatDefaultBookmark :: DefaultBookmark -> T.Text
 formatDefaultBookmark (DefaultBookmark dir mbName) =
-  case mbName of Nothing    -> T.pack dir
-                 Just name  -> T.pack dir <> "\t(" <> name <> ")"
+  case mbName of Nothing   -> T.pack dir
+                 Just name -> T.pack dir <> "\t(" <> name <> ")"
 
 -- | Show a value as a 'T.Text' instead of a 'String'.
 tshow :: Show a => a -> T.Text

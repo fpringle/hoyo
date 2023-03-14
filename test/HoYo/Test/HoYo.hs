@@ -1,13 +1,16 @@
 module HoYo.Test.HoYo where
 
-import HoYo
+import           Control.Exception
 
-import Control.Exception
-import qualified Data.Text as T
-import System.Directory
-import System.IO.Temp
-import Test.QuickCheck
-import Test.QuickCheck.Monadic as Q
+import qualified Data.Text               as T
+
+import           HoYo
+
+import           System.Directory
+import           System.IO.Temp
+
+import           Test.QuickCheck
+import           Test.QuickCheck.Monadic as Q
 
 testHoYoMonadProperty :: HoYoMonad a -> Env -> (Either T.Text a -> Bool) -> Property
 testHoYoMonadProperty hoyo env test = monadicIO $ do

@@ -9,12 +9,14 @@ Bash competion functions used by the CLI.
 
 module HoYo.CLI.Complete where
 
-import HoYo
+import           Control.Monad.IO.Class
 
-import Control.Monad.IO.Class
-import Data.Maybe
-import qualified Data.Text as T
-import Options.Applicative
+import           Data.Maybe
+import qualified Data.Text              as T
+
+import           HoYo
+
+import           Options.Applicative
 
 -- | Fetch existing data file and use it to complete bookmark names.
 bookmarkCompleter :: Completer

@@ -1,17 +1,20 @@
 {-# LANGUAGE TemplateHaskell #-}
 module HoYo.Test.Bookmark where
 
-import HoYo
-import HoYo.Internal.Types
-import HoYo.Test.Gen ()
-import HoYo.Test.HoYo
+import           Control.Monad
 
-import Control.Monad
-import Data.Function
-import qualified Data.Text as T
-import Lens.Micro.Extras
-import Test.QuickCheck
-import Test.QuickCheck.Monadic as Q
+import           Data.Function
+import qualified Data.Text               as T
+
+import           HoYo
+import           HoYo.Internal.Types
+import           HoYo.Test.Gen           ()
+import           HoYo.Test.HoYo
+
+import           Lens.Micro.Extras
+
+import           Test.QuickCheck
+import           Test.QuickCheck.Monadic as Q
 
 testBookmarkSearch :: BookmarkSearchTerm -> Bookmarks -> Property
 testBookmarkSearch search bms =
@@ -29,8 +32,8 @@ testBookmarkSearchSuccess :: Bookmark -> Bookmarks -> Property
 testBookmarkSearchSuccess one (Bookmarks rest) = testBookmarkSearch search (Bookmarks (one:rest))
   where
     search = case _bookmarkName one of
-                Just name   -> SearchName name
-                Nothing     -> SearchIndex (_bookmarkIndex one)
+                Just name -> SearchName name
+                Nothing   -> SearchIndex (_bookmarkIndex one)
 
 prop_BookmarkSearch :: Property
 prop_BookmarkSearch = property testBookmarkSearch
@@ -92,7 +95,7 @@ bookmarksEq (Bookmarks bms1) (Bookmarks bms2) =
 
 eitherBookmarksEq :: Either a Bookmarks -> Either a Bookmarks -> Bool
 eitherBookmarksEq (Right bm1) (Right bm2) = bookmarksEq bm1 bm2
-eitherBookmarksEq _ _ = False
+eitherBookmarksEq _ _                     = False
 
 testGetBookmarks :: Bookmarks -> Property
 testGetBookmarks bms =

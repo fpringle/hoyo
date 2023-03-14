@@ -1,14 +1,16 @@
 {-# LANGUAGE TemplateHaskell #-}
 module HoYo.Test.Utils where
 
-import HoYo
-import HoYo.Internal.Utils
-import HoYo.Test.Gen
-import HoYo.Test.HoYo
+import qualified Data.Text           as T
 
-import qualified Data.Text as T
-import Lens.Micro
-import Test.QuickCheck
+import           HoYo
+import           HoYo.Internal.Utils
+import           HoYo.Test.Gen
+import           HoYo.Test.HoYo
+
+import           Lens.Micro
+
+import           Test.QuickCheck
 
 testMaximumDefaultInt :: Int -> [Int] -> Property
 testMaximumDefaultInt x xs =

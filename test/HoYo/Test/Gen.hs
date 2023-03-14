@@ -5,14 +5,15 @@
 
 module HoYo.Test.Gen where
 
-import HoYo
-import HoYo.Internal.Types
+import qualified Data.Text                 as T
 
-import qualified Data.Text as T
-import Test.QuickCheck
-import Test.QuickCheck.Instances ()
--- import Data.Time
-import System.FilePath
+import           HoYo
+import           HoYo.Internal.Types
+
+import           System.FilePath
+
+import           Test.QuickCheck
+import           Test.QuickCheck.Instances ()
 
 letter :: Gen Char
 letter = elements (['a'..'z'] <> ['A'..'Z'])

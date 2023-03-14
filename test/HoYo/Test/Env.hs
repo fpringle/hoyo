@@ -1,16 +1,17 @@
 {-# LANGUAGE TemplateHaskell #-}
 module HoYo.Test.Env where
 
-import HoYo
-import HoYo.Test.Bookmark
-import HoYo.Test.Gen ()
-import HoYo.Test.HoYo
+import qualified Data.Text               as T
 
-import qualified Data.Text as T
-import Test.QuickCheck
-import Test.QuickCheck.Monadic as Q
--- import Control.Monad
-import System.IO.Temp
+import           HoYo
+import           HoYo.Test.Bookmark
+import           HoYo.Test.Gen           ()
+import           HoYo.Test.HoYo
+
+import           System.IO.Temp
+
+import           Test.QuickCheck
+import           Test.QuickCheck.Monadic as Q
 
 
 envEq :: Env -> Env -> Bool
@@ -22,7 +23,7 @@ envEq (Env bms1 bfp1 cfg1 cfp1) (Env bms2 bfp2 cfg2 cfp2) =
 
 eitherEnvEq :: Either a Env -> Either a Env -> Bool
 eitherEnvEq (Right e1) (Right e2) = envEq e1 e2
-eitherEnvEq _ _ = False
+eitherEnvEq _ _                   = False
 
 testWriteReadEnv :: Bookmarks -> Config -> Property
 testWriteReadEnv bms cfg = monadicIO $ do
