@@ -1,5 +1,5 @@
 {-|
-Module      : HoYo.Bookmark
+Module      : Hoyo.Bookmark
 Copyright   : (c) Frederick Pringle, 2023
 License     : BSD-3-Clause
 Maintainer  : freddyjepringle@gmail.com
@@ -9,7 +9,7 @@ by the hoyo program. This module exports some utility datatypes and functions
 used for working with bookmarks.
 -}
 
-module HoYo.Bookmark (
+module Hoyo.Bookmark (
   -- * The Bookmark type
   Bookmark (..)
   , Bookmarks (..)
@@ -36,6 +36,6 @@ module HoYo.Bookmark (
   , encodeBookmarksFile
   ) where
 
-import HoYo.Internal.Bookmark
-import HoYo.Internal.Types
-import HoYo.Internal.Utils
+import Hoyo.Internal.Bookmark
+import Hoyo.Internal.Types
+import Hoyo.Internal.Utils

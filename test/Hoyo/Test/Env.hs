@@ -1,12 +1,12 @@
 {-# LANGUAGE TemplateHaskell #-}
-module HoYo.Test.Env where
+module Hoyo.Test.Env where
 
 import qualified Data.Text               as T
 
-import           HoYo
-import           HoYo.Test.Bookmark
-import           HoYo.Test.Gen           ()
-import           HoYo.Test.HoYo
+import           Hoyo
+import           Hoyo.Test.Bookmark
+import           Hoyo.Test.Gen           ()
+import           Hoyo.Test.Hoyo
 
 import           System.IO.Temp
 

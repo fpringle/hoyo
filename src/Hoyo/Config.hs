@@ -1,5 +1,5 @@
 {-|
-Module      : HoYo.Config
+Module      : Hoyo.Config
 Copyright   : (c) Frederick Pringle, 2023
 License     : BSD-3-Clause
 Maintainer  : freddyjepringle@gmail.com
@@ -10,7 +10,7 @@ usually at ~/.config/hoyo/config.toml
 
 {-# LANGUAGE RankNTypes #-}
 
-module HoYo.Config (
+module Hoyo.Config (
   Config (..)
 
   , defaultConfig
@@ -23,5 +23,5 @@ module HoYo.Config (
   , getKeyVals
   ) where
 
-import HoYo.Internal.Config
-import HoYo.Internal.Types
+import Hoyo.Internal.Config
+import Hoyo.Internal.Types

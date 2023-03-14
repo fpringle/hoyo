@@ -1,22 +1,22 @@
 {-|
-Module      : HoYo.Internal.Env
+Module      : Hoyo.Internal.Env
 Copyright   : (c) Frederick Pringle, 2023
 License     : BSD-3-Clause
 Maintainer  : freddyjepringle@gmail.com
 
-Internals used by the HoYo.Internal module.
+Internals used by the Hoyo.Internal module.
 -}
 
-module HoYo.Internal.Env where
+module Hoyo.Internal.Env where
 
 import           Control.Monad.Except
 
 import qualified Data.Text              as T
 
-import           HoYo.Internal.Bookmark
-import           HoYo.Internal.Config
-import           HoYo.Internal.Types
-import           HoYo.Internal.Utils
+import           Hoyo.Internal.Bookmark
+import           Hoyo.Internal.Config
+import           Hoyo.Internal.Types
+import           Hoyo.Internal.Utils
 
 import           Lens.Micro.Extras
 

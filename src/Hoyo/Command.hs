@@ -1,5 +1,5 @@
 {-|
-Module      : HoYo.Command
+Module      : Hoyo.Command
 Copyright   : (c) Frederick Pringle, 2023
 License     : BSD-3-Clause
 Maintainer  : freddyjepringle@gmail.com
@@ -8,7 +8,7 @@ This module defines data-types and runner functions for the hoyo
 command-line program.
 -}
 
-module HoYo.Command (
+module Hoyo.Command (
   -- * Running CLI commands
   runCommand
   , modifyBookmarks
@@ -51,5 +51,5 @@ module HoYo.Command (
   , MaybeOverride (..)
   ) where
 
-import HoYo.Internal.Command
-import HoYo.Internal.Types
+import Hoyo.Internal.Command
+import Hoyo.Internal.Types

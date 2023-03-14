@@ -1,15 +1,15 @@
 {-# LANGUAGE TemplateHaskell #-}
-module HoYo.Test.Bookmark where
+module Hoyo.Test.Bookmark where
 
 import           Control.Monad
 
 import           Data.Function
 import qualified Data.Text               as T
 
-import           HoYo
-import           HoYo.Internal.Types
-import           HoYo.Test.Gen           ()
-import           HoYo.Test.HoYo
+import           Hoyo
+import           Hoyo.Internal.Types
+import           Hoyo.Test.Gen           ()
+import           Hoyo.Test.Hoyo
 
 import           Lens.Micro.Extras
 
@@ -99,7 +99,7 @@ eitherBookmarksEq _ _                     = False
 
 testGetBookmarks :: Bookmarks -> Property
 testGetBookmarks bms =
-  testHoYoMonadPropertyWithEnv bms defaultConfig getBookmarks (eitherBookmarksEq (Right bms))
+  testHoyoMonadPropertyWithEnv bms defaultConfig getBookmarks (eitherBookmarksEq (Right bms))
 
 prop_GetBookmarks :: Property
 prop_GetBookmarks = withMaxSuccess 10 testGetBookmarks

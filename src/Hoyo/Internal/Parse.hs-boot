@@ -1,5 +1,5 @@
 {-|
-Module      : HoYo.Internal.Parse
+Module      : Hoyo.Internal.Parse
 Copyright   : (c) Frederick Pringle, 2023
 License     : BSD-3-Clause
 Maintainer  : freddyjepringle@gmail.com
@@ -7,9 +7,9 @@ Maintainer  : freddyjepringle@gmail.com
 Parse CLI arguments.
 -}
 
-module HoYo.Internal.Parse where
+module Hoyo.Internal.Parse where
 
-import HoYo.Internal.Types
+import Hoyo.Internal.Types
 
 import qualified Data.Text as T
 import Options.Applicative

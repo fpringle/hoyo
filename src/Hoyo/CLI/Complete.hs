@@ -1,5 +1,5 @@
 {-|
-Module      : HoYo.CLI.Complete
+Module      : Hoyo.CLI.Complete
 Copyright   : (c) Frederick Pringle, 2023
 License     : BSD-3-Clause
 Maintainer  : freddyjepringle@gmail.com
@@ -7,14 +7,14 @@ Maintainer  : freddyjepringle@gmail.com
 Bash competion functions used by the CLI.
 -}
 
-module HoYo.CLI.Complete where
+module Hoyo.CLI.Complete where
 
 import           Control.Monad.IO.Class
 
 import           Data.Maybe
 import qualified Data.Text              as T
 
-import           HoYo
+import           Hoyo
 
 import           Options.Applicative
 

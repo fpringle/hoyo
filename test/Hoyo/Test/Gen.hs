@@ -3,12 +3,12 @@
 {-# LANGUAGE FlexibleContexts  #-}
 {-# LANGUAGE FlexibleInstances #-}
 
-module HoYo.Test.Gen where
+module Hoyo.Test.Gen where
 
 import qualified Data.Text                 as T
 
-import           HoYo
-import           HoYo.Internal.Types
+import           Hoyo
+import           Hoyo.Internal.Types
 
 import           System.FilePath
 

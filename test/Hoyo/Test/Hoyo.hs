@@ -1,10 +1,10 @@
-module HoYo.Test.HoYo where
+module Hoyo.Test.Hoyo where
 
 import           Control.Exception
 
 import qualified Data.Text               as T
 
-import           HoYo
+import           Hoyo
 
 import           System.Directory
 import           System.IO.Temp
@@ -12,13 +12,13 @@ import           System.IO.Temp
 import           Test.QuickCheck
 import           Test.QuickCheck.Monadic as Q
 
-testHoYoMonadProperty :: HoYoMonad a -> Env -> (Either T.Text a -> Bool) -> Property
-testHoYoMonadProperty hoyo env test = monadicIO $ do
-  res <- run (runHoYo hoyo env)
+testHoyoMonadProperty :: HoyoMonad a -> Env -> (Either T.Text a -> Bool) -> Property
+testHoyoMonadProperty hoyo env test = monadicIO $ do
+  res <- run (runHoyo hoyo env)
   Q.assert (test res)
 
-testHoYoMonadEq :: Eq a => HoYoMonad a -> Env -> Either T.Text a -> Property
-testHoYoMonadEq hoyo env expected = testHoYoMonadProperty hoyo env (== expected)
+testHoyoMonadEq :: Eq a => HoyoMonad a -> Env -> Either T.Text a -> Property
+testHoyoMonadEq hoyo env expected = testHoyoMonadProperty hoyo env (== expected)
 
 withEnv :: (Env -> IO a) -> Bookmarks -> Config -> IO a
 withEnv func bms cfg = bracket createFiles deleteFiles runFunc
@@ -44,10 +44,10 @@ withEnv func bms cfg = bracket createFiles deleteFiles runFunc
       removeFile bFile
       removeFile cFile
 
-testHoYoMonadPropertyWithEnv :: Bookmarks -> Config -> HoYoMonad a -> (Either T.Text a -> Bool) -> Property
-testHoYoMonadPropertyWithEnv bms cfg hoyo test = monadicIO $ do
-  result <- run (withEnv (runHoYo hoyo) bms cfg)
+testHoyoMonadPropertyWithEnv :: Bookmarks -> Config -> HoyoMonad a -> (Either T.Text a -> Bool) -> Property
+testHoyoMonadPropertyWithEnv bms cfg hoyo test = monadicIO $ do
+  result <- run (withEnv (runHoyo hoyo) bms cfg)
   Q.assert (test result)
 
-testHoYoMonadEqWithEnv :: Eq a => Bookmarks -> Config -> HoYoMonad a -> Either T.Text a -> Property
-testHoYoMonadEqWithEnv bms cfg hoyo expected = testHoYoMonadPropertyWithEnv bms cfg hoyo (== expected)
+testHoyoMonadEqWithEnv :: Eq a => Bookmarks -> Config -> HoyoMonad a -> Either T.Text a -> Property
+testHoyoMonadEqWithEnv bms cfg hoyo expected = testHoyoMonadPropertyWithEnv bms cfg hoyo (== expected)

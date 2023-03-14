@@ -1,10 +1,10 @@
 {-|
-Module      : HoYo.Internal.Utils
+Module      : Hoyo.Internal.Utils
 Copyright   : (c) Frederick Pringle, 2023
 License     : BSD-3-Clause
 Maintainer  : freddyjepringle@gmail.com
 
-Utility functions used by all the main HoYo.* modules.
+Utility functions used by all the main Hoyo.* modules.
 -}
 
 {-# LANGUAGE DataKinds  #-}
@@ -12,7 +12,7 @@ Utility functions used by all the main HoYo.* modules.
 {-# LANGUAGE RankNTypes #-}
 {-# OPTIONS_HADDOCK prune #-}
 
-module HoYo.Internal.Utils where
+module Hoyo.Internal.Utils where
 
 {- HLINT ignore "Use list comprehension" -}
 
@@ -32,7 +32,7 @@ import qualified Data.Text                  as T
 import qualified Data.Text.IO               as T
 import           Data.Time
 
-import           HoYo.Internal.Types
+import           Hoyo.Internal.Types
 
 import           Lens.Micro
 import           Lens.Micro.Extras
@@ -147,13 +147,13 @@ maximumDefault def [] = def
 maximumDefault _ xs   = maximum xs
 
 -- | Throw an error if a check fails.
-assert :: T.Text -> HoYoMonad Bool -> HoYoMonad ()
+assert :: T.Text -> HoyoMonad Bool -> HoyoMonad ()
 assert err check = do
   res <- check
   unless res $ throwError err
 
 -- | Throw an error if a check fails AND the "fail_on_error" flag is set.
-assertVerbose :: T.Text -> HoYoMonad Bool -> HoYoMonad Bool
+assertVerbose :: T.Text -> HoyoMonad Bool -> HoyoMonad Bool
 assertVerbose err check = do
   shouldFail <- asks' (config . failOnError)
   res <- check

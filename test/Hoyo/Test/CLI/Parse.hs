@@ -2,14 +2,14 @@
 
 {- HLINT ignore "Use list comprehension" -}
 
-module HoYo.Test.CLI.Parse where
+module Hoyo.Test.CLI.Parse where
 
 import qualified Data.Text           as T
 
-import           HoYo
-import           HoYo.CLI.Parse
-import           HoYo.Internal.Utils
-import           HoYo.Test.Gen       ()
+import           Hoyo
+import           Hoyo.CLI.Parse
+import           Hoyo.Internal.Utils
+import           Hoyo.Test.Gen       ()
 
 import           Options.Applicative as O
 

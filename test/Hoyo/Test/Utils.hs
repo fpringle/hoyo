@@ -1,12 +1,12 @@
 {-# LANGUAGE TemplateHaskell #-}
-module HoYo.Test.Utils where
+module Hoyo.Test.Utils where
 
 import qualified Data.Text           as T
 
-import           HoYo
-import           HoYo.Internal.Utils
-import           HoYo.Test.Gen
-import           HoYo.Test.HoYo
+import           Hoyo
+import           Hoyo.Internal.Utils
+import           Hoyo.Test.Gen
+import           Hoyo.Test.Hoyo
 
 import           Lens.Micro
 
@@ -61,19 +61,19 @@ prop_ReadInt = forAll cases (uncurry testReadInt)
       return (tx, Left ("Couldn't parse integer: " <> tx))
 
 prop_Assert :: T.Text -> Bool -> Property
-prop_Assert errMsg True = testHoYoMonadEqWithEnv
+prop_Assert errMsg True = testHoyoMonadEqWithEnv
                               (Bookmarks [])
                               defaultConfig
                               (assert errMsg (return True))
                               (Right ())
-prop_Assert errMsg False = testHoYoMonadEqWithEnv
+prop_Assert errMsg False = testHoyoMonadEqWithEnv
                               (Bookmarks [])
                               defaultConfig
                               (assert errMsg (return False))
                               (Left errMsg)
 
 prop_AssertVerbose :: T.Text -> Bool -> Bool -> Property
-prop_AssertVerbose errMsg bool verb = testHoYoMonadEqWithEnv
+prop_AssertVerbose errMsg bool verb = testHoyoMonadEqWithEnv
                                         (Bookmarks [])
                                         (set failOnError verb defaultConfig)
                                         (assertVerbose errMsg (return bool))
