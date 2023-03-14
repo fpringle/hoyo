@@ -30,7 +30,7 @@ import Lens.Micro.Extras
 -- | A 'TomlCodec' for encoding and decoding 'Bookmark's.
 bookmarkCodec :: TomlCodec Bookmark
 bookmarkCodec = Bookmark
-  <$> Toml.text       "directory"           .= _bookmarkDirectory
+  <$> Toml.string     "directory"           .= _bookmarkDirectory
   <*> Toml.int        "index"               .= _bookmarkIndex
   <*> Toml.zonedTime  "created"             .= _bookmarkCreationTime
   <*> Toml.dioptional (Toml.text   "name")  .= _bookmarkName
@@ -38,7 +38,7 @@ bookmarkCodec = Bookmark
 -- | A 'TomlCodec' for encoding and decoding 'Bookmark's.
 defaultBookmarkCodec :: TomlCodec DefaultBookmark
 defaultBookmarkCodec = DefaultBookmark
-  <$> Toml.text       "directory"           .= _defaultBookmarkDirectory
+  <$> Toml.string     "directory"           .= _defaultBookmarkDirectory
   <*> Toml.dioptional (Toml.text   "name")  .= _defaultBookmarkName
 
 -- | A 'TomlCodec' for encoding and decoding 'Bookmarks'.
@@ -50,16 +50,16 @@ decodeBookmarks :: T.Text -> Either T.Text Bookmarks
 decodeBookmarks = first Toml.prettyTomlDecodeErrors . Toml.decodeExact bookmarksCodec
 
 -- | Decode a 'Bookmark' from a file.
-decodeBookmarksFile :: MonadIO m => TFilePath -> m (Either T.Text Bookmarks)
-decodeBookmarksFile = fmap (first Toml.prettyTomlDecodeErrors) . Toml.decodeFileExact bookmarksCodec . T.unpack
+decodeBookmarksFile :: MonadIO m => FilePath -> m (Either T.Text Bookmarks)
+decodeBookmarksFile = fmap (first Toml.prettyTomlDecodeErrors) . Toml.decodeFileExact bookmarksCodec
 
 -- | Encode a 'Bookmark' to a Text.
 encodeBookmarks :: Bookmarks -> T.Text
 encodeBookmarks = Toml.encode bookmarksCodec
 
 -- | Encode a 'Bookmark' to a file.
-encodeBookmarksFile :: MonadIO m => TFilePath -> Bookmarks -> m ()
-encodeBookmarksFile fp = void . Toml.encodeToFile bookmarksCodec (T.unpack fp)
+encodeBookmarksFile :: MonadIO m => FilePath -> Bookmarks -> m ()
+encodeBookmarksFile fp = void . Toml.encodeToFile bookmarksCodec fp
 
 -- | @searchBookmarks searchTerm bookmarks@ partitions @bookmarks@ into a list of
 -- 'Bookmark's that match the search term and a list of those that do not.
@@ -79,7 +79,7 @@ filterBookmarkByName (Just name) = on (==) (fmap T.toLower) (Just name) . view b
 filterBookmarkByDirInfix :: Maybe T.Text -> Bookmark -> Bool
 filterBookmarkByDirInfix Nothing = const True
 filterBookmarkByDirInfix (Just pref) =
-  on T.isInfixOf (T.dropWhileEnd (== '/')) pref . view bookmarkDirectory
+  on T.isInfixOf (T.dropWhileEnd (== '/')) pref . T.pack . view bookmarkDirectory
 
 -- | Given a bookmark name and a bookmark directory, test if a bookmark matches those
 -- filters.

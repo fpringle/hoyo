@@ -45,7 +45,6 @@ module HoYo (
   , assertVerbose
 
   -- * Misc
-  , TFilePath
   , versionString
   ) where
 
@@ -75,7 +74,7 @@ failure err = do
 -- the bookmark path (@bFp@) and the config path (@sFp@), applies the global
 -- options and overrides in @globals@, and runs @hoyo@, returning either
 -- the result or an error message.
-withFiles :: GlobalOptions -> TFilePath -> TFilePath -> HoYoMonad a -> IO (Either T.Text a)
+withFiles :: GlobalOptions -> FilePath -> FilePath -> HoYoMonad a -> IO (Either T.Text a)
 withFiles globals bFp sFp hoyo =
   getEnv bFp sFp >>= \case
     Left err    -> failure err
@@ -85,7 +84,7 @@ withFiles globals bFp sFp hoyo =
 -- the bookmark path (@bFp@) and the config path (@sFp@), applies the global
 -- options and overrides in @globals@, and runs @hoyo@, either printing an error
 -- message or discarding the result.
-getEnvAndRunHoYo :: GlobalOptions -> HoYoMonad a -> TFilePath -> TFilePath -> IO a
+getEnvAndRunHoYo :: GlobalOptions -> HoYoMonad a -> FilePath -> FilePath -> IO a
 getEnvAndRunHoYo globals hoyo bFp sFp = withFiles globals bFp sFp hoyo >>= \case
   Left err  -> failure err
   Right res -> return res
@@ -93,7 +92,7 @@ getEnvAndRunHoYo globals hoyo bFp sFp = withFiles globals bFp sFp hoyo >>= \case
 -- | @getEnvAndRunHoYo opts bFp sFp@ gets the environment saved in
 -- the bookmark path (@bFp@) and the config path (@sFp@), and runs the command
 -- specified by @opts@.
-getEnvAndRunCommand :: Options -> TFilePath -> TFilePath -> IO ()
+getEnvAndRunCommand :: Options -> FilePath -> FilePath -> IO ()
 getEnvAndRunCommand (Options cmd globals) bFp sFp = case cmd of
   Check opts  -> runCheck opts bFp sFp
   otherCmd    -> getEnvAndRunHoYo globals (runCommand otherCmd) bFp sFp

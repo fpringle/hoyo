@@ -16,6 +16,8 @@ and this project adheres to the
 
 ### Changed
 
+- Undid some of the obsessive usage of `T.Text`. For example, got rid of `TFilePath`.
+
 ### Removed
 
 ## [0.4.0.0] - 2023-02-10

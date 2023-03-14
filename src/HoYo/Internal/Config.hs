@@ -78,16 +78,16 @@ decodeConfig :: T.Text -> Either T.Text Config
 decodeConfig = first Toml.prettyTomlDecodeErrors . Toml.decodeExact configCodec
 
 -- | Decode a 'Config' from a file.
-decodeConfigFile :: MonadIO m => TFilePath -> m (Either T.Text Config)
-decodeConfigFile = fmap (first Toml.prettyTomlDecodeErrors) . Toml.decodeFileExact configCodec . T.unpack
+decodeConfigFile :: MonadIO m => FilePath -> m (Either T.Text Config)
+decodeConfigFile = fmap (first Toml.prettyTomlDecodeErrors) . Toml.decodeFileExact configCodec
 
 -- | Encode a 'Config' to a Text.
 encodeConfig :: Config -> T.Text
 encodeConfig = Toml.encode configCodec
 
 -- | Encode a 'Config' to a file.
-encodeConfigFile :: MonadIO m => TFilePath -> Config -> m ()
-encodeConfigFile fp = void . Toml.encodeToFile configCodec (T.unpack fp)
+encodeConfigFile :: MonadIO m => FilePath -> Config -> m ()
+encodeConfigFile fp = void . Toml.encodeToFile configCodec fp
 
 -- | Get TOML key-value pairs from a 'Config'.
 getKeyVals :: Config -> [(T.Text, AnyConfigValue)]

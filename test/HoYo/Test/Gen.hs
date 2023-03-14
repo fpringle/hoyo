@@ -32,8 +32,8 @@ maybeText = liftArbitrary text
 string :: Gen String
 string = listOf1 letterOrDigit
 
-genFilePath :: Gen TFilePath
-genFilePath = T.pack . joinPath . ("/" :) <$> listOf string
+genFilePath :: Gen FilePath
+genFilePath = joinPath . ("/" :) <$> listOf string
 
 -- genZonedTime :: Gen ZonedTime
 -- genZonedTime = ZonedTime <$> genLocalTime <*> genTimeZone

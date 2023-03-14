@@ -41,8 +41,8 @@ prop_WriteReadEnv = withMaxSuccess 10 testWriteReadEnv
 
 prop_InitEnv :: Property
 prop_InitEnv = ioProperty $ do
-  bFile <- T.pack <$> emptySystemTempFile "bookmarks.toml"
-  cFile <- T.pack <$> emptySystemTempFile "config.toml"
+  bFile <- emptySystemTempFile "bookmarks.toml"
+  cFile <- emptySystemTempFile "config.toml"
   initEnv bFile cFile
   writtenEnv <- readEnv bFile cFile
   let expectedEnv = Env (Bookmarks []) bFile defaultConfig cFile

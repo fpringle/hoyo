@@ -155,16 +155,15 @@ assertVerbose err check = do
 
 -- | Given a file name and an extension, try to find a suitable path for
 -- backing up that file. Used by 'backupFile'.
-getBackupFile :: (MonadIO m, MonadError T.Text m) => TFilePath -> String -> m TFilePath
+getBackupFile :: (MonadIO m, MonadError T.Text m) => FilePath -> String -> m FilePath
 getBackupFile fp ext = do
-  let fpStr = T.unpack fp
-  ex <- liftIO $ doesFileExist fpStr
-  unless ex $ throwError ("not a file: " <> T.pack fpStr)
-  let firstTry = fpStr <> "." <> ext
+  ex <- liftIO $ doesFileExist fp
+  unless ex $ throwError ("not a file: " <> T.pack fp)
+  let firstTry = fp <> "." <> ext
   firstExists <- liftIO $ doesFileExist firstTry
   if firstExists
-  then T.pack <$> getBackupFile' fpStr 2
-  else return $ T.pack firstTry
+  then getBackupFile' fp 2
+  else return firstTry
 
   where
     getBackupFile' :: (MonadIO m, MonadError T.Text m) => String -> Int -> m String
@@ -176,10 +175,10 @@ getBackupFile fp ext = do
       else return file
 
 -- | Try to back-up a file. Used when the "backup_before_clear" option is set.
-backupFile :: (MonadIO m, MonadError T.Text m) => TFilePath -> String -> m ()
+backupFile :: (MonadIO m, MonadError T.Text m) => FilePath -> String -> m ()
 backupFile fp ext = do
   file <- getBackupFile fp ext
-  liftIO $ copyFileWithMetadata (T.unpack fp) (T.unpack file)
+  liftIO $ copyFileWithMetadata fp file
 
 -- | Try to read a 'Bool'.
 readBool :: MonadError T.Text m => T.Text -> m Bool
@@ -220,8 +219,8 @@ formatBookmark :: Bool -> Int -> Bookmark -> T.Text
 formatBookmark shouldDisplayTime indexWidth (Bookmark dir idx zTime mbName) =
   let num = T.justifyRight indexWidth ' ' $ tshow idx
       timeStr = T.pack $ formatTime defaultTimeLocale "%D %T" zTime
-      d = case mbName of Nothing    -> dir
-                         Just name  -> dir <> "\t(" <> name <> ")"
+      d = case mbName of Nothing    -> T.pack dir
+                         Just name  -> T.pack dir <> "\t(" <> name <> ")"
 
   in if shouldDisplayTime
      then num <> ". " <> timeStr <> "\t" <> d
@@ -244,8 +243,8 @@ formatBookmarks shouldDisplayTime bms = map (formatBookmark shouldDisplayTime in
 -- @formatDefaultBookmark bm@ returns a pretty representation of @bm@.
 formatDefaultBookmark :: DefaultBookmark -> T.Text
 formatDefaultBookmark (DefaultBookmark dir mbName) =
-  case mbName of Nothing    -> dir
-                 Just name  -> dir <> "\t(" <> name <> ")"
+  case mbName of Nothing    -> T.pack dir
+                 Just name  -> T.pack dir <> "\t(" <> name <> ")"
 
 -- | Show a value as a 'T.Text' instead of a 'String'.
 tshow :: Show a => a -> T.Text
@@ -280,7 +279,7 @@ maybeSingletonWithPrefix :: [T.Text] -> Maybe T.Text -> [T.Text]
 maybeSingletonWithPrefix pref = maybe [] (\t -> pref <> [t])
 
 formatCommand :: Command -> [T.Text]
-formatCommand (Add (AddOptions d n)) = "add" : d : maybeSingleton n
+formatCommand (Add (AddOptions d n)) = "add" : T.pack d : maybeSingleton n
 formatCommand (Move opts) = ["move", formatSearchTerm $ moveSearch opts]
 formatCommand (List (ListOptions n d)) = ["list"]
                                       <> maybeSingletonWithPrefix ["--name"] n
@@ -302,11 +301,11 @@ formatConfigCommand (Set opts) = ["set"
                                 , setValue opts
                                 ]
 formatConfigCommand (AddDefaultBookmark (ConfigAddDefaultOptions d n))
-  = "add-default" : d : maybeSingleton n
+  = "add-default" : T.pack d : maybeSingleton n
 
 formatGlobals :: GlobalOptions -> [T.Text]
-formatGlobals (GlobalOptions c d o) = maybeSingletonWithPrefix ["--config-file"] c
-                                   <> maybeSingletonWithPrefix ["--bookmarks-file"] d
+formatGlobals (GlobalOptions c d o) = maybeSingletonWithPrefix ["--config-file"] (T.pack <$> c)
+                                   <> maybeSingletonWithPrefix ["--bookmarks-file"] (T.pack <$> d)
                                    <> formatOverrides o
 
 formatOverrides :: OverrideOptions -> [T.Text]
