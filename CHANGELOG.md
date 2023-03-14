@@ -12,6 +12,7 @@ and this project adheres to the
 
 - Integration with Nix.
 - Help message footer - links to online docs and bug tracker.
+- `hoyo help <command>` command - does the same thing as `hoyo --help` and `hoyo <command> --help`.
 
 ### Fixed
 
