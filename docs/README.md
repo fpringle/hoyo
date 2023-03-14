@@ -44,8 +44,9 @@ source path/to/hoyo.sh
 
 ## Command-line options
 
-Running `hoyo --help` will display all the global default options, as well
-as the available commands. For command-specific options, run `hoyo <cmd> --help`.
+Running `hoyo --help` or `hoyo help` will display all the global default options,
+as well as the available commands. For command-specific options, run
+`hoyo <cmd> --help` or `hoyo help <cmd>`.
 
 ```
 Set directory bookmarks for quick "cd" behaviour
@@ -84,6 +85,8 @@ Available commands:
   refresh                  Re-calculate bookmark indices
   config                   View/manage hoyo config
   check                    Verify validity of config and bookmarks
+  help                     Print a help message for the entire program or a
+                           specific command
 
 Bugs:
   If something went wrong unexpectedly or you think there's a problem with hoyo,
