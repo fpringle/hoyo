@@ -220,14 +220,15 @@ printStdout = liftIO . T.putStrLn
 -- during other commands.
 --
 -- @formatBookmark displayTime numberWidth bm@ returns a pretty representation
--- of @bm@, optionally showing the creation time, and padding the index to a
--- certain width.
-formatBookmark :: Bool -> Int -> Bookmark -> T.Text
-formatBookmark shouldDisplayTime indexWidth (Bookmark dir idx zTime mbName) =
+-- of @bm@, optionally showing the creation time, and padding the index and
+-- directory to a certain width.
+formatBookmark :: Bool -> Int -> Int -> Bookmark -> T.Text
+formatBookmark shouldDisplayTime indexWidth direcWidth (Bookmark dir idx zTime mbName) =
   let num = T.justifyRight indexWidth ' ' $ tshow idx
+      dirStr = T.justifyLeft direcWidth ' ' $ T.pack dir
       timeStr = T.pack $ formatTime defaultTimeLocale "%D %T" zTime
-      d = case mbName of Nothing   -> T.pack dir
-                         Just name -> T.pack dir <> "\t(" <> name <> ")"
+      d = case mbName of Nothing   -> dirStr
+                         Just name -> dirStr <> "  (" <> name <> ")"
 
   in if shouldDisplayTime
      then num <> ". " <> timeStr <> "\t" <> d
@@ -240,9 +241,10 @@ formatBookmark shouldDisplayTime indexWidth (Bookmark dir idx zTime mbName) =
 -- of @bms@, optionally showing the creation time, and padding the indices to
 -- line up.
 formatBookmarks :: Bool -> [Bookmark] -> [T.Text]
-formatBookmarks shouldDisplayTime bms = map (formatBookmark shouldDisplayTime indexWidth) bms
+formatBookmarks shouldDisplayTime bms = map (formatBookmark shouldDisplayTime indexWidth direcWidth) bms
   where
     indexWidth = maximumDefault 1 $ map (length . show . view bookmarkIndex) bms
+    direcWidth = maximumDefault 1 $ map (length . view bookmarkDirectory) bms
 
 -- | Format a 'DefaultBookmark'. Used for the "config print" command and error reporting
 -- during other commands.
