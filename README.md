@@ -103,7 +103,7 @@ Online documentation:
 
 ```shell
 $ hoyo list
-1. /home/Documents doc
+1. /home/Documents     (doc)
 2. /home/Music/Albums
 ```
 
@@ -123,7 +123,7 @@ $ pwd
 ```shell
 $ hoyo add /home h
 $ hoyo list
-1. /home/Documents doc
+1. /home/Documents     (doc)
 2. /home/Music/Albums
 3. /home h
 $ hoyo move h
@@ -136,7 +136,7 @@ $ pwd
 ```shell
 $ hoyo delete 2
 $ hoyo list
-1. /home/Documents doc
+1. /home/Documents  (doc)
 3. /home h
 ```
 
@@ -145,7 +145,7 @@ $ hoyo list
 ```shell
 $ hoyo refresh
 $ hoyo list
-1. /home/Documents doc
+1. /home/Documents  (doc)
 2. /home h
 ```
 
@@ -165,7 +165,7 @@ enable_reset = true
 ```shell
 $ hoyo config set display_creation_time true
 $ hoyo list
-1. 12/26/22 16:55:13    /home/Documents doc
+1. 12/26/22 16:55:13    /home/Documents  (doc)
 2. 12/27/22 12:01:55    /home h
 ```
 
@@ -252,7 +252,7 @@ For example, if `default_command = "list"`:
 ```shell
 $ hoyo      # no arguments
 1. /home/me
-2. /home/me/coding/haskell      (hask)
+2. /home/me/coding/haskell  (hask)
 ```
 
 If the `default_command` option is no set, then running `hoyo` with no arguments
