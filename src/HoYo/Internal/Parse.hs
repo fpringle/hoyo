@@ -118,27 +118,14 @@ bookmarkSearchTerm = eitherReader $ \s ->
   SearchIndex <$> readEither s
   <|> Right (SearchName (T.pack s))
 
--- | Parse mods + bookmark completer used in 'moveCommand' and 'moveCommandHidden'.
-moveCommandMods :: Mod ArgumentFields BookmarkSearchTerm
-moveCommandMods = metavar "<bookmark>"
-                    <> help "Index or name of the bookmark to move to"
-                    <> completer bookmarkCompleter
-
 -- | Parse options for the @hoyo move@ command.
 moveCommand :: Parser Command
 moveCommand = Move . MoveOptions
-                <$> argument bookmarkSearchTerm moveCommandMods
-
--- | When hoyo is run without a command but with a search term (e.g. `hoyo docs`),
--- it is interpreted as a move command - so the example above would be interpreted
--- as `hoyo move docs`. We hide this from the CLI help message because it's quite
--- ugly.
-moveCommandHidden :: Parser Command
-moveCommandHidden = Move . MoveOptions
-                      <$> argument bookmarkSearchTerm (
-                            moveCommandMods
-                            <> internal
-                          )
+                <$> argument bookmarkSearchTerm (
+                      metavar "<bookmark>"
+                      <> help "Index or name of the bookmark to move to"
+                      <> completer bookmarkCompleter
+                      )
 
 -- | Parse options for the @hoyo list@ command.
 listCommand :: Parser Command
@@ -262,8 +249,7 @@ parseCommand = (versionOption <*> hsubparser (
   <> command "config" (info configCommand (progDesc "View/manage hoyo config"))
   <> command "check" (info checkCommand (progDesc "Verify validity of config and bookmarks"))
   <> command "help" (info helpCommand (progDesc "Print a help message for the entire program or a specific command"))
-  )) <|> moveCommandHidden
-     <|> defaultCommand
+  )) <|> defaultCommand
 
 -- | Parse an 'Options' argument, which includes the command
 -- to run and any global options.
