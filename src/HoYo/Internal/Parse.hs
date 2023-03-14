@@ -236,6 +236,15 @@ checkCommand = Check . noArgs <$> (
                   <*> switch (long "bookmarks" <> short 'b' <> help "Check the bookmarks file")
                 )
 
+-- | Parse options for the @hoyo help@ command.
+helpCommand :: Parser Command
+helpCommand = Help . HelpOptions
+                <$> optional (strArgument (
+                                metavar "<command>"
+                                <> help "Command to get help with"
+                              )
+                            )
+
 -- | If hoyo is run with no arguments, we run the "default command" if it's set.
 defaultCommand :: Parser Command
 defaultCommand = pure DefaultCommand
@@ -252,6 +261,7 @@ parseCommand = (versionOption <*> hsubparser (
   <> command "refresh" (info refreshCommand (progDesc "Re-calculate bookmark indices"))
   <> command "config" (info configCommand (progDesc "View/manage hoyo config"))
   <> command "check" (info checkCommand (progDesc "Verify validity of config and bookmarks"))
+  <> command "help" (info helpCommand (progDesc "Print a help message for the entire program or a specific command"))
   )) <|> moveCommandHidden
      <|> defaultCommand
 
