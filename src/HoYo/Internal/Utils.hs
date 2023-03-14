@@ -39,6 +39,7 @@ import Lens.Micro.Extras
 import qualified Toml.Parser.Core as Toml (eof, errorBundlePretty, parse)
 import qualified Toml.Parser.Value as Toml
 
+import Data.Maybe
 import Data.Time
 
 import System.Directory
@@ -291,6 +292,7 @@ formatCommand (ConfigCmd cmd) = "config" : formatConfigCommand cmd
 formatCommand (Check (CheckOptions c b)) = ["check"]
                                         <> (if c then ["--config"] else [])
                                         <> (if b then ["--bookmarks"] else [])
+formatCommand (Help (HelpOptions cmd)) = ["help"] <> maybeToList cmd
 formatCommand DefaultCommand = []
 
 formatConfigCommand :: ConfigCommand -> [T.Text]
