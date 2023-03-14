@@ -4,8 +4,8 @@ import           Control.Monad       (forM_)
 
 import qualified Data.Text           as T
 
-import           HoYo
-import           HoYo.CLI.Parse
+import           Hoyo
+import           Hoyo.CLI.Parse
 
 import           Options.Applicative
 

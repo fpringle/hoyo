@@ -9,30 +9,29 @@ Internals used by the Hoyo.Bookmark module.
 </span><span id="line-9"></span><span>
 </span><span id="line-10"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Hoyo.Internal.Bookmark</span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-11"></span><span>
-</span><span id="line-12"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html"><span class="hs-identifier">Hoyo.Internal.Types</span></a></span><span>
-</span><span id="line-13"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Hoyo.Internal.Utils.html"><span class="hs-identifier">Hoyo.Internal.Utils</span></a></span><span>
+</span><span id="line-12"></span><span class="hs-keyword">import</span><span>           </span><span class="annot"><span class="hs-identifier">Control.Monad</span></span><span>          </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">forM</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">void</span></span><span class="hs-special">)</span><span>
+</span><span id="line-13"></span><span class="hs-keyword">import</span><span>           </span><span class="annot"><span class="hs-identifier">Control.Monad.IO.Class</span></span><span>
 </span><span id="line-14"></span><span>
-</span><span id="line-15"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Bifunctor</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">first</span></span><span class="hs-special">)</span><span>
-</span><span id="line-16"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Function</span></span><span>
-</span><span id="line-17"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.List</span></span><span>
-</span><span id="line-18"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Data.Text</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">T</span></span><span>
-</span><span id="line-19"></span><span>
-</span><span id="line-20"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Control.Monad</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">forM</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">void</span></span><span class="hs-special">)</span><span>
-</span><span id="line-21"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Control.Monad.IO.Class</span></span><span>
-</span><span id="line-22"></span><span>
-</span><span id="line-23"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Time</span></span><span>
-</span><span id="line-24"></span><span>
-</span><span id="line-25"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Toml</span></span><span>
-</span><span id="line-26"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Toml</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">TomlCodec</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-operator">(.=)</span></span><span class="hs-special">)</span><span>
-</span><span id="line-27"></span><span>
-</span><span id="line-28"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Lens.Micro.Extras</span></span><span>
-</span><span id="line-29"></span><span>
-</span><span id="line-30"></span><span class="hs-comment">-- | A 'TomlCodec' for encoding and decoding 'Bookmark's.</span><span>
-</span><span id="line-31"></span><span class="annot"><a href="Hoyo.Internal.Bookmark.html#bookmarkCodec"><span class="hs-identifier hs-type">bookmarkCodec</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">TomlCodec</span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#Bookmark"><span class="hs-identifier hs-type">Bookmark</span></a></span><span>
-</span><span id="line-32"></span><span id="bookmarkCodec"><span class="annot"><span class="annottext">bookmarkCodec :: TomlCodec Bookmark
+</span><span id="line-15"></span><span class="hs-keyword">import</span><span>           </span><span class="annot"><span class="hs-identifier">Data.Bifunctor</span></span><span>         </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">first</span></span><span class="hs-special">)</span><span>
+</span><span id="line-16"></span><span class="hs-keyword">import</span><span>           </span><span class="annot"><span class="hs-identifier">Data.Function</span></span><span>
+</span><span id="line-17"></span><span class="hs-keyword">import</span><span>           </span><span class="annot"><span class="hs-identifier">Data.List</span></span><span>
+</span><span id="line-18"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Data.Text</span></span><span>              </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">T</span></span><span>
+</span><span id="line-19"></span><span class="hs-keyword">import</span><span>           </span><span class="annot"><span class="hs-identifier">Data.Time</span></span><span>
+</span><span id="line-20"></span><span>
+</span><span id="line-21"></span><span class="hs-keyword">import</span><span>           </span><span class="annot"><a href="Hoyo.Internal.Types.html"><span class="hs-identifier">Hoyo.Internal.Types</span></a></span><span>
+</span><span id="line-22"></span><span class="hs-keyword">import</span><span>           </span><span class="annot"><a href="Hoyo.Internal.Utils.html"><span class="hs-identifier">Hoyo.Internal.Utils</span></a></span><span>
+</span><span id="line-23"></span><span>
+</span><span id="line-24"></span><span class="hs-keyword">import</span><span>           </span><span class="annot"><span class="hs-identifier">Lens.Micro.Extras</span></span><span>
+</span><span id="line-25"></span><span>
+</span><span id="line-26"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Toml</span></span><span>
+</span><span id="line-27"></span><span class="hs-keyword">import</span><span>           </span><span class="annot"><span class="hs-identifier">Toml</span></span><span>                   </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">TomlCodec</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-operator">(.=)</span></span><span class="hs-special">)</span><span>
+</span><span id="line-28"></span><span>
+</span><span id="line-29"></span><span class="hs-comment">-- | A 'TomlCodec' for encoding and decoding 'Bookmark's.</span><span>
+</span><span id="line-30"></span><span class="annot"><a href="Hoyo.Internal.Bookmark.html#bookmarkCodec"><span class="hs-identifier hs-type">bookmarkCodec</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">TomlCodec</span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#Bookmark"><span class="hs-identifier hs-type">Bookmark</span></a></span><span>
+</span><span id="line-31"></span><span id="bookmarkCodec"><span class="annot"><span class="annottext">bookmarkCodec :: TomlCodec Bookmark
 </span><a href="Hoyo.Internal.Bookmark.html#bookmarkCodec"><span class="hs-identifier hs-var hs-var">bookmarkCodec</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Int -&gt; ZonedTime -&gt; Maybe Text -&gt; Bookmark
 </span><a href="Hoyo.Internal.Types.html#Bookmark"><span class="hs-identifier hs-var">Bookmark</span></a></span><span>
-</span><span id="line-33"></span><span>  </span><span class="annot"><span class="annottext">(FilePath -&gt; Int -&gt; ZonedTime -&gt; Maybe Text -&gt; Bookmark)
+</span><span id="line-32"></span><span>  </span><span class="annot"><span class="annottext">(FilePath -&gt; Int -&gt; ZonedTime -&gt; Maybe Text -&gt; Bookmark)
 -&gt; Codec Bookmark FilePath
 -&gt; Codec Bookmark (Int -&gt; ZonedTime -&gt; Maybe Text -&gt; Bookmark)
 forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
@@ -44,7 +43,7 @@ forall field a object.
 Codec field a -&gt; (object -&gt; field) -&gt; Codec object a
 </span><span class="hs-operator hs-var">.=</span></span><span> </span><span class="annot"><span class="annottext">Bookmark -&gt; FilePath
 </span><a href="Hoyo.Internal.Types.html#_bookmarkDirectory"><span class="hs-identifier hs-var hs-var">_bookmarkDirectory</span></a></span><span>
-</span><span id="line-34"></span><span>  </span><span class="annot"><span class="annottext">Codec Bookmark (Int -&gt; ZonedTime -&gt; Maybe Text -&gt; Bookmark)
+</span><span id="line-33"></span><span>  </span><span class="annot"><span class="annottext">Codec Bookmark (Int -&gt; ZonedTime -&gt; Maybe Text -&gt; Bookmark)
 -&gt; Codec Bookmark Int
 -&gt; Codec Bookmark (ZonedTime -&gt; Maybe Text -&gt; Bookmark)
 forall (f :: * -&gt; *) a b. Applicative f =&gt; f (a -&gt; b) -&gt; f a -&gt; f b
@@ -55,7 +54,7 @@ forall field a object.
 Codec field a -&gt; (object -&gt; field) -&gt; Codec object a
 </span><span class="hs-operator hs-var">.=</span></span><span> </span><span class="annot"><span class="annottext">Bookmark -&gt; Int
 </span><a href="Hoyo.Internal.Types.html#_bookmarkIndex"><span class="hs-identifier hs-var hs-var">_bookmarkIndex</span></a></span><span>
-</span><span id="line-35"></span><span>  </span><span class="annot"><span class="annottext">Codec Bookmark (ZonedTime -&gt; Maybe Text -&gt; Bookmark)
+</span><span id="line-34"></span><span>  </span><span class="annot"><span class="annottext">Codec Bookmark (ZonedTime -&gt; Maybe Text -&gt; Bookmark)
 -&gt; Codec Bookmark ZonedTime
 -&gt; Codec Bookmark (Maybe Text -&gt; Bookmark)
 forall (f :: * -&gt; *) a b. Applicative f =&gt; f (a -&gt; b) -&gt; f a -&gt; f b
@@ -67,7 +66,7 @@ forall field a object.
 Codec field a -&gt; (object -&gt; field) -&gt; Codec object a
 </span><span class="hs-operator hs-var">.=</span></span><span> </span><span class="annot"><span class="annottext">Bookmark -&gt; ZonedTime
 </span><a href="Hoyo.Internal.Types.html#_bookmarkCreationTime"><span class="hs-identifier hs-var hs-var">_bookmarkCreationTime</span></a></span><span>
-</span><span id="line-36"></span><span>  </span><span class="annot"><span class="annottext">Codec Bookmark (Maybe Text -&gt; Bookmark)
+</span><span id="line-35"></span><span>  </span><span class="annot"><span class="annottext">Codec Bookmark (Maybe Text -&gt; Bookmark)
 -&gt; Codec Bookmark (Maybe Text) -&gt; TomlCodec Bookmark
 forall (f :: * -&gt; *) a b. Applicative f =&gt; f (a -&gt; b) -&gt; f a -&gt; f b
 </span><span class="hs-operator hs-var">&lt;*&gt;</span></span><span> </span><span class="annot"><span class="annottext">TomlCodec Text -&gt; TomlCodec (Maybe Text)
@@ -80,13 +79,13 @@ forall field a object.
 Codec field a -&gt; (object -&gt; field) -&gt; Codec object a
 </span><span class="hs-operator hs-var">.=</span></span><span> </span><span class="annot"><span class="annottext">Bookmark -&gt; Maybe Text
 </span><a href="Hoyo.Internal.Types.html#_bookmarkName"><span class="hs-identifier hs-var hs-var">_bookmarkName</span></a></span><span>
-</span><span id="line-37"></span><span>
-</span><span id="line-38"></span><span class="hs-comment">-- | A 'TomlCodec' for encoding and decoding 'Bookmark's.</span><span>
-</span><span id="line-39"></span><span class="annot"><a href="Hoyo.Internal.Bookmark.html#defaultBookmarkCodec"><span class="hs-identifier hs-type">defaultBookmarkCodec</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">TomlCodec</span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#DefaultBookmark"><span class="hs-identifier hs-type">DefaultBookmark</span></a></span><span>
-</span><span id="line-40"></span><span id="defaultBookmarkCodec"><span class="annot"><span class="annottext">defaultBookmarkCodec :: TomlCodec DefaultBookmark
+</span><span id="line-36"></span><span>
+</span><span id="line-37"></span><span class="hs-comment">-- | A 'TomlCodec' for encoding and decoding 'Bookmark's.</span><span>
+</span><span id="line-38"></span><span class="annot"><a href="Hoyo.Internal.Bookmark.html#defaultBookmarkCodec"><span class="hs-identifier hs-type">defaultBookmarkCodec</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">TomlCodec</span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#DefaultBookmark"><span class="hs-identifier hs-type">DefaultBookmark</span></a></span><span>
+</span><span id="line-39"></span><span id="defaultBookmarkCodec"><span class="annot"><span class="annottext">defaultBookmarkCodec :: TomlCodec DefaultBookmark
 </span><a href="Hoyo.Internal.Bookmark.html#defaultBookmarkCodec"><span class="hs-identifier hs-var hs-var">defaultBookmarkCodec</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Maybe Text -&gt; DefaultBookmark
 </span><a href="Hoyo.Internal.Types.html#DefaultBookmark"><span class="hs-identifier hs-var">DefaultBookmark</span></a></span><span>
-</span><span id="line-41"></span><span>  </span><span class="annot"><span class="annottext">(FilePath -&gt; Maybe Text -&gt; DefaultBookmark)
+</span><span id="line-40"></span><span>  </span><span class="annot"><span class="annottext">(FilePath -&gt; Maybe Text -&gt; DefaultBookmark)
 -&gt; Codec DefaultBookmark FilePath
 -&gt; Codec DefaultBookmark (Maybe Text -&gt; DefaultBookmark)
 forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
@@ -98,7 +97,7 @@ forall field a object.
 Codec field a -&gt; (object -&gt; field) -&gt; Codec object a
 </span><span class="hs-operator hs-var">.=</span></span><span> </span><span class="annot"><span class="annottext">DefaultBookmark -&gt; FilePath
 </span><a href="Hoyo.Internal.Types.html#_defaultBookmarkDirectory"><span class="hs-identifier hs-var hs-var">_defaultBookmarkDirectory</span></a></span><span>
-</span><span id="line-42"></span><span>  </span><span class="annot"><span class="annottext">Codec DefaultBookmark (Maybe Text -&gt; DefaultBookmark)
+</span><span id="line-41"></span><span>  </span><span class="annot"><span class="annottext">Codec DefaultBookmark (Maybe Text -&gt; DefaultBookmark)
 -&gt; Codec DefaultBookmark (Maybe Text) -&gt; TomlCodec DefaultBookmark
 forall (f :: * -&gt; *) a b. Applicative f =&gt; f (a -&gt; b) -&gt; f a -&gt; f b
 </span><span class="hs-operator hs-var">&lt;*&gt;</span></span><span> </span><span class="annot"><span class="annottext">TomlCodec Text -&gt; TomlCodec (Maybe Text)
@@ -112,10 +111,10 @@ forall field a object.
 Codec field a -&gt; (object -&gt; field) -&gt; Codec object a
 </span><span class="hs-operator hs-var">.=</span></span><span> </span><span class="annot"><span class="annottext">DefaultBookmark -&gt; Maybe Text
 </span><a href="Hoyo.Internal.Types.html#_defaultBookmarkName"><span class="hs-identifier hs-var hs-var">_defaultBookmarkName</span></a></span><span>
-</span><span id="line-43"></span><span>
-</span><span id="line-44"></span><span class="hs-comment">-- | A 'TomlCodec' for encoding and decoding 'Bookmarks'.</span><span>
-</span><span id="line-45"></span><span class="annot"><a href="Hoyo.Internal.Bookmark.html#bookmarksCodec"><span class="hs-identifier hs-type">bookmarksCodec</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">TomlCodec</span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#Bookmarks"><span class="hs-identifier hs-type">Bookmarks</span></a></span><span>
-</span><span id="line-46"></span><span id="bookmarksCodec"><span class="annot"><span class="annottext">bookmarksCodec :: TomlCodec Bookmarks
+</span><span id="line-42"></span><span>
+</span><span id="line-43"></span><span class="hs-comment">-- | A 'TomlCodec' for encoding and decoding 'Bookmarks'.</span><span>
+</span><span id="line-44"></span><span class="annot"><a href="Hoyo.Internal.Bookmark.html#bookmarksCodec"><span class="hs-identifier hs-type">bookmarksCodec</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">TomlCodec</span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#Bookmarks"><span class="hs-identifier hs-type">Bookmarks</span></a></span><span>
+</span><span id="line-45"></span><span id="bookmarksCodec"><span class="annot"><span class="annottext">bookmarksCodec :: TomlCodec Bookmarks
 </span><a href="Hoyo.Internal.Bookmark.html#bookmarksCodec"><span class="hs-identifier hs-var hs-var">bookmarksCodec</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">TomlCodec [Bookmark] -&gt; TomlCodec Bookmarks
 forall b a. Coercible a b =&gt; TomlCodec a -&gt; TomlCodec b
 </span><span class="hs-identifier hs-var">Toml.diwrap</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">TomlCodec Bookmark -&gt; Key -&gt; TomlCodec [Bookmark]
@@ -123,10 +122,10 @@ forall a. TomlCodec a -&gt; Key -&gt; TomlCodec [a]
 </span><span class="hs-identifier hs-var">Toml.list</span></span><span> </span><span class="annot"><span class="annottext">TomlCodec Bookmark
 </span><a href="Hoyo.Internal.Bookmark.html#bookmarkCodec"><span class="hs-identifier hs-var">bookmarkCodec</span></a></span><span> </span><span class="annot"><span class="annottext">Key
 </span><span class="hs-string">&quot;bookmark&quot;</span></span><span class="hs-special">)</span><span>
-</span><span id="line-47"></span><span>
-</span><span id="line-48"></span><span class="hs-comment">-- | Decode a 'Bookmark' from a Text.</span><span>
-</span><span id="line-49"></span><span class="annot"><a href="Hoyo.Internal.Bookmark.html#decodeBookmarks"><span class="hs-identifier hs-type">decodeBookmarks</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">T.Text</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Either</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">T.Text</span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#Bookmarks"><span class="hs-identifier hs-type">Bookmarks</span></a></span><span>
-</span><span id="line-50"></span><span id="decodeBookmarks"><span class="annot"><span class="annottext">decodeBookmarks :: Text -&gt; Either Text Bookmarks
+</span><span id="line-46"></span><span>
+</span><span id="line-47"></span><span class="hs-comment">-- | Decode a 'Bookmark' from a Text.</span><span>
+</span><span id="line-48"></span><span class="annot"><a href="Hoyo.Internal.Bookmark.html#decodeBookmarks"><span class="hs-identifier hs-type">decodeBookmarks</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">T.Text</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Either</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">T.Text</span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#Bookmarks"><span class="hs-identifier hs-type">Bookmarks</span></a></span><span>
+</span><span id="line-49"></span><span id="decodeBookmarks"><span class="annot"><span class="annottext">decodeBookmarks :: Text -&gt; Either Text Bookmarks
 </span><a href="Hoyo.Internal.Bookmark.html#decodeBookmarks"><span class="hs-identifier hs-var hs-var">decodeBookmarks</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">([TomlDecodeError] -&gt; Text)
 -&gt; Either [TomlDecodeError] Bookmarks -&gt; Either Text Bookmarks
 forall (p :: * -&gt; * -&gt; *) a b c.
@@ -142,10 +141,10 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 forall a. TomlCodec a -&gt; Text -&gt; Either [TomlDecodeError] a
 </span><span class="hs-identifier hs-var">Toml.decodeExact</span></span><span> </span><span class="annot"><span class="annottext">TomlCodec Bookmarks
 </span><a href="Hoyo.Internal.Bookmark.html#bookmarksCodec"><span class="hs-identifier hs-var">bookmarksCodec</span></a></span><span>
-</span><span id="line-51"></span><span>
-</span><span id="line-52"></span><span class="hs-comment">-- | Decode a 'Bookmark' from a file.</span><span>
-</span><span id="line-53"></span><span id="local-6989586621679110217"><span class="annot"><a href="Hoyo.Internal.Bookmark.html#decodeBookmarksFile"><span class="hs-identifier hs-type">decodeBookmarksFile</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MonadIO</span></span><span> </span><span class="annot"><a href="#local-6989586621679110217"><span class="hs-identifier hs-type">m</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">FilePath</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679110217"><span class="hs-identifier hs-type">m</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Either</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">T.Text</span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#Bookmarks"><span class="hs-identifier hs-type">Bookmarks</span></a></span><span class="hs-special">)</span></span><span>
-</span><span id="line-54"></span><span id="decodeBookmarksFile"><span class="annot"><span class="annottext">decodeBookmarksFile :: FilePath -&gt; m (Either Text Bookmarks)
+</span><span id="line-50"></span><span>
+</span><span id="line-51"></span><span class="hs-comment">-- | Decode a 'Bookmark' from a file.</span><span>
+</span><span id="line-52"></span><span id="local-6989586621679110317"><span class="annot"><a href="Hoyo.Internal.Bookmark.html#decodeBookmarksFile"><span class="hs-identifier hs-type">decodeBookmarksFile</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MonadIO</span></span><span> </span><span class="annot"><a href="#local-6989586621679110317"><span class="hs-identifier hs-type">m</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">FilePath</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679110317"><span class="hs-identifier hs-type">m</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Either</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">T.Text</span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#Bookmarks"><span class="hs-identifier hs-type">Bookmarks</span></a></span><span class="hs-special">)</span></span><span>
+</span><span id="line-53"></span><span id="decodeBookmarksFile"><span class="annot"><span class="annottext">decodeBookmarksFile :: FilePath -&gt; m (Either Text Bookmarks)
 </span><a href="Hoyo.Internal.Bookmark.html#decodeBookmarksFile"><span class="hs-identifier hs-var hs-var">decodeBookmarksFile</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Either [TomlDecodeError] Bookmarks -&gt; Either Text Bookmarks)
 -&gt; m (Either [TomlDecodeError] Bookmarks)
 -&gt; m (Either Text Bookmarks)
@@ -169,20 +168,20 @@ MonadIO m =&gt;
 TomlCodec a -&gt; FilePath -&gt; m (Either [TomlDecodeError] a)
 </span><span class="hs-identifier hs-var">Toml.decodeFileExact</span></span><span> </span><span class="annot"><span class="annottext">TomlCodec Bookmarks
 </span><a href="Hoyo.Internal.Bookmark.html#bookmarksCodec"><span class="hs-identifier hs-var">bookmarksCodec</span></a></span><span>
-</span><span id="line-55"></span><span>
-</span><span id="line-56"></span><span class="hs-comment">-- | Encode a 'Bookmark' to a Text.</span><span>
-</span><span id="line-57"></span><span class="annot"><a href="Hoyo.Internal.Bookmark.html#encodeBookmarks"><span class="hs-identifier hs-type">encodeBookmarks</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#Bookmarks"><span class="hs-identifier hs-type">Bookmarks</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">T.Text</span></span><span>
-</span><span id="line-58"></span><span id="encodeBookmarks"><span class="annot"><span class="annottext">encodeBookmarks :: Bookmarks -&gt; Text
+</span><span id="line-54"></span><span>
+</span><span id="line-55"></span><span class="hs-comment">-- | Encode a 'Bookmark' to a Text.</span><span>
+</span><span id="line-56"></span><span class="annot"><a href="Hoyo.Internal.Bookmark.html#encodeBookmarks"><span class="hs-identifier hs-type">encodeBookmarks</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#Bookmarks"><span class="hs-identifier hs-type">Bookmarks</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">T.Text</span></span><span>
+</span><span id="line-57"></span><span id="encodeBookmarks"><span class="annot"><span class="annottext">encodeBookmarks :: Bookmarks -&gt; Text
 </span><a href="Hoyo.Internal.Bookmark.html#encodeBookmarks"><span class="hs-identifier hs-var hs-var">encodeBookmarks</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">TomlCodec Bookmarks -&gt; Bookmarks -&gt; Text
 forall a. TomlCodec a -&gt; a -&gt; Text
 </span><span class="hs-identifier hs-var">Toml.encode</span></span><span> </span><span class="annot"><span class="annottext">TomlCodec Bookmarks
 </span><a href="Hoyo.Internal.Bookmark.html#bookmarksCodec"><span class="hs-identifier hs-var">bookmarksCodec</span></a></span><span>
-</span><span id="line-59"></span><span>
-</span><span id="line-60"></span><span class="hs-comment">-- | Encode a 'Bookmark' to a file.</span><span>
-</span><span id="line-61"></span><span id="local-6989586621679110212"><span class="annot"><a href="Hoyo.Internal.Bookmark.html#encodeBookmarksFile"><span class="hs-identifier hs-type">encodeBookmarksFile</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MonadIO</span></span><span> </span><span class="annot"><a href="#local-6989586621679110212"><span class="hs-identifier hs-type">m</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">FilePath</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#Bookmarks"><span class="hs-identifier hs-type">Bookmarks</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679110212"><span class="hs-identifier hs-type">m</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span></span><span>
-</span><span id="line-62"></span><span id="encodeBookmarksFile"><span class="annot"><span class="annottext">encodeBookmarksFile :: FilePath -&gt; Bookmarks -&gt; m ()
-</span><a href="Hoyo.Internal.Bookmark.html#encodeBookmarksFile"><span class="hs-identifier hs-var hs-var">encodeBookmarksFile</span></a></span></span><span> </span><span id="local-6989586621679110210"><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679110210"><span class="hs-identifier hs-var">fp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">m Text -&gt; m ()
+</span><span id="line-58"></span><span>
+</span><span id="line-59"></span><span class="hs-comment">-- | Encode a 'Bookmark' to a file.</span><span>
+</span><span id="line-60"></span><span id="local-6989586621679110312"><span class="annot"><a href="Hoyo.Internal.Bookmark.html#encodeBookmarksFile"><span class="hs-identifier hs-type">encodeBookmarksFile</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MonadIO</span></span><span> </span><span class="annot"><a href="#local-6989586621679110312"><span class="hs-identifier hs-type">m</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">FilePath</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#Bookmarks"><span class="hs-identifier hs-type">Bookmarks</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679110312"><span class="hs-identifier hs-type">m</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span></span><span>
+</span><span id="line-61"></span><span id="encodeBookmarksFile"><span class="annot"><span class="annottext">encodeBookmarksFile :: FilePath -&gt; Bookmarks -&gt; m ()
+</span><a href="Hoyo.Internal.Bookmark.html#encodeBookmarksFile"><span class="hs-identifier hs-var hs-var">encodeBookmarksFile</span></a></span></span><span> </span><span id="local-6989586621679110310"><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679110310"><span class="hs-identifier hs-var">fp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">m Text -&gt; m ()
 forall (f :: * -&gt; *) a. Functor f =&gt; f a -&gt; f ()
 </span><span class="hs-identifier hs-var">void</span></span><span> </span><span class="annot"><span class="annottext">(m Text -&gt; m ()) -&gt; (Bookmarks -&gt; m Text) -&gt; Bookmarks -&gt; m ()
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
@@ -192,32 +191,32 @@ MonadIO m =&gt;
 TomlCodec a -&gt; FilePath -&gt; a -&gt; m Text
 </span><span class="hs-identifier hs-var">Toml.encodeToFile</span></span><span> </span><span class="annot"><span class="annottext">TomlCodec Bookmarks
 </span><a href="Hoyo.Internal.Bookmark.html#bookmarksCodec"><span class="hs-identifier hs-var">bookmarksCodec</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679110210"><span class="hs-identifier hs-var">fp</span></a></span><span>
-</span><span id="line-63"></span><span>
-</span><span id="line-64"></span><span class="hs-comment">-- | @searchBookmarks searchTerm bookmarks@ partitions @bookmarks@ into a list of</span><span>
-</span><span id="line-65"></span><span class="hs-comment">-- 'Bookmark's that match the search term and a list of those that do not.</span><span>
-</span><span id="line-66"></span><span class="annot"><a href="Hoyo.Internal.Bookmark.html#searchBookmarks"><span class="hs-identifier hs-type">searchBookmarks</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#BookmarkSearchTerm"><span class="hs-identifier hs-type">BookmarkSearchTerm</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#Bookmarks"><span class="hs-identifier hs-type">Bookmarks</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="annot"><a href="Hoyo.Internal.Types.html#Bookmark"><span class="hs-identifier hs-type">Bookmark</span></a></span><span class="hs-special">]</span><span class="hs-special">,</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Hoyo.Internal.Types.html#Bookmark"><span class="hs-identifier hs-type">Bookmark</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
-</span><span id="line-67"></span><span id="searchBookmarks"><span class="annot"><span class="annottext">searchBookmarks :: BookmarkSearchTerm -&gt; Bookmarks -&gt; ([Bookmark], [Bookmark])
-</span><a href="Hoyo.Internal.Bookmark.html#searchBookmarks"><span class="hs-identifier hs-var hs-var">searchBookmarks</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Hoyo.Internal.Types.html#SearchIndex"><span class="hs-identifier hs-type">SearchIndex</span></a></span><span> </span><span id="local-6989586621679110206"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679110206"><span class="hs-identifier hs-var">idx</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Hoyo.Internal.Types.html#Bookmarks"><span class="hs-identifier hs-type">Bookmarks</span></a></span><span> </span><span id="local-6989586621679110204"><span class="annot"><span class="annottext">[Bookmark]
-</span><a href="#local-6989586621679110204"><span class="hs-identifier hs-var">bms</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span>
-</span><span id="line-68"></span><span>  </span><span class="annot"><span class="annottext">(Bookmark -&gt; Bool) -&gt; [Bookmark] -&gt; ([Bookmark], [Bookmark])
+</span><a href="#local-6989586621679110310"><span class="hs-identifier hs-var">fp</span></a></span><span>
+</span><span id="line-62"></span><span>
+</span><span id="line-63"></span><span class="hs-comment">-- | @searchBookmarks searchTerm bookmarks@ partitions @bookmarks@ into a list of</span><span>
+</span><span id="line-64"></span><span class="hs-comment">-- 'Bookmark's that match the search term and a list of those that do not.</span><span>
+</span><span id="line-65"></span><span class="annot"><a href="Hoyo.Internal.Bookmark.html#searchBookmarks"><span class="hs-identifier hs-type">searchBookmarks</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#BookmarkSearchTerm"><span class="hs-identifier hs-type">BookmarkSearchTerm</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#Bookmarks"><span class="hs-identifier hs-type">Bookmarks</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="annot"><a href="Hoyo.Internal.Types.html#Bookmark"><span class="hs-identifier hs-type">Bookmark</span></a></span><span class="hs-special">]</span><span class="hs-special">,</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Hoyo.Internal.Types.html#Bookmark"><span class="hs-identifier hs-type">Bookmark</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
+</span><span id="line-66"></span><span id="searchBookmarks"><span class="annot"><span class="annottext">searchBookmarks :: BookmarkSearchTerm -&gt; Bookmarks -&gt; ([Bookmark], [Bookmark])
+</span><a href="Hoyo.Internal.Bookmark.html#searchBookmarks"><span class="hs-identifier hs-var hs-var">searchBookmarks</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Hoyo.Internal.Types.html#SearchIndex"><span class="hs-identifier hs-type">SearchIndex</span></a></span><span> </span><span id="local-6989586621679110306"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679110306"><span class="hs-identifier hs-var">idx</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Hoyo.Internal.Types.html#Bookmarks"><span class="hs-identifier hs-type">Bookmarks</span></a></span><span> </span><span id="local-6989586621679110304"><span class="annot"><span class="annottext">[Bookmark]
+</span><a href="#local-6989586621679110304"><span class="hs-identifier hs-var">bms</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span>
+</span><span id="line-67"></span><span>  </span><span class="annot"><span class="annottext">(Bookmark -&gt; Bool) -&gt; [Bookmark] -&gt; ([Bookmark], [Bookmark])
 forall a. (a -&gt; Bool) -&gt; [a] -&gt; ([a], [a])
 </span><span class="hs-identifier hs-var">partition</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679110206"><span class="hs-identifier hs-var">idx</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Int -&gt; Bool) -&gt; (Bookmark -&gt; Int) -&gt; Bookmark -&gt; Bool
+</span><a href="#local-6989586621679110306"><span class="hs-identifier hs-var">idx</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Int -&gt; Bool) -&gt; (Bookmark -&gt; Int) -&gt; Bookmark -&gt; Bool
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Getting Int Bookmark Int -&gt; Bookmark -&gt; Int
 forall a s. Getting a s a -&gt; s -&gt; a
 </span><span class="hs-identifier hs-var">view</span></span><span> </span><span class="annot"><span class="annottext">Getting Int Bookmark Int
 Lens' Bookmark Int
 </span><a href="Hoyo.Internal.Types.html#bookmarkIndex"><span class="hs-identifier hs-var">bookmarkIndex</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Bookmark]
-</span><a href="#local-6989586621679110204"><span class="hs-identifier hs-var">bms</span></a></span><span>
-</span><span id="line-69"></span><span class="annot"><a href="Hoyo.Internal.Bookmark.html#searchBookmarks"><span class="hs-identifier hs-var">searchBookmarks</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Hoyo.Internal.Types.html#SearchName"><span class="hs-identifier hs-type">SearchName</span></a></span><span> </span><span id="local-6989586621679110199"><span class="annot"><span class="annottext">Text
-</span><a href="#local-6989586621679110199"><span class="hs-identifier hs-var">name</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Hoyo.Internal.Types.html#Bookmarks"><span class="hs-identifier hs-type">Bookmarks</span></a></span><span> </span><span id="local-6989586621679110198"><span class="annot"><span class="annottext">[Bookmark]
-</span><a href="#local-6989586621679110198"><span class="hs-identifier hs-var">bms</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span>
-</span><span id="line-70"></span><span>  </span><span class="annot"><span class="annottext">(Bookmark -&gt; Bool) -&gt; [Bookmark] -&gt; ([Bookmark], [Bookmark])
+</span><a href="#local-6989586621679110304"><span class="hs-identifier hs-var">bms</span></a></span><span>
+</span><span id="line-68"></span><span class="annot"><a href="Hoyo.Internal.Bookmark.html#searchBookmarks"><span class="hs-identifier hs-var">searchBookmarks</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Hoyo.Internal.Types.html#SearchName"><span class="hs-identifier hs-type">SearchName</span></a></span><span> </span><span id="local-6989586621679110299"><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679110299"><span class="hs-identifier hs-var">name</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Hoyo.Internal.Types.html#Bookmarks"><span class="hs-identifier hs-type">Bookmarks</span></a></span><span> </span><span id="local-6989586621679110298"><span class="annot"><span class="annottext">[Bookmark]
+</span><a href="#local-6989586621679110298"><span class="hs-identifier hs-var">bms</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span>
+</span><span id="line-69"></span><span>  </span><span class="annot"><span class="annottext">(Bookmark -&gt; Bool) -&gt; [Bookmark] -&gt; ([Bookmark], [Bookmark])
 forall a. (a -&gt; Bool) -&gt; [a] -&gt; ([a], [a])
 </span><span class="hs-identifier hs-var">partition</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(Maybe Text -&gt; Maybe Text -&gt; Bool)
 -&gt; (Maybe Text -&gt; Maybe Text) -&gt; Maybe Text -&gt; Maybe Text -&gt; Bool
@@ -230,7 +229,7 @@ forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
 </span><span class="hs-identifier hs-var">T.toLower</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Text -&gt; Maybe Text
 forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Text
-</span><a href="#local-6989586621679110199"><span class="hs-identifier hs-var">name</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Maybe Text -&gt; Bool)
+</span><a href="#local-6989586621679110299"><span class="hs-identifier hs-var">name</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Maybe Text -&gt; Bool)
 -&gt; (Bookmark -&gt; Maybe Text) -&gt; Bookmark -&gt; Bool
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Getting (Maybe Text) Bookmark (Maybe Text)
@@ -239,19 +238,19 @@ forall a s. Getting a s a -&gt; s -&gt; a
 </span><span class="hs-identifier hs-var">view</span></span><span> </span><span class="annot"><span class="annottext">Getting (Maybe Text) Bookmark (Maybe Text)
 Lens' Bookmark (Maybe Text)
 </span><a href="Hoyo.Internal.Types.html#bookmarkName"><span class="hs-identifier hs-var">bookmarkName</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Bookmark]
-</span><a href="#local-6989586621679110198"><span class="hs-identifier hs-var">bms</span></a></span><span>
-</span><span id="line-71"></span><span>
-</span><span id="line-72"></span><span class="hs-comment">-- | A predicate used by 'filterBookmarks' - match on the bookmark name.</span><span>
-</span><span id="line-73"></span><span class="hs-comment">-- Note that matching is case-sensitive.</span><span>
-</span><span id="line-74"></span><span class="annot"><a href="Hoyo.Internal.Bookmark.html#filterBookmarkByName"><span class="hs-identifier hs-type">filterBookmarkByName</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">T.Text</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#Bookmark"><span class="hs-identifier hs-type">Bookmark</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span>
-</span><span id="line-75"></span><span id="filterBookmarkByName"><span class="annot"><span class="annottext">filterBookmarkByName :: Maybe Text -&gt; Bookmark -&gt; Bool
+</span><a href="#local-6989586621679110298"><span class="hs-identifier hs-var">bms</span></a></span><span>
+</span><span id="line-70"></span><span>
+</span><span id="line-71"></span><span class="hs-comment">-- | A predicate used by 'filterBookmarks' - match on the bookmark name.</span><span>
+</span><span id="line-72"></span><span class="hs-comment">-- Note that matching is case-sensitive.</span><span>
+</span><span id="line-73"></span><span class="annot"><a href="Hoyo.Internal.Bookmark.html#filterBookmarkByName"><span class="hs-identifier hs-type">filterBookmarkByName</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">T.Text</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#Bookmark"><span class="hs-identifier hs-type">Bookmark</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span>
+</span><span id="line-74"></span><span id="filterBookmarkByName"><span class="annot"><span class="annottext">filterBookmarkByName :: Maybe Text -&gt; Bookmark -&gt; Bool
 </span><a href="Hoyo.Internal.Bookmark.html#filterBookmarkByName"><span class="hs-identifier hs-var hs-var">filterBookmarkByName</span></a></span></span><span> </span><span class="annot"><span class="annottext">Maybe Text
 </span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bookmark -&gt; Bool
 forall a b. a -&gt; b -&gt; a
 </span><span class="hs-identifier hs-var">const</span></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">True</span></span><span>
-</span><span id="line-76"></span><span class="annot"><a href="Hoyo.Internal.Bookmark.html#filterBookmarkByName"><span class="hs-identifier hs-var">filterBookmarkByName</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span id="local-6989586621679110192"><span class="annot"><span class="annottext">Text
-</span><a href="#local-6989586621679110192"><span class="hs-identifier hs-var">name</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Maybe Text -&gt; Maybe Text -&gt; Bool)
+</span><span id="line-75"></span><span class="annot"><a href="Hoyo.Internal.Bookmark.html#filterBookmarkByName"><span class="hs-identifier hs-var">filterBookmarkByName</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span id="local-6989586621679110292"><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679110292"><span class="hs-identifier hs-var">name</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Maybe Text -&gt; Maybe Text -&gt; Bool)
 -&gt; (Maybe Text -&gt; Maybe Text) -&gt; Maybe Text -&gt; Maybe Text -&gt; Bool
 forall b c a. (b -&gt; b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; a -&gt; c
 </span><span class="hs-identifier hs-var">on</span></span><span> </span><span class="annot"><span class="annottext">Maybe Text -&gt; Maybe Text -&gt; Bool
@@ -262,7 +261,7 @@ forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
 </span><span class="hs-identifier hs-var">T.toLower</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Text -&gt; Maybe Text
 forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Text
-</span><a href="#local-6989586621679110192"><span class="hs-identifier hs-var">name</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Maybe Text -&gt; Bool)
+</span><a href="#local-6989586621679110292"><span class="hs-identifier hs-var">name</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Maybe Text -&gt; Bool)
 -&gt; (Bookmark -&gt; Maybe Text) -&gt; Bookmark -&gt; Bool
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Getting (Maybe Text) Bookmark (Maybe Text)
@@ -271,18 +270,18 @@ forall a s. Getting a s a -&gt; s -&gt; a
 </span><span class="hs-identifier hs-var">view</span></span><span> </span><span class="annot"><span class="annottext">Getting (Maybe Text) Bookmark (Maybe Text)
 Lens' Bookmark (Maybe Text)
 </span><a href="Hoyo.Internal.Types.html#bookmarkName"><span class="hs-identifier hs-var">bookmarkName</span></a></span><span>
-</span><span id="line-77"></span><span>
-</span><span id="line-78"></span><span class="hs-comment">-- | A predicate used by 'filterBookmarks' - match on the bookmark directory.</span><span>
-</span><span id="line-79"></span><span class="annot"><a href="Hoyo.Internal.Bookmark.html#filterBookmarkByDirInfix"><span class="hs-identifier hs-type">filterBookmarkByDirInfix</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">T.Text</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#Bookmark"><span class="hs-identifier hs-type">Bookmark</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span>
-</span><span id="line-80"></span><span id="filterBookmarkByDirInfix"><span class="annot"><span class="annottext">filterBookmarkByDirInfix :: Maybe Text -&gt; Bookmark -&gt; Bool
+</span><span id="line-76"></span><span>
+</span><span id="line-77"></span><span class="hs-comment">-- | A predicate used by 'filterBookmarks' - match on the bookmark directory.</span><span>
+</span><span id="line-78"></span><span class="annot"><a href="Hoyo.Internal.Bookmark.html#filterBookmarkByDirInfix"><span class="hs-identifier hs-type">filterBookmarkByDirInfix</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">T.Text</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#Bookmark"><span class="hs-identifier hs-type">Bookmark</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span>
+</span><span id="line-79"></span><span id="filterBookmarkByDirInfix"><span class="annot"><span class="annottext">filterBookmarkByDirInfix :: Maybe Text -&gt; Bookmark -&gt; Bool
 </span><a href="Hoyo.Internal.Bookmark.html#filterBookmarkByDirInfix"><span class="hs-identifier hs-var hs-var">filterBookmarkByDirInfix</span></a></span></span><span> </span><span class="annot"><span class="annottext">Maybe Text
 </span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bookmark -&gt; Bool
 forall a b. a -&gt; b -&gt; a
 </span><span class="hs-identifier hs-var">const</span></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">True</span></span><span>
-</span><span id="line-81"></span><span class="annot"><a href="Hoyo.Internal.Bookmark.html#filterBookmarkByDirInfix"><span class="hs-identifier hs-var">filterBookmarkByDirInfix</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span id="local-6989586621679110190"><span class="annot"><span class="annottext">Text
-</span><a href="#local-6989586621679110190"><span class="hs-identifier hs-var">pref</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span>
-</span><span id="line-82"></span><span>  </span><span class="annot"><span class="annottext">(Text -&gt; Text -&gt; Bool) -&gt; (Text -&gt; Text) -&gt; Text -&gt; Text -&gt; Bool
+</span><span id="line-80"></span><span class="annot"><a href="Hoyo.Internal.Bookmark.html#filterBookmarkByDirInfix"><span class="hs-identifier hs-var">filterBookmarkByDirInfix</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span id="local-6989586621679110290"><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679110290"><span class="hs-identifier hs-var">pref</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span>
+</span><span id="line-81"></span><span>  </span><span class="annot"><span class="annottext">(Text -&gt; Text -&gt; Bool) -&gt; (Text -&gt; Text) -&gt; Text -&gt; Text -&gt; Bool
 forall b c a. (b -&gt; b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; a -&gt; c
 </span><span class="hs-identifier hs-var">on</span></span><span> </span><span class="annot"><span class="annottext">Text -&gt; Text -&gt; Bool
 </span><span class="hs-identifier hs-var">T.isInfixOf</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(Char -&gt; Bool) -&gt; Text -&gt; Text
@@ -290,7 +289,7 @@ forall b c a. (b -&gt; b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; a -&gt; c
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">Char
 </span><span class="hs-char">'/'</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Text
-</span><a href="#local-6989586621679110190"><span class="hs-identifier hs-var">pref</span></a></span><span> </span><span class="annot"><span class="annottext">(Text -&gt; Bool) -&gt; (Bookmark -&gt; Text) -&gt; Bookmark -&gt; Bool
+</span><a href="#local-6989586621679110290"><span class="hs-identifier hs-var">pref</span></a></span><span> </span><span class="annot"><span class="annottext">(Text -&gt; Bool) -&gt; (Bookmark -&gt; Text) -&gt; Bookmark -&gt; Bool
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Text
 </span><span class="hs-identifier hs-var">T.pack</span></span><span> </span><span class="annot"><span class="annottext">(FilePath -&gt; Text) -&gt; (Bookmark -&gt; FilePath) -&gt; Bookmark -&gt; Text
@@ -300,37 +299,37 @@ forall a s. Getting a s a -&gt; s -&gt; a
 </span><span class="hs-identifier hs-var">view</span></span><span> </span><span class="annot"><span class="annottext">Getting FilePath Bookmark FilePath
 Lens' Bookmark FilePath
 </span><a href="Hoyo.Internal.Types.html#bookmarkDirectory"><span class="hs-identifier hs-var">bookmarkDirectory</span></a></span><span>
-</span><span id="line-83"></span><span>
-</span><span id="line-84"></span><span class="hs-comment">-- | Given a bookmark name and a bookmark directory, test if a bookmark matches those</span><span>
-</span><span id="line-85"></span><span class="hs-comment">-- filters.</span><span>
-</span><span id="line-86"></span><span class="annot"><a href="Hoyo.Internal.Bookmark.html#filterBookmarks"><span class="hs-identifier hs-type">filterBookmarks</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">T.Text</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">T.Text</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#Bookmark"><span class="hs-identifier hs-type">Bookmark</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span>
-</span><span id="line-87"></span><span id="filterBookmarks"><span class="annot"><span class="annottext">filterBookmarks :: Maybe Text -&gt; Maybe Text -&gt; Bookmark -&gt; Bool
-</span><a href="Hoyo.Internal.Bookmark.html#filterBookmarks"><span class="hs-identifier hs-var hs-var">filterBookmarks</span></a></span></span><span> </span><span id="local-6989586621679110184"><span class="annot"><span class="annottext">Maybe Text
-</span><a href="#local-6989586621679110184"><span class="hs-identifier hs-var">name</span></a></span></span><span> </span><span id="local-6989586621679110183"><span class="annot"><span class="annottext">Maybe Text
-</span><a href="#local-6989586621679110183"><span class="hs-identifier hs-var">dirInfix</span></a></span></span><span> </span><span id="local-6989586621679110182"><span class="annot"><span class="annottext">Bookmark
-</span><a href="#local-6989586621679110182"><span class="hs-identifier hs-var">bm</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe Text -&gt; Bookmark -&gt; Bool
+</span><span id="line-82"></span><span>
+</span><span id="line-83"></span><span class="hs-comment">-- | Given a bookmark name and a bookmark directory, test if a bookmark matches those</span><span>
+</span><span id="line-84"></span><span class="hs-comment">-- filters.</span><span>
+</span><span id="line-85"></span><span class="annot"><a href="Hoyo.Internal.Bookmark.html#filterBookmarks"><span class="hs-identifier hs-type">filterBookmarks</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">T.Text</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">T.Text</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#Bookmark"><span class="hs-identifier hs-type">Bookmark</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span>
+</span><span id="line-86"></span><span id="filterBookmarks"><span class="annot"><span class="annottext">filterBookmarks :: Maybe Text -&gt; Maybe Text -&gt; Bookmark -&gt; Bool
+</span><a href="Hoyo.Internal.Bookmark.html#filterBookmarks"><span class="hs-identifier hs-var hs-var">filterBookmarks</span></a></span></span><span> </span><span id="local-6989586621679110284"><span class="annot"><span class="annottext">Maybe Text
+</span><a href="#local-6989586621679110284"><span class="hs-identifier hs-var">name</span></a></span></span><span> </span><span id="local-6989586621679110283"><span class="annot"><span class="annottext">Maybe Text
+</span><a href="#local-6989586621679110283"><span class="hs-identifier hs-var">dirInfix</span></a></span></span><span> </span><span id="local-6989586621679110282"><span class="annot"><span class="annottext">Bookmark
+</span><a href="#local-6989586621679110282"><span class="hs-identifier hs-var">bm</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe Text -&gt; Bookmark -&gt; Bool
 </span><a href="Hoyo.Internal.Bookmark.html#filterBookmarkByName"><span class="hs-identifier hs-var">filterBookmarkByName</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe Text
-</span><a href="#local-6989586621679110184"><span class="hs-identifier hs-var">name</span></a></span><span> </span><span class="annot"><span class="annottext">Bookmark
-</span><a href="#local-6989586621679110182"><span class="hs-identifier hs-var">bm</span></a></span><span>
-</span><span id="line-88"></span><span>                                     </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
+</span><a href="#local-6989586621679110284"><span class="hs-identifier hs-var">name</span></a></span><span> </span><span class="annot"><span class="annottext">Bookmark
+</span><a href="#local-6989586621679110282"><span class="hs-identifier hs-var">bm</span></a></span><span>
+</span><span id="line-87"></span><span>                                     </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
 </span><span class="hs-operator hs-var">&amp;&amp;</span></span><span> </span><span class="annot"><span class="annottext">Maybe Text -&gt; Bookmark -&gt; Bool
 </span><a href="Hoyo.Internal.Bookmark.html#filterBookmarkByDirInfix"><span class="hs-identifier hs-var">filterBookmarkByDirInfix</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe Text
-</span><a href="#local-6989586621679110183"><span class="hs-identifier hs-var">dirInfix</span></a></span><span> </span><span class="annot"><span class="annottext">Bookmark
-</span><a href="#local-6989586621679110182"><span class="hs-identifier hs-var">bm</span></a></span><span>
-</span><span id="line-89"></span><span>
-</span><span id="line-90"></span><span class="hs-comment">-- | Convert a list of 'DefaultBookmark's to a 'Bookmarks', assiging indices and/</span><span>
-</span><span id="line-91"></span><span class="hs-comment">-- creation times on the fly.</span><span>
-</span><span id="line-92"></span><span id="local-6989586621679110180"><span class="annot"><a href="Hoyo.Internal.Bookmark.html#bookmarksFromDefault"><span class="hs-identifier hs-type">bookmarksFromDefault</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MonadIO</span></span><span> </span><span class="annot"><a href="#local-6989586621679110180"><span class="hs-identifier hs-type">m</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Hoyo.Internal.Types.html#DefaultBookmark"><span class="hs-identifier hs-type">DefaultBookmark</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679110180"><span class="hs-identifier hs-type">m</span></a></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#Bookmarks"><span class="hs-identifier hs-type">Bookmarks</span></a></span></span><span>
-</span><span id="line-93"></span><span id="bookmarksFromDefault"><span class="annot"><span class="annottext">bookmarksFromDefault :: [DefaultBookmark] -&gt; m Bookmarks
-</span><a href="Hoyo.Internal.Bookmark.html#bookmarksFromDefault"><span class="hs-identifier hs-var hs-var">bookmarksFromDefault</span></a></span></span><span> </span><span id="local-6989586621679110178"><span class="annot"><span class="annottext">[DefaultBookmark]
-</span><a href="#local-6989586621679110178"><span class="hs-identifier hs-var">dbms</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Bookmark] -&gt; Bookmarks
+</span><a href="#local-6989586621679110283"><span class="hs-identifier hs-var">dirInfix</span></a></span><span> </span><span class="annot"><span class="annottext">Bookmark
+</span><a href="#local-6989586621679110282"><span class="hs-identifier hs-var">bm</span></a></span><span>
+</span><span id="line-88"></span><span>
+</span><span id="line-89"></span><span class="hs-comment">-- | Convert a list of 'DefaultBookmark's to a 'Bookmarks', assiging indices and/</span><span>
+</span><span id="line-90"></span><span class="hs-comment">-- creation times on the fly.</span><span>
+</span><span id="line-91"></span><span id="local-6989586621679110280"><span class="annot"><a href="Hoyo.Internal.Bookmark.html#bookmarksFromDefault"><span class="hs-identifier hs-type">bookmarksFromDefault</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MonadIO</span></span><span> </span><span class="annot"><a href="#local-6989586621679110280"><span class="hs-identifier hs-type">m</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Hoyo.Internal.Types.html#DefaultBookmark"><span class="hs-identifier hs-type">DefaultBookmark</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679110280"><span class="hs-identifier hs-type">m</span></a></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#Bookmarks"><span class="hs-identifier hs-type">Bookmarks</span></a></span></span><span>
+</span><span id="line-92"></span><span id="bookmarksFromDefault"><span class="annot"><span class="annottext">bookmarksFromDefault :: [DefaultBookmark] -&gt; m Bookmarks
+</span><a href="Hoyo.Internal.Bookmark.html#bookmarksFromDefault"><span class="hs-identifier hs-var hs-var">bookmarksFromDefault</span></a></span></span><span> </span><span id="local-6989586621679110278"><span class="annot"><span class="annottext">[DefaultBookmark]
+</span><a href="#local-6989586621679110278"><span class="hs-identifier hs-var">dbms</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Bookmark] -&gt; Bookmarks
 </span><a href="Hoyo.Internal.Types.html#Bookmarks"><span class="hs-identifier hs-var">Bookmarks</span></a></span><span> </span><span class="annot"><span class="annottext">([Bookmark] -&gt; Bookmarks) -&gt; m [Bookmark] -&gt; m Bookmarks
 forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
 </span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="annottext">m [Bookmark]
-</span><a href="#local-6989586621679110177"><span class="hs-identifier hs-var">bms</span></a></span><span>
-</span><span id="line-94"></span><span>  </span><span class="hs-keyword">where</span><span>
-</span><span id="line-95"></span><span>    </span><span id="local-6989586621679110177"><span class="annot"><span class="annottext">bms :: m [Bookmark]
-</span><a href="#local-6989586621679110177"><span class="hs-identifier hs-var hs-var">bms</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[(DefaultBookmark, Int)]
+</span><a href="#local-6989586621679110277"><span class="hs-identifier hs-var">bms</span></a></span><span>
+</span><span id="line-93"></span><span>  </span><span class="hs-keyword">where</span><span>
+</span><span id="line-94"></span><span>    </span><span id="local-6989586621679110277"><span class="annot"><span class="annottext">bms :: m [Bookmark]
+</span><a href="#local-6989586621679110277"><span class="hs-identifier hs-var hs-var">bms</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[(DefaultBookmark, Int)]
 -&gt; ((DefaultBookmark, Int) -&gt; m Bookmark) -&gt; m [Bookmark]
 forall (t :: * -&gt; *) (m :: * -&gt; *) a b.
 (Traversable t, Monad m) =&gt;
@@ -338,33 +337,33 @@ t a -&gt; (a -&gt; m b) -&gt; m (t b)
 </span><span class="hs-identifier hs-var">forM</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[DefaultBookmark] -&gt; [Int] -&gt; [(DefaultBookmark, Int)]
 forall a b. [a] -&gt; [b] -&gt; [(a, b)]
 </span><span class="hs-identifier hs-var">zip</span></span><span> </span><span class="annot"><span class="annottext">[DefaultBookmark]
-</span><a href="#local-6989586621679110178"><span class="hs-identifier hs-var">dbms</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679110278"><span class="hs-identifier hs-var">dbms</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">1</span></span><span class="hs-glyph">..</span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(((DefaultBookmark, Int) -&gt; m Bookmark) -&gt; m [Bookmark])
 -&gt; ((DefaultBookmark, Int) -&gt; m Bookmark) -&gt; m [Bookmark]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="hs-glyph">\</span><span class="hs-special">(</span><span class="annot"><a href="Hoyo.Internal.Types.html#DefaultBookmark"><span class="hs-identifier hs-type">DefaultBookmark</span></a></span><span> </span><span id="local-6989586621679110176"><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679110176"><span class="hs-identifier hs-var">dir</span></a></span></span><span> </span><span id="local-6989586621679110175"><span class="annot"><span class="annottext">Maybe Text
-</span><a href="#local-6989586621679110175"><span class="hs-identifier hs-var">name</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679110174"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679110174"><span class="hs-identifier hs-var">idx</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-96"></span><span>      </span><span id="local-6989586621679110173"><span class="annot"><span class="annottext">ZonedTime
-</span><a href="#local-6989586621679110173"><span class="hs-identifier hs-var">zTime</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">IO ZonedTime -&gt; m ZonedTime
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="hs-glyph">\</span><span class="hs-special">(</span><span class="annot"><a href="Hoyo.Internal.Types.html#DefaultBookmark"><span class="hs-identifier hs-type">DefaultBookmark</span></a></span><span> </span><span id="local-6989586621679110276"><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679110276"><span class="hs-identifier hs-var">dir</span></a></span></span><span> </span><span id="local-6989586621679110275"><span class="annot"><span class="annottext">Maybe Text
+</span><a href="#local-6989586621679110275"><span class="hs-identifier hs-var">name</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679110274"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679110274"><span class="hs-identifier hs-var">idx</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-95"></span><span>      </span><span id="local-6989586621679110273"><span class="annot"><span class="annottext">ZonedTime
+</span><a href="#local-6989586621679110273"><span class="hs-identifier hs-var">zTime</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">IO ZonedTime -&gt; m ZonedTime
 forall (m :: * -&gt; *) a. MonadIO m =&gt; IO a -&gt; m a
 </span><span class="hs-identifier hs-var">liftIO</span></span><span> </span><span class="annot"><span class="annottext">IO ZonedTime
 </span><span class="hs-identifier hs-var">getZonedTime</span></span><span>
-</span><span id="line-97"></span><span>      </span><span class="annot"><span class="annottext">Bookmark -&gt; m Bookmark
+</span><span id="line-96"></span><span>      </span><span class="annot"><span class="annottext">Bookmark -&gt; m Bookmark
 forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
 </span><span class="hs-identifier hs-var">return</span></span><span> </span><span class="annot"><span class="annottext">(Bookmark -&gt; m Bookmark) -&gt; Bookmark -&gt; m Bookmark
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Int -&gt; ZonedTime -&gt; Maybe Text -&gt; Bookmark
 </span><a href="Hoyo.Internal.Types.html#Bookmark"><span class="hs-identifier hs-var">Bookmark</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679110176"><span class="hs-identifier hs-var">dir</span></a></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679110174"><span class="hs-identifier hs-var">idx</span></a></span><span> </span><span class="annot"><span class="annottext">ZonedTime
-</span><a href="#local-6989586621679110173"><span class="hs-identifier hs-var">zTime</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe Text
-</span><a href="#local-6989586621679110175"><span class="hs-identifier hs-var">name</span></a></span><span>
-</span><span id="line-98"></span><span>
-</span><span id="line-99"></span><span class="hs-comment">-- | Get the bookmarks from the currently used bookmark file.</span><span>
-</span><span id="line-100"></span><span class="annot"><a href="Hoyo.Internal.Bookmark.html#getBookmarks"><span class="hs-identifier hs-type">getBookmarks</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#HoyoMonad"><span class="hs-identifier hs-type">HoyoMonad</span></a></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#Bookmarks"><span class="hs-identifier hs-type">Bookmarks</span></a></span><span>
-</span><span id="line-101"></span><span id="getBookmarks"><span class="annot"><span class="annottext">getBookmarks :: HoyoMonad Bookmarks
+</span><a href="#local-6989586621679110276"><span class="hs-identifier hs-var">dir</span></a></span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679110274"><span class="hs-identifier hs-var">idx</span></a></span><span> </span><span class="annot"><span class="annottext">ZonedTime
+</span><a href="#local-6989586621679110273"><span class="hs-identifier hs-var">zTime</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe Text
+</span><a href="#local-6989586621679110275"><span class="hs-identifier hs-var">name</span></a></span><span>
+</span><span id="line-97"></span><span>
+</span><span id="line-98"></span><span class="hs-comment">-- | Get the bookmarks from the currently used bookmark file.</span><span>
+</span><span id="line-99"></span><span class="annot"><a href="Hoyo.Internal.Bookmark.html#getBookmarks"><span class="hs-identifier hs-type">getBookmarks</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#HoyoMonad"><span class="hs-identifier hs-type">HoyoMonad</span></a></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#Bookmarks"><span class="hs-identifier hs-type">Bookmarks</span></a></span><span>
+</span><span id="line-100"></span><span id="getBookmarks"><span class="annot"><span class="annottext">getBookmarks :: HoyoMonad Bookmarks
 </span><a href="Hoyo.Internal.Bookmark.html#getBookmarks"><span class="hs-identifier hs-var hs-var">getBookmarks</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SimpleGetter Env Bookmarks -&gt; HoyoMonad Bookmarks
 forall a (m :: * -&gt; *) b.
 MonadReader a m =&gt;
@@ -372,4 +371,4 @@ SimpleGetter a b -&gt; m b
 </span><a href="Hoyo.Internal.Utils.html#asks%27"><span class="hs-identifier hs-var">asks'</span></a></span><span> </span><span class="annot"><span class="annottext">SimpleGetter Env Bookmarks
 Lens' Env Bookmarks
 </span><a href="Hoyo.Internal.Types.html#bookmarks"><span class="hs-identifier hs-var">bookmarks</span></a></span><span>
-</span><span id="line-102"></span></pre></body></html>
+</span><span id="line-101"></span></pre></body></html>

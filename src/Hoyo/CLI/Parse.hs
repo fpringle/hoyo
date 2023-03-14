@@ -1,5 +1,5 @@
 {-|
-Module      : HoYo.CLI.Parse
+Module      : Hoyo.CLI.Parse
 Copyright   : (c) Frederick Pringle, 2023
 License     : BSD-3-Clause
 Maintainer  : freddyjepringle@gmail.com
@@ -7,7 +7,7 @@ Maintainer  : freddyjepringle@gmail.com
 Parse CLI arguments.
 -}
 
-module HoYo.CLI.Parse (
+module Hoyo.CLI.Parse (
   -- * Parsing CLI arguments and options
     options
   , parseOptions
@@ -35,4 +35,4 @@ module HoYo.CLI.Parse (
   , splitArgs
   ) where
 
-import HoYo.Internal.Parse
+import Hoyo.Internal.Parse

@@ -1,13 +1,13 @@
 {-|
-Module      : HoYo.Internal.Bookmark
+Module      : Hoyo.Internal.Bookmark
 Copyright   : (c) Frederick Pringle, 2023
 License     : BSD-3-Clause
 Maintainer  : freddyjepringle@gmail.com
 
-Internals used by the HoYo.Bookmark module.
+Internals used by the Hoyo.Bookmark module.
 -}
 
-module HoYo.Internal.Bookmark where
+module Hoyo.Internal.Bookmark where
 
 import           Control.Monad          (forM, void)
 import           Control.Monad.IO.Class
@@ -18,8 +18,8 @@ import           Data.List
 import qualified Data.Text              as T
 import           Data.Time
 
-import           HoYo.Internal.Types
-import           HoYo.Internal.Utils
+import           Hoyo.Internal.Types
+import           Hoyo.Internal.Utils
 
 import           Lens.Micro.Extras
 
@@ -96,5 +96,5 @@ bookmarksFromDefault dbms = Bookmarks <$> bms
       return $ Bookmark dir idx zTime name
 
 -- | Get the bookmarks from the currently used bookmark file.
-getBookmarks :: HoYoMonad Bookmarks
+getBookmarks :: HoyoMonad Bookmarks
 getBookmarks = asks' bookmarks

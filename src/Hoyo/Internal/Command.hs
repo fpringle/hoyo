@@ -1,13 +1,13 @@
 {-|
-Module      : HoYo.Internal.Command
+Module      : Hoyo.Internal.Command
 Copyright   : (c) Frederick Pringle, 2023
 License     : BSD-3-Clause
 Maintainer  : freddyjepringle@gmail.com
 
-Internals used by the HoYo.Command module.
+Internals used by the Hoyo.Command module.
 -}
 
-module HoYo.Internal.Command where
+module Hoyo.Internal.Command where
 
 import                          Control.Applicative
 import                          Control.Monad
@@ -21,11 +21,11 @@ import                          Data.List
 import                qualified Data.Text                  as T
 import                          Data.Time
 
-import                          HoYo.Bookmark
-import                          HoYo.Internal.Config
-import {-# SOURCE #-}           HoYo.Internal.Parse
-import                          HoYo.Internal.Types
-import                          HoYo.Internal.Utils
+import                          Hoyo.Bookmark
+import                          Hoyo.Internal.Config
+import {-# SOURCE #-}           Hoyo.Internal.Parse
+import                          Hoyo.Internal.Types
+import                          Hoyo.Internal.Utils
 
 import                          Lens.Micro
 import                          Lens.Micro.Extras
@@ -86,7 +86,7 @@ defaultGlobalOptions = GlobalOptions Nothing Nothing defaultOverrideOptions
 --
 -- @modifyBookmarks f@ retrieves the current bookmarks, applies @f@,
 -- and saves them back to file.
-modifyBookmarks :: ([Bookmark] -> [Bookmark]) -> HoYoMonad ()
+modifyBookmarks :: ([Bookmark] -> [Bookmark]) -> HoyoMonad ()
 modifyBookmarks f = modifyBookmarksM (return . f)
 
 -- | Helper function twhenever we need to modify the saved bookmarks,
@@ -94,21 +94,21 @@ modifyBookmarks f = modifyBookmarksM (return . f)
 --
 -- @modifyBookmarks f@ retrieves the current bookmarks, applies @f@
 -- in the hoyo environment, and saves them back to file.
-modifyBookmarksM :: ([Bookmark] -> HoYoMonad [Bookmark]) -> HoYoMonad ()
+modifyBookmarksM :: ([Bookmark] -> HoyoMonad [Bookmark]) -> HoyoMonad ()
 modifyBookmarksM f = do
   Env (Bookmarks bms) bFp _ _ <- ask
   newBookmarks <- Bookmarks <$> f bms
   encodeBookmarksFile bFp newBookmarks
 
 -- | Normalise a filepath and make sure it's a valid directory.
-normaliseAndVerifyDirectory :: FilePath -> HoYoMonad FilePath
+normaliseAndVerifyDirectory :: FilePath -> HoyoMonad FilePath
 normaliseAndVerifyDirectory d = do
   dir <- liftIO $ canonicalizePath d
   assertVerbose "not a directory" $ liftIO $ doesDirectoryExist dir
   return dir
 
 -- | Take a name and make sure it's valid.
-verifyName :: T.Text -> HoYoMonad ()
+verifyName :: T.Text -> HoyoMonad ()
 verifyName name = do
   let nameStr = T.unpack name
   assert "bookmark name can't be empty" $ return $ not $ T.null name
@@ -116,13 +116,13 @@ verifyName name = do
 
 -- | Given the existing bookmarks and a potential bookmark name,
 -- test if the new bookmark will have a unique name.
-testNameUnique :: [Bookmark] -> T.Text -> HoYoMonad Bool
+testNameUnique :: [Bookmark] -> T.Text -> HoyoMonad Bool
 testNameUnique bms name =
   assertVerbose "bookmark name already used" $
     return $ all ((/= Just name) . view bookmarkName) bms
 
 -- | Run the "add" command: add a new bookmark.
-runAdd :: AddOptions -> HoYoMonad ()
+runAdd :: AddOptions -> HoyoMonad ()
 runAdd opts = do
   dir <- normaliseAndVerifyDirectory $ addDirectory opts
   let name = addName opts
@@ -138,7 +138,7 @@ runAdd opts = do
     else return bms
 
 -- | Run the "move" command: search for a bookmark and @cd@ to it.
-runMove :: MoveOptions -> HoYoMonad ()
+runMove :: MoveOptions -> HoyoMonad ()
 runMove opts = do
   bms <- asks' bookmarks
   let search = moveSearch opts
@@ -151,7 +151,7 @@ runMove opts = do
                 throwError $ T.intercalate "\n" ("multiple bookmarks matching search:" : strs)
 
 -- | Run the "list" command: list all the saved bookmarks.
-runList :: ListOptions -> HoYoMonad ()
+runList :: ListOptions -> HoyoMonad ()
 runList opts = do
   let filt = filterBookmarks (listFilterName opts) (listFilterDirectoryInfix opts)
   bms' <- asks' bookmarks
@@ -176,7 +176,7 @@ resetDisabledErrMsg = T.intercalate "\n" [
   ]
 
 -- | Run the "clear" command: delete all the saved bookmarks.
-runClear :: ClearOptions -> HoYoMonad ()
+runClear :: ClearOptions -> HoyoMonad ()
 runClear _ = do
   assert clearDisabledErrMsg (asks' (config . enableClearing))
 
@@ -190,7 +190,7 @@ runClear _ = do
   encodeBookmarksFile fp bms
 
 -- | Run the "delete" command: search for a bookmark and delete it.
-runDelete :: DeleteOptions -> HoYoMonad ()
+runDelete :: DeleteOptions -> HoyoMonad ()
 runDelete opts = do
   let search = deleteSearch opts
   modifyBookmarksM $ \bms -> do
@@ -202,14 +202,14 @@ runDelete opts = do
     return afterDelete
 
 -- | Run the "refresh" command: re-index bookmarks.
-runRefresh :: RefreshOptions -> HoYoMonad ()
+runRefresh :: RefreshOptions -> HoyoMonad ()
 runRefresh _ = modifyBookmarks $
   zipWith (set bookmarkIndex) [1..]                           -- re-index from 1
     . nubBy ((==) `on` view bookmarkDirectory)                -- remove duplicate directories
     . sortOn (zonedTimeToUTC . view bookmarkCreationTime)     -- sort by creation time
 
 -- | Run the "config print" command: print the current config.
-runConfigPrint :: ConfigPrintOptions -> HoYoMonad ()
+runConfigPrint :: ConfigPrintOptions -> HoyoMonad ()
 runConfigPrint _ = do
   s <- asks' config
   let keyVals = getKeyVals s
@@ -219,7 +219,7 @@ runConfigPrint _ = do
     printStdout (T.justifyLeft keyWidth ' ' key <> " = " <> vStr)
 
 -- | Run the "config reset" command: reset the config to 'defaultConfig'.
-runConfigReset :: ConfigResetOptions -> HoYoMonad ()
+runConfigReset :: ConfigResetOptions -> HoyoMonad ()
 runConfigReset _ = do
   assert resetDisabledErrMsg (asks' (config . enableReset))
 
@@ -231,7 +231,7 @@ runConfigReset _ = do
   encodeConfigFile path defaultConfig
 
 -- | Run the "config set" command: try to set a key-value pair in the config.
-runConfigSet :: ConfigSetOptions -> HoYoMonad ()
+runConfigSet :: ConfigSetOptions -> HoyoMonad ()
 runConfigSet opts = do
   let key = setKey opts
   let val = setValue opts
@@ -241,7 +241,7 @@ runConfigSet opts = do
     >>= encodeConfigFile cfgPath
 
 -- | Run the "config add-default" command: try to set a key-value pair in the config.
-runAddDefault :: ConfigAddDefaultOptions -> HoYoMonad ()
+runAddDefault :: ConfigAddDefaultOptions -> HoyoMonad ()
 runAddDefault opts = do
   dir <- normaliseAndVerifyDirectory $ addDefaultDir opts
 
@@ -252,7 +252,7 @@ runAddDefault opts = do
     >>= encodeConfigFile cfgPath . over defaultBookmarks (defaultBm :)
 
 -- | Run the "config" command: dispatch on the given sub-command.
-runConfig :: ConfigCommand -> HoYoMonad ()
+runConfig :: ConfigCommand -> HoyoMonad ()
 runConfig (Print opts)              = runConfigPrint opts
 runConfig (Reset opts)              = runConfigReset opts
 runConfig (Set opts)                = runConfigSet opts
@@ -278,18 +278,18 @@ runCheck opts bFp sFp = do
   when (checkBookmarks opts) $ runCheckBookmarks bFp
 
 -- | Run the default command, if it has been specified by the user.
-runDefaultCommand :: HoYoMonad ()
+runDefaultCommand :: HoyoMonad ()
 runDefaultCommand = asks' (config . defaultCommand) >>= \case
   Nothing             -> liftIO $ showHelp Nothing
   Just DefaultCommand -> throwError "default command: stuck in a loop!"
   Just otherCommand   -> runCommand otherCommand
 
 -- | Run the "help" command: get help on a specific subcommand.
-runHelp :: HelpOptions -> HoYoMonad ()
+runHelp :: HelpOptions -> HoyoMonad ()
 runHelp (HelpOptions cmd) = liftIO $ showHelp (T.unpack <$> cmd)
 
 -- | Run a 'Command' in the hoyo environment.
-runCommand :: Command -> HoYoMonad ()
+runCommand :: Command -> HoyoMonad ()
 runCommand       (Add opts) = runAdd opts
 runCommand      (Move opts) = runMove opts
 runCommand      (List opts) = runList opts
@@ -300,7 +300,7 @@ runCommand (ConfigCmd opts) = runConfig opts
 runCommand   DefaultCommand = runDefaultCommand
 runCommand      (Help opts) = runHelp opts
 runCommand     (Check opts) = do
-  -- printStderr "The 'check' command should be run outside the HoYo monad."
+  -- printStderr "The 'check' command should be run outside the Hoyo monad."
   printStderr "It's discouraged to set default_command = \"check\" in your hoyo config file."
   Env _ bFp _ sFp <- ask
   liftIO $ runCheck opts bFp sFp

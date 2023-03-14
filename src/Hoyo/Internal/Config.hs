@@ -1,15 +1,15 @@
 {-|
-Module      : HoYo.Internal.Config
+Module      : Hoyo.Internal.Config
 Copyright   : (c) Frederick Pringle, 2023
 License     : BSD-3-Clause
 Maintainer  : freddyjepringle@gmail.com
 
-Internals used by the HoYo.Config module.
+Internals used by the Hoyo.Config module.
 -}
 
 {-# LANGUAGE RankNTypes    #-}
 {-# LANGUAGE TupleSections #-}
-module HoYo.Internal.Config where
+module Hoyo.Internal.Config where
 
 import                          Control.Category       ((<<<))
 import                          Control.Monad
@@ -19,10 +19,10 @@ import                          Data.Bifunctor         (first)
 import                          Data.Maybe             (maybeToList)
 import                qualified Data.Text              as T
 
-import                          HoYo.Internal.Bookmark
-import {-# SOURCE #-}           HoYo.Internal.Parse
-import                          HoYo.Internal.Types
-import                          HoYo.Internal.Utils
+import                          Hoyo.Internal.Bookmark
+import {-# SOURCE #-}           Hoyo.Internal.Parse
+import                          Hoyo.Internal.Types
+import                          Hoyo.Internal.Utils
 
 import                          Lens.Micro
 import                          Lens.Micro.Extras

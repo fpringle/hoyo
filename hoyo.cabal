@@ -52,21 +52,21 @@ library
       , deps
       , warnings
     exposed-modules:
-        HoYo
-        HoYo.Env
-        HoYo.Config
-        HoYo.Command
-        HoYo.Bookmark
-        HoYo.CLI.Parse
-        HoYo.CLI.Complete
-        HoYo.Internal.Env
-        HoYo.Internal.Config
-        HoYo.Internal.Command
-        HoYo.Internal.Bookmark
-        HoYo.Internal.Parse
-        HoYo.Internal.Types
-        HoYo.Internal.Utils
-        HoYo.Internal.Version
+        Hoyo
+        Hoyo.Env
+        Hoyo.Config
+        Hoyo.Command
+        Hoyo.Bookmark
+        Hoyo.CLI.Parse
+        Hoyo.CLI.Complete
+        Hoyo.Internal.Env
+        Hoyo.Internal.Config
+        Hoyo.Internal.Command
+        Hoyo.Internal.Bookmark
+        Hoyo.Internal.Parse
+        Hoyo.Internal.Types
+        Hoyo.Internal.Utils
+        Hoyo.Internal.Version
 
     hs-source-dirs:     src
     -- other-modules:
@@ -93,12 +93,12 @@ test-suite hoyo-test
       , deps
       , warnings
     main-is:          Main.hs
-    other-modules:    HoYo.Test.Gen
-                      HoYo.Test.Bookmark
-                      HoYo.Test.Utils
-                      HoYo.Test.HoYo
-                      HoYo.Test.Env
-                      HoYo.Test.CLI.Parse
+    other-modules:    Hoyo.Test.Gen
+                      Hoyo.Test.Bookmark
+                      Hoyo.Test.Utils
+                      Hoyo.Test.Hoyo
+                      Hoyo.Test.Env
+                      Hoyo.Test.CLI.Parse
     -- other-extensions:
     hs-source-dirs:   test
     default-language: Haskell2010

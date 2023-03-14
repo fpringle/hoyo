@@ -1,10 +1,10 @@
 {-|
-Module      : HoYo.Internal.Types
+Module      : Hoyo.Internal.Types
 Copyright   : (c) Frederick Pringle, 2023
 License     : BSD-3-Clause
 Maintainer  : freddyjepringle@gmail.com
 
-Types used by all the main HoYo.* modules.
+Types used by all the main Hoyo.* modules.
 -}
 
 {-# LANGUAGE DataKinds       #-}
@@ -15,7 +15,7 @@ Types used by all the main HoYo.* modules.
 {-# OPTIONS -Wno-missing-signatures #-}
 {-# OPTIONS_HADDOCK prune #-}
 
-module HoYo.Internal.Types where
+module Hoyo.Internal.Types where
 
 import           Control.Monad.Except       (ExceptT, MonadError (..))
 import           Control.Monad.IO.Class
@@ -71,7 +71,7 @@ data BookmarkSearchTerm
   | SearchName T.Text
   deriving (Show, Eq)
 
--- | The types of config values allowed in the HoYo config.
+-- | The types of config values allowed in the Hoyo config.
 data ConfigValueType
   = TBool
   | TDefaultBookmark
@@ -79,7 +79,7 @@ data ConfigValueType
   | TList ConfigValueType
   | TMaybe ConfigValueType
 
--- | Values in the HoYo config. Using a GADT parameterised by 'ConfigValueType'
+-- | Values in the Hoyo config. Using a GADT parameterised by 'ConfigValueType'
 -- gives us stricter type safety.
 data ConfigValue (t :: ConfigValueType) where
   BoolV :: Bool -> ConfigValue 'TBool
@@ -118,15 +118,15 @@ data Config
            }
   deriving (Show, Eq)
 
--- | 'HoYoMonad' is the main monad stack for the hoyo program. It's essentially a wrapper
+-- | 'HoyoMonad' is the main monad stack for the hoyo program. It's essentially a wrapper
 -- around @ExceptT T.Text (ReaderT Env IO)@: in other words,
--- @HoYoMonad a@ is equivalent to @Env -> IO (Either T.Text a)@
-newtype HoYoMonad a
-  = HoYoMonad { unHoYo :: ExceptT T.Text (ReaderT Env IO) a }
+-- @HoyoMonad a@ is equivalent to @Env -> IO (Either T.Text a)@
+newtype HoyoMonad a
+  = HoyoMonad { unHoyo :: ExceptT T.Text (ReaderT Env IO) a }
   deriving (Functor, Applicative, Monad, MonadError T.Text, MonadReader Env)
 
-instance MonadIO HoYoMonad where
-  liftIO m = HoYoMonad (liftIO $ tryIOError m) >>= \case
+instance MonadIO HoyoMonad where
+  liftIO m = HoyoMonad (liftIO $ tryIOError m) >>= \case
     Left err     -> throwError ("IO error: " <> T.pack (show err))
     Right result -> return result
 
@@ -200,7 +200,7 @@ newtype HelpOptions
   deriving (Show, Eq)
 
 -- | The core data-type for the hoyo CLI. The 'Command' is parsed from the command-line,
--- then 'HoYo.Command.runCommand' dispatches on the type.
+-- then 'Hoyo.Command.runCommand' dispatches on the type.
 data Command
   = Add AddOptions
   | Move MoveOptions

@@ -2,10 +2,10 @@ module Main (main) where
 
 import Control.Monad
 
-import HoYo.Test.Bookmark
-import HoYo.Test.CLI.Parse
-import HoYo.Test.Env
-import HoYo.Test.Utils
+import Hoyo.Test.Bookmark
+import Hoyo.Test.CLI.Parse
+import Hoyo.Test.Env
+import Hoyo.Test.Utils
 
 import System.Exit
 

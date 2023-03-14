@@ -1,5 +1,5 @@
 {-|
-Module      : HoYo.Env
+Module      : Hoyo.Env
 Copyright   : (c) Frederick Pringle, 2023
 License     : BSD-3-Clause
 Maintainer  : freddyjepringle@gmail.com
@@ -7,8 +7,8 @@ Maintainer  : freddyjepringle@gmail.com
 The read-only hoyo environment.
 -}
 
-module HoYo.Env (
-  -- * HoYo config
+module Hoyo.Env (
+  -- * Hoyo config
   Env (..)
   , initEnv
   , getEnv
@@ -20,5 +20,5 @@ module HoYo.Env (
   , defaultConfigPath
   ) where
 
-import HoYo.Internal.Env
-import HoYo.Internal.Types
+import Hoyo.Internal.Env
+import Hoyo.Internal.Types
