@@ -10,6 +10,8 @@ and this project adheres to the
 
 ### Added
 
+- Integration with Nix.
+
 ### Fixed
 
 ### Changed
