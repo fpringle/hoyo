@@ -4,14 +4,16 @@
 
 module HoYo.Test.CLI.Parse where
 
-import HoYo
-import HoYo.CLI.Parse
-import HoYo.Internal.Utils
-import HoYo.Test.Gen ()
+import qualified Data.Text           as T
 
-import qualified Data.Text as T
-import Options.Applicative as O
-import Test.QuickCheck
+import           HoYo
+import           HoYo.CLI.Parse
+import           HoYo.Internal.Utils
+import           HoYo.Test.Gen       ()
+
+import           Options.Applicative as O
+
+import           Test.QuickCheck
 
 testParserResult :: Options -> ParserResult Options -> Property
 testParserResult a (O.Success b) = counterexample (T.unpack $ formatArgs $ formatOptions b) $ a === b

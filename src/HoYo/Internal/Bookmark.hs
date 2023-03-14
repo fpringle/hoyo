@@ -9,23 +9,22 @@ Internals used by the HoYo.Bookmark module.
 
 module HoYo.Internal.Bookmark where
 
-import HoYo.Internal.Types
-import HoYo.Internal.Utils
+import           Control.Monad          (forM, void)
+import           Control.Monad.IO.Class
 
-import Data.Bifunctor (first)
-import Data.Function
-import Data.List
-import qualified Data.Text as T
+import           Data.Bifunctor         (first)
+import           Data.Function
+import           Data.List
+import qualified Data.Text              as T
+import           Data.Time
 
-import Control.Monad (forM, void)
-import Control.Monad.IO.Class
+import           HoYo.Internal.Types
+import           HoYo.Internal.Utils
 
-import Data.Time
+import           Lens.Micro.Extras
 
 import qualified Toml
-import Toml (TomlCodec, (.=))
-
-import Lens.Micro.Extras
+import           Toml                   (TomlCodec, (.=))
 
 -- | A 'TomlCodec' for encoding and decoding 'Bookmark's.
 bookmarkCodec :: TomlCodec Bookmark

@@ -48,18 +48,20 @@ module HoYo (
   , versionString
   ) where
 
-import HoYo.Bookmark
-import HoYo.Command
-import HoYo.Config
-import HoYo.Env
-import HoYo.Internal.Types
-import HoYo.Internal.Utils
-import HoYo.Internal.Version
+import           Control.Monad.Except       (runExceptT)
+import           Control.Monad.Trans.Reader (runReaderT)
 
-import Control.Monad.Except (runExceptT)
-import Control.Monad.Trans.Reader (runReaderT)
-import qualified Data.Text as T
-import System.Exit
+import qualified Data.Text                  as T
+
+import           HoYo.Bookmark
+import           HoYo.Command
+import           HoYo.Config
+import           HoYo.Env
+import           HoYo.Internal.Types
+import           HoYo.Internal.Utils
+import           HoYo.Internal.Version
+
+import           System.Exit
 
 -- | Given a hoyo 'Env', run a monadic action in IO.
 runHoYo :: HoYoMonad a -> Env -> IO (Either T.Text a)
@@ -77,8 +79,8 @@ failure err = do
 withFiles :: GlobalOptions -> FilePath -> FilePath -> HoYoMonad a -> IO (Either T.Text a)
 withFiles globals bFp sFp hoyo =
   getEnv bFp sFp >>= \case
-    Left err    -> failure err
-    Right env   -> runHoYo hoyo $ overrideEnv (overrides globals) env
+    Left err  -> failure err
+    Right env -> runHoYo hoyo $ overrideEnv (overrides globals) env
 
 -- | @getEnvAndRunHoYo globals hoyo bFp sFp@ gets the environment saved in
 -- the bookmark path (@bFp@) and the config path (@sFp@), applies the global
@@ -94,5 +96,5 @@ getEnvAndRunHoYo globals hoyo bFp sFp = withFiles globals bFp sFp hoyo >>= \case
 -- specified by @opts@.
 getEnvAndRunCommand :: Options -> FilePath -> FilePath -> IO ()
 getEnvAndRunCommand (Options cmd globals) bFp sFp = case cmd of
-  Check opts  -> runCheck opts bFp sFp
-  otherCmd    -> getEnvAndRunHoYo globals (runCommand otherCmd) bFp sFp
+  Check opts -> runCheck opts bFp sFp
+  otherCmd   -> getEnvAndRunHoYo globals (runCommand otherCmd) bFp sFp

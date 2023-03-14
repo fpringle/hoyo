@@ -1,13 +1,16 @@
 module Main where
 
-import HoYo
-import HoYo.CLI.Parse
+import           Control.Monad       (forM_)
 
-import Control.Monad (forM_)
-import qualified Data.Text as T
-import Options.Applicative
-import System.Environment (withProgName)
-import System.Exit
+import qualified Data.Text           as T
+
+import           HoYo
+import           HoYo.CLI.Parse
+
+import           Options.Applicative
+
+import           System.Environment  (withProgName)
+import           System.Exit
 
 
 failure :: T.Text -> IO ()

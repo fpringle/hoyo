@@ -11,28 +11,26 @@ Internals used by the HoYo.Config module.
 {-# LANGUAGE TupleSections #-}
 module HoYo.Internal.Config where
 
-import HoYo.Internal.Bookmark
-import HoYo.Internal.Types
-import HoYo.Internal.Utils
+import                          Control.Category       ((<<<))
+import                          Control.Monad
+import                          Control.Monad.Except
 
-import {-# SOURCE #-} HoYo.Internal.Parse
+import                          Data.Bifunctor         (first)
+import                          Data.Maybe             (maybeToList)
+import                qualified Data.Text              as T
 
-import Data.Bifunctor (first)
-import qualified Data.Text as T
+import                          HoYo.Internal.Bookmark
+import {-# SOURCE #-}           HoYo.Internal.Parse
+import                          HoYo.Internal.Types
+import                          HoYo.Internal.Utils
 
-import Control.Category ((<<<))
-import Control.Monad
-import Control.Monad.Except
+import                          Lens.Micro
+import                          Lens.Micro.Extras
 
-import Options.Applicative
+import                          Options.Applicative
 
-import qualified Toml
-import Toml (TomlCodec, (.=))
-
-import Lens.Micro
-import Lens.Micro.Extras
-
-import Data.Maybe (maybeToList)
+import                qualified Toml
+import                          Toml                   (TomlCodec, (.=))
 
 -- | A TOML codec describing how to convert a 'Config' to and from its
 -- TOML representation.

@@ -9,19 +9,19 @@ Internals used by the HoYo.Internal module.
 
 module HoYo.Internal.Env where
 
-import HoYo.Internal.Bookmark
-import HoYo.Internal.Config
-import HoYo.Internal.Types
-import HoYo.Internal.Utils
+import           Control.Monad.Except
 
-import qualified Data.Text as T
+import qualified Data.Text              as T
 
-import Control.Monad.Except
+import           HoYo.Internal.Bookmark
+import           HoYo.Internal.Config
+import           HoYo.Internal.Types
+import           HoYo.Internal.Utils
 
-import Lens.Micro.Extras
+import           Lens.Micro.Extras
 
-import System.Directory
-import System.FilePath
+import           System.Directory
+import           System.FilePath
 
 -- | Write an 'Env' to file.
 writeEnv :: MonadIO m => Env -> m ()
@@ -35,10 +35,10 @@ readEnv bFp sFp = do
   bs <- decodeBookmarksFile bFp
   se <- decodeConfigFile sFp
   case (bs, se) of
-    (Right b, Right s)  -> return $ Right (Env b bFp s sFp)
-    (Left e, Right _)   -> return $ Left e
-    (Right _, Left e)   -> return $ Left e
-    (Left e1, Left e2)  -> return $ Left (T.unlines [e1, e2])
+    (Right b, Right s) -> return $ Right (Env b bFp s sFp)
+    (Left e, Right _)  -> return $ Left e
+    (Right _, Left e)  -> return $ Left e
+    (Left e1, Left e2) -> return $ Left (T.unlines [e1, e2])
 
 -- | Given a file path, make sure that its directory exists.
 initPath :: MonadIO m => FilePath -> m ()

@@ -9,34 +9,31 @@ Internals used by the HoYo.Command module.
 
 module HoYo.Internal.Command where
 
-import HoYo.Bookmark
-import HoYo.Internal.Config
-import {-# SOURCE #-} HoYo.Internal.Parse
-import HoYo.Internal.Types
-import HoYo.Internal.Utils
+import                          Control.Applicative
+import                          Control.Monad
+import                          Control.Monad.Except       (throwError)
+import                          Control.Monad.IO.Class
+import                          Control.Monad.Reader.Class (ask)
 
-import Data.Char (isDigit)
-import Data.Function
-import Data.List
+import                          Data.Char                  (isDigit)
+import                          Data.Function
+import                          Data.List
+import                qualified Data.Text                  as T
+import                          Data.Time
 
-import Control.Applicative
+import                          HoYo.Bookmark
+import                          HoYo.Internal.Config
+import {-# SOURCE #-}           HoYo.Internal.Parse
+import                          HoYo.Internal.Types
+import                          HoYo.Internal.Utils
 
-import qualified Data.Text as T
+import                          Lens.Micro
+import                          Lens.Micro.Extras
 
-import Control.Monad
-import Control.Monad.Except (throwError)
-import Control.Monad.IO.Class
-import Control.Monad.Reader.Class (ask)
+import                          Options.Applicative
 
-import Lens.Micro
-import Lens.Micro.Extras
-
-import Options.Applicative
-
-import System.Directory
-import System.Exit
-
-import Data.Time
+import                          System.Directory
+import                          System.Exit
 
 -- | Combine a config flag with a command-line flag, checking for conflicts.
 combOverride :: Bool -> Bool -> MaybeOverride
@@ -47,10 +44,10 @@ combOverride True  True  = Conflict
 
 -- | Convert a 'MaybeOverride' to a function on 'Bool'.
 overrideFunc :: MaybeOverride -> (Bool -> Bool)
-overrideFunc NoOverride     = id
-overrideFunc OverrideTrue   = const True
-overrideFunc OverrideFalse  = const False
-overrideFunc Conflict       = error "override conflict!"
+overrideFunc NoOverride    = id
+overrideFunc OverrideTrue  = const True
+overrideFunc OverrideFalse = const False
+overrideFunc Conflict      = error "override conflict!"
 
 -- | Apply the override options to a 'Config'.
 overrideConfig :: OverrideOptions -> Config -> Config
@@ -73,7 +70,7 @@ verifyOverrides (OverrideOptions o1 o2 o3 o4 o5) = verify o1
                                                <|> verify o4
                                                <|> verify o5
   where verify Conflict = Just "conflicting flags"
-        verify _ = Nothing
+        verify _        = Nothing
 
 -- | The default behaviour is to override nothing.
 defaultOverrideOptions :: OverrideOptions
@@ -258,22 +255,22 @@ runAddDefault opts = do
 
 -- | Run the "config" command: dispatch on the given sub-command.
 runConfig :: ConfigCommand -> HoYoMonad ()
-runConfig (Print opts) = runConfigPrint opts
-runConfig (Reset opts) = runConfigReset opts
-runConfig (Set opts) = runConfigSet opts
+runConfig (Print opts)              = runConfigPrint opts
+runConfig (Reset opts)              = runConfigReset opts
+runConfig (Set opts)                = runConfigSet opts
 runConfig (AddDefaultBookmark opts) = runAddDefault opts
 
 -- | Check that the config file is valid.
 runCheckConfig :: FilePath -> IO ()
 runCheckConfig = decodeConfigFile >=> \case
-  Left err  -> printStderr err
-  Right _   -> printStdout "Config is good"
+  Left err -> printStderr err
+  Right _  -> printStdout "Config is good"
 
 -- | Check that the bookmarks file is valid.
 runCheckBookmarks :: FilePath -> IO ()
 runCheckBookmarks = decodeBookmarksFile >=> \case
-  Left err  -> printStderr err
-  Right _   -> printStdout "Bookmarks file is good"
+  Left err -> printStderr err
+  Right _  -> printStdout "Bookmarks file is good"
 
 -- | Run the "config check" command: validate the current
 -- config and bookmarks files.
@@ -285,9 +282,9 @@ runCheck opts bFp sFp = do
 -- | Run the default command, if it has been specified by the user.
 runDefaultCommand :: HoYoMonad ()
 runDefaultCommand = asks' (config . defaultCommand) >>= \case
-  Nothing   -> return ()
+  Nothing             -> return ()
   Just DefaultCommand -> throwError "default command: stuck in a loop!"
-  Just otherCommand -> runCommand otherCommand
+  Just otherCommand   -> runCommand otherCommand
 
 -- | Run the "help" command: get help on a specific subcommand.
 runHelp :: HelpOptions -> HoYoMonad ()
