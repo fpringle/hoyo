@@ -22,6 +22,10 @@ and this project adheres to the
 
 ### Removed
 
+- Get rid of the "catch-all" `move` command
+    (see [here](https://clig.dev/#subcommands:~:text=Don%E2%80%99t%20have%20a%20catch%2Dall%20subcommand.)
+    for more information).
+
 ## [0.4.0.0] - 2023-02-10
 
 ### Added
