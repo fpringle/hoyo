@@ -296,6 +296,13 @@ options = info (parseOptions <**> helper) (
           <> footerDoc (unChunk hoyoFooter)
           )
 
+-- | Show the help message. Pass a non-'Nothing' argument to specify a command.
+showHelp :: Maybe String -> IO ()
+showHelp cmd =
+  handleParseResult
+    $ Failure
+    $ parserFailure defaultPrefs options (ShowHelpText cmd) []
+
 -- | Split a string into arguments as they would be interpreted on the command line.
 --
 -- Adapted from [this StackOverflow comment](https://stackoverflow.com/a/64236441).

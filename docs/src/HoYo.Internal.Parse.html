@@ -210,22 +210,22 @@ forall (f :: * -&gt; *) a b. Applicative f =&gt; f (a -&gt; b) -&gt; f a -&gt; f
 </span><span id="line-72"></span><span class="hs-comment">-- @</span><span>
 </span><span id="line-73"></span><span class="annot"><a href="HoYo.Internal.Parse.html#parseOverride"><span class="hs-identifier hs-type">parseOverride</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Mod</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">FlagFields</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Mod</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">FlagFields</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Parser</span></span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#MaybeOverride"><span class="hs-identifier hs-type">MaybeOverride</span></a></span><span>
 </span><span id="line-74"></span><span id="parseOverride"><span class="annot"><span class="annottext">parseOverride :: Mod FlagFields Bool -&gt; Mod FlagFields Bool -&gt; Parser MaybeOverride
-</span><a href="HoYo.Internal.Parse.html#parseOverride"><span class="hs-identifier hs-var hs-var">parseOverride</span></a></span></span><span> </span><span id="local-6989586621679111591"><span class="annot"><span class="annottext">Mod FlagFields Bool
-</span><a href="#local-6989586621679111591"><span class="hs-identifier hs-var">posMod</span></a></span></span><span> </span><span id="local-6989586621679111590"><span class="annot"><span class="annottext">Mod FlagFields Bool
-</span><a href="#local-6989586621679111590"><span class="hs-identifier hs-var">negMod</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; MaybeOverride
+</span><a href="HoYo.Internal.Parse.html#parseOverride"><span class="hs-identifier hs-var hs-var">parseOverride</span></a></span></span><span> </span><span id="local-6989586621679111682"><span class="annot"><span class="annottext">Mod FlagFields Bool
+</span><a href="#local-6989586621679111682"><span class="hs-identifier hs-var">posMod</span></a></span></span><span> </span><span id="local-6989586621679111681"><span class="annot"><span class="annottext">Mod FlagFields Bool
+</span><a href="#local-6989586621679111681"><span class="hs-identifier hs-var">negMod</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; MaybeOverride
 </span><a href="HoYo.Internal.Command.html#combOverride"><span class="hs-identifier hs-var">combOverride</span></a></span><span>
 </span><span id="line-75"></span><span>                                </span><span class="annot"><span class="annottext">(Bool -&gt; Bool -&gt; MaybeOverride)
 -&gt; Parser Bool -&gt; Parser (Bool -&gt; MaybeOverride)
 forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
 </span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="annottext">Mod FlagFields Bool -&gt; Parser Bool
 </span><span class="hs-identifier hs-var">switch</span></span><span> </span><span class="annot"><span class="annottext">Mod FlagFields Bool
-</span><a href="#local-6989586621679111591"><span class="hs-identifier hs-var">posMod</span></a></span><span>
+</span><a href="#local-6989586621679111682"><span class="hs-identifier hs-var">posMod</span></a></span><span>
 </span><span id="line-76"></span><span>                                </span><span class="annot"><span class="annottext">Parser (Bool -&gt; MaybeOverride)
 -&gt; Parser Bool -&gt; Parser MaybeOverride
 forall (f :: * -&gt; *) a b. Applicative f =&gt; f (a -&gt; b) -&gt; f a -&gt; f b
 </span><span class="hs-operator hs-var">&lt;*&gt;</span></span><span> </span><span class="annot"><span class="annottext">Mod FlagFields Bool -&gt; Parser Bool
 </span><span class="hs-identifier hs-var">switch</span></span><span> </span><span class="annot"><span class="annottext">Mod FlagFields Bool
-</span><a href="#local-6989586621679111590"><span class="hs-identifier hs-var">negMod</span></a></span><span>
+</span><a href="#local-6989586621679111681"><span class="hs-identifier hs-var">negMod</span></a></span><span>
 </span><span id="line-77"></span><span>
 </span><span id="line-78"></span><span class="hs-comment">-- | Parse a 'MaybeOverride' corresponding to the &quot;fail_on_error&quot; config option.</span><span>
 </span><span id="line-79"></span><span class="annot"><a href="HoYo.Internal.Parse.html#parseOverrideFailOnError"><span class="hs-identifier hs-type">parseOverrideFailOnError</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Parser</span></span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#MaybeOverride"><span class="hs-identifier hs-type">MaybeOverride</span></a></span><span>
@@ -408,8 +408,8 @@ forall a. (FilePath -&gt; Either FilePath a) -&gt; ReadM a
 -&gt; (FilePath -&gt; Either FilePath BookmarkSearchTerm)
 -&gt; ReadM BookmarkSearchTerm
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="hs-glyph">\</span><span id="local-6989586621679111581"><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679111581"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span>
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="hs-glyph">\</span><span id="local-6989586621679111672"><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679111672"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span>
 </span><span id="line-120"></span><span>  </span><span class="annot"><span class="annottext">Int -&gt; BookmarkSearchTerm
 </span><a href="HoYo.Internal.Types.html#SearchIndex"><span class="hs-identifier hs-var">SearchIndex</span></a></span><span> </span><span class="annot"><span class="annottext">(Int -&gt; BookmarkSearchTerm)
 -&gt; Either FilePath Int -&gt; Either FilePath BookmarkSearchTerm
@@ -417,7 +417,7 @@ forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
 </span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Either FilePath Int
 forall a. Read a =&gt; FilePath -&gt; Either FilePath a
 </span><span class="hs-identifier hs-var">readEither</span></span><span> </span><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679111581"><span class="hs-identifier hs-var">s</span></a></span><span>
+</span><a href="#local-6989586621679111672"><span class="hs-identifier hs-var">s</span></a></span><span>
 </span><span id="line-121"></span><span>  </span><span class="annot"><span class="annottext">Either FilePath BookmarkSearchTerm
 -&gt; Either FilePath BookmarkSearchTerm
 -&gt; Either FilePath BookmarkSearchTerm
@@ -427,7 +427,7 @@ forall a b. b -&gt; Either a b
 </span><span class="hs-identifier hs-var">Right</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Text -&gt; BookmarkSearchTerm
 </span><a href="HoYo.Internal.Types.html#SearchName"><span class="hs-identifier hs-var">SearchName</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FilePath -&gt; Text
 </span><span class="hs-identifier hs-var">T.pack</span></span><span> </span><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679111581"><span class="hs-identifier hs-var">s</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679111672"><span class="hs-identifier hs-var">s</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
 </span><span id="line-122"></span><span>
 </span><span id="line-123"></span><span class="hs-comment">-- | Parse options for the @hoyo move@ command.</span><span>
 </span><span id="line-124"></span><span class="annot"><a href="HoYo.Internal.Parse.html#moveCommand"><span class="hs-identifier hs-type">moveCommand</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Parser</span></span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#Command"><span class="hs-identifier hs-type">Command</span></a></span><span>
@@ -829,9 +829,9 @@ forall (f :: * -&gt; *) a. FilePath -&gt; Mod f a
 </span><a href="HoYo.Internal.Types.html#CheckOptions"><span class="hs-identifier hs-var">CheckOptions</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">True</span></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">True</span></span><span>
-</span><span id="line-218"></span><span class="annot"><a href="HoYo.Internal.Parse.html#noArgs"><span class="hs-identifier hs-var">noArgs</span></a></span><span> </span><span id="local-6989586621679111534"><span class="annot"><span class="annottext">CheckOptions
-</span><a href="#local-6989586621679111534"><span class="hs-identifier hs-var">opts</span></a></span></span><span>                       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CheckOptions
-</span><a href="#local-6989586621679111534"><span class="hs-identifier hs-var">opts</span></a></span><span>
+</span><span id="line-218"></span><span class="annot"><a href="HoYo.Internal.Parse.html#noArgs"><span class="hs-identifier hs-var">noArgs</span></a></span><span> </span><span id="local-6989586621679111625"><span class="annot"><span class="annottext">CheckOptions
+</span><a href="#local-6989586621679111625"><span class="hs-identifier hs-var">opts</span></a></span></span><span>                       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CheckOptions
+</span><a href="#local-6989586621679111625"><span class="hs-identifier hs-var">opts</span></a></span><span>
 </span><span id="line-219"></span><span>
 </span><span id="line-220"></span><span class="hs-comment">-- | Parse options for the @hoyo check@ command.</span><span>
 </span><span id="line-221"></span><span class="annot"><a href="HoYo.Internal.Parse.html#checkCommand"><span class="hs-identifier hs-type">checkCommand</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Parser</span></span><span> </span><span class="annot"><a href="HoYo.Internal.Types.html#Command"><span class="hs-identifier hs-type">Command</span></a></span><span>
@@ -1082,7 +1082,7 @@ forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-string">&quot;\n\nCopyright (c) 2023, Frederick Pringle\n\nAll rights reserved.&quot;</span></span><span>
 </span><span id="line-267"></span><span>
 </span><span id="line-268"></span><span class="hs-comment">-- | Add a hidden --version flag to the end of a parser.</span><span>
-</span><span id="line-269"></span><span id="local-6989586621679111629"><span class="annot"><a href="HoYo.Internal.Parse.html#versionOption"><span class="hs-identifier hs-type">versionOption</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Parser</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="#local-6989586621679111629"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679111629"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span></span><span>
+</span><span id="line-269"></span><span id="local-6989586621679111729"><span class="annot"><a href="HoYo.Internal.Parse.html#versionOption"><span class="hs-identifier hs-type">versionOption</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Parser</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="#local-6989586621679111729"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679111729"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span></span><span>
 </span><span id="line-270"></span><span id="versionOption"><span class="annot"><span class="annottext">versionOption :: Parser (a -&gt; a)
 </span><a href="HoYo.Internal.Parse.html#versionOption"><span class="hs-identifier hs-var hs-var">versionOption</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Mod OptionFields (a -&gt; a) -&gt; Parser (a -&gt; a)
 forall a. FilePath -&gt; Mod OptionFields (a -&gt; a) -&gt; Parser (a -&gt; a)
@@ -1112,38 +1112,38 @@ forall (f :: * -&gt; *) a. FilePath -&gt; Mod f a
 </span><span id="line-278"></span><span id="hoyoFooter"><span class="annot"><span class="annottext">hoyoFooter :: Chunk Doc
 </span><a href="HoYo.Internal.Parse.html#hoyoFooter"><span class="hs-identifier hs-var hs-var">hoyoFooter</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
 </span><span id="line-279"></span><span>  </span><span class="hs-keyword">let</span><span>
-</span><span id="line-280"></span><span>    </span><span id="local-6989586621679111516"><span class="annot"><span class="annottext">withTitle :: FilePath -&gt; f Doc -&gt; f Doc
-</span><a href="#local-6989586621679111516"><span class="hs-identifier hs-var hs-var">withTitle</span></a></span></span><span> </span><span id="local-6989586621679111515"><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679111515"><span class="hs-identifier hs-var">title</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Doc -&gt; Doc) -&gt; f Doc -&gt; f Doc
+</span><span id="line-280"></span><span>    </span><span id="local-6989586621679111607"><span class="annot"><span class="annottext">withTitle :: FilePath -&gt; f Doc -&gt; f Doc
+</span><a href="#local-6989586621679111607"><span class="hs-identifier hs-var hs-var">withTitle</span></a></span></span><span> </span><span id="local-6989586621679111606"><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679111606"><span class="hs-identifier hs-var">title</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Doc -&gt; Doc) -&gt; f Doc -&gt; f Doc
 forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
 </span><span class="hs-identifier hs-var">fmap</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">FilePath -&gt; Doc
 </span><span class="hs-identifier hs-var">string</span></span><span> </span><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679111515"><span class="hs-identifier hs-var">title</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
+</span><a href="#local-6989586621679111606"><span class="hs-identifier hs-var">title</span></a></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
 </span><span class="hs-operator hs-var">.$.</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Doc -&gt; Doc) -&gt; (Doc -&gt; Doc) -&gt; Doc -&gt; Doc
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Doc -&gt; Doc
 </span><span class="hs-identifier hs-var">indent</span></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">2</span></span><span class="hs-special">)</span><span>
-</span><span id="line-281"></span><span>    </span><span id="local-6989586621679111511"><span class="annot"><span class="annottext">bugText :: Chunk Doc
-</span><a href="#local-6989586621679111511"><span class="hs-identifier hs-var hs-var">bugText</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Chunk Doc
+</span><span id="line-281"></span><span>    </span><span id="local-6989586621679111602"><span class="annot"><span class="annottext">bugText :: Chunk Doc
+</span><a href="#local-6989586621679111602"><span class="hs-identifier hs-var hs-var">bugText</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Chunk Doc
 </span><span class="hs-identifier hs-var">paragraph</span></span><span> </span><span class="annot"><span class="annottext">FilePath
 </span><span class="hs-string">&quot;If something went wrong unexpectedly or you think there's a problem with hoyo, let me know! To report an issue, create a bug report at https://github.com/fpringle/hoyo/issues&quot;</span></span><span>
-</span><span id="line-282"></span><span>    </span><span id="local-6989586621679111509"><span class="annot"><span class="annottext">docText :: Chunk Doc
-</span><a href="#local-6989586621679111509"><span class="hs-identifier hs-var hs-var">docText</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Chunk Doc
+</span><span id="line-282"></span><span>    </span><span id="local-6989586621679111600"><span class="annot"><span class="annottext">docText :: Chunk Doc
+</span><a href="#local-6989586621679111600"><span class="hs-identifier hs-var hs-var">docText</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Chunk Doc
 </span><span class="hs-identifier hs-var">paragraph</span></span><span> </span><span class="annot"><span class="annottext">FilePath
 </span><span class="hs-string">&quot;To read the web documentation, visit https://github.com/fpringle/hoyo#readme&quot;</span></span><span>
 </span><span id="line-283"></span><span>  </span><span class="hs-keyword">in</span><span> </span><span class="annot"><span class="annottext">[Chunk Doc] -&gt; Chunk Doc
 </span><span class="hs-identifier hs-var">vsepChunks</span></span><span> </span><span class="hs-special">[</span><span>
 </span><span id="line-284"></span><span>        </span><span class="annot"><span class="annottext">FilePath -&gt; Chunk Doc -&gt; Chunk Doc
 forall (f :: * -&gt; *). Functor f =&gt; FilePath -&gt; f Doc -&gt; f Doc
-</span><a href="#local-6989586621679111516"><span class="hs-identifier hs-var">withTitle</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679111607"><span class="hs-identifier hs-var">withTitle</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
 </span><span class="hs-string">&quot;Bugs:&quot;</span></span><span> </span><span class="annot"><span class="annottext">Chunk Doc
-</span><a href="#local-6989586621679111511"><span class="hs-identifier hs-var">bugText</span></a></span><span>
+</span><a href="#local-6989586621679111602"><span class="hs-identifier hs-var">bugText</span></a></span><span>
 </span><span id="line-285"></span><span>      </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Chunk Doc -&gt; Chunk Doc
 forall (f :: * -&gt; *). Functor f =&gt; FilePath -&gt; f Doc -&gt; f Doc
-</span><a href="#local-6989586621679111516"><span class="hs-identifier hs-var">withTitle</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679111607"><span class="hs-identifier hs-var">withTitle</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
 </span><span class="hs-string">&quot;Online documentation:&quot;</span></span><span> </span><span class="annot"><span class="annottext">Chunk Doc
-</span><a href="#local-6989586621679111509"><span class="hs-identifier hs-var">docText</span></a></span><span>
+</span><a href="#local-6989586621679111600"><span class="hs-identifier hs-var">docText</span></a></span><span>
 </span><span id="line-286"></span><span>      </span><span class="hs-special">]</span><span>
 </span><span id="line-287"></span><span>
 </span><span id="line-288"></span><span class="hs-comment">-- | A 'ParserInfo' object containing the necessary information for parsing</span><span>
@@ -1189,13 +1189,46 @@ forall a. Chunk a -&gt; Maybe a
 </span><a href="HoYo.Internal.Parse.html#hoyoFooter"><span class="hs-identifier hs-var">hoyoFooter</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-297"></span><span>          </span><span class="hs-special">)</span><span>
 </span><span id="line-298"></span><span>
-</span><span id="line-299"></span><span class="hs-comment">-- | Split a string into arguments as they would be interpreted on the command line.</span><span>
-</span><span id="line-300"></span><span class="hs-comment">--</span><span>
-</span><span id="line-301"></span><span class="hs-comment">-- Adapted from [this StackOverflow comment](https://stackoverflow.com/a/64236441).</span><span>
-</span><span id="line-302"></span><span class="annot"><a href="HoYo.Internal.Parse.html#splitArgs"><span class="hs-identifier hs-type">splitArgs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">T.Text</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">]</span><span>
-</span><span id="line-303"></span><span id="splitArgs"><span class="annot"><span class="annottext">splitArgs :: Text -&gt; [FilePath]
+</span><span id="line-299"></span><span class="hs-comment">-- | Show the help message. Pass a non-'Nothing' argument to specify a command.</span><span>
+</span><span id="line-300"></span><span class="annot"><a href="HoYo.Internal.Parse.html#showHelp"><span class="hs-identifier hs-type">showHelp</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IO</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><span id="line-301"></span><span id="showHelp"><span class="annot"><span class="annottext">showHelp :: Maybe FilePath -&gt; IO ()
+</span><a href="HoYo.Internal.Parse.html#showHelp"><span class="hs-identifier hs-var hs-var">showHelp</span></a></span></span><span> </span><span id="local-6989586621679111589"><span class="annot"><span class="annottext">Maybe FilePath
+</span><a href="#local-6989586621679111589"><span class="hs-identifier hs-var">cmd</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
+</span><span id="line-302"></span><span>  </span><span class="annot"><span class="annottext">ParserResult () -&gt; IO ()
+forall a. ParserResult a -&gt; IO a
+</span><span class="hs-identifier hs-var">handleParseResult</span></span><span>
+</span><span id="line-303"></span><span>    </span><span class="annot"><span class="annottext">(ParserResult () -&gt; IO ()) -&gt; ParserResult () -&gt; IO ()
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">ParserFailure ParserHelp -&gt; ParserResult ()
+forall a. ParserFailure ParserHelp -&gt; ParserResult a
+</span><span class="hs-identifier hs-var">Failure</span></span><span>
+</span><span id="line-304"></span><span>    </span><span class="annot"><span class="annottext">(ParserFailure ParserHelp -&gt; ParserResult ())
+-&gt; ParserFailure ParserHelp -&gt; ParserResult ()
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">ParserPrefs
+-&gt; ParserInfo Options
+-&gt; ParseError
+-&gt; [Context]
+-&gt; ParserFailure ParserHelp
+forall a.
+ParserPrefs
+-&gt; ParserInfo a
+-&gt; ParseError
+-&gt; [Context]
+-&gt; ParserFailure ParserHelp
+</span><span class="hs-identifier hs-var">parserFailure</span></span><span> </span><span class="annot"><span class="annottext">ParserPrefs
+</span><span class="hs-identifier hs-var">defaultPrefs</span></span><span> </span><span class="annot"><span class="annottext">ParserInfo Options
+</span><a href="HoYo.Internal.Parse.html#options"><span class="hs-identifier hs-var">options</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Maybe FilePath -&gt; ParseError
+</span><span class="hs-identifier hs-var">ShowHelpText</span></span><span> </span><span class="annot"><span class="annottext">Maybe FilePath
+</span><a href="#local-6989586621679111589"><span class="hs-identifier hs-var">cmd</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
+</span><span id="line-305"></span><span>
+</span><span id="line-306"></span><span class="hs-comment">-- | Split a string into arguments as they would be interpreted on the command line.</span><span>
+</span><span id="line-307"></span><span class="hs-comment">--</span><span>
+</span><span id="line-308"></span><span class="hs-comment">-- Adapted from [this StackOverflow comment](https://stackoverflow.com/a/64236441).</span><span>
+</span><span id="line-309"></span><span class="annot"><a href="HoYo.Internal.Parse.html#splitArgs"><span class="hs-identifier hs-type">splitArgs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">T.Text</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">]</span><span>
+</span><span id="line-310"></span><span id="splitArgs"><span class="annot"><span class="annottext">splitArgs :: Text -&gt; [FilePath]
 </span><a href="HoYo.Internal.Parse.html#splitArgs"><span class="hs-identifier hs-var hs-var">splitArgs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool -&gt; FilePath -&gt; FilePath -&gt; [FilePath]
-</span><a href="#local-6989586621679111498"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679111582"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">False</span></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">False</span></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">False</span></span><span> </span><span class="annot"><span class="annottext">FilePath
@@ -1204,120 +1237,120 @@ forall a. Chunk a -&gt; Maybe a
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Text -&gt; FilePath
 </span><span class="hs-identifier hs-var">T.unpack</span></span><span>
-</span><span id="line-304"></span><span>  </span><span class="hs-keyword">where</span><span>
-</span><span id="line-305"></span><span>    </span><span class="annot"><a href="#local-6989586621679111498"><span class="hs-identifier hs-type">splitArgs'</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">]</span><span>
-</span><span id="line-306"></span><span>    </span><span id="local-6989586621679111498"><span class="annot"><span class="annottext">splitArgs' :: Bool -&gt; Bool -&gt; Bool -&gt; FilePath -&gt; FilePath -&gt; [FilePath]
-</span><a href="#local-6989586621679111498"><span class="hs-identifier hs-var hs-var">splitArgs'</span></a></span></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span id="line-311"></span><span>  </span><span class="hs-keyword">where</span><span>
+</span><span id="line-312"></span><span>    </span><span class="annot"><a href="#local-6989586621679111582"><span class="hs-identifier hs-type">splitArgs'</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">]</span><span>
+</span><span id="line-313"></span><span>    </span><span id="local-6989586621679111582"><span class="annot"><span class="annottext">splitArgs' :: Bool -&gt; Bool -&gt; Bool -&gt; FilePath -&gt; FilePath -&gt; [FilePath]
+</span><a href="#local-6989586621679111582"><span class="hs-identifier hs-var hs-var">splitArgs'</span></a></span></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">Bool
-</span><span class="hs-identifier hs-var">True</span></span><span> </span><span id="local-6989586621679111496"><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679111496"><span class="hs-identifier hs-var">res</span></a></span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679111496"><span class="hs-identifier hs-var">res</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-307"></span><span>    </span><span class="annot"><a href="#local-6989586621679111498"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-identifier hs-var">True</span></span><span> </span><span id="local-6989586621679111580"><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679111580"><span class="hs-identifier hs-var">res</span></a></span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679111580"><span class="hs-identifier hs-var">res</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-314"></span><span>    </span><span class="annot"><a href="#local-6989586621679111582"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">False</span></span><span> </span><span class="annot"><span class="annottext">FilePath
 </span><span class="hs-identifier">_</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-308"></span><span>
-</span><span id="line-309"></span><span>    </span><span class="annot"><a href="#local-6989586621679111498"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span id="line-315"></span><span>
+</span><span id="line-316"></span><span>    </span><span class="annot"><a href="#local-6989586621679111582"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">False</span></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">Bool
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679111495"><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679111495"><span class="hs-identifier hs-var">res</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char
-</span><span class="hs-char">'^'</span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679111494"><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679111494"><span class="hs-identifier hs-var">rest</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool -&gt; FilePath -&gt; FilePath -&gt; [FilePath]
-</span><a href="#local-6989586621679111498"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679111579"><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679111579"><span class="hs-identifier hs-var">res</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char
+</span><span class="hs-char">'^'</span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679111578"><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679111578"><span class="hs-identifier hs-var">rest</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool -&gt; FilePath -&gt; FilePath -&gt; [FilePath]
+</span><a href="#local-6989586621679111582"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">False</span></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">False</span></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">True</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679111495"><span class="hs-identifier hs-var">res</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath
+</span><a href="#local-6989586621679111579"><span class="hs-identifier hs-var">res</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">FilePath
 </span><span class="hs-string">&quot;^&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679111494"><span class="hs-identifier hs-var">rest</span></a></span><span>
-</span><span id="line-310"></span><span>
-</span><span id="line-311"></span><span>    </span><span class="annot"><a href="#local-6989586621679111498"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span id="local-6989586621679111493"><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679111493"><span class="hs-identifier hs-var">quoted</span></a></span></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679111578"><span class="hs-identifier hs-var">rest</span></a></span><span>
+</span><span id="line-317"></span><span>
+</span><span id="line-318"></span><span>    </span><span class="annot"><a href="#local-6989586621679111582"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span id="local-6989586621679111577"><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679111577"><span class="hs-identifier hs-var">quoted</span></a></span></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">True</span></span><span> </span><span class="annot"><span class="annottext">Bool
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679111492"><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679111492"><span class="hs-identifier hs-var">res</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679111491"><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679111491"><span class="hs-identifier hs-var">chr</span></a></span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679111490"><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679111490"><span class="hs-identifier hs-var">rest</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool -&gt; FilePath -&gt; FilePath -&gt; [FilePath]
-</span><a href="#local-6989586621679111498"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679111493"><span class="hs-identifier hs-var">quoted</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679111576"><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679111576"><span class="hs-identifier hs-var">res</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679111575"><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679111575"><span class="hs-identifier hs-var">chr</span></a></span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679111574"><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679111574"><span class="hs-identifier hs-var">rest</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool -&gt; FilePath -&gt; FilePath -&gt; [FilePath]
+</span><a href="#local-6989586621679111582"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679111577"><span class="hs-identifier hs-var">quoted</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">False</span></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">True</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679111492"><span class="hs-identifier hs-var">res</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath
+</span><a href="#local-6989586621679111576"><span class="hs-identifier hs-var">res</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679111491"><span class="hs-identifier hs-var">chr</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679111490"><span class="hs-identifier hs-var">rest</span></a></span><span>
-</span><span id="line-312"></span><span>
-</span><span id="line-313"></span><span>    </span><span class="annot"><a href="#local-6989586621679111498"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span id="local-6989586621679111489"><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679111489"><span class="hs-identifier hs-var">quoted</span></a></span></span><span> </span><span id="local-6989586621679111488"><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679111488"><span class="hs-identifier hs-var">escaped</span></a></span></span><span> </span><span class="annot"><span class="annottext">Bool
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679111487"><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679111487"><span class="hs-identifier hs-var">res</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char
-</span><span class="hs-char">'&quot;'</span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679111486"><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679111486"><span class="hs-identifier hs-var">rest</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool -&gt; FilePath -&gt; FilePath -&gt; [FilePath]
-</span><a href="#local-6989586621679111498"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Bool -&gt; Bool
+</span><a href="#local-6989586621679111575"><span class="hs-identifier hs-var">chr</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679111574"><span class="hs-identifier hs-var">rest</span></a></span><span>
+</span><span id="line-319"></span><span>
+</span><span id="line-320"></span><span>    </span><span class="annot"><a href="#local-6989586621679111582"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span id="local-6989586621679111573"><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679111573"><span class="hs-identifier hs-var">quoted</span></a></span></span><span> </span><span id="local-6989586621679111572"><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679111572"><span class="hs-identifier hs-var">escaped</span></a></span></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679111571"><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679111571"><span class="hs-identifier hs-var">res</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char
+</span><span class="hs-char">'&quot;'</span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679111570"><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679111570"><span class="hs-identifier hs-var">rest</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool -&gt; FilePath -&gt; FilePath -&gt; [FilePath]
+</span><a href="#local-6989586621679111582"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Bool -&gt; Bool
 </span><span class="hs-identifier hs-var">not</span></span><span> </span><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679111489"><span class="hs-identifier hs-var">quoted</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679111488"><span class="hs-identifier hs-var">escaped</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679111573"><span class="hs-identifier hs-var">quoted</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679111572"><span class="hs-identifier hs-var">escaped</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">True</span></span><span> </span><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679111487"><span class="hs-identifier hs-var">res</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679111486"><span class="hs-identifier hs-var">rest</span></a></span><span>
-</span><span id="line-314"></span><span>
-</span><span id="line-315"></span><span>    </span><span class="annot"><a href="#local-6989586621679111498"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span id="local-6989586621679111484"><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679111484"><span class="hs-identifier hs-var">quoted</span></a></span></span><span> </span><span class="annot"><span class="annottext">Bool
-</span><span class="hs-identifier hs-var">False</span></span><span> </span><span id="local-6989586621679111483"><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679111483"><span class="hs-identifier hs-var">started</span></a></span></span><span> </span><span id="local-6989586621679111482"><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679111482"><span class="hs-identifier hs-var">res</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679111571"><span class="hs-identifier hs-var">res</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679111570"><span class="hs-identifier hs-var">rest</span></a></span><span>
+</span><span id="line-321"></span><span>
+</span><span id="line-322"></span><span>    </span><span class="annot"><a href="#local-6989586621679111582"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span id="local-6989586621679111568"><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679111568"><span class="hs-identifier hs-var">quoted</span></a></span></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-identifier hs-var">False</span></span><span> </span><span id="local-6989586621679111567"><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679111567"><span class="hs-identifier hs-var">started</span></a></span></span><span> </span><span id="local-6989586621679111566"><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679111566"><span class="hs-identifier hs-var">res</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char
 </span><span class="hs-char">'\\'</span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span class="annot"><span class="annottext">Char
-</span><span class="hs-char">'&quot;'</span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679111481"><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679111481"><span class="hs-identifier hs-var">rest</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool -&gt; FilePath -&gt; FilePath -&gt; [FilePath]
-</span><a href="#local-6989586621679111498"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679111484"><span class="hs-identifier hs-var">quoted</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-char">'&quot;'</span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679111565"><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679111565"><span class="hs-identifier hs-var">rest</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool -&gt; FilePath -&gt; FilePath -&gt; [FilePath]
+</span><a href="#local-6989586621679111582"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679111568"><span class="hs-identifier hs-var">quoted</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">True</span></span><span> </span><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679111483"><span class="hs-identifier hs-var">started</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679111482"><span class="hs-identifier hs-var">res</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679111567"><span class="hs-identifier hs-var">started</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679111566"><span class="hs-identifier hs-var">res</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char
 </span><span class="hs-char">'&quot;'</span></span><span class="annot"><span class="annottext">Char -&gt; FilePath -&gt; FilePath
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679111481"><span class="hs-identifier hs-var">rest</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-316"></span><span>
-</span><span id="line-317"></span><span>    </span><span class="annot"><a href="#local-6989586621679111498"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
-</span><span class="hs-identifier hs-var">False</span></span><span> </span><span id="local-6989586621679111480"><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679111480"><span class="hs-identifier hs-var">escaped</span></a></span></span><span> </span><span id="local-6989586621679111479"><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679111479"><span class="hs-identifier hs-var">started</span></a></span></span><span> </span><span id="local-6989586621679111478"><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679111478"><span class="hs-identifier hs-var">res</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char
-</span><span class="hs-char">' '</span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679111477"><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679111477"><span class="hs-identifier hs-var">rest</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679111478"><span class="hs-identifier hs-var">res</span></a></span><span> </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679111479"><span class="hs-identifier hs-var">started</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[FilePath] -&gt; [FilePath] -&gt; [FilePath]
+</span><a href="#local-6989586621679111565"><span class="hs-identifier hs-var">rest</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-323"></span><span>
+</span><span id="line-324"></span><span>    </span><span class="annot"><a href="#local-6989586621679111582"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-identifier hs-var">False</span></span><span> </span><span id="local-6989586621679111564"><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679111564"><span class="hs-identifier hs-var">escaped</span></a></span></span><span> </span><span id="local-6989586621679111563"><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679111563"><span class="hs-identifier hs-var">started</span></a></span></span><span> </span><span id="local-6989586621679111562"><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679111562"><span class="hs-identifier hs-var">res</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char
+</span><span class="hs-char">' '</span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679111561"><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679111561"><span class="hs-identifier hs-var">rest</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679111562"><span class="hs-identifier hs-var">res</span></a></span><span> </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679111563"><span class="hs-identifier hs-var">started</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[FilePath] -&gt; [FilePath] -&gt; [FilePath]
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool -&gt; FilePath -&gt; FilePath -&gt; [FilePath]
-</span><a href="#local-6989586621679111498"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679111582"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">False</span></span><span> </span><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679111480"><span class="hs-identifier hs-var">escaped</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679111564"><span class="hs-identifier hs-var">escaped</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">False</span></span><span> </span><span class="annot"><span class="annottext">FilePath
 </span><span class="hs-string">&quot;&quot;</span></span><span> </span><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679111477"><span class="hs-identifier hs-var">rest</span></a></span><span>
-</span><span id="line-318"></span><span>
-</span><span id="line-319"></span><span>    </span><span class="annot"><a href="#local-6989586621679111498"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span id="local-6989586621679111476"><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679111476"><span class="hs-identifier hs-var">quoted</span></a></span></span><span> </span><span id="local-6989586621679111475"><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679111475"><span class="hs-identifier hs-var">escaped</span></a></span></span><span> </span><span class="annot"><span class="annottext">Bool
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679111474"><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679111474"><span class="hs-identifier hs-var">res</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679111473"><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679111473"><span class="hs-identifier hs-var">chr</span></a></span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679111472"><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679111472"><span class="hs-identifier hs-var">rest</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool -&gt; FilePath -&gt; FilePath -&gt; [FilePath]
-</span><a href="#local-6989586621679111498"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679111476"><span class="hs-identifier hs-var">quoted</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679111475"><span class="hs-identifier hs-var">escaped</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679111561"><span class="hs-identifier hs-var">rest</span></a></span><span>
+</span><span id="line-325"></span><span>
+</span><span id="line-326"></span><span>    </span><span class="annot"><a href="#local-6989586621679111582"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span id="local-6989586621679111560"><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679111560"><span class="hs-identifier hs-var">quoted</span></a></span></span><span> </span><span id="local-6989586621679111559"><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679111559"><span class="hs-identifier hs-var">escaped</span></a></span></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679111558"><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679111558"><span class="hs-identifier hs-var">res</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679111557"><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679111557"><span class="hs-identifier hs-var">chr</span></a></span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679111556"><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679111556"><span class="hs-identifier hs-var">rest</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool -&gt; FilePath -&gt; FilePath -&gt; [FilePath]
+</span><a href="#local-6989586621679111582"><span class="hs-identifier hs-var">splitArgs'</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679111560"><span class="hs-identifier hs-var">quoted</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679111559"><span class="hs-identifier hs-var">escaped</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">True</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679111474"><span class="hs-identifier hs-var">res</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath
+</span><a href="#local-6989586621679111558"><span class="hs-identifier hs-var">res</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679111473"><span class="hs-identifier hs-var">chr</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679111472"><span class="hs-identifier hs-var">rest</span></a></span><span>
-</span><span id="line-320"></span></pre></body></html>
+</span><a href="#local-6989586621679111557"><span class="hs-identifier hs-var">chr</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679111556"><span class="hs-identifier hs-var">rest</span></a></span><span>
+</span><span id="line-327"></span></pre></body></html>
