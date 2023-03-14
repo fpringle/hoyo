@@ -16,3 +16,4 @@ import Options.Applicative
 
 parseCommand :: Parser Command
 splitArgs :: T.Text -> [String]
+options :: ParserInfo Options

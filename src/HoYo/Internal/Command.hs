@@ -11,6 +11,7 @@ module HoYo.Internal.Command where
 
 import HoYo.Bookmark
 import HoYo.Internal.Config
+import {-# SOURCE #-} HoYo.Internal.Parse
 import HoYo.Internal.Types
 import HoYo.Internal.Utils
 
@@ -29,6 +30,8 @@ import Control.Monad.Reader.Class (ask)
 
 import Lens.Micro
 import Lens.Micro.Extras
+
+import Options.Applicative
 
 import System.Directory
 import System.Exit
@@ -282,10 +285,16 @@ runCheck opts bFp sFp = do
 -- | Run the default command, if it has been specified by the user.
 runDefaultCommand :: HoYoMonad ()
 runDefaultCommand = asks' (config . defaultCommand) >>= \case
-  Nothing   -> return () -- return ShowHelp
+  Nothing   -> return ()
   Just DefaultCommand -> throwError "default command: stuck in a loop!"
-  -- Just otherCommand -> return () -- return $ ReRun cmd
   Just otherCommand -> runCommand otherCommand
+
+-- | Run the "help" command: get help on a specific subcommand.
+runHelp :: HelpOptions -> HoYoMonad ()
+runHelp (HelpOptions cmd) = liftIO
+                            $ handleParseResult
+                            $ Failure
+                            $ parserFailure defaultPrefs options (ShowHelpText (T.unpack <$> cmd)) []
 
 -- | Run a 'Command' in the hoyo environment.
 runCommand :: Command -> HoYoMonad ()
@@ -297,6 +306,7 @@ runCommand    (Delete opts) = runDelete opts
 runCommand   (Refresh opts) = runRefresh opts
 runCommand (ConfigCmd opts) = runConfig opts
 runCommand   DefaultCommand = runDefaultCommand
+runCommand      (Help opts) = runHelp opts
 runCommand     (Check opts) = do
   -- printStderr "The 'check' command should be run outside the HoYo monad."
   printStderr "It's discouraged to set default_command = \"check\" in your hoyo config file."

@@ -189,6 +189,10 @@ data CheckOptions = CheckOptions {
   , checkBookmarks    :: Bool
   } deriving (Show, Eq)
 
+newtype HelpOptions = HelpOptions {
+  helpSubcommand      :: Maybe T.Text
+  } deriving (Show, Eq)
+
 -- | The core data-type for the hoyo CLI. The 'Command' is parsed from the command-line,
 -- then 'HoYo.Command.runCommand' dispatches on the type.
 data Command =
@@ -201,6 +205,7 @@ data Command =
   | ConfigCmd ConfigCommand
   | Check CheckOptions
   | DefaultCommand
+  | Help HelpOptions
   deriving (Show, Eq)
 
 -- | Datatype for representing a command-line settings override.
