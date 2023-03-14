@@ -33,7 +33,7 @@ withEnv func bms cfg = bracket createFiles deleteFiles runFunc
   -- create env
   -- run func
     runFunc (bFile, cFile) = do
-      let env = Env bms (T.pack bFile) cfg (T.pack cFile)
+      let env = Env bms bFile cfg cFile
       func env
 
   -- cleanup

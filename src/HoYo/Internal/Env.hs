@@ -30,7 +30,7 @@ writeEnv env = do
   encodeConfigFile (view configPath env) (view config env)
 
 -- | Read an 'Env' from a file.
-readEnv :: MonadIO m => TFilePath -> TFilePath -> m (Either T.Text Env)
+readEnv :: MonadIO m => FilePath -> FilePath -> m (Either T.Text Env)
 readEnv bFp sFp = do
   bs <- decodeBookmarksFile bFp
   se <- decodeConfigFile sFp
@@ -41,15 +41,15 @@ readEnv bFp sFp = do
     (Left e1, Left e2)  -> return $ Left (T.unlines [e1, e2])
 
 -- | Given a file path, make sure that its directory exists.
-initPath :: MonadIO m => TFilePath -> m ()
+initPath :: MonadIO m => FilePath -> m ()
 initPath fp' = do
-  fp <- liftIO $ makeAbsolute $ T.unpack fp'
+  fp <- liftIO $ makeAbsolute fp'
   let dir = takeDirectory fp
   liftIO $ createDirectoryIfMissing True dir
 
 -- | Given a filepath for the bookmarks file and a filepath for the config file,
 -- initialize the respective TOMLs at those locations.
-initEnv :: MonadIO m => TFilePath -> TFilePath -> m ()
+initEnv :: MonadIO m => FilePath -> FilePath -> m ()
 initEnv bFp sFp = do
   initPath sFp
   initPath bFp
@@ -61,51 +61,49 @@ initEnv bFp sFp = do
 --
 -- Returns the newly created 'Bookmarks' object, or the result of parsing
 -- the file if it already existed.
-initBookmarksIfNotExists :: (MonadIO m, MonadError T.Text m) => Config -> TFilePath -> m Bookmarks
+initBookmarksIfNotExists :: (MonadIO m, MonadError T.Text m) => Config -> FilePath -> m Bookmarks
 initBookmarksIfNotExists cfg fp' = do
-  fp <- liftIO $ makeAbsolute $ T.unpack fp'
-  let fpText = T.pack fp
+  fp <- liftIO $ makeAbsolute fp'
   ex <- liftIO $ doesFileExist fp
   unless ex $ do
-    initPath fpText
+    initPath fp
     bms <- bookmarksFromDefault $ view defaultBookmarks cfg
-    encodeBookmarksFile fpText bms
-  decodeBookmarksFile fpText >>= liftEither
+    encodeBookmarksFile fp bms
+  decodeBookmarksFile fp >>= liftEither
 
 -- | If the config path doesn't exist, try to create it.
 --
 -- Returns the newly created 'Config' object, or the result of parsing
 -- the file if it already existed.
-initConfigIfNotExists :: (MonadIO m, MonadError T.Text m) => TFilePath -> m Config
+initConfigIfNotExists :: (MonadIO m, MonadError T.Text m) => FilePath -> m Config
 initConfigIfNotExists fp' = do
-  fp <- liftIO $ makeAbsolute $ T.unpack fp'
-  let fpText = T.pack fp
+  fp <- liftIO $ makeAbsolute fp'
   exists <- liftIO $ doesFileExist fp
   unless exists $ do
-    initPath fpText
-    encodeConfigFile fpText defaultConfig
-  decodeConfigFile fpText >>= liftEither
+    initPath fp
+    encodeConfigFile fp defaultConfig
+  decodeConfigFile fp >>= liftEither
 
 -- | If the environment files have not been created yet, do so.
 --
 -- Return the 'Env' object.
-initEnvIfNotExists :: (MonadIO m, MonadError T.Text m) => TFilePath -> TFilePath -> m Env
+initEnvIfNotExists :: (MonadIO m, MonadError T.Text m) => FilePath -> FilePath -> m Env
 initEnvIfNotExists bFp sFp = do
   cfg <- initConfigIfNotExists sFp
   bms <- initBookmarksIfNotExists cfg bFp
   return $ Env bms bFp cfg sFp
 
 -- | Retrieve an 'Env' from given bookmark- and config- file locations.
-getEnv :: MonadIO m => TFilePath -> TFilePath -> m (Either T.Text Env)
+getEnv :: MonadIO m => FilePath -> FilePath -> m (Either T.Text Env)
 getEnv bFp' sFp' = do
-  sFp <- T.pack <$> liftIO (makeAbsolute $ T.unpack sFp')
-  bFp <- T.pack <$> liftIO (makeAbsolute $ T.unpack bFp')
+  sFp <- liftIO (makeAbsolute sFp')
+  bFp <- liftIO (makeAbsolute bFp')
   runExceptT $ initEnvIfNotExists bFp sFp
 
 -- | The default path for the hoyo config. Usually $HOME\/.config\/hoyo\/config.toml
-defaultConfigPath :: IO TFilePath
-defaultConfigPath = T.pack <$> getXdgDirectory XdgConfig "hoyo/config.toml"
+defaultConfigPath :: IO FilePath
+defaultConfigPath = getXdgDirectory XdgConfig "hoyo/config.toml"
 
 -- |The default path for hoyo bookmarks. Usually $HOME\/.local\/share\/hoyo\/config.toml
-defaultBookmarksPath :: IO TFilePath
-defaultBookmarksPath = T.pack <$> getXdgDirectory XdgData "hoyo/bookmarks.toml"
+defaultBookmarksPath :: IO FilePath
+defaultBookmarksPath = getXdgDirectory XdgData "hoyo/bookmarks.toml"

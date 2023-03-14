@@ -58,14 +58,14 @@ testBookmarkFilterByDirInfix bm1 bm2 =
   filterBookmarkByDirInfix (Just dir) bm1
     .&&. not (filterBookmarkByDirInfix (Just dir) bm2)
 
-  where dir = _bookmarkDirectory bm1
+  where dir = T.pack $ _bookmarkDirectory bm1
 
 prop_BookmarkFilterByDirInfix :: Property
 prop_BookmarkFilterByDirInfix = forAll bookmarksWithDifferentDirectories (uncurry testBookmarkFilterByDirInfix)
   where
     bookmarksWithDifferentDirectories = do
       bm1 <- suchThat arbitrary ((/= "/") . _bookmarkDirectory)
-      bm2 <- suchThat arbitrary (not . on T.isInfixOf _bookmarkDirectory bm1)
+      bm2 <- suchThat arbitrary (not . on T.isInfixOf (T.pack . _bookmarkDirectory) bm1)
       return (bm1, bm2)
 
 testBookmarksFromDefault :: [DefaultBookmark] -> Property

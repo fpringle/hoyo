@@ -30,23 +30,20 @@ import Data.Time
 
 import System.IO.Error
 
--- | A 'T.Text' version of 'FilePath'.
-type TFilePath = T.Text
-
 -- | The main hoyo read-only environment. Contains the current saved bookmarks,
 -- the current hoyo configuration, and the file locations for each.
 data Env = Env {
   _bookmarks        :: !Bookmarks
-  , _bookmarksPath  :: !TFilePath
+  , _bookmarksPath  :: !FilePath
   , _config         :: !Config
-  , _configPath     :: !TFilePath
+  , _configPath     :: !FilePath
   } deriving Show
 
 -- | Bookmark a directory for easy @cd@. A bookmark remembers the directory,
 -- the index, the creation time, and optionally a user-specified nickname
 -- for the bookmark.
 data Bookmark = Bookmark {
-  _bookmarkDirectory        :: !TFilePath
+  _bookmarkDirectory        :: !FilePath
   , _bookmarkIndex          :: !Int
   , _bookmarkCreationTime   :: !ZonedTime
   , _bookmarkName           :: !(Maybe T.Text)
@@ -55,7 +52,7 @@ data Bookmark = Bookmark {
 -- | Default bookmarks to save at init. A default bookmark remembers the directory
 -- and optionally a user-specified nickname for the bookmark.
 data DefaultBookmark = DefaultBookmark {
-  _defaultBookmarkDirectory        :: !TFilePath
+  _defaultBookmarkDirectory        :: !FilePath
   , _defaultBookmarkName           :: !(Maybe T.Text)
   } deriving (Show, Eq)
 
@@ -130,7 +127,7 @@ instance MonadIO HoYoMonad where
 
 -- | Options for the "add" command to be parsed from the command-line.
 data AddOptions = AddOptions {
-  addDirectory  :: TFilePath
+  addDirectory  :: FilePath
   , addName     :: Maybe T.Text
   } deriving (Show, Eq)
 
@@ -174,7 +171,7 @@ data ConfigSetOptions = ConfigSetOptions {
 
 -- | Options for the "config add-default" command to be parsed from the command-line.
 data ConfigAddDefaultOptions = ConfigAddDefaultOptions {
-  addDefaultDir       :: TFilePath
+  addDefaultDir       :: FilePath
   , addDefaultName    :: Maybe T.Text
   } deriving (Show, Eq)
 
@@ -225,8 +222,8 @@ data OverrideOptions = OverrideOptions {
 
 -- | CLI options that can be set regardless of which command is run.
 data GlobalOptions = GlobalOptions {
-  globalConfigPath  :: Maybe TFilePath
-  , dataPath        :: Maybe TFilePath
+  globalConfigPath  :: Maybe FilePath
+  , dataPath        :: Maybe FilePath
   , overrides       :: OverrideOptions
   } deriving (Show, Eq)
 

@@ -103,11 +103,11 @@ modifyBookmarksM f = do
   encodeBookmarksFile bFp newBookmarks
 
 -- | Normalise a filepath and make sure it's a valid directory.
-normaliseAndVerifyDirectory :: TFilePath -> HoYoMonad TFilePath
+normaliseAndVerifyDirectory :: FilePath -> HoYoMonad FilePath
 normaliseAndVerifyDirectory d = do
-  dir <- liftIO $ canonicalizePath $ T.unpack d
+  dir <- liftIO $ canonicalizePath d
   assertVerbose "not a directory" $ liftIO $ doesDirectoryExist dir
-  return $ T.pack dir
+  return dir
 
 -- | Take a name and make sure it's valid.
 verifyName :: T.Text -> HoYoMonad ()
@@ -129,7 +129,8 @@ runAdd opts = do
   dir <- normaliseAndVerifyDirectory $ addDirectory opts
   let name = addName opts
   modifyBookmarksM $ \bms -> do
-    uniqName <- testNameUnique bms dir
+    uniqName <- case name of Nothing -> return True
+                             Just n  -> testNameUnique bms n
     if uniqName
     then do
       let maxIndex = maximumDefault 0 $ map (view bookmarkIndex) bms
@@ -145,7 +146,7 @@ runMove opts = do
   let search = moveSearch opts
   case fst $ searchBookmarks search bms of
     []    -> throwError ("Unknown bookmark: " <> tshow search)
-    [bm]  -> do printStdout ("cd " <> view bookmarkDirectory bm)
+    [bm]  -> do printStdout ("cd " <> T.pack (view bookmarkDirectory bm))
                 liftIO $ exitWith (ExitFailure 3)
     ms    -> do displayTime <- asks' (config . displayCreationTime)
                 let strs = formatBookmarks displayTime $ sortOn (view bookmarkIndex) ms
@@ -260,20 +261,20 @@ runConfig (Set opts) = runConfigSet opts
 runConfig (AddDefaultBookmark opts) = runAddDefault opts
 
 -- | Check that the config file is valid.
-runCheckConfig :: TFilePath -> IO ()
+runCheckConfig :: FilePath -> IO ()
 runCheckConfig = decodeConfigFile >=> \case
   Left err  -> printStderr err
   Right _   -> printStdout "Config is good"
 
 -- | Check that the bookmarks file is valid.
-runCheckBookmarks :: TFilePath -> IO ()
+runCheckBookmarks :: FilePath -> IO ()
 runCheckBookmarks = decodeBookmarksFile >=> \case
   Left err  -> printStderr err
   Right _   -> printStdout "Bookmarks file is good"
 
 -- | Run the "config check" command: validate the current
 -- config and bookmarks files.
-runCheck :: CheckOptions -> TFilePath -> TFilePath -> IO ()
+runCheck :: CheckOptions -> FilePath -> FilePath -> IO ()
 runCheck opts bFp sFp = do
   when (checkConfig opts) $ runCheckConfig sFp
   when (checkBookmarks opts) $ runCheckBookmarks bFp
