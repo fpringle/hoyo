@@ -44,8 +44,13 @@ common deps
     unordered-containers,
     ansi-terminal
 
+common warnings
+  ghc-options: -Wall
+
 library
-    import:           deps
+    import:
+      , deps
+      , warnings
     exposed-modules:
         HoYo
         HoYo.Env
@@ -70,7 +75,9 @@ library
     ghc-options:        -Wall -Wno-duplicate-exports -Wno-unused-do-bind
 
 executable hoyo-cli
-    import:           deps
+    import:
+      , deps
+      , warnings
     main-is:          Main.hs
     other-modules:
     hs-source-dirs:   exe
@@ -82,7 +89,9 @@ executable hoyo-cli
     default-extensions: OverloadedStrings LambdaCase
 
 test-suite hoyo-test
-    import:           deps
+    import:
+      , deps
+      , warnings
     main-is:          Main.hs
     other-modules:    HoYo.Test.Gen
                       HoYo.Test.Bookmark

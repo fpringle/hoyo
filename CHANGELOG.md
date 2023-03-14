@@ -16,6 +16,8 @@ and this project adheres to the
 
 ### Fixed
 
+- Show help text when the user runs `hoyo` but doesn't have a default command set.
+
 ### Changed
 
 - Undid some of the obsessive usage of `T.Text`. For example, got rid of `TFilePath`.

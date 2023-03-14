@@ -30,8 +30,6 @@ import                          HoYo.Internal.Utils
 import                          Lens.Micro
 import                          Lens.Micro.Extras
 
-import                          Options.Applicative
-
 import                          System.Directory
 import                          System.Exit
 
@@ -282,16 +280,13 @@ runCheck opts bFp sFp = do
 -- | Run the default command, if it has been specified by the user.
 runDefaultCommand :: HoYoMonad ()
 runDefaultCommand = asks' (config . defaultCommand) >>= \case
-  Nothing             -> return ()
+  Nothing             -> liftIO $ showHelp Nothing
   Just DefaultCommand -> throwError "default command: stuck in a loop!"
   Just otherCommand   -> runCommand otherCommand
 
 -- | Run the "help" command: get help on a specific subcommand.
 runHelp :: HelpOptions -> HoYoMonad ()
-runHelp (HelpOptions cmd) = liftIO
-                            $ handleParseResult
-                            $ Failure
-                            $ parserFailure defaultPrefs options (ShowHelpText (T.unpack <$> cmd)) []
+runHelp (HelpOptions cmd) = liftIO $ showHelp (T.unpack <$> cmd)
 
 -- | Run a 'Command' in the hoyo environment.
 runCommand :: Command -> HoYoMonad ()
