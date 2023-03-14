@@ -48,7 +48,7 @@ Running `hoyo --help` will display all the global default options, as well
 as the available commands. For command-specific options, run `hoyo <cmd> --help`.
 
 ```
-Set directory bookmarks for quick "cd"-like behaviour
+Set directory bookmarks for quick "cd" behaviour
 
 Usage: hoyo [COMMAND] [-C|--config-file <file>] [-B|--bookmarks-file <file>]
             [--fail] [--nofail] [--time] [--notime] [--enable-clear]
@@ -84,6 +84,14 @@ Available commands:
   refresh                  Re-calculate bookmark indices
   config                   View/manage hoyo config
   check                    Verify validity of config and bookmarks
+
+Bugs:
+  If something went wrong unexpectedly or you think there's a problem with hoyo,
+  let me know! To report an issue, create a bug report at
+  https://github.com/fpringle/hoyo/issues
+
+Online documentation:
+  To read the web documentation, visit https://github.com/fpringle/hoyo#readme
 ```
 
 ## Examples

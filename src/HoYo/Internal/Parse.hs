@@ -16,6 +16,8 @@ import HoYo.Internal.Version
 
 import qualified Data.Text as T
 import Options.Applicative
+import Options.Applicative.Help.Chunk
+import Options.Applicative.Help.Pretty
 import Text.Read
 
 -- | Parse global options: options that can be set on the command line
@@ -273,13 +275,27 @@ versionOption = infoOption versionInfo (
                   <> help "Display version information and exit"
                 )
 
+-- | A footer to display at the end of the long help message.
+hoyoFooter :: Chunk Doc
+hoyoFooter =
+  let
+    withTitle title = fmap ((string title .$.) . indent 2)
+    bugText = paragraph "If something went wrong unexpectedly or you think there's a problem with hoyo, let me know! To report an issue, create a bug report at https://github.com/fpringle/hoyo/issues"
+    docText = paragraph "To read the web documentation, visit https://github.com/fpringle/hoyo#readme"
+  in vsepChunks [
+        withTitle "Bugs:" bugText
+      , withTitle "Online documentation:" docText
+      ]
+
 -- | A 'ParserInfo' object containing the necessary information for parsing
 -- CLI commands and arguments, and displaying useful help text.
 options :: ParserInfo Options
 options = info (parseOptions <**> helper) (
           fullDesc
-          <> header "Set directory bookmarks for quick \"cd\"-like behaviour"
+          <> header "Set directory bookmarks for quick \"cd\" behaviour"
           <> progDesc "For more help on a particular sub-command, run `hoyo <cmd> --help`."
+          <> footer "for full documentation go to github"
+          <> footerDoc (unChunk hoyoFooter)
           )
 
 -- | Split a string into arguments as they would be interpreted on the command line.

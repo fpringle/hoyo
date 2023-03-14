@@ -11,6 +11,7 @@ and this project adheres to the
 ### Added
 
 - Integration with Nix.
+- Help message footer - links to online docs and bug tracker.
 
 ### Fixed
 
