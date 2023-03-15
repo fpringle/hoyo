@@ -40,6 +40,7 @@ import           Lens.Micro.Extras
 import           System.Console.ANSI        hiding (Reset)
 import           System.Directory
 import           System.IO
+import           System.Pager
 
 import           Text.Read                  (readEither)
 
@@ -215,6 +216,10 @@ printStderr msg = liftIO $ do
 -- | Print to stdout.
 printStdout :: MonadIO m => T.Text -> m ()
 printStdout = liftIO . T.putStrLn
+
+-- | Print or page lines.
+pageLines :: MonadIO m => [T.Text] -> m ()
+pageLines = liftIO . printOrPage . T.unlines
 
 -- | Format a 'Bookmark'. Used for the "list" command and error reporting
 -- during other commands.

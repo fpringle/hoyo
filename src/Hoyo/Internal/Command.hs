@@ -157,7 +157,7 @@ runList opts = do
   bms' <- asks' bookmarks
   let bms = filter filt $ sortOn (view bookmarkIndex) $ unBookmarks bms'
   displayTime <- asks' (config . displayCreationTime)
-  mapM_ printStdout (formatBookmarks displayTime bms)
+  pageLines (formatBookmarks displayTime bms)
 
 -- | Help text displayed when the user tries to run "hoyo clear"
 -- when "enable_clear" is set to false.
@@ -214,9 +214,9 @@ runConfigPrint _ = do
   s <- asks' config
   let keyVals = getKeyVals s
   let keyWidth = maximum $ map (T.length . fst) keyVals
-  forM_ keyVals $ \(key, val) -> do
-    let vStr = formatConfigValue val
-    printStdout (T.justifyLeft keyWidth ' ' key <> " = " <> vStr)
+  let align = T.justifyLeft keyWidth ' '
+  let ls = map (\(k, v) -> align k <> " = " <> formatConfigValue v) keyVals
+  pageLines ls
 
 -- | Run the "config reset" command: reset the config to 'defaultConfig'.
 runConfigReset :: ConfigResetOptions -> HoyoMonad ()
