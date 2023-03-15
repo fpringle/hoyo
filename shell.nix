@@ -7,12 +7,8 @@ let
     optparse-applicative package-version text time tomland transformers
     unordered-containers
 
-    # executable dependencies
-    base optparse-applicative text
-
     # test dependencies
-    base directory filepath microlens optparse-applicative QuickCheck
-    quickcheck-instances temporary text time
+    QuickCheck quickcheck-instances temporary
   ]);
 in
 pkgs.stdenv.mkDerivation rec {
