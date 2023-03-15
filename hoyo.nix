@@ -3,7 +3,7 @@
 , package-version, QuickCheck, quickcheck-instances, temporary
 , text, time, tomland, transformers, unordered-containers
 }:
-mkDerivation {
+mkDerivation rec {
   pname = "hoyo";
   version = "0.4.0.0";
   src = ./.;
@@ -14,16 +14,9 @@ mkDerivation {
     optparse-applicative package-version text time tomland transformers
     unordered-containers
   ];
-  executableHaskellDepends = [
-    ansi-terminal base directory filepath microlens microlens-th mtl
-    optparse-applicative package-version text time tomland transformers
-    unordered-containers
-  ];
-  testHaskellDepends = [
-    ansi-terminal base directory filepath microlens microlens-th mtl
-    optparse-applicative package-version QuickCheck
-    quickcheck-instances temporary text time tomland transformers
-    unordered-containers
+  executableHaskellDepends = libraryHaskellDepends;
+  testHaskellDepends = libraryHaskellDepends ++ [
+    QuickCheck quickcheck-instances temporary
   ];
   homepage = "https://github.com/fpringle/hoyo";
   description = "Bookmark directories for cd";
