@@ -52,15 +52,15 @@ module Hoyo (
 import Control.Monad.Except       (runExceptT)
 import Control.Monad.Trans.Reader (runReaderT)
 
-import           Hoyo.Bookmark
-import           Hoyo.Command
-import           Hoyo.Config
-import           Hoyo.Env
-import           Hoyo.Internal.Types
-import           Hoyo.Internal.Version
-import           Hoyo.Utils
+import Hoyo.Bookmark
+import Hoyo.Command
+import Hoyo.Config
+import Hoyo.Env
+import Hoyo.Internal.Types
+import Hoyo.Internal.Version
+import Hoyo.Utils
 
-import           System.Exit
+import System.Exit
 
 -- | Given a hoyo 'Env', run a monadic action in IO.
 runHoyo :: HoyoMonad a -> Env -> IO (Either HoyoException a)

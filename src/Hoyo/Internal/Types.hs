@@ -29,12 +29,11 @@ import qualified Data.List.NonEmpty         as NE
 import qualified Data.Text                  as T
 import           Data.Time
 
+import           GHC.Generics
+
 import           Language.Haskell.TH.Syntax
 
 import           Lens.Micro
-
-import           GHC.Generics
-
 import           Lens.Micro.TH
 
 import           System.IO.Error

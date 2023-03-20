@@ -22,10 +22,10 @@ module Hoyo.Env (
 
 import Control.Monad.Except
 
-import           Hoyo.Bookmark
-import           Hoyo.Config
-import           Hoyo.Internal.Types
-import           Hoyo.Utils
+import Hoyo.Bookmark
+import Hoyo.Config
+import Hoyo.Internal.Types
+import Hoyo.Utils
 
 import Lens.Micro.Extras
 

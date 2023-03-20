@@ -19,6 +19,7 @@ and this project adheres to the
 ### Changed
 
 - Got rid of all the unnecessary `Internal/*` modules.
+- Switch to using a custom Exception type instead of just `Text`.
 
 ### Removed
 
@@ -26,6 +27,8 @@ and this project adheres to the
 
 ### Fixed
 - Updated nix files with new dependencies.
+
+### Changed
 
 ## [0.5.1.0] - 2023-03-20
 
