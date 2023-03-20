@@ -9,6 +9,7 @@ hoyo is a command-line utility that lets the user save directories as bookmarks 
 # Contents
 
 * [Installation](#installation)
+    * [Uninstalling](#uninstalling)
 * [Usage](#usage)
     * [Command-line options](#command-line-options)
     * [Examples](#examples)
@@ -23,11 +24,11 @@ hoyo is a command-line utility that lets the user save directories as bookmarks 
 
 You can download binary directly [from GitHub releases](https://github.com/fpringle/hoyo/releases).
 
-After downloading binary, make it executable and copy it under convenient location, for example:
+After downloading the binary, make it executable and copy it under convenient location, for example:
 
 ```shell
-chmod +x hoyo-cli
-mv hoyo-cli ~/.local/bin/hoyo-cli
+$ chmod +x hoyo-cli
+$ mv hoyo-cli ~/.local/bin/hoyo-cli
 ```
 
 ## Download shell config script and source
@@ -38,6 +39,21 @@ Add the following line to your `.bashrc`:
 
 ```bash
 source path/to/hoyo.sh
+```
+
+## Uninstalling
+
+Delete `hoyo-cli`
+
+```shell
+$ rm -rf ~/.local/bin/hoyo-cli
+```
+
+Remove config and data files:
+
+```shell
+$ rm -rf ~/.config/hoyo
+$ rm -rf ~/.local/share/hoyo
 ```
 
 # Usage
