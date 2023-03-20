@@ -50,7 +50,7 @@ Types used by all the main Hoyo.* modules.
 </span><span id="line-47"></span><span>        </span><span class="hs-special">,</span><span> </span><span id="_configPath"><span class="annot"><span class="annottext">Env -&gt; FilePath
 </span><a href="Hoyo.Internal.Types.html#_configPath"><span class="hs-identifier hs-var hs-var">_configPath</span></a></span></span><span>    </span><span class="hs-glyph">::</span><span> </span><span class="hs-glyph">!</span><span class="annot"><span class="hs-identifier hs-type">FilePath</span></span><span>
 </span><span id="line-48"></span><span>        </span><span class="hs-special">}</span><span>
-</span><span id="line-49"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127735"><span id="local-6989586621679127737"><span id="local-6989586621679127739"><span class="annot"><span class="annottext">Int -&gt; Env -&gt; ShowS
+</span><span id="line-49"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127741"><span id="local-6989586621679127743"><span id="local-6989586621679127745"><span class="annot"><span class="annottext">Int -&gt; Env -&gt; ShowS
 [Env] -&gt; ShowS
 Env -&gt; FilePath
 (Int -&gt; Env -&gt; ShowS)
@@ -78,7 +78,7 @@ $cshowsPrec :: Int -&gt; Env -&gt; ShowS
 </span><span id="line-58"></span><span>             </span><span class="hs-special">,</span><span> </span><span id="_bookmarkName"><span class="annot"><span class="annottext">Bookmark -&gt; Maybe Text
 </span><a href="Hoyo.Internal.Types.html#_bookmarkName"><span class="hs-identifier hs-var hs-var">_bookmarkName</span></a></span></span><span>         </span><span class="hs-glyph">::</span><span> </span><span class="hs-glyph">!</span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">T.Text</span></span><span class="hs-special">)</span><span>
 </span><span id="line-59"></span><span>             </span><span class="hs-special">}</span><span>
-</span><span id="line-60"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127723"><span id="local-6989586621679127725"><span id="local-6989586621679127727"><span class="annot"><span class="annottext">Int -&gt; Bookmark -&gt; ShowS
+</span><span id="line-60"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127729"><span id="local-6989586621679127731"><span id="local-6989586621679127733"><span class="annot"><span class="annottext">Int -&gt; Bookmark -&gt; ShowS
 [Bookmark] -&gt; ShowS
 Bookmark -&gt; FilePath
 (Int -&gt; Bookmark -&gt; ShowS)
@@ -93,34 +93,34 @@ showsPrec :: Int -&gt; Bookmark -&gt; ShowS
 $cshowsPrec :: Int -&gt; Bookmark -&gt; ShowS
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">)</span><span>
 </span><span id="line-61"></span><span>
-</span><span id="line-62"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679127720"><span class="annot"><span class="hs-identifier hs-type">Eq</span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#Bookmark"><span class="hs-identifier hs-type">Bookmark</span></a></span></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-63"></span><span>  </span><span class="annot"><a href="Hoyo.Internal.Types.html#Bookmark"><span class="hs-identifier hs-type">Bookmark</span></a></span><span> </span><span id="local-6989586621679127718"><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679127718"><span class="hs-identifier hs-var">d1</span></a></span></span><span> </span><span id="local-6989586621679127717"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679127717"><span class="hs-identifier hs-var">i1</span></a></span></span><span> </span><span class="annot"><span class="annottext">ZonedTime
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679127716"><span class="annot"><span class="annottext">Maybe Text
-</span><a href="#local-6989586621679127716"><span class="hs-identifier hs-var">n1</span></a></span></span><span> </span><span id="local-6989586621679127715"><span class="annot"><span class="annottext">== :: Bookmark -&gt; Bookmark -&gt; Bool
-</span><span class="hs-operator hs-var hs-var hs-var hs-var">==</span></span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#Bookmark"><span class="hs-identifier hs-type">Bookmark</span></a></span><span> </span><span id="local-6989586621679127714"><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679127714"><span class="hs-identifier hs-var">d2</span></a></span></span><span> </span><span id="local-6989586621679127713"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679127713"><span class="hs-identifier hs-var">i2</span></a></span></span><span> </span><span class="annot"><span class="annottext">ZonedTime
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679127712"><span class="annot"><span class="annottext">Maybe Text
-</span><a href="#local-6989586621679127712"><span class="hs-identifier hs-var">n2</span></a></span></span><span>
+</span><span id="line-62"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679127726"><span class="annot"><span class="hs-identifier hs-type">Eq</span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#Bookmark"><span class="hs-identifier hs-type">Bookmark</span></a></span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-63"></span><span>  </span><span class="annot"><a href="Hoyo.Internal.Types.html#Bookmark"><span class="hs-identifier hs-type">Bookmark</span></a></span><span> </span><span id="local-6989586621679127724"><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679127724"><span class="hs-identifier hs-var">d1</span></a></span></span><span> </span><span id="local-6989586621679127723"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679127723"><span class="hs-identifier hs-var">i1</span></a></span></span><span> </span><span class="annot"><span class="annottext">ZonedTime
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679127722"><span class="annot"><span class="annottext">Maybe Text
+</span><a href="#local-6989586621679127722"><span class="hs-identifier hs-var">n1</span></a></span></span><span> </span><span id="local-6989586621679127721"><span class="annot"><span class="annottext">== :: Bookmark -&gt; Bookmark -&gt; Bool
+</span><span class="hs-operator hs-var hs-var hs-var hs-var">==</span></span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#Bookmark"><span class="hs-identifier hs-type">Bookmark</span></a></span><span> </span><span id="local-6989586621679127720"><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679127720"><span class="hs-identifier hs-var">d2</span></a></span></span><span> </span><span id="local-6989586621679127719"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679127719"><span class="hs-identifier hs-var">i2</span></a></span></span><span> </span><span class="annot"><span class="annottext">ZonedTime
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679127718"><span class="annot"><span class="annottext">Maybe Text
+</span><a href="#local-6989586621679127718"><span class="hs-identifier hs-var">n2</span></a></span></span><span>
 </span><span id="line-64"></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679127718"><span class="hs-identifier hs-var">d1</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; Bool
+</span><a href="#local-6989586621679127724"><span class="hs-identifier hs-var">d1</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679127714"><span class="hs-identifier hs-var">d2</span></a></span><span>
+</span><a href="#local-6989586621679127720"><span class="hs-identifier hs-var">d2</span></a></span><span>
 </span><span id="line-65"></span><span>   </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
 </span><span class="hs-operator hs-var">&amp;&amp;</span></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679127717"><span class="hs-identifier hs-var">i1</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Bool
+</span><a href="#local-6989586621679127723"><span class="hs-identifier hs-var">i1</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679127713"><span class="hs-identifier hs-var">i2</span></a></span><span>
+</span><a href="#local-6989586621679127719"><span class="hs-identifier hs-var">i2</span></a></span><span>
 </span><span id="line-66"></span><span>   </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
 </span><span class="hs-operator hs-var">&amp;&amp;</span></span><span> </span><span class="annot"><span class="annottext">Maybe Text
-</span><a href="#local-6989586621679127716"><span class="hs-identifier hs-var">n1</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe Text -&gt; Maybe Text -&gt; Bool
+</span><a href="#local-6989586621679127722"><span class="hs-identifier hs-var">n1</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe Text -&gt; Maybe Text -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">Maybe Text
-</span><a href="#local-6989586621679127712"><span class="hs-identifier hs-var">n2</span></a></span><span>
+</span><a href="#local-6989586621679127718"><span class="hs-identifier hs-var">n2</span></a></span><span>
 </span><span id="line-67"></span><span>
 </span><span id="line-68"></span><span class="hs-comment">-- | Default bookmarks to save at init. A default bookmark remembers the directory</span><span>
 </span><span id="line-69"></span><span class="hs-comment">-- and optionally a user-specified nickname for the bookmark.</span><span>
@@ -130,7 +130,7 @@ forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span id="line-72"></span><span>                    </span><span class="hs-special">,</span><span> </span><span id="_defaultBookmarkName"><span class="annot"><span class="annottext">DefaultBookmark -&gt; Maybe Text
 </span><a href="Hoyo.Internal.Types.html#_defaultBookmarkName"><span class="hs-identifier hs-var hs-var">_defaultBookmarkName</span></a></span></span><span>      </span><span class="hs-glyph">::</span><span> </span><span class="hs-glyph">!</span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">T.Text</span></span><span class="hs-special">)</span><span>
 </span><span id="line-73"></span><span>                    </span><span class="hs-special">}</span><span>
-</span><span id="line-74"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127702"><span id="local-6989586621679127704"><span id="local-6989586621679127706"><span class="annot"><span class="annottext">Int -&gt; DefaultBookmark -&gt; ShowS
+</span><span id="line-74"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127708"><span id="local-6989586621679127710"><span id="local-6989586621679127712"><span class="annot"><span class="annottext">Int -&gt; DefaultBookmark -&gt; ShowS
 [DefaultBookmark] -&gt; ShowS
 DefaultBookmark -&gt; FilePath
 (Int -&gt; DefaultBookmark -&gt; ShowS)
@@ -145,7 +145,7 @@ show :: DefaultBookmark -&gt; FilePath
 $cshow :: DefaultBookmark -&gt; FilePath
 showsPrec :: Int -&gt; DefaultBookmark -&gt; ShowS
 $cshowsPrec :: Int -&gt; DefaultBookmark -&gt; ShowS
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679127698"><span id="local-6989586621679127700"><span class="annot"><span class="annottext">DefaultBookmark -&gt; DefaultBookmark -&gt; Bool
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679127704"><span id="local-6989586621679127706"><span class="annot"><span class="annottext">DefaultBookmark -&gt; DefaultBookmark -&gt; Bool
 (DefaultBookmark -&gt; DefaultBookmark -&gt; Bool)
 -&gt; (DefaultBookmark -&gt; DefaultBookmark -&gt; Bool)
 -&gt; Eq DefaultBookmark
@@ -160,7 +160,7 @@ $c== :: DefaultBookmark -&gt; DefaultBookmark -&gt; Bool
 </span><span id="line-77"></span><span class="hs-keyword">newtype</span><span> </span><span id="Bookmarks"><span class="annot"><a href="Hoyo.Internal.Types.html#Bookmarks"><span class="hs-identifier hs-var">Bookmarks</span></a></span></span><span>
 </span><span id="line-78"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span id="Bookmarks"><span class="annot"><a href="Hoyo.Internal.Types.html#Bookmarks"><span class="hs-identifier hs-var">Bookmarks</span></a></span></span><span> </span><span class="hs-special">{</span><span> </span><span id="unBookmarks"><span class="annot"><span class="annottext">Bookmarks -&gt; [Bookmark]
 </span><a href="Hoyo.Internal.Types.html#unBookmarks"><span class="hs-identifier hs-var hs-var">unBookmarks</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Hoyo.Internal.Types.html#Bookmark"><span class="hs-identifier hs-type">Bookmark</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">}</span><span>
-</span><span id="line-79"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127690"><span id="local-6989586621679127692"><span id="local-6989586621679127694"><span class="annot"><span class="annottext">Int -&gt; Bookmarks -&gt; ShowS
+</span><span id="line-79"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127696"><span id="local-6989586621679127698"><span id="local-6989586621679127700"><span class="annot"><span class="annottext">Int -&gt; Bookmarks -&gt; ShowS
 [Bookmarks] -&gt; ShowS
 Bookmarks -&gt; FilePath
 (Int -&gt; Bookmarks -&gt; ShowS)
@@ -182,7 +182,7 @@ $cshowsPrec :: Int -&gt; Bookmarks -&gt; ShowS
 </span><span id="line-83"></span><span class="hs-keyword">data</span><span> </span><span id="BookmarkSearchTerm"><span class="annot"><a href="Hoyo.Internal.Types.html#BookmarkSearchTerm"><span class="hs-identifier hs-var">BookmarkSearchTerm</span></a></span></span><span>
 </span><span id="line-84"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span id="SearchIndex"><span class="annot"><a href="Hoyo.Internal.Types.html#SearchIndex"><span class="hs-identifier hs-var">SearchIndex</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span>
 </span><span id="line-85"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span id="SearchName"><span class="annot"><a href="Hoyo.Internal.Types.html#SearchName"><span class="hs-identifier hs-var">SearchName</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">T.Text</span></span><span>
-</span><span id="line-86"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127682"><span id="local-6989586621679127684"><span id="local-6989586621679127686"><span class="annot"><span class="annottext">Int -&gt; BookmarkSearchTerm -&gt; ShowS
+</span><span id="line-86"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127688"><span id="local-6989586621679127690"><span id="local-6989586621679127692"><span class="annot"><span class="annottext">Int -&gt; BookmarkSearchTerm -&gt; ShowS
 [BookmarkSearchTerm] -&gt; ShowS
 BookmarkSearchTerm -&gt; FilePath
 (Int -&gt; BookmarkSearchTerm -&gt; ShowS)
@@ -197,7 +197,7 @@ show :: BookmarkSearchTerm -&gt; FilePath
 $cshow :: BookmarkSearchTerm -&gt; FilePath
 showsPrec :: Int -&gt; BookmarkSearchTerm -&gt; ShowS
 $cshowsPrec :: Int -&gt; BookmarkSearchTerm -&gt; ShowS
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679127678"><span id="local-6989586621679127680"><span class="annot"><span class="annottext">BookmarkSearchTerm -&gt; BookmarkSearchTerm -&gt; Bool
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679127684"><span id="local-6989586621679127686"><span class="annot"><span class="annottext">BookmarkSearchTerm -&gt; BookmarkSearchTerm -&gt; Bool
 (BookmarkSearchTerm -&gt; BookmarkSearchTerm -&gt; Bool)
 -&gt; (BookmarkSearchTerm -&gt; BookmarkSearchTerm -&gt; Bool)
 -&gt; Eq BookmarkSearchTerm
@@ -218,32 +218,32 @@ $c== :: BookmarkSearchTerm -&gt; BookmarkSearchTerm -&gt; Bool
 </span><span id="line-95"></span><span>
 </span><span id="line-96"></span><span class="hs-comment">-- | Values in the Hoyo config. Using a GADT parameterised by 'ConfigValueType'</span><span>
 </span><span id="line-97"></span><span class="hs-comment">-- gives us stricter type safety.</span><span>
-</span><span id="line-98"></span><span class="hs-keyword">data</span><span> </span><span id="ConfigValue"><span class="annot"><a href="Hoyo.Internal.Types.html#ConfigValue"><span class="hs-identifier hs-var">ConfigValue</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127677"><span class="annot"><a href="#local-6989586621679127677"><span class="hs-identifier hs-type">t</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#ConfigValueType"><span class="hs-identifier hs-type">ConfigValueType</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-98"></span><span class="hs-keyword">data</span><span> </span><span id="ConfigValue"><span class="annot"><a href="Hoyo.Internal.Types.html#ConfigValue"><span class="hs-identifier hs-var">ConfigValue</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127683"><span class="annot"><a href="#local-6989586621679127683"><span class="hs-identifier hs-type">t</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#ConfigValueType"><span class="hs-identifier hs-type">ConfigValueType</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-99"></span><span>  </span><span id="BoolV"><span class="annot"><a href="Hoyo.Internal.Types.html#BoolV"><span class="hs-identifier hs-var">BoolV</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#ConfigValue"><span class="hs-identifier hs-type">ConfigValue</span></a></span><span> </span><span class="hs-special">'</span><span class="annot"><a href="Hoyo.Internal.Types.html#TBool"><span class="hs-identifier hs-type">TBool</span></a></span><span>
 </span><span id="line-100"></span><span>  </span><span id="DefaultBookmarkV"><span class="annot"><a href="Hoyo.Internal.Types.html#DefaultBookmarkV"><span class="hs-identifier hs-var">DefaultBookmarkV</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#DefaultBookmark"><span class="hs-identifier hs-type">DefaultBookmark</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#ConfigValue"><span class="hs-identifier hs-type">ConfigValue</span></a></span><span> </span><span class="hs-special">'</span><span class="annot"><a href="Hoyo.Internal.Types.html#TDefaultBookmark"><span class="hs-identifier hs-type">TDefaultBookmark</span></a></span><span>
 </span><span id="line-101"></span><span>  </span><span id="CommandV"><span class="annot"><a href="Hoyo.Internal.Types.html#CommandV"><span class="hs-identifier hs-var">CommandV</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#Command"><span class="hs-identifier hs-type">Command</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#ConfigValue"><span class="hs-identifier hs-type">ConfigValue</span></a></span><span> </span><span class="hs-special">'</span><span class="annot"><a href="Hoyo.Internal.Types.html#TCommand"><span class="hs-identifier hs-type">TCommand</span></a></span><span>
-</span><span id="line-102"></span><span>  </span><span id="ListOfV"><span class="annot"><a href="Hoyo.Internal.Types.html#ListOfV"><span class="hs-identifier hs-var">ListOfV</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-keyword">forall</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127672"><span class="annot"><a href="#local-6989586621679127672"><span class="hs-identifier hs-type">a</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#ConfigValueType"><span class="hs-identifier hs-type">ConfigValueType</span></a></span><span class="hs-special">)</span><span class="hs-operator">.</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Hoyo.Internal.Types.html#ConfigValue"><span class="hs-identifier hs-type">ConfigValue</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679127672"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#ConfigValue"><span class="hs-identifier hs-type">ConfigValue</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-special">'</span><span class="annot"><a href="Hoyo.Internal.Types.html#TList"><span class="hs-identifier hs-type">TList</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679127672"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-103"></span><span>  </span><span id="MaybeV"><span class="annot"><a href="Hoyo.Internal.Types.html#MaybeV"><span class="hs-identifier hs-var">MaybeV</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-keyword">forall</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127670"><span class="annot"><a href="#local-6989586621679127670"><span class="hs-identifier hs-type">a</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#ConfigValueType"><span class="hs-identifier hs-type">ConfigValueType</span></a></span><span class="hs-special">)</span><span class="hs-operator">.</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Hoyo.Internal.Types.html#ConfigValue"><span class="hs-identifier hs-type">ConfigValue</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679127670"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#ConfigValue"><span class="hs-identifier hs-type">ConfigValue</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-special">'</span><span class="annot"><a href="Hoyo.Internal.Types.html#TMaybe"><span class="hs-identifier hs-type">TMaybe</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679127670"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-102"></span><span>  </span><span id="ListOfV"><span class="annot"><a href="Hoyo.Internal.Types.html#ListOfV"><span class="hs-identifier hs-var">ListOfV</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-keyword">forall</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127678"><span class="annot"><a href="#local-6989586621679127678"><span class="hs-identifier hs-type">a</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#ConfigValueType"><span class="hs-identifier hs-type">ConfigValueType</span></a></span><span class="hs-special">)</span><span class="hs-operator">.</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Hoyo.Internal.Types.html#ConfigValue"><span class="hs-identifier hs-type">ConfigValue</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679127678"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#ConfigValue"><span class="hs-identifier hs-type">ConfigValue</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-special">'</span><span class="annot"><a href="Hoyo.Internal.Types.html#TList"><span class="hs-identifier hs-type">TList</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679127678"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-103"></span><span>  </span><span id="MaybeV"><span class="annot"><a href="Hoyo.Internal.Types.html#MaybeV"><span class="hs-identifier hs-var">MaybeV</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-keyword">forall</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127676"><span class="annot"><a href="#local-6989586621679127676"><span class="hs-identifier hs-type">a</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#ConfigValueType"><span class="hs-identifier hs-type">ConfigValueType</span></a></span><span class="hs-special">)</span><span class="hs-operator">.</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Hoyo.Internal.Types.html#ConfigValue"><span class="hs-identifier hs-type">ConfigValue</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679127676"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#ConfigValue"><span class="hs-identifier hs-type">ConfigValue</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-special">'</span><span class="annot"><a href="Hoyo.Internal.Types.html#TMaybe"><span class="hs-identifier hs-type">TMaybe</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679127676"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-104"></span><span>
-</span><span id="line-105"></span><span id="local-6989586621679127669"><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679127664"><span id="local-6989586621679127667"><span class="annot"><span class="hs-identifier hs-type">Show</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Hoyo.Internal.Types.html#ConfigValue"><span class="hs-identifier hs-type">ConfigValue</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="#local-6989586621679127669"><span class="hs-identifier hs-type">t</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#ConfigValueType"><span class="hs-identifier hs-type">ConfigValueType</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span></span></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-106"></span><span>  </span><span id="local-6989586621679127663"><span class="annot"><span class="annottext">show :: ConfigValue t -&gt; FilePath
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var">show</span></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Hoyo.Internal.Types.html#BoolV"><span class="hs-identifier hs-type">BoolV</span></a></span><span> </span><span id="local-6989586621679127661"><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679127661"><span class="hs-identifier hs-var">bool</span></a></span></span><span class="hs-special">)</span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; FilePath
+</span><span id="line-105"></span><span id="local-6989586621679127675"><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679127670"><span id="local-6989586621679127673"><span class="annot"><span class="hs-identifier hs-type">Show</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Hoyo.Internal.Types.html#ConfigValue"><span class="hs-identifier hs-type">ConfigValue</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="#local-6989586621679127675"><span class="hs-identifier hs-type">t</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#ConfigValueType"><span class="hs-identifier hs-type">ConfigValueType</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span></span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-106"></span><span>  </span><span id="local-6989586621679127669"><span class="annot"><span class="annottext">show :: ConfigValue t -&gt; FilePath
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var">show</span></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Hoyo.Internal.Types.html#BoolV"><span class="hs-identifier hs-type">BoolV</span></a></span><span> </span><span id="local-6989586621679127667"><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679127667"><span class="hs-identifier hs-var">bool</span></a></span></span><span class="hs-special">)</span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; FilePath
 forall a. Show a =&gt; a -&gt; FilePath
 </span><span class="hs-identifier hs-var">show</span></span><span> </span><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679127661"><span class="hs-identifier hs-var">bool</span></a></span><span>
-</span><span id="line-107"></span><span>  </span><span class="annot"><span class="hs-identifier hs-var">show</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Hoyo.Internal.Types.html#DefaultBookmarkV"><span class="hs-identifier hs-type">DefaultBookmarkV</span></a></span><span> </span><span id="local-6989586621679127660"><span class="annot"><span class="annottext">DefaultBookmark
-</span><a href="#local-6989586621679127660"><span class="hs-identifier hs-var">bm</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DefaultBookmark -&gt; FilePath
+</span><a href="#local-6989586621679127667"><span class="hs-identifier hs-var">bool</span></a></span><span>
+</span><span id="line-107"></span><span>  </span><span class="annot"><span class="hs-identifier hs-var">show</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Hoyo.Internal.Types.html#DefaultBookmarkV"><span class="hs-identifier hs-type">DefaultBookmarkV</span></a></span><span> </span><span id="local-6989586621679127666"><span class="annot"><span class="annottext">DefaultBookmark
+</span><a href="#local-6989586621679127666"><span class="hs-identifier hs-var">bm</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DefaultBookmark -&gt; FilePath
 forall a. Show a =&gt; a -&gt; FilePath
 </span><span class="hs-identifier hs-var">show</span></span><span> </span><span class="annot"><span class="annottext">DefaultBookmark
-</span><a href="#local-6989586621679127660"><span class="hs-identifier hs-var">bm</span></a></span><span>
-</span><span id="line-108"></span><span>  </span><span class="annot"><span class="hs-identifier hs-var">show</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Hoyo.Internal.Types.html#CommandV"><span class="hs-identifier hs-type">CommandV</span></a></span><span> </span><span id="local-6989586621679127659"><span class="annot"><span class="annottext">Command
-</span><a href="#local-6989586621679127659"><span class="hs-identifier hs-var">t</span></a></span></span><span class="hs-special">)</span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Command -&gt; FilePath
+</span><a href="#local-6989586621679127666"><span class="hs-identifier hs-var">bm</span></a></span><span>
+</span><span id="line-108"></span><span>  </span><span class="annot"><span class="hs-identifier hs-var">show</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Hoyo.Internal.Types.html#CommandV"><span class="hs-identifier hs-type">CommandV</span></a></span><span> </span><span id="local-6989586621679127665"><span class="annot"><span class="annottext">Command
+</span><a href="#local-6989586621679127665"><span class="hs-identifier hs-var">t</span></a></span></span><span class="hs-special">)</span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Command -&gt; FilePath
 forall a. Show a =&gt; a -&gt; FilePath
 </span><span class="hs-identifier hs-var">show</span></span><span> </span><span class="annot"><span class="annottext">Command
-</span><a href="#local-6989586621679127659"><span class="hs-identifier hs-var">t</span></a></span><span>
-</span><span id="line-109"></span><span>  </span><span class="annot"><span class="hs-identifier hs-var">show</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Hoyo.Internal.Types.html#ListOfV"><span class="hs-identifier hs-type">ListOfV</span></a></span><span> </span><span id="local-6989586621679127658"><span class="annot"><span class="annottext">[ConfigValue a]
-</span><a href="#local-6989586621679127658"><span class="hs-identifier hs-var">xs</span></a></span></span><span class="hs-special">)</span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679127665"><span class="hs-identifier hs-var">t</span></a></span><span>
+</span><span id="line-109"></span><span>  </span><span class="annot"><span class="hs-identifier hs-var">show</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Hoyo.Internal.Types.html#ListOfV"><span class="hs-identifier hs-type">ListOfV</span></a></span><span> </span><span id="local-6989586621679127664"><span class="annot"><span class="annottext">[ConfigValue a]
+</span><a href="#local-6989586621679127664"><span class="hs-identifier hs-var">xs</span></a></span></span><span class="hs-special">)</span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">FilePath
 </span><span class="hs-string">&quot;[&quot;</span></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; ShowS
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; [FilePath] -&gt; FilePath
@@ -254,59 +254,59 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">ConfigValue a -&gt; FilePath
 forall a. Show a =&gt; a -&gt; FilePath
 </span><span class="hs-identifier hs-var">show</span></span><span> </span><span class="annot"><span class="annottext">[ConfigValue a]
-</span><a href="#local-6989586621679127658"><span class="hs-identifier hs-var">xs</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; ShowS
+</span><a href="#local-6989586621679127664"><span class="hs-identifier hs-var">xs</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; ShowS
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">FilePath
 </span><span class="hs-string">&quot;]&quot;</span></span><span>
-</span><span id="line-110"></span><span>  </span><span class="annot"><span class="hs-identifier hs-var">show</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Hoyo.Internal.Types.html#MaybeV"><span class="hs-identifier hs-type">MaybeV</span></a></span><span> </span><span id="local-6989586621679127657"><span class="annot"><span class="annottext">Maybe (ConfigValue a)
-</span><a href="#local-6989586621679127657"><span class="hs-identifier hs-var">xs</span></a></span></span><span class="hs-special">)</span><span>           </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe (ConfigValue a) -&gt; FilePath
+</span><span id="line-110"></span><span>  </span><span class="annot"><span class="hs-identifier hs-var">show</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Hoyo.Internal.Types.html#MaybeV"><span class="hs-identifier hs-type">MaybeV</span></a></span><span> </span><span id="local-6989586621679127663"><span class="annot"><span class="annottext">Maybe (ConfigValue a)
+</span><a href="#local-6989586621679127663"><span class="hs-identifier hs-var">xs</span></a></span></span><span class="hs-special">)</span><span>           </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe (ConfigValue a) -&gt; FilePath
 forall a. Show a =&gt; a -&gt; FilePath
 </span><span class="hs-identifier hs-var">show</span></span><span> </span><span class="annot"><span class="annottext">Maybe (ConfigValue a)
-</span><a href="#local-6989586621679127657"><span class="hs-identifier hs-var">xs</span></a></span></span><span>
+</span><a href="#local-6989586621679127663"><span class="hs-identifier hs-var">xs</span></a></span></span><span>
 </span><span id="line-111"></span><span>
-</span><span id="line-112"></span><span id="local-6989586621679127656"><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679127653"><span class="annot"><span class="hs-identifier hs-type">Eq</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Hoyo.Internal.Types.html#ConfigValue"><span class="hs-identifier hs-type">ConfigValue</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="#local-6989586621679127656"><span class="hs-identifier hs-type">t</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#ConfigValueType"><span class="hs-identifier hs-type">ConfigValueType</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-113"></span><span>  </span><span class="annot"><a href="Hoyo.Internal.Types.html#BoolV"><span class="hs-identifier hs-type">BoolV</span></a></span><span> </span><span id="local-6989586621679127652"><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679127652"><span class="hs-identifier hs-var">b1</span></a></span></span><span>            </span><span id="local-6989586621679127651"><span class="annot"><span class="annottext">== :: ConfigValue t -&gt; ConfigValue t -&gt; Bool
-</span><span class="hs-operator hs-var hs-var hs-var hs-var">==</span></span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#BoolV"><span class="hs-identifier hs-type">BoolV</span></a></span><span> </span><span id="local-6989586621679127650"><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679127650"><span class="hs-identifier hs-var">b2</span></a></span></span><span>            </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679127652"><span class="hs-identifier hs-var">b1</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
+</span><span id="line-112"></span><span id="local-6989586621679127662"><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679127659"><span class="annot"><span class="hs-identifier hs-type">Eq</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Hoyo.Internal.Types.html#ConfigValue"><span class="hs-identifier hs-type">ConfigValue</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="#local-6989586621679127662"><span class="hs-identifier hs-type">t</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#ConfigValueType"><span class="hs-identifier hs-type">ConfigValueType</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-113"></span><span>  </span><span class="annot"><a href="Hoyo.Internal.Types.html#BoolV"><span class="hs-identifier hs-type">BoolV</span></a></span><span> </span><span id="local-6989586621679127658"><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679127658"><span class="hs-identifier hs-var">b1</span></a></span></span><span>            </span><span id="local-6989586621679127657"><span class="annot"><span class="annottext">== :: ConfigValue t -&gt; ConfigValue t -&gt; Bool
+</span><span class="hs-operator hs-var hs-var hs-var hs-var">==</span></span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#BoolV"><span class="hs-identifier hs-type">BoolV</span></a></span><span> </span><span id="local-6989586621679127656"><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679127656"><span class="hs-identifier hs-var">b2</span></a></span></span><span>            </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679127658"><span class="hs-identifier hs-var">b1</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679127650"><span class="hs-identifier hs-var">b2</span></a></span><span>
-</span><span id="line-114"></span><span>  </span><span class="annot"><a href="Hoyo.Internal.Types.html#DefaultBookmarkV"><span class="hs-identifier hs-type">DefaultBookmarkV</span></a></span><span> </span><span id="local-6989586621679127649"><span class="annot"><span class="annottext">DefaultBookmark
-</span><a href="#local-6989586621679127649"><span class="hs-identifier hs-var">b1</span></a></span></span><span> </span><span class="annot"><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#DefaultBookmarkV"><span class="hs-identifier hs-type">DefaultBookmarkV</span></a></span><span> </span><span id="local-6989586621679127648"><span class="annot"><span class="annottext">DefaultBookmark
-</span><a href="#local-6989586621679127648"><span class="hs-identifier hs-var">b2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DefaultBookmark
-</span><a href="#local-6989586621679127649"><span class="hs-identifier hs-var">b1</span></a></span><span> </span><span class="annot"><span class="annottext">DefaultBookmark -&gt; DefaultBookmark -&gt; Bool
+</span><a href="#local-6989586621679127656"><span class="hs-identifier hs-var">b2</span></a></span><span>
+</span><span id="line-114"></span><span>  </span><span class="annot"><a href="Hoyo.Internal.Types.html#DefaultBookmarkV"><span class="hs-identifier hs-type">DefaultBookmarkV</span></a></span><span> </span><span id="local-6989586621679127655"><span class="annot"><span class="annottext">DefaultBookmark
+</span><a href="#local-6989586621679127655"><span class="hs-identifier hs-var">b1</span></a></span></span><span> </span><span class="annot"><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#DefaultBookmarkV"><span class="hs-identifier hs-type">DefaultBookmarkV</span></a></span><span> </span><span id="local-6989586621679127654"><span class="annot"><span class="annottext">DefaultBookmark
+</span><a href="#local-6989586621679127654"><span class="hs-identifier hs-var">b2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DefaultBookmark
+</span><a href="#local-6989586621679127655"><span class="hs-identifier hs-var">b1</span></a></span><span> </span><span class="annot"><span class="annottext">DefaultBookmark -&gt; DefaultBookmark -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">DefaultBookmark
-</span><a href="#local-6989586621679127648"><span class="hs-identifier hs-var">b2</span></a></span><span>
-</span><span id="line-115"></span><span>  </span><span class="annot"><a href="Hoyo.Internal.Types.html#CommandV"><span class="hs-identifier hs-type">CommandV</span></a></span><span> </span><span id="local-6989586621679127647"><span class="annot"><span class="annottext">Command
-</span><a href="#local-6989586621679127647"><span class="hs-identifier hs-var">b1</span></a></span></span><span>         </span><span class="annot"><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#CommandV"><span class="hs-identifier hs-type">CommandV</span></a></span><span> </span><span id="local-6989586621679127646"><span class="annot"><span class="annottext">Command
-</span><a href="#local-6989586621679127646"><span class="hs-identifier hs-var">b2</span></a></span></span><span>         </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Command
-</span><a href="#local-6989586621679127647"><span class="hs-identifier hs-var">b1</span></a></span><span> </span><span class="annot"><span class="annottext">Command -&gt; Command -&gt; Bool
+</span><a href="#local-6989586621679127654"><span class="hs-identifier hs-var">b2</span></a></span><span>
+</span><span id="line-115"></span><span>  </span><span class="annot"><a href="Hoyo.Internal.Types.html#CommandV"><span class="hs-identifier hs-type">CommandV</span></a></span><span> </span><span id="local-6989586621679127653"><span class="annot"><span class="annottext">Command
+</span><a href="#local-6989586621679127653"><span class="hs-identifier hs-var">b1</span></a></span></span><span>         </span><span class="annot"><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#CommandV"><span class="hs-identifier hs-type">CommandV</span></a></span><span> </span><span id="local-6989586621679127652"><span class="annot"><span class="annottext">Command
+</span><a href="#local-6989586621679127652"><span class="hs-identifier hs-var">b2</span></a></span></span><span>         </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Command
+</span><a href="#local-6989586621679127653"><span class="hs-identifier hs-var">b1</span></a></span><span> </span><span class="annot"><span class="annottext">Command -&gt; Command -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">Command
-</span><a href="#local-6989586621679127646"><span class="hs-identifier hs-var">b2</span></a></span><span>
-</span><span id="line-116"></span><span>  </span><span class="annot"><a href="Hoyo.Internal.Types.html#ListOfV"><span class="hs-identifier hs-type">ListOfV</span></a></span><span> </span><span id="local-6989586621679127645"><span class="annot"><span class="annottext">[ConfigValue a]
-</span><a href="#local-6989586621679127645"><span class="hs-identifier hs-var">b1</span></a></span></span><span>          </span><span class="annot"><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#ListOfV"><span class="hs-identifier hs-type">ListOfV</span></a></span><span> </span><span id="local-6989586621679127644"><span class="annot"><span class="annottext">[ConfigValue a]
-</span><a href="#local-6989586621679127644"><span class="hs-identifier hs-var">b2</span></a></span></span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[ConfigValue a]
-</span><a href="#local-6989586621679127645"><span class="hs-identifier hs-var">b1</span></a></span><span> </span><span class="annot"><span class="annottext">[ConfigValue a] -&gt; [ConfigValue a] -&gt; Bool
+</span><a href="#local-6989586621679127652"><span class="hs-identifier hs-var">b2</span></a></span><span>
+</span><span id="line-116"></span><span>  </span><span class="annot"><a href="Hoyo.Internal.Types.html#ListOfV"><span class="hs-identifier hs-type">ListOfV</span></a></span><span> </span><span id="local-6989586621679127651"><span class="annot"><span class="annottext">[ConfigValue a]
+</span><a href="#local-6989586621679127651"><span class="hs-identifier hs-var">b1</span></a></span></span><span>          </span><span class="annot"><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#ListOfV"><span class="hs-identifier hs-type">ListOfV</span></a></span><span> </span><span id="local-6989586621679127650"><span class="annot"><span class="annottext">[ConfigValue a]
+</span><a href="#local-6989586621679127650"><span class="hs-identifier hs-var">b2</span></a></span></span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[ConfigValue a]
+</span><a href="#local-6989586621679127651"><span class="hs-identifier hs-var">b1</span></a></span><span> </span><span class="annot"><span class="annottext">[ConfigValue a] -&gt; [ConfigValue a] -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">[ConfigValue a]
 [ConfigValue a]
-</span><a href="#local-6989586621679127644"><span class="hs-identifier hs-var">b2</span></a></span><span>
-</span><span id="line-117"></span><span>  </span><span class="annot"><a href="Hoyo.Internal.Types.html#MaybeV"><span class="hs-identifier hs-type">MaybeV</span></a></span><span> </span><span id="local-6989586621679127643"><span class="annot"><span class="annottext">Maybe (ConfigValue a)
-</span><a href="#local-6989586621679127643"><span class="hs-identifier hs-var">b1</span></a></span></span><span>           </span><span class="annot"><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#MaybeV"><span class="hs-identifier hs-type">MaybeV</span></a></span><span> </span><span id="local-6989586621679127642"><span class="annot"><span class="annottext">Maybe (ConfigValue a)
-</span><a href="#local-6989586621679127642"><span class="hs-identifier hs-var">b2</span></a></span></span><span>           </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe (ConfigValue a)
-</span><a href="#local-6989586621679127643"><span class="hs-identifier hs-var">b1</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe (ConfigValue a) -&gt; Maybe (ConfigValue a) -&gt; Bool
+</span><a href="#local-6989586621679127650"><span class="hs-identifier hs-var">b2</span></a></span><span>
+</span><span id="line-117"></span><span>  </span><span class="annot"><a href="Hoyo.Internal.Types.html#MaybeV"><span class="hs-identifier hs-type">MaybeV</span></a></span><span> </span><span id="local-6989586621679127649"><span class="annot"><span class="annottext">Maybe (ConfigValue a)
+</span><a href="#local-6989586621679127649"><span class="hs-identifier hs-var">b1</span></a></span></span><span>           </span><span class="annot"><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#MaybeV"><span class="hs-identifier hs-type">MaybeV</span></a></span><span> </span><span id="local-6989586621679127648"><span class="annot"><span class="annottext">Maybe (ConfigValue a)
+</span><a href="#local-6989586621679127648"><span class="hs-identifier hs-var">b2</span></a></span></span><span>           </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe (ConfigValue a)
+</span><a href="#local-6989586621679127649"><span class="hs-identifier hs-var">b1</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe (ConfigValue a) -&gt; Maybe (ConfigValue a) -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">Maybe (ConfigValue a)
 Maybe (ConfigValue a)
-</span><a href="#local-6989586621679127642"><span class="hs-identifier hs-var">b2</span></a></span></span><span>
+</span><a href="#local-6989586621679127648"><span class="hs-identifier hs-var">b2</span></a></span></span><span>
 </span><span id="line-118"></span><span>
 </span><span id="line-119"></span><span class="hs-comment">-- | Existential wrapper around 'ConfigValue'.</span><span>
 </span><span id="line-120"></span><span class="hs-keyword">data</span><span> </span><span id="AnyConfigValue"><span class="annot"><a href="Hoyo.Internal.Types.html#AnyConfigValue"><span class="hs-identifier hs-var">AnyConfigValue</span></a></span></span><span>
-</span><span id="line-121"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">forall</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127640"><span class="annot"><a href="#local-6989586621679127640"><span class="hs-identifier hs-type">t</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#ConfigValueType"><span class="hs-identifier hs-type">ConfigValueType</span></a></span><span class="hs-special">)</span><span class="hs-operator">.</span><span> </span><span id="AnyConfigValue"><span class="annot"><a href="Hoyo.Internal.Types.html#AnyConfigValue"><span class="hs-identifier hs-var">AnyConfigValue</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Hoyo.Internal.Types.html#ConfigValue"><span class="hs-identifier hs-type">ConfigValue</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679127640"><span class="hs-identifier hs-type">t</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-121"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">forall</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127646"><span class="annot"><a href="#local-6989586621679127646"><span class="hs-identifier hs-type">t</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#ConfigValueType"><span class="hs-identifier hs-type">ConfigValueType</span></a></span><span class="hs-special">)</span><span class="hs-operator">.</span><span> </span><span id="AnyConfigValue"><span class="annot"><a href="Hoyo.Internal.Types.html#AnyConfigValue"><span class="hs-identifier hs-var">AnyConfigValue</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Hoyo.Internal.Types.html#ConfigValue"><span class="hs-identifier hs-type">ConfigValue</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679127646"><span class="hs-identifier hs-type">t</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-122"></span><span>
 </span><span id="line-123"></span><span class="hs-comment">-- | A representation of hoyo settings.</span><span>
 </span><span id="line-124"></span><span class="hs-keyword">data</span><span> </span><span id="Config"><span class="annot"><a href="Hoyo.Internal.Types.html#Config"><span class="hs-identifier hs-var">Config</span></a></span></span><span>
@@ -325,7 +325,7 @@ Maybe (ConfigValue a)
 </span><span id="line-131"></span><span>           </span><span class="hs-special">,</span><span> </span><span id="_defaultCommand"><span class="annot"><span class="annottext">Config -&gt; ConfigValue ('TMaybe 'TCommand)
 </span><a href="Hoyo.Internal.Types.html#_defaultCommand"><span class="hs-identifier hs-var hs-var">_defaultCommand</span></a></span></span><span>      </span><span class="hs-glyph">::</span><span> </span><span class="hs-glyph">!</span><span class="hs-special">(</span><span class="annot"><a href="Hoyo.Internal.Types.html#ConfigValue"><span class="hs-identifier hs-type">ConfigValue</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-special">'</span><span class="annot"><a href="Hoyo.Internal.Types.html#TMaybe"><span class="hs-identifier hs-type">TMaybe</span></a></span><span> </span><span class="hs-special">'</span><span class="annot"><a href="Hoyo.Internal.Types.html#TCommand"><span class="hs-identifier hs-type">TCommand</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
 </span><span id="line-132"></span><span>           </span><span class="hs-special">}</span><span>
-</span><span id="line-133"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127625"><span id="local-6989586621679127627"><span id="local-6989586621679127629"><span class="annot"><span class="annottext">Int -&gt; Config -&gt; ShowS
+</span><span id="line-133"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127631"><span id="local-6989586621679127633"><span id="local-6989586621679127635"><span class="annot"><span class="annottext">Int -&gt; Config -&gt; ShowS
 [Config] -&gt; ShowS
 Config -&gt; FilePath
 (Int -&gt; Config -&gt; ShowS)
@@ -338,7 +338,7 @@ show :: Config -&gt; FilePath
 $cshow :: Config -&gt; FilePath
 showsPrec :: Int -&gt; Config -&gt; ShowS
 $cshowsPrec :: Int -&gt; Config -&gt; ShowS
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679127621"><span id="local-6989586621679127623"><span class="annot"><span class="annottext">Config -&gt; Config -&gt; Bool
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679127627"><span id="local-6989586621679127629"><span class="annot"><span class="annottext">Config -&gt; Config -&gt; Bool
 (Config -&gt; Config -&gt; Bool)
 -&gt; (Config -&gt; Config -&gt; Bool) -&gt; Eq Config
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
@@ -349,10 +349,10 @@ $c== :: Config -&gt; Config -&gt; Bool
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></span></span></span><span class="hs-special">)</span><span>
 </span><span id="line-134"></span><span>
 </span><span id="line-135"></span><span class="hs-comment">-- | Report an exception while searching for a bookmark.</span><span>
-</span><span id="line-136"></span><span id="local-6989586621679127619"><span id="local-6989586621679127620"></span></span><span class="hs-keyword">data</span><span> </span><span id="SearchException"><span class="annot"><a href="Hoyo.Internal.Types.html#SearchException"><span class="hs-identifier hs-var">SearchException</span></a></span></span><span>
+</span><span id="line-136"></span><span id="local-6989586621679127625"><span id="local-6989586621679127626"></span></span><span class="hs-keyword">data</span><span> </span><span id="SearchException"><span class="annot"><a href="Hoyo.Internal.Types.html#SearchException"><span class="hs-identifier hs-var">SearchException</span></a></span></span><span>
 </span><span id="line-137"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span id="NothingFound"><span class="annot"><a href="Hoyo.Internal.Types.html#NothingFound"><span class="hs-identifier hs-var">NothingFound</span></a></span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#BookmarkSearchTerm"><span class="hs-identifier hs-type">BookmarkSearchTerm</span></a></span><span>
 </span><span id="line-138"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span id="TooManyResults"><span class="annot"><a href="Hoyo.Internal.Types.html#TooManyResults"><span class="hs-identifier hs-var">TooManyResults</span></a></span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#BookmarkSearchTerm"><span class="hs-identifier hs-type">BookmarkSearchTerm</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">T.Text</span></span><span class="hs-special">]</span><span>
-</span><span id="line-139"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127611"><span id="local-6989586621679127613"><span id="local-6989586621679127615"><span class="annot"><span class="annottext">Int -&gt; SearchException -&gt; ShowS
+</span><span id="line-139"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127617"><span id="local-6989586621679127619"><span id="local-6989586621679127621"><span class="annot"><span class="annottext">Int -&gt; SearchException -&gt; ShowS
 [SearchException] -&gt; ShowS
 SearchException -&gt; FilePath
 (Int -&gt; SearchException -&gt; ShowS)
@@ -367,7 +367,7 @@ show :: SearchException -&gt; FilePath
 $cshow :: SearchException -&gt; FilePath
 showsPrec :: Int -&gt; SearchException -&gt; ShowS
 $cshowsPrec :: Int -&gt; SearchException -&gt; ShowS
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679127607"><span id="local-6989586621679127609"><span class="annot"><span class="annottext">SearchException -&gt; SearchException -&gt; Bool
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679127613"><span id="local-6989586621679127615"><span class="annot"><span class="annottext">SearchException -&gt; SearchException -&gt; Bool
 (SearchException -&gt; SearchException -&gt; Bool)
 -&gt; (SearchException -&gt; SearchException -&gt; Bool)
 -&gt; Eq SearchException
@@ -388,11 +388,11 @@ $cfrom :: forall x. SearchException -&gt; Rep SearchException x
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">Generic</span></span><span class="hs-special">)</span><span>
 </span><span id="line-140"></span><span>
 </span><span id="line-141"></span><span class="hs-comment">-- | Report an exception while running a command.</span><span>
-</span><span id="line-142"></span><span id="local-6989586621679127602"><span id="local-6989586621679127603"></span></span><span class="hs-keyword">data</span><span> </span><span id="CommandException"><span class="annot"><a href="Hoyo.Internal.Types.html#CommandException"><span class="hs-identifier hs-var">CommandException</span></a></span></span><span>
+</span><span id="line-142"></span><span id="local-6989586621679127608"><span id="local-6989586621679127609"></span></span><span class="hs-keyword">data</span><span> </span><span id="CommandException"><span class="annot"><a href="Hoyo.Internal.Types.html#CommandException"><span class="hs-identifier hs-var">CommandException</span></a></span></span><span>
 </span><span id="line-143"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span id="SearchException"><span class="annot"><a href="Hoyo.Internal.Types.html#SearchException"><span class="hs-identifier hs-var">SearchException</span></a></span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#SearchException"><span class="hs-identifier hs-type">SearchException</span></a></span><span>
 </span><span id="line-144"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span id="InvalidArgumentException"><span class="annot"><a href="Hoyo.Internal.Types.html#InvalidArgumentException"><span class="hs-identifier hs-var">InvalidArgumentException</span></a></span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">T.Text</span></span><span class="hs-special">]</span><span>
 </span><span id="line-145"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span id="LoopException"><span class="annot"><a href="Hoyo.Internal.Types.html#LoopException"><span class="hs-identifier hs-var">LoopException</span></a></span></span><span>
-</span><span id="line-146"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127593"><span id="local-6989586621679127595"><span id="local-6989586621679127597"><span class="annot"><span class="annottext">Int -&gt; CommandException -&gt; ShowS
+</span><span id="line-146"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127599"><span id="local-6989586621679127601"><span id="local-6989586621679127603"><span class="annot"><span class="annottext">Int -&gt; CommandException -&gt; ShowS
 [CommandException] -&gt; ShowS
 CommandException -&gt; FilePath
 (Int -&gt; CommandException -&gt; ShowS)
@@ -407,7 +407,7 @@ show :: CommandException -&gt; FilePath
 $cshow :: CommandException -&gt; FilePath
 showsPrec :: Int -&gt; CommandException -&gt; ShowS
 $cshowsPrec :: Int -&gt; CommandException -&gt; ShowS
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679127589"><span id="local-6989586621679127591"><span class="annot"><span class="annottext">CommandException -&gt; CommandException -&gt; Bool
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679127595"><span id="local-6989586621679127597"><span class="annot"><span class="annottext">CommandException -&gt; CommandException -&gt; Bool
 (CommandException -&gt; CommandException -&gt; Bool)
 -&gt; (CommandException -&gt; CommandException -&gt; Bool)
 -&gt; Eq CommandException
@@ -428,10 +428,10 @@ $cfrom :: forall x. CommandException -&gt; Rep CommandException x
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">Generic</span></span><span class="hs-special">)</span><span>
 </span><span id="line-147"></span><span>
 </span><span id="line-148"></span><span class="hs-comment">-- | Report a file system exception.</span><span>
-</span><span id="line-149"></span><span id="local-6989586621679127585"><span id="local-6989586621679127586"></span></span><span class="hs-keyword">data</span><span> </span><span id="FileSystemException"><span class="annot"><a href="Hoyo.Internal.Types.html#FileSystemException"><span class="hs-identifier hs-var">FileSystemException</span></a></span></span><span>
+</span><span id="line-149"></span><span id="local-6989586621679127591"><span id="local-6989586621679127592"></span></span><span class="hs-keyword">data</span><span> </span><span id="FileSystemException"><span class="annot"><a href="Hoyo.Internal.Types.html#FileSystemException"><span class="hs-identifier hs-var">FileSystemException</span></a></span></span><span>
 </span><span id="line-150"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span id="NoFileException"><span class="annot"><a href="Hoyo.Internal.Types.html#NoFileException"><span class="hs-identifier hs-var">NoFileException</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">FilePath</span></span><span>
 </span><span id="line-151"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span id="NoDirException"><span class="annot"><a href="Hoyo.Internal.Types.html#NoDirException"><span class="hs-identifier hs-var">NoDirException</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">FilePath</span></span><span>
-</span><span id="line-152"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127577"><span id="local-6989586621679127579"><span id="local-6989586621679127581"><span class="annot"><span class="annottext">Int -&gt; FileSystemException -&gt; ShowS
+</span><span id="line-152"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127583"><span id="local-6989586621679127585"><span id="local-6989586621679127587"><span class="annot"><span class="annottext">Int -&gt; FileSystemException -&gt; ShowS
 [FileSystemException] -&gt; ShowS
 FileSystemException -&gt; FilePath
 (Int -&gt; FileSystemException -&gt; ShowS)
@@ -446,7 +446,7 @@ show :: FileSystemException -&gt; FilePath
 $cshow :: FileSystemException -&gt; FilePath
 showsPrec :: Int -&gt; FileSystemException -&gt; ShowS
 $cshowsPrec :: Int -&gt; FileSystemException -&gt; ShowS
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679127573"><span id="local-6989586621679127575"><span class="annot"><span class="annottext">FileSystemException -&gt; FileSystemException -&gt; Bool
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679127579"><span id="local-6989586621679127581"><span class="annot"><span class="annottext">FileSystemException -&gt; FileSystemException -&gt; Bool
 (FileSystemException -&gt; FileSystemException -&gt; Bool)
 -&gt; (FileSystemException -&gt; FileSystemException -&gt; Bool)
 -&gt; Eq FileSystemException
@@ -467,14 +467,14 @@ $cfrom :: forall x. FileSystemException -&gt; Rep FileSystemException x
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">Generic</span></span><span class="hs-special">)</span><span>
 </span><span id="line-153"></span><span>
 </span><span id="line-154"></span><span class="hs-comment">-- | A custom hierarchical exception type for hoyo.</span><span>
-</span><span id="line-155"></span><span id="local-6989586621679127569"><span id="local-6989586621679127570"></span></span><span class="hs-keyword">data</span><span> </span><span id="HoyoException"><span class="annot"><a href="Hoyo.Internal.Types.html#HoyoException"><span class="hs-identifier hs-var">HoyoException</span></a></span></span><span>
+</span><span id="line-155"></span><span id="local-6989586621679127575"><span id="local-6989586621679127576"></span></span><span class="hs-keyword">data</span><span> </span><span id="HoyoException"><span class="annot"><a href="Hoyo.Internal.Types.html#HoyoException"><span class="hs-identifier hs-var">HoyoException</span></a></span></span><span>
 </span><span id="line-156"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span id="ConfigException"><span class="annot"><a href="Hoyo.Internal.Types.html#ConfigException"><span class="hs-identifier hs-var">ConfigException</span></a></span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">T.Text</span></span><span class="hs-special">]</span><span>
 </span><span id="line-157"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span id="CommandException"><span class="annot"><a href="Hoyo.Internal.Types.html#CommandException"><span class="hs-identifier hs-var">CommandException</span></a></span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#CommandException"><span class="hs-identifier hs-type">CommandException</span></a></span><span>
 </span><span id="line-158"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span id="IOException"><span class="annot"><a href="Hoyo.Internal.Types.html#IOException"><span class="hs-identifier hs-var">IOException</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">IOError</span></span><span>
 </span><span id="line-159"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span id="FileSystemException"><span class="annot"><a href="Hoyo.Internal.Types.html#FileSystemException"><span class="hs-identifier hs-var">FileSystemException</span></a></span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#FileSystemException"><span class="hs-identifier hs-type">FileSystemException</span></a></span><span>
 </span><span id="line-160"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span id="ParseException"><span class="annot"><a href="Hoyo.Internal.Types.html#ParseException"><span class="hs-identifier hs-var">ParseException</span></a></span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">T.Text</span></span><span class="hs-special">]</span><span>
 </span><span id="line-161"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span id="MultipleExceptions"><span class="annot"><a href="Hoyo.Internal.Types.html#MultipleExceptions"><span class="hs-identifier hs-var">MultipleExceptions</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">NE.NonEmpty</span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#HoyoException"><span class="hs-identifier hs-type">HoyoException</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-162"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127557"><span id="local-6989586621679127559"><span id="local-6989586621679127561"><span class="annot"><span class="annottext">Int -&gt; HoyoException -&gt; ShowS
+</span><span id="line-162"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127563"><span id="local-6989586621679127565"><span id="local-6989586621679127567"><span class="annot"><span class="annottext">Int -&gt; HoyoException -&gt; ShowS
 [HoyoException] -&gt; ShowS
 HoyoException -&gt; FilePath
 (Int -&gt; HoyoException -&gt; ShowS)
@@ -489,7 +489,7 @@ show :: HoyoException -&gt; FilePath
 $cshow :: HoyoException -&gt; FilePath
 showsPrec :: Int -&gt; HoyoException -&gt; ShowS
 $cshowsPrec :: Int -&gt; HoyoException -&gt; ShowS
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679127553"><span id="local-6989586621679127555"><span class="annot"><span class="annottext">HoyoException -&gt; HoyoException -&gt; Bool
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679127559"><span id="local-6989586621679127561"><span class="annot"><span class="annottext">HoyoException -&gt; HoyoException -&gt; Bool
 (HoyoException -&gt; HoyoException -&gt; Bool)
 -&gt; (HoyoException -&gt; HoyoException -&gt; Bool) -&gt; Eq HoyoException
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
@@ -508,83 +508,83 @@ $cto :: forall x. Rep HoyoException x -&gt; HoyoException
 $cfrom :: forall x. HoyoException -&gt; Rep HoyoException x
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">Generic</span></span><span class="hs-special">)</span><span>
 </span><span id="line-163"></span><span>
-</span><span id="line-164"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679127546"><span id="local-6989586621679127548"><span class="annot"><span class="hs-identifier hs-type">Semigroup</span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#HoyoException"><span class="hs-identifier hs-type">HoyoException</span></a></span></span></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-165"></span><span>  </span><span class="annot"><a href="Hoyo.Internal.Types.html#MultipleExceptions"><span class="hs-identifier hs-type">MultipleExceptions</span></a></span><span> </span><span id="local-6989586621679127544"><span class="annot"><span class="annottext">NonEmpty HoyoException
-</span><a href="#local-6989586621679127544"><span class="hs-identifier hs-var">ne1</span></a></span></span><span> </span><span id="local-6989586621679127543"><span class="annot"><span class="annottext">&lt;&gt; :: HoyoException -&gt; HoyoException -&gt; HoyoException
-</span><span class="hs-operator hs-var hs-var hs-var hs-var">&lt;&gt;</span></span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#MultipleExceptions"><span class="hs-identifier hs-type">MultipleExceptions</span></a></span><span> </span><span id="local-6989586621679127542"><span class="annot"><span class="annottext">NonEmpty HoyoException
-</span><a href="#local-6989586621679127542"><span class="hs-identifier hs-var">ne2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NonEmpty HoyoException -&gt; HoyoException
+</span><span id="line-164"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679127552"><span id="local-6989586621679127554"><span class="annot"><span class="hs-identifier hs-type">Semigroup</span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#HoyoException"><span class="hs-identifier hs-type">HoyoException</span></a></span></span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-165"></span><span>  </span><span class="annot"><a href="Hoyo.Internal.Types.html#MultipleExceptions"><span class="hs-identifier hs-type">MultipleExceptions</span></a></span><span> </span><span id="local-6989586621679127550"><span class="annot"><span class="annottext">NonEmpty HoyoException
+</span><a href="#local-6989586621679127550"><span class="hs-identifier hs-var">ne1</span></a></span></span><span> </span><span id="local-6989586621679127549"><span class="annot"><span class="annottext">&lt;&gt; :: HoyoException -&gt; HoyoException -&gt; HoyoException
+</span><span class="hs-operator hs-var hs-var hs-var hs-var">&lt;&gt;</span></span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#MultipleExceptions"><span class="hs-identifier hs-type">MultipleExceptions</span></a></span><span> </span><span id="local-6989586621679127548"><span class="annot"><span class="annottext">NonEmpty HoyoException
+</span><a href="#local-6989586621679127548"><span class="hs-identifier hs-var">ne2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NonEmpty HoyoException -&gt; HoyoException
 </span><a href="Hoyo.Internal.Types.html#MultipleExceptions"><span class="hs-identifier hs-var">MultipleExceptions</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NonEmpty HoyoException
-</span><a href="#local-6989586621679127544"><span class="hs-identifier hs-var">ne1</span></a></span><span> </span><span class="annot"><span class="annottext">NonEmpty HoyoException
+</span><a href="#local-6989586621679127550"><span class="hs-identifier hs-var">ne1</span></a></span><span> </span><span class="annot"><span class="annottext">NonEmpty HoyoException
 -&gt; NonEmpty HoyoException -&gt; NonEmpty HoyoException
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">NonEmpty HoyoException
-</span><a href="#local-6989586621679127542"><span class="hs-identifier hs-var">ne2</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-166"></span><span>  </span><span class="annot"><a href="Hoyo.Internal.Types.html#MultipleExceptions"><span class="hs-identifier hs-type">MultipleExceptions</span></a></span><span> </span><span id="local-6989586621679127541"><span class="annot"><span class="annottext">NonEmpty HoyoException
-</span><a href="#local-6989586621679127541"><span class="hs-identifier hs-var">ne</span></a></span></span><span> </span><span class="annot"><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span id="local-6989586621679127540"><span class="annot"><span class="annottext">HoyoException
-</span><a href="#local-6989586621679127540"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NonEmpty HoyoException -&gt; HoyoException
+</span><a href="#local-6989586621679127548"><span class="hs-identifier hs-var">ne2</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-166"></span><span>  </span><span class="annot"><a href="Hoyo.Internal.Types.html#MultipleExceptions"><span class="hs-identifier hs-type">MultipleExceptions</span></a></span><span> </span><span id="local-6989586621679127547"><span class="annot"><span class="annottext">NonEmpty HoyoException
+</span><a href="#local-6989586621679127547"><span class="hs-identifier hs-var">ne</span></a></span></span><span> </span><span class="annot"><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span id="local-6989586621679127546"><span class="annot"><span class="annottext">HoyoException
+</span><a href="#local-6989586621679127546"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NonEmpty HoyoException -&gt; HoyoException
 </span><a href="Hoyo.Internal.Types.html#MultipleExceptions"><span class="hs-identifier hs-var">MultipleExceptions</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NonEmpty HoyoException
-</span><a href="#local-6989586621679127541"><span class="hs-identifier hs-var">ne</span></a></span><span> </span><span class="annot"><span class="annottext">NonEmpty HoyoException
+</span><a href="#local-6989586621679127547"><span class="hs-identifier hs-var">ne</span></a></span><span> </span><span class="annot"><span class="annottext">NonEmpty HoyoException
 -&gt; NonEmpty HoyoException -&gt; NonEmpty HoyoException
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">HoyoException
-</span><a href="#local-6989586621679127540"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">HoyoException -&gt; [HoyoException] -&gt; NonEmpty HoyoException
+</span><a href="#local-6989586621679127546"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">HoyoException -&gt; [HoyoException] -&gt; NonEmpty HoyoException
 forall a. a -&gt; [a] -&gt; NonEmpty a
 </span><span class="hs-operator hs-var">NE.:|</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-167"></span><span>  </span><span id="local-6989586621679127538"><span class="annot"><span class="annottext">HoyoException
-</span><a href="#local-6989586621679127538"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="annot"><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#MultipleExceptions"><span class="hs-identifier hs-type">MultipleExceptions</span></a></span><span> </span><span id="local-6989586621679127537"><span class="annot"><span class="annottext">NonEmpty HoyoException
-</span><a href="#local-6989586621679127537"><span class="hs-identifier hs-var">ne</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NonEmpty HoyoException -&gt; HoyoException
+</span><span id="line-167"></span><span>  </span><span id="local-6989586621679127544"><span class="annot"><span class="annottext">HoyoException
+</span><a href="#local-6989586621679127544"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="annot"><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#MultipleExceptions"><span class="hs-identifier hs-type">MultipleExceptions</span></a></span><span> </span><span id="local-6989586621679127543"><span class="annot"><span class="annottext">NonEmpty HoyoException
+</span><a href="#local-6989586621679127543"><span class="hs-identifier hs-var">ne</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NonEmpty HoyoException -&gt; HoyoException
 </span><a href="Hoyo.Internal.Types.html#MultipleExceptions"><span class="hs-identifier hs-var">MultipleExceptions</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">HoyoException
-</span><a href="#local-6989586621679127538"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">HoyoException -&gt; NonEmpty HoyoException -&gt; NonEmpty HoyoException
+</span><a href="#local-6989586621679127544"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">HoyoException -&gt; NonEmpty HoyoException -&gt; NonEmpty HoyoException
 forall a. a -&gt; NonEmpty a -&gt; NonEmpty a
 </span><span class="hs-operator hs-var">NE.&lt;|</span></span><span> </span><span class="annot"><span class="annottext">NonEmpty HoyoException
-</span><a href="#local-6989586621679127537"><span class="hs-identifier hs-var">ne</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-168"></span><span>  </span><span class="annot"><a href="Hoyo.Internal.Types.html#ConfigException"><span class="hs-identifier hs-type">ConfigException</span></a></span><span> </span><span id="local-6989586621679127535"><span class="annot"><span class="annottext">[Text]
-</span><a href="#local-6989586621679127535"><span class="hs-identifier hs-var">xs</span></a></span></span><span> </span><span class="annot"><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#ConfigException"><span class="hs-identifier hs-type">ConfigException</span></a></span><span> </span><span id="local-6989586621679127534"><span class="annot"><span class="annottext">[Text]
-</span><a href="#local-6989586621679127534"><span class="hs-identifier hs-var">ys</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Text] -&gt; HoyoException
+</span><a href="#local-6989586621679127543"><span class="hs-identifier hs-var">ne</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-168"></span><span>  </span><span class="annot"><a href="Hoyo.Internal.Types.html#ConfigException"><span class="hs-identifier hs-type">ConfigException</span></a></span><span> </span><span id="local-6989586621679127541"><span class="annot"><span class="annottext">[Text]
+</span><a href="#local-6989586621679127541"><span class="hs-identifier hs-var">xs</span></a></span></span><span> </span><span class="annot"><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#ConfigException"><span class="hs-identifier hs-type">ConfigException</span></a></span><span> </span><span id="local-6989586621679127540"><span class="annot"><span class="annottext">[Text]
+</span><a href="#local-6989586621679127540"><span class="hs-identifier hs-var">ys</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Text] -&gt; HoyoException
 </span><a href="Hoyo.Internal.Types.html#ConfigException"><span class="hs-identifier hs-var">ConfigException</span></a></span><span> </span><span class="annot"><span class="annottext">([Text] -&gt; HoyoException) -&gt; [Text] -&gt; HoyoException
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[Text]
-</span><a href="#local-6989586621679127535"><span class="hs-identifier hs-var">xs</span></a></span><span> </span><span class="annot"><span class="annottext">[Text] -&gt; [Text] -&gt; [Text]
+</span><a href="#local-6989586621679127541"><span class="hs-identifier hs-var">xs</span></a></span><span> </span><span class="annot"><span class="annottext">[Text] -&gt; [Text] -&gt; [Text]
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">[Text]
-</span><a href="#local-6989586621679127534"><span class="hs-identifier hs-var">ys</span></a></span><span>
-</span><span id="line-169"></span><span>  </span><span class="annot"><a href="Hoyo.Internal.Types.html#ParseException"><span class="hs-identifier hs-type">ParseException</span></a></span><span> </span><span id="local-6989586621679127533"><span class="annot"><span class="annottext">[Text]
-</span><a href="#local-6989586621679127533"><span class="hs-identifier hs-var">xs</span></a></span></span><span> </span><span class="annot"><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#ParseException"><span class="hs-identifier hs-type">ParseException</span></a></span><span> </span><span id="local-6989586621679127532"><span class="annot"><span class="annottext">[Text]
-</span><a href="#local-6989586621679127532"><span class="hs-identifier hs-var">ys</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Text] -&gt; HoyoException
+</span><a href="#local-6989586621679127540"><span class="hs-identifier hs-var">ys</span></a></span><span>
+</span><span id="line-169"></span><span>  </span><span class="annot"><a href="Hoyo.Internal.Types.html#ParseException"><span class="hs-identifier hs-type">ParseException</span></a></span><span> </span><span id="local-6989586621679127539"><span class="annot"><span class="annottext">[Text]
+</span><a href="#local-6989586621679127539"><span class="hs-identifier hs-var">xs</span></a></span></span><span> </span><span class="annot"><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#ParseException"><span class="hs-identifier hs-type">ParseException</span></a></span><span> </span><span id="local-6989586621679127538"><span class="annot"><span class="annottext">[Text]
+</span><a href="#local-6989586621679127538"><span class="hs-identifier hs-var">ys</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Text] -&gt; HoyoException
 </span><a href="Hoyo.Internal.Types.html#ParseException"><span class="hs-identifier hs-var">ParseException</span></a></span><span> </span><span class="annot"><span class="annottext">([Text] -&gt; HoyoException) -&gt; [Text] -&gt; HoyoException
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[Text]
-</span><a href="#local-6989586621679127533"><span class="hs-identifier hs-var">xs</span></a></span><span> </span><span class="annot"><span class="annottext">[Text] -&gt; [Text] -&gt; [Text]
+</span><a href="#local-6989586621679127539"><span class="hs-identifier hs-var">xs</span></a></span><span> </span><span class="annot"><span class="annottext">[Text] -&gt; [Text] -&gt; [Text]
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">[Text]
-</span><a href="#local-6989586621679127532"><span class="hs-identifier hs-var">ys</span></a></span><span>
-</span><span id="line-170"></span><span>  </span><span class="annot"><a href="Hoyo.Internal.Types.html#CommandException"><span class="hs-identifier hs-type">CommandException</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Hoyo.Internal.Types.html#InvalidArgumentException"><span class="hs-identifier hs-type">InvalidArgumentException</span></a></span><span> </span><span id="local-6989586621679127531"><span class="annot"><span class="annottext">[Text]
-</span><a href="#local-6989586621679127531"><span class="hs-identifier hs-var">xs</span></a></span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#CommandException"><span class="hs-identifier hs-type">CommandException</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Hoyo.Internal.Types.html#InvalidArgumentException"><span class="hs-identifier hs-type">InvalidArgumentException</span></a></span><span> </span><span id="local-6989586621679127530"><span class="annot"><span class="annottext">[Text]
-</span><a href="#local-6989586621679127530"><span class="hs-identifier hs-var">ys</span></a></span></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679127538"><span class="hs-identifier hs-var">ys</span></a></span><span>
+</span><span id="line-170"></span><span>  </span><span class="annot"><a href="Hoyo.Internal.Types.html#CommandException"><span class="hs-identifier hs-type">CommandException</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Hoyo.Internal.Types.html#InvalidArgumentException"><span class="hs-identifier hs-type">InvalidArgumentException</span></a></span><span> </span><span id="local-6989586621679127537"><span class="annot"><span class="annottext">[Text]
+</span><a href="#local-6989586621679127537"><span class="hs-identifier hs-var">xs</span></a></span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#CommandException"><span class="hs-identifier hs-type">CommandException</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Hoyo.Internal.Types.html#InvalidArgumentException"><span class="hs-identifier hs-type">InvalidArgumentException</span></a></span><span> </span><span id="local-6989586621679127536"><span class="annot"><span class="annottext">[Text]
+</span><a href="#local-6989586621679127536"><span class="hs-identifier hs-var">ys</span></a></span></span><span class="hs-special">)</span><span>
 </span><span id="line-171"></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CommandException -&gt; HoyoException
 </span><a href="Hoyo.Internal.Types.html#CommandException"><span class="hs-identifier hs-var">CommandException</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Text] -&gt; CommandException
 </span><a href="Hoyo.Internal.Types.html#InvalidArgumentException"><span class="hs-identifier hs-var">InvalidArgumentException</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Text]
-</span><a href="#local-6989586621679127531"><span class="hs-identifier hs-var">xs</span></a></span><span> </span><span class="annot"><span class="annottext">[Text] -&gt; [Text] -&gt; [Text]
+</span><a href="#local-6989586621679127537"><span class="hs-identifier hs-var">xs</span></a></span><span> </span><span class="annot"><span class="annottext">[Text] -&gt; [Text] -&gt; [Text]
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">[Text]
-</span><a href="#local-6989586621679127530"><span class="hs-identifier hs-var">ys</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-172"></span><span>  </span><span id="local-6989586621679127529"><span class="annot"><span class="annottext">HoyoException
-</span><a href="#local-6989586621679127529"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="annot"><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span id="local-6989586621679127528"><span class="annot"><span class="annottext">HoyoException
-</span><a href="#local-6989586621679127528"><span class="hs-identifier hs-var">y</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NonEmpty HoyoException -&gt; HoyoException
+</span><a href="#local-6989586621679127536"><span class="hs-identifier hs-var">ys</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-172"></span><span>  </span><span id="local-6989586621679127535"><span class="annot"><span class="annottext">HoyoException
+</span><a href="#local-6989586621679127535"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="annot"><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span id="local-6989586621679127534"><span class="annot"><span class="annottext">HoyoException
+</span><a href="#local-6989586621679127534"><span class="hs-identifier hs-var">y</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NonEmpty HoyoException -&gt; HoyoException
 </span><a href="Hoyo.Internal.Types.html#MultipleExceptions"><span class="hs-identifier hs-var">MultipleExceptions</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">HoyoException
-</span><a href="#local-6989586621679127529"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">HoyoException -&gt; [HoyoException] -&gt; NonEmpty HoyoException
+</span><a href="#local-6989586621679127535"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">HoyoException -&gt; [HoyoException] -&gt; NonEmpty HoyoException
 forall a. a -&gt; [a] -&gt; NonEmpty a
 </span><span class="hs-operator hs-var">NE.:|</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">HoyoException
-</span><a href="#local-6989586621679127528"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679127534"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
 </span><span id="line-173"></span><span>
 </span><span id="line-174"></span><span class="hs-comment">-- | 'HoyoMonad' is the main monad stack for the hoyo program. It's essentially a wrapper</span><span>
 </span><span id="line-175"></span><span class="hs-comment">-- around @ExceptT T.Text (ReaderT Env IO)@: in other words,</span><span>
 </span><span id="line-176"></span><span class="hs-comment">-- @HoyoMonad a@ is equivalent to @Env -&gt; IO (Either T.Text a)@</span><span>
-</span><span id="line-177"></span><span class="hs-keyword">newtype</span><span> </span><span id="HoyoMonad"><span class="annot"><a href="Hoyo.Internal.Types.html#HoyoMonad"><span class="hs-identifier hs-var">HoyoMonad</span></a></span></span><span> </span><span id="local-6989586621679127782"><span class="annot"><a href="#local-6989586621679127782"><span class="hs-identifier hs-type">a</span></a></span></span><span>
+</span><span id="line-177"></span><span class="hs-keyword">newtype</span><span> </span><span id="HoyoMonad"><span class="annot"><a href="Hoyo.Internal.Types.html#HoyoMonad"><span class="hs-identifier hs-var">HoyoMonad</span></a></span></span><span> </span><span id="local-6989586621679127788"><span class="annot"><a href="#local-6989586621679127788"><span class="hs-identifier hs-type">a</span></a></span></span><span>
 </span><span id="line-178"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span id="HoyoMonad"><span class="annot"><a href="Hoyo.Internal.Types.html#HoyoMonad"><span class="hs-identifier hs-var">HoyoMonad</span></a></span></span><span> </span><span class="hs-special">{</span><span> </span><span id="unHoyo"><span class="annot"><span class="annottext">HoyoMonad a -&gt; ExceptT HoyoException (ReaderT Env IO) a
-</span><a href="Hoyo.Internal.Types.html#unHoyo"><span class="hs-identifier hs-var hs-var">unHoyo</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ExceptT</span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#HoyoException"><span class="hs-identifier hs-type">HoyoException</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">ReaderT</span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#Env"><span class="hs-identifier hs-type">Env</span></a></span><span> </span><span class="annot"><span class="hs-identifier hs-type">IO</span></span><span class="hs-special">)</span><span> </span><span class="annot"><a href="#local-6989586621679127782"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-special">}</span><span>
+</span><a href="Hoyo.Internal.Types.html#unHoyo"><span class="hs-identifier hs-var hs-var">unHoyo</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ExceptT</span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#HoyoException"><span class="hs-identifier hs-type">HoyoException</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">ReaderT</span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#Env"><span class="hs-identifier hs-type">Env</span></a></span><span> </span><span class="annot"><span class="hs-identifier hs-type">IO</span></span><span class="hs-special">)</span><span> </span><span class="annot"><a href="#local-6989586621679127788"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-special">}</span><span>
 </span><span id="line-179"></span><span>  </span><span class="hs-keyword">deriving</span><span>
-</span><span id="line-180"></span><span>  </span><span class="hs-special">(</span><span> </span><span id="local-6989586621679127522"><span id="local-6989586621679127524"><span class="annot"><span class="annottext">a -&gt; HoyoMonad b -&gt; HoyoMonad a
+</span><span id="line-180"></span><span>  </span><span class="hs-special">(</span><span> </span><span id="local-6989586621679127528"><span id="local-6989586621679127530"><span class="annot"><span class="annottext">a -&gt; HoyoMonad b -&gt; HoyoMonad a
 (a -&gt; b) -&gt; HoyoMonad a -&gt; HoyoMonad b
 (forall a b. (a -&gt; b) -&gt; HoyoMonad a -&gt; HoyoMonad b)
 -&gt; (forall a b. a -&gt; HoyoMonad b -&gt; HoyoMonad a)
@@ -599,7 +599,7 @@ $c&lt;$ :: forall a b. a -&gt; HoyoMonad b -&gt; HoyoMonad a
 fmap :: (a -&gt; b) -&gt; HoyoMonad a -&gt; HoyoMonad b
 $cfmap :: forall a b. (a -&gt; b) -&gt; HoyoMonad a -&gt; HoyoMonad b
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Functor</span></span></span></span><span>
-</span><span id="line-181"></span><span>  </span><span class="hs-special">,</span><span> </span><span id="local-6989586621679127510"><span id="local-6989586621679127512"><span id="local-6989586621679127514"><span id="local-6989586621679127516"><span id="local-6989586621679127518"><span class="annot"><span class="annottext">Functor HoyoMonad
+</span><span id="line-181"></span><span>  </span><span class="hs-special">,</span><span> </span><span id="local-6989586621679127516"><span id="local-6989586621679127518"><span id="local-6989586621679127520"><span id="local-6989586621679127522"><span id="local-6989586621679127524"><span class="annot"><span class="annottext">Functor HoyoMonad
 a -&gt; HoyoMonad a
 Functor HoyoMonad
 -&gt; (forall a. a -&gt; HoyoMonad a)
@@ -640,7 +640,7 @@ pure :: a -&gt; HoyoMonad a
 $cpure :: forall a. a -&gt; HoyoMonad a
 $cp1Applicative :: Functor HoyoMonad
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Applicative</span></span></span></span></span></span></span><span>
-</span><span id="line-182"></span><span>  </span><span class="hs-special">,</span><span> </span><span id="local-6989586621679127502"><span id="local-6989586621679127504"><span id="local-6989586621679127506"><span class="annot"><span class="annottext">Applicative HoyoMonad
+</span><span id="line-182"></span><span>  </span><span class="hs-special">,</span><span> </span><span id="local-6989586621679127508"><span id="local-6989586621679127510"><span id="local-6989586621679127512"><span class="annot"><span class="annottext">Applicative HoyoMonad
 a -&gt; HoyoMonad a
 Applicative HoyoMonad
 -&gt; (forall a b. HoyoMonad a -&gt; (a -&gt; HoyoMonad b) -&gt; HoyoMonad b)
@@ -666,14 +666,14 @@ $c&gt;&gt; :: forall a b. HoyoMonad a -&gt; HoyoMonad b -&gt; HoyoMonad b
 $c&gt;&gt;= :: forall a b. HoyoMonad a -&gt; (a -&gt; HoyoMonad b) -&gt; HoyoMonad b
 $cp1Monad :: Applicative HoyoMonad
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Monad</span></span></span></span></span><span>
-</span><span id="line-183"></span><span>  </span><span class="hs-special">,</span><span> </span><span id="local-6989586621679127496"><span id="local-6989586621679127498"><span class="annot"><span class="hs-identifier hs-type">MonadError</span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#HoyoException"><span class="hs-identifier hs-type">HoyoException</span></a></span></span></span><span>
-</span><span id="line-184"></span><span>  </span><span class="hs-special">,</span><span> </span><span id="local-6989586621679127488"><span id="local-6989586621679127490"><span id="local-6989586621679127492"><span class="annot"><span class="hs-identifier hs-type">MonadReader</span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#Env"><span class="hs-identifier hs-type">Env</span></a></span></span></span></span><span>
+</span><span id="line-183"></span><span>  </span><span class="hs-special">,</span><span> </span><span id="local-6989586621679127502"><span id="local-6989586621679127504"><span class="annot"><span class="hs-identifier hs-type">MonadError</span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#HoyoException"><span class="hs-identifier hs-type">HoyoException</span></a></span></span></span><span>
+</span><span id="line-184"></span><span>  </span><span class="hs-special">,</span><span> </span><span id="local-6989586621679127494"><span id="local-6989586621679127496"><span id="local-6989586621679127498"><span class="annot"><span class="hs-identifier hs-type">MonadReader</span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#Env"><span class="hs-identifier hs-type">Env</span></a></span></span></span></span><span>
 </span><span id="line-185"></span><span>  </span><span class="hs-special">)</span><span>
 </span><span id="line-186"></span><span>
 </span><span id="line-187"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MonadIO</span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#HoyoMonad"><span class="hs-identifier hs-type">HoyoMonad</span></a></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-188"></span><span>  </span><span id="local-6989586621679127483"><span class="annot"><span class="annottext">liftIO :: IO a -&gt; HoyoMonad a
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var">liftIO</span></span></span><span> </span><span id="local-6989586621679127481"><span class="annot"><span class="annottext">IO a
-</span><a href="#local-6989586621679127481"><span class="hs-identifier hs-var">m</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ExceptT HoyoException (ReaderT Env IO) (Either IOError a)
+</span><span id="line-188"></span><span>  </span><span id="local-6989586621679127489"><span class="annot"><span class="annottext">liftIO :: IO a -&gt; HoyoMonad a
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var">liftIO</span></span></span><span> </span><span id="local-6989586621679127487"><span class="annot"><span class="annottext">IO a
+</span><a href="#local-6989586621679127487"><span class="hs-identifier hs-var">m</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ExceptT HoyoException (ReaderT Env IO) (Either IOError a)
 -&gt; HoyoMonad (Either IOError a)
 forall a. ExceptT HoyoException (ReaderT Env IO) a -&gt; HoyoMonad a
 </span><a href="Hoyo.Internal.Types.html#HoyoMonad"><span class="hs-identifier hs-var">HoyoMonad</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">IO (Either IOError a)
@@ -687,23 +687,23 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">IO a -&gt; IO (Either IOError a)
 forall a. IO a -&gt; IO (Either IOError a)
 </span><span class="hs-identifier hs-var">tryIOError</span></span><span> </span><span class="annot"><span class="annottext">IO a
-</span><a href="#local-6989586621679127481"><span class="hs-identifier hs-var">m</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">HoyoMonad (Either IOError a)
+</span><a href="#local-6989586621679127487"><span class="hs-identifier hs-var">m</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">HoyoMonad (Either IOError a)
 -&gt; (Either IOError a -&gt; HoyoMonad a) -&gt; HoyoMonad a
 forall (m :: * -&gt; *) a b. Monad m =&gt; m a -&gt; (a -&gt; m b) -&gt; m b
 </span><span class="hs-operator hs-var">&gt;&gt;=</span></span><span> </span><span class="hs-glyph">\</span><span class="hs-glyph">case</span><span>
-</span><span id="line-189"></span><span>    </span><span class="annot"><span class="hs-identifier hs-type">Left</span></span><span> </span><span id="local-6989586621679127479"><span class="annot"><span class="annottext">IOError
-</span><a href="#local-6989586621679127479"><span class="hs-identifier hs-var">err</span></a></span></span><span>     </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">HoyoException -&gt; HoyoMonad a
+</span><span id="line-189"></span><span>    </span><span class="annot"><span class="hs-identifier hs-type">Left</span></span><span> </span><span id="local-6989586621679127485"><span class="annot"><span class="annottext">IOError
+</span><a href="#local-6989586621679127485"><span class="hs-identifier hs-var">err</span></a></span></span><span>     </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">HoyoException -&gt; HoyoMonad a
 forall e (m :: * -&gt; *) a. MonadError e m =&gt; e -&gt; m a
 </span><span class="hs-identifier hs-var">throwError</span></span><span> </span><span class="annot"><span class="annottext">(HoyoException -&gt; HoyoMonad a) -&gt; HoyoException -&gt; HoyoMonad a
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">IOError -&gt; HoyoException
 </span><a href="Hoyo.Internal.Types.html#IOException"><span class="hs-identifier hs-var">IOException</span></a></span><span> </span><span class="annot"><span class="annottext">IOError
-</span><a href="#local-6989586621679127479"><span class="hs-identifier hs-var">err</span></a></span><span>
-</span><span id="line-190"></span><span>    </span><span class="annot"><span class="hs-identifier hs-type">Right</span></span><span> </span><span id="local-6989586621679127477"><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679127477"><span class="hs-identifier hs-var">result</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">a -&gt; HoyoMonad a
+</span><a href="#local-6989586621679127485"><span class="hs-identifier hs-var">err</span></a></span><span>
+</span><span id="line-190"></span><span>    </span><span class="annot"><span class="hs-identifier hs-type">Right</span></span><span> </span><span id="local-6989586621679127483"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679127483"><span class="hs-identifier hs-var">result</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">a -&gt; HoyoMonad a
 forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
 </span><span class="hs-identifier hs-var">return</span></span><span> </span><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679127477"><span class="hs-identifier hs-var">result</span></a></span><span>
+</span><a href="#local-6989586621679127483"><span class="hs-identifier hs-var">result</span></a></span><span>
 </span><span id="line-191"></span><span>
 </span><span id="line-192"></span><span class="hs-comment">-- | Options for the &quot;add&quot; command to be parsed from the command-line.</span><span>
 </span><span id="line-193"></span><span class="hs-keyword">data</span><span> </span><span id="AddOptions"><span class="annot"><a href="Hoyo.Internal.Types.html#AddOptions"><span class="hs-identifier hs-var">AddOptions</span></a></span></span><span>
@@ -712,7 +712,7 @@ forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
 </span><span id="line-195"></span><span>               </span><span class="hs-special">,</span><span> </span><span id="addName"><span class="annot"><span class="annottext">AddOptions -&gt; Maybe Text
 </span><a href="Hoyo.Internal.Types.html#addName"><span class="hs-identifier hs-var hs-var">addName</span></a></span></span><span>      </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">T.Text</span></span><span>
 </span><span id="line-196"></span><span>               </span><span class="hs-special">}</span><span>
-</span><span id="line-197"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127468"><span id="local-6989586621679127470"><span id="local-6989586621679127472"><span class="annot"><span class="annottext">Int -&gt; AddOptions -&gt; ShowS
+</span><span id="line-197"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127474"><span id="local-6989586621679127476"><span id="local-6989586621679127478"><span class="annot"><span class="annottext">Int -&gt; AddOptions -&gt; ShowS
 [AddOptions] -&gt; ShowS
 AddOptions -&gt; FilePath
 (Int -&gt; AddOptions -&gt; ShowS)
@@ -727,7 +727,7 @@ show :: AddOptions -&gt; FilePath
 $cshow :: AddOptions -&gt; FilePath
 showsPrec :: Int -&gt; AddOptions -&gt; ShowS
 $cshowsPrec :: Int -&gt; AddOptions -&gt; ShowS
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679127464"><span id="local-6989586621679127466"><span class="annot"><span class="annottext">AddOptions -&gt; AddOptions -&gt; Bool
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679127470"><span id="local-6989586621679127472"><span class="annot"><span class="annottext">AddOptions -&gt; AddOptions -&gt; Bool
 (AddOptions -&gt; AddOptions -&gt; Bool)
 -&gt; (AddOptions -&gt; AddOptions -&gt; Bool) -&gt; Eq AddOptions
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
@@ -741,7 +741,7 @@ $c== :: AddOptions -&gt; AddOptions -&gt; Bool
 </span><span id="line-200"></span><span class="hs-keyword">newtype</span><span> </span><span id="MoveOptions"><span class="annot"><a href="Hoyo.Internal.Types.html#MoveOptions"><span class="hs-identifier hs-var">MoveOptions</span></a></span></span><span>
 </span><span id="line-201"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span id="MoveOptions"><span class="annot"><a href="Hoyo.Internal.Types.html#MoveOptions"><span class="hs-identifier hs-var">MoveOptions</span></a></span></span><span> </span><span class="hs-special">{</span><span> </span><span id="moveSearch"><span class="annot"><span class="annottext">MoveOptions -&gt; BookmarkSearchTerm
 </span><a href="Hoyo.Internal.Types.html#moveSearch"><span class="hs-identifier hs-var hs-var">moveSearch</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#BookmarkSearchTerm"><span class="hs-identifier hs-type">BookmarkSearchTerm</span></a></span><span> </span><span class="hs-special">}</span><span>
-</span><span id="line-202"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127456"><span id="local-6989586621679127458"><span id="local-6989586621679127460"><span class="annot"><span class="annottext">Int -&gt; MoveOptions -&gt; ShowS
+</span><span id="line-202"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127462"><span id="local-6989586621679127464"><span id="local-6989586621679127466"><span class="annot"><span class="annottext">Int -&gt; MoveOptions -&gt; ShowS
 [MoveOptions] -&gt; ShowS
 MoveOptions -&gt; FilePath
 (Int -&gt; MoveOptions -&gt; ShowS)
@@ -756,7 +756,7 @@ show :: MoveOptions -&gt; FilePath
 $cshow :: MoveOptions -&gt; FilePath
 showsPrec :: Int -&gt; MoveOptions -&gt; ShowS
 $cshowsPrec :: Int -&gt; MoveOptions -&gt; ShowS
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679127452"><span id="local-6989586621679127454"><span class="annot"><span class="annottext">MoveOptions -&gt; MoveOptions -&gt; Bool
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679127458"><span id="local-6989586621679127460"><span class="annot"><span class="annottext">MoveOptions -&gt; MoveOptions -&gt; Bool
 (MoveOptions -&gt; MoveOptions -&gt; Bool)
 -&gt; (MoveOptions -&gt; MoveOptions -&gt; Bool) -&gt; Eq MoveOptions
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
@@ -775,7 +775,7 @@ $c== :: MoveOptions -&gt; MoveOptions -&gt; Bool
 </span><span id="line-208"></span><span>                </span><span class="hs-special">,</span><span> </span><span id="listJSONOutput"><span class="annot"><span class="annottext">ListOptions -&gt; Bool
 </span><a href="Hoyo.Internal.Types.html#listJSONOutput"><span class="hs-identifier hs-var hs-var">listJSONOutput</span></a></span></span><span>           </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span>
 </span><span id="line-209"></span><span>                </span><span class="hs-special">}</span><span>
-</span><span id="line-210"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127442"><span id="local-6989586621679127444"><span id="local-6989586621679127446"><span class="annot"><span class="annottext">Int -&gt; ListOptions -&gt; ShowS
+</span><span id="line-210"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127448"><span id="local-6989586621679127450"><span id="local-6989586621679127452"><span class="annot"><span class="annottext">Int -&gt; ListOptions -&gt; ShowS
 [ListOptions] -&gt; ShowS
 ListOptions -&gt; FilePath
 (Int -&gt; ListOptions -&gt; ShowS)
@@ -790,7 +790,7 @@ show :: ListOptions -&gt; FilePath
 $cshow :: ListOptions -&gt; FilePath
 showsPrec :: Int -&gt; ListOptions -&gt; ShowS
 $cshowsPrec :: Int -&gt; ListOptions -&gt; ShowS
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679127438"><span id="local-6989586621679127440"><span class="annot"><span class="annottext">ListOptions -&gt; ListOptions -&gt; Bool
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679127444"><span id="local-6989586621679127446"><span class="annot"><span class="annottext">ListOptions -&gt; ListOptions -&gt; Bool
 (ListOptions -&gt; ListOptions -&gt; Bool)
 -&gt; (ListOptions -&gt; ListOptions -&gt; Bool) -&gt; Eq ListOptions
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
@@ -801,7 +801,7 @@ $c== :: ListOptions -&gt; ListOptions -&gt; Bool
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></span></span></span><span class="hs-special">)</span><span>
 </span><span id="line-211"></span><span>
 </span><span id="line-212"></span><span class="hs-comment">-- | Options for the &quot;clear&quot; command to be parsed from the command-line.</span><span>
-</span><span id="line-213"></span><span class="hs-keyword">data</span><span> </span><span id="ClearOptions"><span class="annot"><a href="Hoyo.Internal.Types.html#ClearOptions"><span class="hs-identifier hs-var">ClearOptions</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="ClearOptions"><span class="annot"><a href="Hoyo.Internal.Types.html#ClearOptions"><span class="hs-identifier hs-var">ClearOptions</span></a></span></span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127431"><span id="local-6989586621679127433"><span id="local-6989586621679127435"><span class="annot"><span class="annottext">Int -&gt; ClearOptions -&gt; ShowS
+</span><span id="line-213"></span><span class="hs-keyword">data</span><span> </span><span id="ClearOptions"><span class="annot"><a href="Hoyo.Internal.Types.html#ClearOptions"><span class="hs-identifier hs-var">ClearOptions</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="ClearOptions"><span class="annot"><a href="Hoyo.Internal.Types.html#ClearOptions"><span class="hs-identifier hs-var">ClearOptions</span></a></span></span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127437"><span id="local-6989586621679127439"><span id="local-6989586621679127441"><span class="annot"><span class="annottext">Int -&gt; ClearOptions -&gt; ShowS
 [ClearOptions] -&gt; ShowS
 ClearOptions -&gt; FilePath
 (Int -&gt; ClearOptions -&gt; ShowS)
@@ -816,7 +816,7 @@ show :: ClearOptions -&gt; FilePath
 $cshow :: ClearOptions -&gt; FilePath
 showsPrec :: Int -&gt; ClearOptions -&gt; ShowS
 $cshowsPrec :: Int -&gt; ClearOptions -&gt; ShowS
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679127427"><span id="local-6989586621679127429"><span class="annot"><span class="annottext">ClearOptions -&gt; ClearOptions -&gt; Bool
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679127433"><span id="local-6989586621679127435"><span class="annot"><span class="annottext">ClearOptions -&gt; ClearOptions -&gt; Bool
 (ClearOptions -&gt; ClearOptions -&gt; Bool)
 -&gt; (ClearOptions -&gt; ClearOptions -&gt; Bool) -&gt; Eq ClearOptions
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
@@ -830,7 +830,7 @@ $c== :: ClearOptions -&gt; ClearOptions -&gt; Bool
 </span><span id="line-216"></span><span class="hs-keyword">newtype</span><span> </span><span id="DeleteOptions"><span class="annot"><a href="Hoyo.Internal.Types.html#DeleteOptions"><span class="hs-identifier hs-var">DeleteOptions</span></a></span></span><span>
 </span><span id="line-217"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span id="DeleteOptions"><span class="annot"><a href="Hoyo.Internal.Types.html#DeleteOptions"><span class="hs-identifier hs-var">DeleteOptions</span></a></span></span><span> </span><span class="hs-special">{</span><span> </span><span id="deleteSearch"><span class="annot"><span class="annottext">DeleteOptions -&gt; BookmarkSearchTerm
 </span><a href="Hoyo.Internal.Types.html#deleteSearch"><span class="hs-identifier hs-var hs-var">deleteSearch</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#BookmarkSearchTerm"><span class="hs-identifier hs-type">BookmarkSearchTerm</span></a></span><span> </span><span class="hs-special">}</span><span>
-</span><span id="line-218"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127419"><span id="local-6989586621679127421"><span id="local-6989586621679127423"><span class="annot"><span class="annottext">Int -&gt; DeleteOptions -&gt; ShowS
+</span><span id="line-218"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127425"><span id="local-6989586621679127427"><span id="local-6989586621679127429"><span class="annot"><span class="annottext">Int -&gt; DeleteOptions -&gt; ShowS
 [DeleteOptions] -&gt; ShowS
 DeleteOptions -&gt; FilePath
 (Int -&gt; DeleteOptions -&gt; ShowS)
@@ -845,7 +845,7 @@ show :: DeleteOptions -&gt; FilePath
 $cshow :: DeleteOptions -&gt; FilePath
 showsPrec :: Int -&gt; DeleteOptions -&gt; ShowS
 $cshowsPrec :: Int -&gt; DeleteOptions -&gt; ShowS
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679127415"><span id="local-6989586621679127417"><span class="annot"><span class="annottext">DeleteOptions -&gt; DeleteOptions -&gt; Bool
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679127421"><span id="local-6989586621679127423"><span class="annot"><span class="annottext">DeleteOptions -&gt; DeleteOptions -&gt; Bool
 (DeleteOptions -&gt; DeleteOptions -&gt; Bool)
 -&gt; (DeleteOptions -&gt; DeleteOptions -&gt; Bool) -&gt; Eq DeleteOptions
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
@@ -856,7 +856,7 @@ $c== :: DeleteOptions -&gt; DeleteOptions -&gt; Bool
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></span></span></span><span class="hs-special">)</span><span>
 </span><span id="line-219"></span><span>
 </span><span id="line-220"></span><span class="hs-comment">-- | Options for the &quot;refresh&quot; command to be parsed from the command-line.</span><span>
-</span><span id="line-221"></span><span class="hs-keyword">data</span><span> </span><span id="RefreshOptions"><span class="annot"><a href="Hoyo.Internal.Types.html#RefreshOptions"><span class="hs-identifier hs-var">RefreshOptions</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="RefreshOptions"><span class="annot"><a href="Hoyo.Internal.Types.html#RefreshOptions"><span class="hs-identifier hs-var">RefreshOptions</span></a></span></span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127408"><span id="local-6989586621679127410"><span id="local-6989586621679127412"><span class="annot"><span class="annottext">Int -&gt; RefreshOptions -&gt; ShowS
+</span><span id="line-221"></span><span class="hs-keyword">data</span><span> </span><span id="RefreshOptions"><span class="annot"><a href="Hoyo.Internal.Types.html#RefreshOptions"><span class="hs-identifier hs-var">RefreshOptions</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="RefreshOptions"><span class="annot"><a href="Hoyo.Internal.Types.html#RefreshOptions"><span class="hs-identifier hs-var">RefreshOptions</span></a></span></span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127414"><span id="local-6989586621679127416"><span id="local-6989586621679127418"><span class="annot"><span class="annottext">Int -&gt; RefreshOptions -&gt; ShowS
 [RefreshOptions] -&gt; ShowS
 RefreshOptions -&gt; FilePath
 (Int -&gt; RefreshOptions -&gt; ShowS)
@@ -871,7 +871,7 @@ show :: RefreshOptions -&gt; FilePath
 $cshow :: RefreshOptions -&gt; FilePath
 showsPrec :: Int -&gt; RefreshOptions -&gt; ShowS
 $cshowsPrec :: Int -&gt; RefreshOptions -&gt; ShowS
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679127404"><span id="local-6989586621679127406"><span class="annot"><span class="annottext">RefreshOptions -&gt; RefreshOptions -&gt; Bool
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679127410"><span id="local-6989586621679127412"><span class="annot"><span class="annottext">RefreshOptions -&gt; RefreshOptions -&gt; Bool
 (RefreshOptions -&gt; RefreshOptions -&gt; Bool)
 -&gt; (RefreshOptions -&gt; RefreshOptions -&gt; Bool) -&gt; Eq RefreshOptions
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
@@ -885,7 +885,7 @@ $c== :: RefreshOptions -&gt; RefreshOptions -&gt; Bool
 </span><span id="line-224"></span><span class="hs-keyword">newtype</span><span> </span><span id="ConfigPrintOptions"><span class="annot"><a href="Hoyo.Internal.Types.html#ConfigPrintOptions"><span class="hs-identifier hs-var">ConfigPrintOptions</span></a></span></span><span>
 </span><span id="line-225"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span id="ConfigPrintOptions"><span class="annot"><a href="Hoyo.Internal.Types.html#ConfigPrintOptions"><span class="hs-identifier hs-var">ConfigPrintOptions</span></a></span></span><span> </span><span class="hs-special">{</span><span> </span><span id="configPrintJSONOuput"><span class="annot"><span class="annottext">ConfigPrintOptions -&gt; Bool
 </span><a href="Hoyo.Internal.Types.html#configPrintJSONOuput"><span class="hs-identifier hs-var hs-var">configPrintJSONOuput</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span> </span><span class="hs-special">}</span><span>
-</span><span id="line-226"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127396"><span id="local-6989586621679127398"><span id="local-6989586621679127400"><span class="annot"><span class="annottext">Int -&gt; ConfigPrintOptions -&gt; ShowS
+</span><span id="line-226"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127402"><span id="local-6989586621679127404"><span id="local-6989586621679127406"><span class="annot"><span class="annottext">Int -&gt; ConfigPrintOptions -&gt; ShowS
 [ConfigPrintOptions] -&gt; ShowS
 ConfigPrintOptions -&gt; FilePath
 (Int -&gt; ConfigPrintOptions -&gt; ShowS)
@@ -900,7 +900,7 @@ show :: ConfigPrintOptions -&gt; FilePath
 $cshow :: ConfigPrintOptions -&gt; FilePath
 showsPrec :: Int -&gt; ConfigPrintOptions -&gt; ShowS
 $cshowsPrec :: Int -&gt; ConfigPrintOptions -&gt; ShowS
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679127392"><span id="local-6989586621679127394"><span class="annot"><span class="annottext">ConfigPrintOptions -&gt; ConfigPrintOptions -&gt; Bool
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679127398"><span id="local-6989586621679127400"><span class="annot"><span class="annottext">ConfigPrintOptions -&gt; ConfigPrintOptions -&gt; Bool
 (ConfigPrintOptions -&gt; ConfigPrintOptions -&gt; Bool)
 -&gt; (ConfigPrintOptions -&gt; ConfigPrintOptions -&gt; Bool)
 -&gt; Eq ConfigPrintOptions
@@ -912,7 +912,7 @@ $c== :: ConfigPrintOptions -&gt; ConfigPrintOptions -&gt; Bool
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></span></span></span><span class="hs-special">)</span><span>
 </span><span id="line-227"></span><span>
 </span><span id="line-228"></span><span class="hs-comment">-- | Options for the &quot;config reset&quot; command to be parsed from the command-line.</span><span>
-</span><span id="line-229"></span><span class="hs-keyword">data</span><span> </span><span id="ConfigResetOptions"><span class="annot"><a href="Hoyo.Internal.Types.html#ConfigResetOptions"><span class="hs-identifier hs-var">ConfigResetOptions</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="ConfigResetOptions"><span class="annot"><a href="Hoyo.Internal.Types.html#ConfigResetOptions"><span class="hs-identifier hs-var">ConfigResetOptions</span></a></span></span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127385"><span id="local-6989586621679127387"><span id="local-6989586621679127389"><span class="annot"><span class="annottext">Int -&gt; ConfigResetOptions -&gt; ShowS
+</span><span id="line-229"></span><span class="hs-keyword">data</span><span> </span><span id="ConfigResetOptions"><span class="annot"><a href="Hoyo.Internal.Types.html#ConfigResetOptions"><span class="hs-identifier hs-var">ConfigResetOptions</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="ConfigResetOptions"><span class="annot"><a href="Hoyo.Internal.Types.html#ConfigResetOptions"><span class="hs-identifier hs-var">ConfigResetOptions</span></a></span></span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127391"><span id="local-6989586621679127393"><span id="local-6989586621679127395"><span class="annot"><span class="annottext">Int -&gt; ConfigResetOptions -&gt; ShowS
 [ConfigResetOptions] -&gt; ShowS
 ConfigResetOptions -&gt; FilePath
 (Int -&gt; ConfigResetOptions -&gt; ShowS)
@@ -927,7 +927,7 @@ show :: ConfigResetOptions -&gt; FilePath
 $cshow :: ConfigResetOptions -&gt; FilePath
 showsPrec :: Int -&gt; ConfigResetOptions -&gt; ShowS
 $cshowsPrec :: Int -&gt; ConfigResetOptions -&gt; ShowS
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679127381"><span id="local-6989586621679127383"><span class="annot"><span class="annottext">ConfigResetOptions -&gt; ConfigResetOptions -&gt; Bool
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679127387"><span id="local-6989586621679127389"><span class="annot"><span class="annottext">ConfigResetOptions -&gt; ConfigResetOptions -&gt; Bool
 (ConfigResetOptions -&gt; ConfigResetOptions -&gt; Bool)
 -&gt; (ConfigResetOptions -&gt; ConfigResetOptions -&gt; Bool)
 -&gt; Eq ConfigResetOptions
@@ -945,7 +945,7 @@ $c== :: ConfigResetOptions -&gt; ConfigResetOptions -&gt; Bool
 </span><span id="line-234"></span><span>                     </span><span class="hs-special">,</span><span> </span><span id="setValue"><span class="annot"><span class="annottext">ConfigSetOptions -&gt; Text
 </span><a href="Hoyo.Internal.Types.html#setValue"><span class="hs-identifier hs-var hs-var">setValue</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">T.Text</span></span><span>
 </span><span id="line-235"></span><span>                     </span><span class="hs-special">}</span><span>
-</span><span id="line-236"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127372"><span id="local-6989586621679127374"><span id="local-6989586621679127376"><span class="annot"><span class="annottext">Int -&gt; ConfigSetOptions -&gt; ShowS
+</span><span id="line-236"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127378"><span id="local-6989586621679127380"><span id="local-6989586621679127382"><span class="annot"><span class="annottext">Int -&gt; ConfigSetOptions -&gt; ShowS
 [ConfigSetOptions] -&gt; ShowS
 ConfigSetOptions -&gt; FilePath
 (Int -&gt; ConfigSetOptions -&gt; ShowS)
@@ -960,7 +960,7 @@ show :: ConfigSetOptions -&gt; FilePath
 $cshow :: ConfigSetOptions -&gt; FilePath
 showsPrec :: Int -&gt; ConfigSetOptions -&gt; ShowS
 $cshowsPrec :: Int -&gt; ConfigSetOptions -&gt; ShowS
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679127368"><span id="local-6989586621679127370"><span class="annot"><span class="annottext">ConfigSetOptions -&gt; ConfigSetOptions -&gt; Bool
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679127374"><span id="local-6989586621679127376"><span class="annot"><span class="annottext">ConfigSetOptions -&gt; ConfigSetOptions -&gt; Bool
 (ConfigSetOptions -&gt; ConfigSetOptions -&gt; Bool)
 -&gt; (ConfigSetOptions -&gt; ConfigSetOptions -&gt; Bool)
 -&gt; Eq ConfigSetOptions
@@ -978,7 +978,7 @@ $c== :: ConfigSetOptions -&gt; ConfigSetOptions -&gt; Bool
 </span><span id="line-241"></span><span>                            </span><span class="hs-special">,</span><span> </span><span id="addDefaultName"><span class="annot"><span class="annottext">ConfigAddDefaultOptions -&gt; Maybe Text
 </span><a href="Hoyo.Internal.Types.html#addDefaultName"><span class="hs-identifier hs-var hs-var">addDefaultName</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">T.Text</span></span><span>
 </span><span id="line-242"></span><span>                            </span><span class="hs-special">}</span><span>
-</span><span id="line-243"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127359"><span id="local-6989586621679127361"><span id="local-6989586621679127363"><span class="annot"><span class="annottext">Int -&gt; ConfigAddDefaultOptions -&gt; ShowS
+</span><span id="line-243"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127365"><span id="local-6989586621679127367"><span id="local-6989586621679127369"><span class="annot"><span class="annottext">Int -&gt; ConfigAddDefaultOptions -&gt; ShowS
 [ConfigAddDefaultOptions] -&gt; ShowS
 ConfigAddDefaultOptions -&gt; FilePath
 (Int -&gt; ConfigAddDefaultOptions -&gt; ShowS)
@@ -993,7 +993,7 @@ show :: ConfigAddDefaultOptions -&gt; FilePath
 $cshow :: ConfigAddDefaultOptions -&gt; FilePath
 showsPrec :: Int -&gt; ConfigAddDefaultOptions -&gt; ShowS
 $cshowsPrec :: Int -&gt; ConfigAddDefaultOptions -&gt; ShowS
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679127355"><span id="local-6989586621679127357"><span class="annot"><span class="annottext">ConfigAddDefaultOptions -&gt; ConfigAddDefaultOptions -&gt; Bool
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679127361"><span id="local-6989586621679127363"><span class="annot"><span class="annottext">ConfigAddDefaultOptions -&gt; ConfigAddDefaultOptions -&gt; Bool
 (ConfigAddDefaultOptions -&gt; ConfigAddDefaultOptions -&gt; Bool)
 -&gt; (ConfigAddDefaultOptions -&gt; ConfigAddDefaultOptions -&gt; Bool)
 -&gt; Eq ConfigAddDefaultOptions
@@ -1010,7 +1010,7 @@ $c== :: ConfigAddDefaultOptions -&gt; ConfigAddDefaultOptions -&gt; Bool
 </span><span id="line-248"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span id="Reset"><span class="annot"><a href="Hoyo.Internal.Types.html#Reset"><span class="hs-identifier hs-var">Reset</span></a></span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#ConfigResetOptions"><span class="hs-identifier hs-type">ConfigResetOptions</span></a></span><span>
 </span><span id="line-249"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span id="Set"><span class="annot"><a href="Hoyo.Internal.Types.html#Set"><span class="hs-identifier hs-var">Set</span></a></span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#ConfigSetOptions"><span class="hs-identifier hs-type">ConfigSetOptions</span></a></span><span>
 </span><span id="line-250"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span id="AddDefaultBookmark"><span class="annot"><a href="Hoyo.Internal.Types.html#AddDefaultBookmark"><span class="hs-identifier hs-var">AddDefaultBookmark</span></a></span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#ConfigAddDefaultOptions"><span class="hs-identifier hs-type">ConfigAddDefaultOptions</span></a></span><span>
-</span><span id="line-251"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127345"><span id="local-6989586621679127347"><span id="local-6989586621679127349"><span class="annot"><span class="annottext">Int -&gt; ConfigCommand -&gt; ShowS
+</span><span id="line-251"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127351"><span id="local-6989586621679127353"><span id="local-6989586621679127355"><span class="annot"><span class="annottext">Int -&gt; ConfigCommand -&gt; ShowS
 [ConfigCommand] -&gt; ShowS
 ConfigCommand -&gt; FilePath
 (Int -&gt; ConfigCommand -&gt; ShowS)
@@ -1025,7 +1025,7 @@ show :: ConfigCommand -&gt; FilePath
 $cshow :: ConfigCommand -&gt; FilePath
 showsPrec :: Int -&gt; ConfigCommand -&gt; ShowS
 $cshowsPrec :: Int -&gt; ConfigCommand -&gt; ShowS
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679127341"><span id="local-6989586621679127343"><span class="annot"><span class="annottext">ConfigCommand -&gt; ConfigCommand -&gt; Bool
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679127347"><span id="local-6989586621679127349"><span class="annot"><span class="annottext">ConfigCommand -&gt; ConfigCommand -&gt; Bool
 (ConfigCommand -&gt; ConfigCommand -&gt; Bool)
 -&gt; (ConfigCommand -&gt; ConfigCommand -&gt; Bool) -&gt; Eq ConfigCommand
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
@@ -1042,7 +1042,7 @@ $c== :: ConfigCommand -&gt; ConfigCommand -&gt; Bool
 </span><span id="line-256"></span><span>                 </span><span class="hs-special">,</span><span> </span><span id="checkBookmarks"><span class="annot"><span class="annottext">CheckOptions -&gt; Bool
 </span><a href="Hoyo.Internal.Types.html#checkBookmarks"><span class="hs-identifier hs-var hs-var">checkBookmarks</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span>
 </span><span id="line-257"></span><span>                 </span><span class="hs-special">}</span><span>
-</span><span id="line-258"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127332"><span id="local-6989586621679127334"><span id="local-6989586621679127336"><span class="annot"><span class="annottext">Int -&gt; CheckOptions -&gt; ShowS
+</span><span id="line-258"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127338"><span id="local-6989586621679127340"><span id="local-6989586621679127342"><span class="annot"><span class="annottext">Int -&gt; CheckOptions -&gt; ShowS
 [CheckOptions] -&gt; ShowS
 CheckOptions -&gt; FilePath
 (Int -&gt; CheckOptions -&gt; ShowS)
@@ -1057,7 +1057,7 @@ show :: CheckOptions -&gt; FilePath
 $cshow :: CheckOptions -&gt; FilePath
 showsPrec :: Int -&gt; CheckOptions -&gt; ShowS
 $cshowsPrec :: Int -&gt; CheckOptions -&gt; ShowS
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679127328"><span id="local-6989586621679127330"><span class="annot"><span class="annottext">CheckOptions -&gt; CheckOptions -&gt; Bool
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679127334"><span id="local-6989586621679127336"><span class="annot"><span class="annottext">CheckOptions -&gt; CheckOptions -&gt; Bool
 (CheckOptions -&gt; CheckOptions -&gt; Bool)
 -&gt; (CheckOptions -&gt; CheckOptions -&gt; Bool) -&gt; Eq CheckOptions
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
@@ -1071,7 +1071,7 @@ $c== :: CheckOptions -&gt; CheckOptions -&gt; Bool
 </span><span id="line-261"></span><span class="hs-keyword">newtype</span><span> </span><span id="HelpOptions"><span class="annot"><a href="Hoyo.Internal.Types.html#HelpOptions"><span class="hs-identifier hs-var">HelpOptions</span></a></span></span><span>
 </span><span id="line-262"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span id="HelpOptions"><span class="annot"><a href="Hoyo.Internal.Types.html#HelpOptions"><span class="hs-identifier hs-var">HelpOptions</span></a></span></span><span> </span><span class="hs-special">{</span><span> </span><span id="helpSubcommand"><span class="annot"><span class="annottext">HelpOptions -&gt; Maybe Text
 </span><a href="Hoyo.Internal.Types.html#helpSubcommand"><span class="hs-identifier hs-var hs-var">helpSubcommand</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">T.Text</span></span><span> </span><span class="hs-special">}</span><span>
-</span><span id="line-263"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127320"><span id="local-6989586621679127322"><span id="local-6989586621679127324"><span class="annot"><span class="annottext">Int -&gt; HelpOptions -&gt; ShowS
+</span><span id="line-263"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127326"><span id="local-6989586621679127328"><span id="local-6989586621679127330"><span class="annot"><span class="annottext">Int -&gt; HelpOptions -&gt; ShowS
 [HelpOptions] -&gt; ShowS
 HelpOptions -&gt; FilePath
 (Int -&gt; HelpOptions -&gt; ShowS)
@@ -1086,7 +1086,7 @@ show :: HelpOptions -&gt; FilePath
 $cshow :: HelpOptions -&gt; FilePath
 showsPrec :: Int -&gt; HelpOptions -&gt; ShowS
 $cshowsPrec :: Int -&gt; HelpOptions -&gt; ShowS
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679127316"><span id="local-6989586621679127318"><span class="annot"><span class="annottext">HelpOptions -&gt; HelpOptions -&gt; Bool
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679127322"><span id="local-6989586621679127324"><span class="annot"><span class="annottext">HelpOptions -&gt; HelpOptions -&gt; Bool
 (HelpOptions -&gt; HelpOptions -&gt; Bool)
 -&gt; (HelpOptions -&gt; HelpOptions -&gt; Bool) -&gt; Eq HelpOptions
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
@@ -1109,7 +1109,7 @@ $c== :: HelpOptions -&gt; HelpOptions -&gt; Bool
 </span><span id="line-275"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span id="Check"><span class="annot"><a href="Hoyo.Internal.Types.html#Check"><span class="hs-identifier hs-var">Check</span></a></span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#CheckOptions"><span class="hs-identifier hs-type">CheckOptions</span></a></span><span>
 </span><span id="line-276"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span id="DefaultCommand"><span class="annot"><a href="Hoyo.Internal.Types.html#DefaultCommand"><span class="hs-identifier hs-var">DefaultCommand</span></a></span></span><span>
 </span><span id="line-277"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span id="Help"><span class="annot"><a href="Hoyo.Internal.Types.html#Help"><span class="hs-identifier hs-var">Help</span></a></span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#HelpOptions"><span class="hs-identifier hs-type">HelpOptions</span></a></span><span>
-</span><span id="line-278"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127300"><span id="local-6989586621679127302"><span id="local-6989586621679127304"><span class="annot"><span class="annottext">Int -&gt; Command -&gt; ShowS
+</span><span id="line-278"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127306"><span id="local-6989586621679127308"><span id="local-6989586621679127310"><span class="annot"><span class="annottext">Int -&gt; Command -&gt; ShowS
 [Command] -&gt; ShowS
 Command -&gt; FilePath
 (Int -&gt; Command -&gt; ShowS)
@@ -1122,7 +1122,7 @@ show :: Command -&gt; FilePath
 $cshow :: Command -&gt; FilePath
 showsPrec :: Int -&gt; Command -&gt; ShowS
 $cshowsPrec :: Int -&gt; Command -&gt; ShowS
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679127296"><span id="local-6989586621679127298"><span class="annot"><span class="annottext">Command -&gt; Command -&gt; Bool
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679127302"><span id="local-6989586621679127304"><span class="annot"><span class="annottext">Command -&gt; Command -&gt; Bool
 (Command -&gt; Command -&gt; Bool)
 -&gt; (Command -&gt; Command -&gt; Bool) -&gt; Eq Command
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
@@ -1134,7 +1134,7 @@ $c== :: Command -&gt; Command -&gt; Bool
 </span><span id="line-279"></span><span>
 </span><span id="line-280"></span><span class="hs-comment">-- | Datatype for representing a command-line settings override.</span><span>
 </span><span id="line-281"></span><span class="hs-keyword">data</span><span> </span><span id="MaybeOverride"><span class="annot"><a href="Hoyo.Internal.Types.html#MaybeOverride"><span class="hs-identifier hs-var">MaybeOverride</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="OverrideFalse"><span class="annot"><a href="Hoyo.Internal.Types.html#OverrideFalse"><span class="hs-identifier hs-var">OverrideFalse</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="OverrideTrue"><span class="annot"><a href="Hoyo.Internal.Types.html#OverrideTrue"><span class="hs-identifier hs-var">OverrideTrue</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="NoOverride"><span class="annot"><a href="Hoyo.Internal.Types.html#NoOverride"><span class="hs-identifier hs-var">NoOverride</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Conflict"><span class="annot"><a href="Hoyo.Internal.Types.html#Conflict"><span class="hs-identifier hs-var">Conflict</span></a></span></span><span> </span><span class="hs-keyword">deriving</span><span>
-</span><span id="line-282"></span><span>  </span><span class="hs-special">(</span><span> </span><span id="local-6989586621679127286"><span id="local-6989586621679127288"><span id="local-6989586621679127290"><span class="annot"><span class="annottext">Int -&gt; MaybeOverride -&gt; ShowS
+</span><span id="line-282"></span><span>  </span><span class="hs-special">(</span><span> </span><span id="local-6989586621679127292"><span id="local-6989586621679127294"><span id="local-6989586621679127296"><span class="annot"><span class="annottext">Int -&gt; MaybeOverride -&gt; ShowS
 [MaybeOverride] -&gt; ShowS
 MaybeOverride -&gt; FilePath
 (Int -&gt; MaybeOverride -&gt; ShowS)
@@ -1150,7 +1150,7 @@ $cshow :: MaybeOverride -&gt; FilePath
 showsPrec :: Int -&gt; MaybeOverride -&gt; ShowS
 $cshowsPrec :: Int -&gt; MaybeOverride -&gt; ShowS
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span>
-</span><span id="line-283"></span><span>  </span><span class="hs-special">,</span><span> </span><span id="local-6989586621679127282"><span id="local-6989586621679127284"><span class="annot"><span class="annottext">MaybeOverride -&gt; MaybeOverride -&gt; Bool
+</span><span id="line-283"></span><span>  </span><span class="hs-special">,</span><span> </span><span id="local-6989586621679127288"><span id="local-6989586621679127290"><span class="annot"><span class="annottext">MaybeOverride -&gt; MaybeOverride -&gt; Bool
 (MaybeOverride -&gt; MaybeOverride -&gt; Bool)
 -&gt; (MaybeOverride -&gt; MaybeOverride -&gt; Bool) -&gt; Eq MaybeOverride
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
@@ -1174,7 +1174,7 @@ $c== :: MaybeOverride -&gt; MaybeOverride -&gt; Bool
 </span><span id="line-292"></span><span>                    </span><span class="hs-special">,</span><span> </span><span id="overrideBackupBeforeClear"><span class="annot"><span class="annottext">OverrideOptions -&gt; MaybeOverride
 </span><a href="Hoyo.Internal.Types.html#overrideBackupBeforeClear"><span class="hs-identifier hs-var hs-var">overrideBackupBeforeClear</span></a></span></span><span>   </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#MaybeOverride"><span class="hs-identifier hs-type">MaybeOverride</span></a></span><span>
 </span><span id="line-293"></span><span>                    </span><span class="hs-special">}</span><span>
-</span><span id="line-294"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127270"><span id="local-6989586621679127272"><span id="local-6989586621679127274"><span class="annot"><span class="annottext">Int -&gt; OverrideOptions -&gt; ShowS
+</span><span id="line-294"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127276"><span id="local-6989586621679127278"><span id="local-6989586621679127280"><span class="annot"><span class="annottext">Int -&gt; OverrideOptions -&gt; ShowS
 [OverrideOptions] -&gt; ShowS
 OverrideOptions -&gt; FilePath
 (Int -&gt; OverrideOptions -&gt; ShowS)
@@ -1189,7 +1189,7 @@ show :: OverrideOptions -&gt; FilePath
 $cshow :: OverrideOptions -&gt; FilePath
 showsPrec :: Int -&gt; OverrideOptions -&gt; ShowS
 $cshowsPrec :: Int -&gt; OverrideOptions -&gt; ShowS
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679127266"><span id="local-6989586621679127268"><span class="annot"><span class="annottext">OverrideOptions -&gt; OverrideOptions -&gt; Bool
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679127272"><span id="local-6989586621679127274"><span class="annot"><span class="annottext">OverrideOptions -&gt; OverrideOptions -&gt; Bool
 (OverrideOptions -&gt; OverrideOptions -&gt; Bool)
 -&gt; (OverrideOptions -&gt; OverrideOptions -&gt; Bool)
 -&gt; Eq OverrideOptions
@@ -1209,7 +1209,7 @@ $c== :: OverrideOptions -&gt; OverrideOptions -&gt; Bool
 </span><span id="line-300"></span><span>                  </span><span class="hs-special">,</span><span> </span><span id="overrides"><span class="annot"><span class="annottext">GlobalOptions -&gt; OverrideOptions
 </span><a href="Hoyo.Internal.Types.html#overrides"><span class="hs-identifier hs-var hs-var">overrides</span></a></span></span><span>        </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#OverrideOptions"><span class="hs-identifier hs-type">OverrideOptions</span></a></span><span>
 </span><span id="line-301"></span><span>                  </span><span class="hs-special">}</span><span>
-</span><span id="line-302"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127256"><span id="local-6989586621679127258"><span id="local-6989586621679127260"><span class="annot"><span class="annottext">Int -&gt; GlobalOptions -&gt; ShowS
+</span><span id="line-302"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127262"><span id="local-6989586621679127264"><span id="local-6989586621679127266"><span class="annot"><span class="annottext">Int -&gt; GlobalOptions -&gt; ShowS
 [GlobalOptions] -&gt; ShowS
 GlobalOptions -&gt; FilePath
 (Int -&gt; GlobalOptions -&gt; ShowS)
@@ -1224,7 +1224,7 @@ show :: GlobalOptions -&gt; FilePath
 $cshow :: GlobalOptions -&gt; FilePath
 showsPrec :: Int -&gt; GlobalOptions -&gt; ShowS
 $cshowsPrec :: Int -&gt; GlobalOptions -&gt; ShowS
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679127252"><span id="local-6989586621679127254"><span class="annot"><span class="annottext">GlobalOptions -&gt; GlobalOptions -&gt; Bool
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679127258"><span id="local-6989586621679127260"><span class="annot"><span class="annottext">GlobalOptions -&gt; GlobalOptions -&gt; Bool
 (GlobalOptions -&gt; GlobalOptions -&gt; Bool)
 -&gt; (GlobalOptions -&gt; GlobalOptions -&gt; Bool) -&gt; Eq GlobalOptions
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
@@ -1242,7 +1242,7 @@ $c== :: GlobalOptions -&gt; GlobalOptions -&gt; Bool
 </span><span id="line-308"></span><span>            </span><span class="hs-special">,</span><span> </span><span id="optGlobals"><span class="annot"><span class="annottext">Options -&gt; GlobalOptions
 </span><a href="Hoyo.Internal.Types.html#optGlobals"><span class="hs-identifier hs-var hs-var">optGlobals</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#GlobalOptions"><span class="hs-identifier hs-type">GlobalOptions</span></a></span><span>
 </span><span id="line-309"></span><span>            </span><span class="hs-special">}</span><span>
-</span><span id="line-310"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127243"><span id="local-6989586621679127245"><span id="local-6989586621679127247"><span class="annot"><span class="annottext">Int -&gt; Options -&gt; ShowS
+</span><span id="line-310"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679127249"><span id="local-6989586621679127251"><span id="local-6989586621679127253"><span class="annot"><span class="annottext">Int -&gt; Options -&gt; ShowS
 [Options] -&gt; ShowS
 Options -&gt; FilePath
 (Int -&gt; Options -&gt; ShowS)
@@ -1255,7 +1255,7 @@ show :: Options -&gt; FilePath
 $cshow :: Options -&gt; FilePath
 showsPrec :: Int -&gt; Options -&gt; ShowS
 $cshowsPrec :: Int -&gt; Options -&gt; ShowS
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679127239"><span id="local-6989586621679127241"><span class="annot"><span class="annottext">Options -&gt; Options -&gt; Bool
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679127245"><span id="local-6989586621679127247"><span class="annot"><span class="annottext">Options -&gt; Options -&gt; Bool
 (Options -&gt; Options -&gt; Bool)
 -&gt; (Options -&gt; Options -&gt; Bool) -&gt; Eq Options
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
