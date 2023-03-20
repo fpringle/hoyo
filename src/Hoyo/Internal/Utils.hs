@@ -7,16 +7,62 @@ Maintainer  : freddyjepringle@gmail.com
 Utility functions used by all the main Hoyo.* modules.
 -}
 
-{-# LANGUAGE DataKinds  #-}
-{-# LANGUAGE GADTs      #-}
-{-# LANGUAGE RankNTypes #-}
-{-# OPTIONS_HADDOCK prune #-}
+{-# LANGUAGE DataKinds      #-}
+{-# LANGUAGE GADTs          #-}
+{-# LANGUAGE KindSignatures #-}
+{-# LANGUAGE RankNTypes     #-}
 
-module Hoyo.Internal.Utils where
+module Hoyo.Internal.Utils (
+  -- * Lenses for ConfigValue
+    cfgBool
+  , cfgDefaultBookmark
+  , cfgCommand
+  , cfgList
+  , cfgMaybe
+
+  -- * Lenses for Config
+  , failOnError
+  , displayCreationTime
+  , enableClearing
+  , enableReset
+  , backupBeforeClear
+  , defaultBookmarks
+  , defaultCommand
+
+  -- * Utility functions
+  , asks'
+  , assert
+  , assertVerbose
+  , maximumDefault
+
+  -- ** Backups
+  , backupFile
+
+  -- ** Parsing functions
+  , readBool
+  , readInt
+
+  -- ** Printing functions
+  , printStdout
+  , printStderr
+  , pageLines
+
+  -- ** Formatting functions
+  , formatArgs
+  , formatCommand
+  , formatBookmark
+  , formatBookmarks
+  , formatConfigValue
+  , formatOptions
+  , tshow
+  , anyCfgValToJson
+  , bookmarksToJSON
+  ) where
 
 {- HLINT ignore "Use list comprehension" -}
 
 import           Control.Applicative
+import           Control.Exception          (bracket_)
 import           Control.Monad              (unless, when)
 import           Control.Monad.Except
                  ( MonadError (..)
@@ -40,7 +86,9 @@ import           Lens.Micro.Extras
 import           System.Console.ANSI        hiding (Reset)
 import           System.Directory
 import           System.IO
+import           System.Pager
 
+import           Text.JSON
 import           Text.Read                  (readEither)
 
 import qualified Toml.Parser.Core           as Toml
@@ -54,86 +102,88 @@ import qualified Toml.Parser.Value          as Toml
 -----------------------------------------
 -- getters and setter for ConfigValue
 
-getBool :: ConfigValue 'TBool -> Bool
-getBool (BoolV bool) = bool
+-- | A lens into a boolean config value.
+cfgBool :: Lens' (ConfigValue 'TBool) Bool
+cfgBool = lens getBool setBool
+  where
+    getBool :: ConfigValue 'TBool -> Bool
+    getBool (BoolV bool) = bool
 
-setBool :: ConfigValue 'TBool -> Bool -> ConfigValue 'TBool
-setBool _ = BoolV
+    setBool :: ConfigValue 'TBool -> Bool -> ConfigValue 'TBool
+    setBool _ = BoolV
 
-getDefaultBookmark :: ConfigValue 'TDefaultBookmark -> DefaultBookmark
-getDefaultBookmark (DefaultBookmarkV bm) = bm
+-- | A lens into a default bookmark config value.
+cfgDefaultBookmark :: Lens' (ConfigValue 'TDefaultBookmark) DefaultBookmark
+cfgDefaultBookmark = lens getDefaultBookmark setDefaultBookmark
+  where
+    getDefaultBookmark :: ConfigValue 'TDefaultBookmark -> DefaultBookmark
+    getDefaultBookmark (DefaultBookmarkV bm) = bm
 
-setDefaultBookmark :: ConfigValue 'TDefaultBookmark -> DefaultBookmark -> ConfigValue 'TDefaultBookmark
-setDefaultBookmark _ = DefaultBookmarkV
+    setDefaultBookmark :: ConfigValue 'TDefaultBookmark -> DefaultBookmark -> ConfigValue 'TDefaultBookmark
+    setDefaultBookmark _ = DefaultBookmarkV
 
-getCommand :: ConfigValue 'TCommand -> Command
-getCommand (CommandV t) = t
+-- | A lens into a command config value.
+cfgCommand :: Lens' (ConfigValue 'TCommand) Command
+cfgCommand = lens getCommand setCommand
+  where
+    getCommand :: ConfigValue 'TCommand -> Command
+    getCommand (CommandV t) = t
 
-setCommand :: ConfigValue 'TCommand -> Command -> ConfigValue 'TCommand
-setCommand _ = CommandV
+    setCommand :: ConfigValue 'TCommand -> Command -> ConfigValue 'TCommand
+    setCommand _ = CommandV
 
-getList :: ConfigValue ('TList t) -> [ConfigValue t]
-getList (ListOfV xs) = xs
+-- | A lens into a list config value.
+cfgList :: Lens' (ConfigValue ('TList t)) [ConfigValue t]
+cfgList = lens getList setList
+  where
+    getList :: ConfigValue ('TList t) -> [ConfigValue t]
+    getList (ListOfV xs) = xs
 
-setList :: ConfigValue ('TList t) -> [ConfigValue t] -> ConfigValue ('TList t)
-setList _ = ListOfV
+    setList :: ConfigValue ('TList t) -> [ConfigValue t] -> ConfigValue ('TList t)
+    setList _ = ListOfV
 
-getMaybe :: ConfigValue ('TMaybe t) -> Maybe (ConfigValue t)
-getMaybe (MaybeV val) = val
+-- | A lens into an optional config value.
+cfgMaybe :: Lens' (ConfigValue ('TMaybe t)) (Maybe (ConfigValue t))
+cfgMaybe = lens getMaybe setMaybe
+  where
+    getMaybe :: ConfigValue ('TMaybe t) -> Maybe (ConfigValue t)
+    getMaybe (MaybeV val) = val
 
-setMaybe :: ConfigValue ('TMaybe t) -> Maybe (ConfigValue t) -> ConfigValue ('TMaybe t)
-setMaybe _ = MaybeV
+    setMaybe :: ConfigValue ('TMaybe t) -> Maybe (ConfigValue t) -> ConfigValue ('TMaybe t)
+    setMaybe _ = MaybeV
 
 -----------------------------------------
 -- Lenses for Config
 
 failOnError :: Lens' Config Bool
-failOnError = lens getter setter
-  where
-    getter = getBool . _failOnError
-    setter cfg bool = cfg { _failOnError = setBool (_failOnError cfg) bool }
+failOnError = __failOnError . cfgBool
 
 displayCreationTime :: Lens' Config Bool
-displayCreationTime = lens getter setter
-  where
-    getter = getBool . _displayCreationTime
-    setter cfg bool = cfg { _displayCreationTime = setBool (_displayCreationTime cfg) bool }
+displayCreationTime = __displayCreationTime . cfgBool
 
 enableClearing :: Lens' Config Bool
-enableClearing = lens getter setter
-  where
-    getter = getBool . _enableClearing
-    setter cfg bool = cfg { _enableClearing = setBool (_enableClearing cfg) bool }
+enableClearing = __enableClearing . cfgBool
 
 enableReset :: Lens' Config Bool
-enableReset = lens getter setter
-  where
-    getter = getBool . _enableReset
-    setter cfg bool = cfg { _enableReset = setBool (_enableReset cfg) bool }
+enableReset = __enableReset . cfgBool
 
 backupBeforeClear :: Lens' Config Bool
-backupBeforeClear = lens getter setter
+backupBeforeClear = __backupBeforeClear . cfgBool
+
+liftLensToList :: Lens' a b -> Lens' [a] [b]
+liftLensToList l = zipList' . liftLens l . zipList
   where
-    getter = getBool . _backupBeforeClear
-    setter cfg bool = cfg { _backupBeforeClear = setBool (_backupBeforeClear cfg) bool }
+    zipList = lens getZipList const
+    zipList' = lens ZipList const
+
+liftLens :: Applicative g => Lens' a b -> Lens' (g a) (g b)
+liftLens l = lens (fmap (view l)) (\ga gb -> set l <$> gb <*> ga)
 
 defaultBookmarks :: Lens' Config [DefaultBookmark]
-defaultBookmarks = lens getter setter
-  where
-    getter :: Config -> [DefaultBookmark]
-    getter = map getDefaultBookmark . getList . _defaultBookmarks
-
-    setter :: Config -> [DefaultBookmark] -> Config
-    setter cfg bms = cfg { _defaultBookmarks = setList (_defaultBookmarks cfg) (fmap DefaultBookmarkV bms)}
+defaultBookmarks = __defaultBookmarks . cfgList . liftLensToList cfgDefaultBookmark
 
 defaultCommand :: Lens' Config (Maybe Command)
-defaultCommand = lens getter setter
-  where
-    getter :: Config -> Maybe Command
-    getter = fmap getCommand . getMaybe . _defaultCommand
-
-    setter :: Config -> Maybe Command -> Config
-    setter cfg cmd = cfg { _defaultCommand = setMaybe (_defaultCommand cfg) (fmap CommandV cmd) }
+defaultCommand = __defaultCommand . cfgMaybe . liftLens cfgCommand
 
 -----------------------------------------
 
@@ -207,14 +257,26 @@ readInt s = liftEither $ first T.pack (
 
 -- | Print to stderr.
 printStderr :: MonadIO m => T.Text -> m ()
-printStderr msg = liftIO $ do
-  hSetSGR stderr [SetColor Foreground Vivid Red]
-  T.hPutStrLn stderr msg
-  hSetSGR stderr []
+printStderr msg = liftIO $ bracket_ makeRed resetColour $ T.hPutStrLn stderr msg
+  where
+    makeRed = hSetSGR stderr [SetColor Foreground Vivid Red]
+    resetColour = do
+      hSetSGR stderr []
+      hPutStrLn stderr ""
 
 -- | Print to stdout.
 printStdout :: MonadIO m => T.Text -> m ()
 printStdout = liftIO . T.putStrLn
+
+-- | Page lines if larger than one page and if the output device is a terminal.
+-- Otherwise, print.
+pageLines :: MonadIO m => [T.Text] -> m ()
+pageLines ts = do
+  let t = T.intercalate "\n" ts
+  isTTY <- liftIO $ hIsTerminalDevice stdout
+  if isTTY
+  then liftIO $ printOrPage t
+  else printStdout t
 
 -- | Format a 'Bookmark'. Used for the "list" command and error reporting
 -- during other commands.
@@ -270,9 +332,9 @@ formatConfigValue (AnyConfigValue (MaybeV t)) = case t of
                                                   Just t' -> formatConfigValue (AnyConfigValue t')
 formatConfigValue (AnyConfigValue (ListOfV xs)) = T.intercalate "\n" (["["] <> map (("  " <>) . formatConfigValue . AnyConfigValue) xs <> ["]"])
 
-formatBookmarkSearchTerm :: BookmarkSearchTerm -> T.Text
-formatBookmarkSearchTerm (SearchIndex idx) = "#" <> tshow idx
-formatBookmarkSearchTerm (SearchName name) = name
+-- formatBookmarkSearchTerm :: BookmarkSearchTerm -> T.Text
+-- formatBookmarkSearchTerm (SearchIndex idx) = "#" <> tshow idx
+-- formatBookmarkSearchTerm (SearchName name) = name
 
 formatSearchTerm :: BookmarkSearchTerm -> T.Text
 formatSearchTerm (SearchIndex idx) = tshow idx
@@ -287,12 +349,14 @@ maybeSingleton = maybe [] singleton
 maybeSingletonWithPrefix :: [T.Text] -> Maybe T.Text -> [T.Text]
 maybeSingletonWithPrefix pref = maybe [] (\t -> pref <> [t])
 
+-- | Format a 'Command' in the same way it would be parsed from the command line.
 formatCommand :: Command -> [T.Text]
 formatCommand (Add (AddOptions d n)) = "add" : T.pack d : maybeSingleton n
 formatCommand (Move opts) = ["move", formatSearchTerm $ moveSearch opts]
-formatCommand (List (ListOptions n d)) = ["list"]
-                                      <> maybeSingletonWithPrefix ["--name"] n
-                                      <> maybeSingletonWithPrefix ["--dir"] d
+formatCommand (List (ListOptions n d json)) = ["list"]
+                                           <> maybeSingletonWithPrefix ["--name"] n
+                                           <> maybeSingletonWithPrefix ["--dir"] d
+                                           <> (if json then ["--json"] else [])
 formatCommand (Clear ClearOptions) = ["clear"]
 formatCommand (Delete opts) = ["delete", formatSearchTerm $ deleteSearch opts]
 formatCommand (Refresh RefreshOptions) = ["refresh"]
@@ -304,7 +368,8 @@ formatCommand (Help (HelpOptions cmd)) = ["help"] <> maybeToList cmd
 formatCommand DefaultCommand = []
 
 formatConfigCommand :: ConfigCommand -> [T.Text]
-formatConfigCommand (Print ConfigPrintOptions) = ["print"]
+formatConfigCommand (Print (ConfigPrintOptions json)) = ["print"]
+                                                     <> (if json then ["--json"] else [])
 formatConfigCommand (Reset ConfigResetOptions) = ["reset"]
 formatConfigCommand (Set opts) = ["set"
                                 , setKey opts
@@ -331,10 +396,43 @@ formatOverride yes _ OverrideTrue = ["--" <> yes]
 formatOverride _ _ NoOverride     = []
 formatOverride yes no Conflict    = ["--" <> no, "--" <> yes]
 
+-- | Format an 'Options' object in the same way it would be parsed from the command line.
 formatOptions :: Options -> [T.Text]
 formatOptions (Options c g) = formatCommand c <> formatGlobals g
 
+-- | Format a list of arguments into a single 'T.Text', enclosing multi-word arguments in quotes.
 formatArgs :: [T.Text] -> T.Text
 formatArgs = T.unwords . map quoteStrings
   where quoteStrings :: T.Text -> T.Text
         quoteStrings s | ' ' `elem` T.unpack s = "\"" <> s <> "\"" | otherwise  = s
+
+-- | Convert a list of 'Bookmark's to a JSON value. Used in `hoyo list --json`.
+bookmarksToJSON :: Bool -> [Bookmark] -> JSValue
+bookmarksToJSON displayTime bms =
+  let nameObj = maybe JSNull (JSString . toJSString . T.unpack)
+      bmToObj (Bookmark dir idx time mbName) = JSObject $ toJSObject $ [
+          ("index", JSRational False $ toRational idx)
+        , ("directory", JSString $ toJSString dir)
+        , ("name", nameObj mbName)
+        ]
+        <> [("creation_time", JSString $ toJSString $ formatTime defaultTimeLocale "%c" time)
+            | displayTime]
+      arr = JSArray $ map bmToObj bms
+  in JSObject $ toJSObject [("bookmarks", arr)]
+
+cfgValToJson :: forall (t :: ConfigValueType). ConfigValue t -> JSValue
+cfgValToJson (BoolV b) = JSBool b
+cfgValToJson (DefaultBookmarkV (DefaultBookmark dir mbName)) =
+  JSObject $ toJSObject [
+      ("directory", JSString $ toJSString dir)
+    , ("name", case mbName of Nothing   -> JSNull
+                              Just name -> JSString $ toJSString $ T.unpack name)
+    ]
+cfgValToJson (CommandV cmd) = JSString $ toJSString $ T.unpack $ T.unwords $ formatCommand cmd
+cfgValToJson (ListOfV xs) = JSArray $ map cfgValToJson xs
+cfgValToJson (MaybeV Nothing) = JSNull
+cfgValToJson (MaybeV (Just x)) = cfgValToJson x
+
+-- | Convert a configuration value to a JSON value. Used in `hoyo config print --json`.
+anyCfgValToJson :: AnyConfigValue -> JSValue
+anyCfgValToJson (AnyConfigValue val) = cfgValToJson val

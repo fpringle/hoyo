@@ -18,6 +18,7 @@ import                          Control.Monad.Except       (throwError)
 import                          Control.Monad.IO.Class
 import                          Control.Monad.Reader.Class (ask)
 
+import                          Data.Bifunctor
 import                          Data.Char                  (isDigit)
 import                          Data.Function
 import                          Data.List
@@ -37,6 +38,8 @@ import                          System.Console.ANSI        hiding (Reset)
 import                          System.Directory
 import                          System.Exit
 import                          System.IO
+
+import                          Text.JSON
 
 -- | Combine a config flag with a command-line flag, checking for conflicts.
 combOverride :: Bool -> Bool -> MaybeOverride
@@ -162,7 +165,11 @@ runList opts = do
   bms' <- asks' bookmarks
   let bms = filter filt $ sortOn (view bookmarkIndex) $ unBookmarks bms'
   displayTime <- asks' (config . displayCreationTime)
-  mapM_ printStdout (formatBookmarks displayTime bms)
+  if listJSONOutput opts
+  then do
+    let jsonObj = bookmarksToJSON displayTime bms
+    printStdout $ T.pack $ encode jsonObj
+  else pageLines (formatBookmarks displayTime bms)
 
 -- | Help text displayed when the user tries to run "hoyo clear"
 -- when "enable_clear" is set to false.
@@ -242,13 +249,18 @@ runRefresh _ = modifyBookmarks $
 
 -- | Run the "config print" command: print the current config.
 runConfigPrint :: ConfigPrintOptions -> HoyoMonad ()
-runConfigPrint _ = do
+runConfigPrint opts = do
   s <- asks' config
   let keyVals = getKeyVals s
   let keyWidth = maximum $ map (T.length . fst) keyVals
-  forM_ keyVals $ \(key, val) -> do
-    let vStr = formatConfigValue val
-    printStdout (T.justifyLeft keyWidth ' ' key <> " = " <> vStr)
+  if configPrintJSONOuput opts
+  then do
+    let jsonObj = JSObject $ toJSObject $ map (bimap T.unpack anyCfgValToJson) keyVals
+    printStdout $ T.pack $ encode jsonObj
+  else do
+    let align = T.justifyLeft keyWidth ' '
+    let ls = map (\(k, v) -> align k <> " = " <> formatConfigValue v) keyVals
+    pageLines ls
 
 -- | Run the "config reset" command: reset the config to 'defaultConfig'.
 runConfigReset :: ConfigResetOptions -> HoyoMonad ()

@@ -22,10 +22,14 @@ import           Control.Monad.IO.Class
 import           Control.Monad.Reader.Class (MonadReader)
 import           Control.Monad.Trans.Reader (ReaderT)
 
+import           Data.Function
 import           Data.List                  (intercalate)
 import qualified Data.Text                  as T
 import           Data.Time
 
+import           Language.Haskell.TH.Syntax
+
+import           Lens.Micro
 import           Lens.Micro.TH
 
 import           System.IO.Error
@@ -146,6 +150,7 @@ newtype MoveOptions
 data ListOptions
   = ListOptions { listFilterName           :: Maybe T.Text
                 , listFilterDirectoryInfix :: Maybe T.Text
+                , listJSONOutput           :: Bool
                 }
   deriving (Show, Eq)
 
@@ -161,7 +166,9 @@ newtype DeleteOptions
 data RefreshOptions = RefreshOptions deriving (Show, Eq)
 
 -- | Options for the "config print" command to be parsed from the command-line.
-data ConfigPrintOptions = ConfigPrintOptions deriving (Show, Eq)
+newtype ConfigPrintOptions
+  = ConfigPrintOptions { configPrintJSONOuput :: Bool }
+  deriving (Show, Eq)
 
 -- | Options for the "config reset" command to be parsed from the command-line.
 data ConfigResetOptions = ConfigResetOptions deriving (Show, Eq)
@@ -249,3 +256,6 @@ data Options
 makeLenses ''Bookmark
 makeLenses ''DefaultBookmark
 makeLenses ''Env
+flip makeLensesWith ''Config $
+  lensRules
+    & lensField .~ \_ _ n -> [TopName $ mkName $ '_' : nameBase n]

@@ -95,7 +95,7 @@ getKeyVals cfg = [
   , ("enable_clearing",       AnyConfigValue $ _enableClearing cfg)
   , ("enable_reset",          AnyConfigValue $ _enableReset cfg)
   , ("backup_before_clear",   AnyConfigValue $ _backupBeforeClear cfg)
-    ] <> maybeToList (fmap (("default_command", ) . AnyConfigValue) $ getMaybe $ _defaultCommand cfg)
+    ] <> maybeToList (("default_command", ) . AnyConfigValue <$> view (__defaultCommand . cfgMaybe) cfg)
       <> [("default_bookmarks", AnyConfigValue $ _defaultBookmarks cfg)]
 
 -- | Try to set a key-value pair in the config.

@@ -16,6 +16,19 @@ and this project adheres to the
 
 ### Removed
 
+## [0.5.1.1] - 2023-03-20
+
+### Fixed
+- Updated nix files with new dependencies.
+
+## [0.5.1.0] - 2023-03-20
+
+### Added
+
+- When the output is longer than a page, and the output is a TTY, then pass output to a pager.
+    Otherwise, print normally.
+- Added `--json` flag to `hoyo list` and `hoyo config print`.
+
 ## [0.5.0.0] - 2023-03-14
 
 ### Added
@@ -213,7 +226,9 @@ build docs using a pre-commit hook.
 
 - Initial release.
 
-[unreleased]: https://github.com/fpringle/hoyo/compare/v0.5.0.0...HEAD
+[unreleased]: https://github.com/fpringle/hoyo/compare/v0.5.1.0...HEAD
+[0.5.1.1]: https://github.com/fpringle/hoyo/compare/v0.5.1.0...v0.5.1.1
+[0.5.1.0]: https://github.com/fpringle/hoyo/compare/v0.5.0.0...v0.5.1.0
 [0.5.0.0]: https://github.com/fpringle/hoyo/compare/v0.4.0.0...v0.5.0.0
 [0.4.0.0]: https://github.com/fpringle/hoyo/compare/v0.3.0.0...v0.4.0.0
 [0.3.0.0]: https://github.com/fpringle/hoyo/compare/v0.2.3.1...v0.3.0.0
