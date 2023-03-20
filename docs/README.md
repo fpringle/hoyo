@@ -189,6 +189,7 @@ $ hoyo list
 
 ```shell
 $ hoyo config reset
+Are you sure you want to clear your hoyo configuration? (y/n) y
 $ hoyo config print
 fail_on_error = false
 enable_clearing = false
@@ -201,6 +202,7 @@ enable_reset = false
 
 ```shell
 $ hoyo clear --enable-clear
+Are you sure you want to delete all your saved backups? (y/n) y
 $ hoyo list
 [ no output ]
 ```
