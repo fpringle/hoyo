@@ -33,6 +33,8 @@ import                          Lens.Micro.Extras
 import                          System.Directory
 import                          System.Exit
 
+import                          Text.JSON
+
 -- | Combine a config flag with a command-line flag, checking for conflicts.
 combOverride :: Bool -> Bool -> MaybeOverride
 combOverride False False = NoOverride
@@ -158,7 +160,18 @@ runList opts = do
   let bms = filter filt $ sortOn (view bookmarkIndex) $ unBookmarks bms'
   displayTime <- asks' (config . displayCreationTime)
   if listJSONOutput opts
-  then error "todo"
+  then do
+    let nameObj = maybe JSNull (JSString . toJSString . T.unpack)
+    let bmToObj (Bookmark dir idx time mbName) = JSObject $ toJSObject $ [
+            ("index", JSRational False $ toRational idx)
+          , ("directory", JSString $ toJSString dir)
+          , ("name", nameObj mbName)
+          ]
+          <> [("creation_time", JSString $ toJSString $ formatTime defaultTimeLocale "%c" time)
+              | displayTime]
+    let arr = JSArray $ map bmToObj bms
+    let jsonObj = JSObject $ toJSObject [("bookmarks", arr)]
+    printStdout $ T.pack $ encode jsonObj
   else mapM_ printStdout (formatBookmarks displayTime bms)
 
 -- | Help text displayed when the user tries to run "hoyo clear"

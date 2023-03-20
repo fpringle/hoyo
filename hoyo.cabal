@@ -42,7 +42,8 @@ common deps
     package-version,
     optparse-applicative,
     unordered-containers,
-    ansi-terminal
+    ansi-terminal,
+    json
 
 common warnings
   ghc-options: -Wall
