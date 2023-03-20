@@ -43,6 +43,8 @@ common deps
     optparse-applicative,
     unordered-containers,
     ansi-terminal,
+    json,
+    template-haskell,
     pager
 
 common warnings
