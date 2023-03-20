@@ -9,7 +9,10 @@ Internals used by the Hoyo.Command module.
 
 module Hoyo.Internal.Command where
 
+{- HLINT ignore "reduce duplication -}
+
 import                          Control.Applicative
+import                          Control.Exception          (bracket_)
 import                          Control.Monad
 import                          Control.Monad.Except       (throwError)
 import                          Control.Monad.IO.Class
@@ -30,8 +33,10 @@ import                          Hoyo.Internal.Utils
 import                          Lens.Micro
 import                          Lens.Micro.Extras
 
+import                          System.Console.ANSI        hiding (Reset)
 import                          System.Directory
 import                          System.Exit
+import                          System.IO
 
 -- | Combine a config flag with a command-line flag, checking for conflicts.
 combOverride :: Bool -> Bool -> MaybeOverride
@@ -175,6 +180,23 @@ resetDisabledErrMsg = T.intercalate "\n" [
   , "To enable, set enable_reset = true in the config or pass the --enable-reset flag."
   ]
 
+-- | Prompt the user for confirmation with the given string.
+getConfirmation :: String -> IO Bool
+getConfirmation s = bracket_ makeRed resetColour getConfirmation'
+  where
+    makeRed = hSetSGR stdout [SetColor Foreground Vivid Red]
+    resetColour = hSetSGR stdout [] >> putStrLn "\n"
+    getConfirmation' = do
+      putStr $ s <> " (y/n): "
+      hFlush stdout
+      inp <- getLine
+      case inp of
+        "y" -> return True
+        "Y" -> return True
+        "n" -> return False
+        "N" -> return False
+        _   -> getConfirmation'
+
 -- | Run the "clear" command: delete all the saved bookmarks.
 runClear :: ClearOptions -> HoyoMonad ()
 runClear _ = do
@@ -184,10 +206,20 @@ runClear _ = do
   backup <- asks' (config . backupBeforeClear)
   when backup $ backupFile path "bkp"
 
-  modifyBookmarks $ const []
-  bms <- asks' (config . defaultBookmarks) >>= bookmarksFromDefault
-  fp <- asks' bookmarksPath
-  encodeBookmarksFile fp bms
+  isTTY <- liftIO $ hIsTerminalDevice stdin
+
+  if backup || not isTTY
+  then runClear'
+  else do
+    yes <- liftIO $ getConfirmation "Are you sure you want to delete all your saved backups?"
+    when yes runClear'
+
+  where
+    runClear' = do
+      modifyBookmarks $ const []
+      bms <- asks' (config . defaultBookmarks) >>= bookmarksFromDefault
+      fp <- asks' bookmarksPath
+      encodeBookmarksFile fp bms
 
 -- | Run the "delete" command: search for a bookmark and delete it.
 runDelete :: DeleteOptions -> HoyoMonad ()
@@ -228,7 +260,13 @@ runConfigReset _ = do
   backup <- asks' (config . backupBeforeClear)
   when backup $ backupFile path "bkp"
 
-  encodeConfigFile path defaultConfig
+  isTTY <- liftIO $ hIsTerminalDevice stdin
+
+  if backup || not isTTY
+  then encodeConfigFile path defaultConfig
+  else do
+    yes <- liftIO $ getConfirmation "Are you sure you want to clear your hoyo configuration?"
+    when yes $ encodeConfigFile path defaultConfig
 
 -- | Run the "config set" command: try to set a key-value pair in the config.
 runConfigSet :: ConfigSetOptions -> HoyoMonad ()
