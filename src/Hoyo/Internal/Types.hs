@@ -22,10 +22,14 @@ import           Control.Monad.IO.Class
 import           Control.Monad.Reader.Class (MonadReader)
 import           Control.Monad.Trans.Reader (ReaderT)
 
+import           Data.Function
 import           Data.List                  (intercalate)
 import qualified Data.Text                  as T
 import           Data.Time
 
+import           Language.Haskell.TH.Syntax
+
+import           Lens.Micro
 import           Lens.Micro.TH
 
 import           System.IO.Error
@@ -252,3 +256,6 @@ data Options
 makeLenses ''Bookmark
 makeLenses ''DefaultBookmark
 makeLenses ''Env
+flip makeLensesWith ''Config $
+  lensRules
+    & lensField .~ \_ _ n -> [TopName $ mkName $ '_' : nameBase n]

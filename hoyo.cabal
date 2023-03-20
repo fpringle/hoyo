@@ -43,7 +43,8 @@ common deps
     optparse-applicative,
     unordered-containers,
     ansi-terminal,
-    json
+    json,
+    template-haskell
 
 common warnings
   ghc-options: -Wall

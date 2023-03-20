@@ -15,6 +15,7 @@ import                          Control.Monad.Except       (throwError)
 import                          Control.Monad.IO.Class
 import                          Control.Monad.Reader.Class (ask)
 
+import                          Data.Bifunctor
 import                          Data.Char                  (isDigit)
 import                          Data.Function
 import                          Data.List
@@ -161,16 +162,7 @@ runList opts = do
   displayTime <- asks' (config . displayCreationTime)
   if listJSONOutput opts
   then do
-    let nameObj = maybe JSNull (JSString . toJSString . T.unpack)
-    let bmToObj (Bookmark dir idx time mbName) = JSObject $ toJSObject $ [
-            ("index", JSRational False $ toRational idx)
-          , ("directory", JSString $ toJSString dir)
-          , ("name", nameObj mbName)
-          ]
-          <> [("creation_time", JSString $ toJSString $ formatTime defaultTimeLocale "%c" time)
-              | displayTime]
-    let arr = JSArray $ map bmToObj bms
-    let jsonObj = JSObject $ toJSObject [("bookmarks", arr)]
+    let jsonObj = bookmarksToJSON displayTime bms
     printStdout $ T.pack $ encode jsonObj
   else mapM_ printStdout (formatBookmarks displayTime bms)
 
@@ -230,7 +222,9 @@ runConfigPrint opts = do
   let keyVals = getKeyVals s
   let keyWidth = maximum $ map (T.length . fst) keyVals
   if configPrintJSONOuput opts
-  then error "todo"
+  then do
+    let jsonObj = JSObject $ toJSObject $ map (bimap T.unpack anyCfgValToJson) keyVals
+    printStdout $ T.pack $ encode jsonObj
   else forM_ keyVals $ \(key, val) -> do
     let vStr = formatConfigValue val
     printStdout (T.justifyLeft keyWidth ' ' key <> " = " <> vStr)
