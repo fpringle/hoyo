@@ -61,6 +61,7 @@ module Hoyo.Internal.Utils (
 {- HLINT ignore "Use list comprehension" -}
 
 import           Control.Applicative
+import           Control.Exception          (bracket_)
 import           Control.Monad              (unless, when)
 import           Control.Monad.Except
                  ( MonadError (..)
@@ -254,11 +255,12 @@ readInt s = liftEither $ first T.pack (
 
 -- | Print to stderr.
 printStderr :: MonadIO m => T.Text -> m ()
-printStderr msg = liftIO $ do
-  hSetSGR stderr [SetColor Foreground Vivid Red]
-  T.hPutStrLn stderr msg
-  hSetSGR stderr []
-  hPutStrLn stderr ""
+printStderr msg = liftIO $ bracket_ makeRed resetColour $ T.hPutStrLn stderr msg
+  where
+    makeRed = hSetSGR stderr [SetColor Foreground Vivid Red]
+    resetColour = do
+      hSetSGR stderr []
+      hPutStrLn stderr ""
 
 -- | Print to stdout.
 printStdout :: MonadIO m => T.Text -> m ()
