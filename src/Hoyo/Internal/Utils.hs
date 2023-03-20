@@ -217,9 +217,15 @@ printStderr msg = liftIO $ do
 printStdout :: MonadIO m => T.Text -> m ()
 printStdout = liftIO . T.putStrLn
 
--- | Print or page lines.
+-- | Page lines if larger than one page and if the output device is a terminal.
+-- Otherwise, print.
 pageLines :: MonadIO m => [T.Text] -> m ()
-pageLines = liftIO . printOrPage . T.unlines
+pageLines ts = do
+  let t = T.intercalate "\n" ts
+  isTTY <- liftIO $ hIsTerminalDevice stdout
+  if isTTY
+  then liftIO $ printOrPage t
+  else printStdout t
 
 -- | Format a 'Bookmark'. Used for the "list" command and error reporting
 -- during other commands.
