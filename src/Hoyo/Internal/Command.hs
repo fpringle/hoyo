@@ -164,7 +164,7 @@ runList opts = do
   then do
     let jsonObj = bookmarksToJSON displayTime bms
     printStdout $ T.pack $ encode jsonObj
-  else mapM_ printStdout (formatBookmarks displayTime bms)
+  else pageLines (formatBookmarks displayTime bms)
 
 -- | Help text displayed when the user tries to run "hoyo clear"
 -- when "enable_clear" is set to false.
@@ -225,9 +225,10 @@ runConfigPrint opts = do
   then do
     let jsonObj = JSObject $ toJSObject $ map (bimap T.unpack anyCfgValToJson) keyVals
     printStdout $ T.pack $ encode jsonObj
-  else forM_ keyVals $ \(key, val) -> do
-    let vStr = formatConfigValue val
-    printStdout (T.justifyLeft keyWidth ' ' key <> " = " <> vStr)
+  else do
+    let align = T.justifyLeft keyWidth ' '
+    let ls = map (\(k, v) -> align k <> " = " <> formatConfigValue v) keyVals
+    pageLines ls
 
 -- | Run the "config reset" command: reset the config to 'defaultConfig'.
 runConfigReset :: ConfigResetOptions -> HoyoMonad ()

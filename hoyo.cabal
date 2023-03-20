@@ -44,7 +44,8 @@ common deps
     unordered-containers,
     ansi-terminal,
     json,
-    template-haskell
+    template-haskell,
+    pager
 
 common warnings
   ghc-options: -Wall
