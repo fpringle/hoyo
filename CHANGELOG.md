@@ -12,6 +12,7 @@ and this project adheres to the
 
 - When the output is longer than a page, and the output is a TTY, then pass output to a pager.
     Otherwise, print normally.
+- Added `--json` flag to `hoyo list` and `hoyo config print`.
 
 ### Fixed
 
