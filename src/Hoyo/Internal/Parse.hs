@@ -9,6 +9,8 @@ Parse CLI arguments.
 
 module Hoyo.Internal.Parse where
 
+import           Data.Char                       (isSpace)
+import           Data.List
 import qualified Data.Text                       as T
 
 import           Hoyo.CLI.Complete
@@ -19,6 +21,10 @@ import           Hoyo.Internal.Version
 import           Options.Applicative
 import           Options.Applicative.Help.Chunk
 import           Options.Applicative.Help.Pretty
+
+import           System.Environment
+import           System.Exit
+import           System.Pager
 
 import           Text.Read
 
@@ -297,11 +303,15 @@ options = info (parseOptions <**> helper) (
           )
 
 -- | Show the help message. Pass a non-'Nothing' argument to specify a command.
+-- If the help message is longer than a page, pass it through the system's pager.
 showHelp :: Maybe String -> IO ()
-showHelp cmd =
-  handleParseResult
-    $ Failure
-    $ parserFailure defaultPrefs options (ShowHelpText cmd) []
+showHelp cmd = do
+  let failure = parserFailure defaultPrefs options (ShowHelpText cmd) []
+  progn <- getProgName
+  let (msg, exit) = renderFailure failure progn
+  let msg' = dropWhileEnd isSpace msg <> "\n"
+  printOrPage $ T.pack msg'
+  exitWith exit
 
 -- | Split a string into arguments as they would be interpreted on the command line.
 --

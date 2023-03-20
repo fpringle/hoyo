@@ -40,6 +40,7 @@ import           Lens.Micro.Extras
 import           System.Console.ANSI        hiding (Reset)
 import           System.Directory
 import           System.IO
+import           System.Pager
 
 import           Text.Read                  (readEither)
 
@@ -215,6 +216,16 @@ printStderr msg = liftIO $ do
 -- | Print to stdout.
 printStdout :: MonadIO m => T.Text -> m ()
 printStdout = liftIO . T.putStrLn
+
+-- | Page lines if larger than one page and if the output device is a terminal.
+-- Otherwise, print.
+pageLines :: MonadIO m => [T.Text] -> m ()
+pageLines ts = do
+  let t = T.intercalate "\n" ts
+  isTTY <- liftIO $ hIsTerminalDevice stdout
+  if isTTY
+  then liftIO $ printOrPage t
+  else printStdout t
 
 -- | Format a 'Bookmark'. Used for the "list" command and error reporting
 -- during other commands.

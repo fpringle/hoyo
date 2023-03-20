@@ -4,8 +4,8 @@ let
   ghc = pkgs.haskell.packages.${compiler}.ghcWithPackages (ps: with ps; [
     # library dependencies
     ansi-terminal base directory filepath microlens microlens-th mtl
-    optparse-applicative package-version text time tomland transformers
-    unordered-containers
+    optparse-applicative package-version pager text time tomland
+    transformers unordered-containers
 
     # test dependencies
     QuickCheck quickcheck-instances temporary
