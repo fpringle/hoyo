@@ -290,9 +290,10 @@ maybeSingletonWithPrefix pref = maybe [] (\t -> pref <> [t])
 formatCommand :: Command -> [T.Text]
 formatCommand (Add (AddOptions d n)) = "add" : T.pack d : maybeSingleton n
 formatCommand (Move opts) = ["move", formatSearchTerm $ moveSearch opts]
-formatCommand (List (ListOptions n d)) = ["list"]
-                                      <> maybeSingletonWithPrefix ["--name"] n
-                                      <> maybeSingletonWithPrefix ["--dir"] d
+formatCommand (List (ListOptions n d json)) = ["list"]
+                                           <> maybeSingletonWithPrefix ["--name"] n
+                                           <> maybeSingletonWithPrefix ["--dir"] d
+                                           <> (if json then ["--json"] else [])
 formatCommand (Clear ClearOptions) = ["clear"]
 formatCommand (Delete opts) = ["delete", formatSearchTerm $ deleteSearch opts]
 formatCommand (Refresh RefreshOptions) = ["refresh"]
@@ -304,7 +305,8 @@ formatCommand (Help (HelpOptions cmd)) = ["help"] <> maybeToList cmd
 formatCommand DefaultCommand = []
 
 formatConfigCommand :: ConfigCommand -> [T.Text]
-formatConfigCommand (Print ConfigPrintOptions) = ["print"]
+formatConfigCommand (Print (ConfigPrintOptions json)) = ["print"]
+                                                     <> (if json then ["--json"] else [])
 formatConfigCommand (Reset ConfigResetOptions) = ["reset"]
 formatConfigCommand (Set opts) = ["set"
                                 , setKey opts

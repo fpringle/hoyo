@@ -145,6 +145,11 @@ listCommand = List <$> (
                           <> metavar "<directory>"
                           <> help "Search bookmarks by directory"
                         ))
+                    <*> switch (
+                          long "json"
+                          <> short 'j'
+                          <> help "List bookmarks in JSON format"
+                        )
                   )
 
 -- | Parse options for the @hoyo clear@ command.
@@ -175,7 +180,12 @@ configCommand = ConfigCmd <$> hsubparser (
 
 -- | Parse options for the @hoyo config print@ sub-command.
 configPrintCommand :: Parser ConfigCommand
-configPrintCommand = pure (Print ConfigPrintOptions)
+configPrintCommand = Print . ConfigPrintOptions
+                        <$> switch (
+                              long "json"
+                              <> short 'j'
+                              <> help "Print config in JSON format"
+                            )
 
 -- | Parse options for the @hoyo config reset@ sub-command.
 configResetCommand :: Parser ConfigCommand

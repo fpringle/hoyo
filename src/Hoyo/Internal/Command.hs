@@ -157,7 +157,9 @@ runList opts = do
   bms' <- asks' bookmarks
   let bms = filter filt $ sortOn (view bookmarkIndex) $ unBookmarks bms'
   displayTime <- asks' (config . displayCreationTime)
-  mapM_ printStdout (formatBookmarks displayTime bms)
+  if listJSONOutput opts
+  then error "todo"
+  else mapM_ printStdout (formatBookmarks displayTime bms)
 
 -- | Help text displayed when the user tries to run "hoyo clear"
 -- when "enable_clear" is set to false.
@@ -210,11 +212,13 @@ runRefresh _ = modifyBookmarks $
 
 -- | Run the "config print" command: print the current config.
 runConfigPrint :: ConfigPrintOptions -> HoyoMonad ()
-runConfigPrint _ = do
+runConfigPrint opts = do
   s <- asks' config
   let keyVals = getKeyVals s
   let keyWidth = maximum $ map (T.length . fst) keyVals
-  forM_ keyVals $ \(key, val) -> do
+  if configPrintJSONOuput opts
+  then error "todo"
+  else forM_ keyVals $ \(key, val) -> do
     let vStr = formatConfigValue val
     printStdout (T.justifyLeft keyWidth ' ' key <> " = " <> vStr)
 

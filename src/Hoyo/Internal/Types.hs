@@ -146,6 +146,7 @@ newtype MoveOptions
 data ListOptions
   = ListOptions { listFilterName           :: Maybe T.Text
                 , listFilterDirectoryInfix :: Maybe T.Text
+                , listJSONOutput           :: Bool
                 }
   deriving (Show, Eq)
 
@@ -161,7 +162,9 @@ newtype DeleteOptions
 data RefreshOptions = RefreshOptions deriving (Show, Eq)
 
 -- | Options for the "config print" command to be parsed from the command-line.
-data ConfigPrintOptions = ConfigPrintOptions deriving (Show, Eq)
+newtype ConfigPrintOptions
+  = ConfigPrintOptions { configPrintJSONOuput :: Bool }
+  deriving (Show, Eq)
 
 -- | Options for the "config reset" command to be parsed from the command-line.
 data ConfigResetOptions = ConfigResetOptions deriving (Show, Eq)

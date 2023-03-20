@@ -25,14 +25,14 @@ Bash competion functions used by the CLI.
 </span><span class="hs-identifier hs-var">listIOCompleter</span></span><span> </span><span class="annot"><span class="annottext">(IO [String] -&gt; Completer) -&gt; IO [String] -&gt; Completer
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-24"></span><span>  </span><span id="local-6989586621679111563"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679111563"><span class="hs-identifier hs-var">sFp</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">IO String
+</span><span id="line-24"></span><span>  </span><span id="local-6989586621679112249"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679112249"><span class="hs-identifier hs-var">sFp</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">IO String
 </span><a href="Hoyo.Internal.Env.html#defaultConfigPath"><span class="hs-identifier hs-var">defaultConfigPath</span></a></span><span>
-</span><span id="line-25"></span><span>  </span><span id="local-6989586621679111561"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679111561"><span class="hs-identifier hs-var">bFp</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">IO String
+</span><span id="line-25"></span><span>  </span><span id="local-6989586621679112247"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679112247"><span class="hs-identifier hs-var">bFp</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">IO String
 </span><a href="Hoyo.Internal.Env.html#defaultBookmarksPath"><span class="hs-identifier hs-var">defaultBookmarksPath</span></a></span><span>
-</span><span id="line-26"></span><span>  </span><span id="local-6989586621679111559"><span class="annot"><span class="annottext">Either Text Bookmarks
-</span><a href="#local-6989586621679111559"><span class="hs-identifier hs-var">res</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">GlobalOptions
+</span><span id="line-26"></span><span>  </span><span id="local-6989586621679112245"><span class="annot"><span class="annottext">Either Text Bookmarks
+</span><a href="#local-6989586621679112245"><span class="hs-identifier hs-var">res</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">GlobalOptions
 -&gt; String
 -&gt; String
 -&gt; HoyoMonad Bookmarks
@@ -42,27 +42,27 @@ GlobalOptions
 -&gt; String -&gt; String -&gt; HoyoMonad a -&gt; IO (Either Text a)
 </span><a href="Hoyo.html#withFiles"><span class="hs-identifier hs-var">withFiles</span></a></span><span> </span><span class="annot"><span class="annottext">GlobalOptions
 </span><a href="Hoyo.Internal.Command.html#defaultGlobalOptions"><span class="hs-identifier hs-var">defaultGlobalOptions</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679111561"><span class="hs-identifier hs-var">bFp</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679111563"><span class="hs-identifier hs-var">sFp</span></a></span><span> </span><span class="annot"><span class="annottext">HoyoMonad Bookmarks
+</span><a href="#local-6989586621679112247"><span class="hs-identifier hs-var">bFp</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679112249"><span class="hs-identifier hs-var">sFp</span></a></span><span> </span><span class="annot"><span class="annottext">HoyoMonad Bookmarks
 </span><a href="Hoyo.Internal.Bookmark.html#getBookmarks"><span class="hs-identifier hs-var">getBookmarks</span></a></span><span>
 </span><span id="line-27"></span><span>  </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">Either Text Bookmarks
-</span><a href="#local-6989586621679111559"><span class="hs-identifier hs-var">res</span></a></span><span> </span><span class="hs-keyword">of</span><span>
-</span><span id="line-28"></span><span>    </span><span class="annot"><span class="hs-identifier hs-type">Left</span></span><span> </span><span id="local-6989586621679111555"><span class="annot"><span class="annottext">Text
-</span><a href="#local-6989586621679111555"><span class="hs-identifier hs-var">err</span></a></span></span><span>              </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">do</span><span> </span><span class="annot"><span class="annottext">IO () -&gt; IO ()
+</span><a href="#local-6989586621679112245"><span class="hs-identifier hs-var">res</span></a></span><span> </span><span class="hs-keyword">of</span><span>
+</span><span id="line-28"></span><span>    </span><span class="annot"><span class="hs-identifier hs-type">Left</span></span><span> </span><span id="local-6989586621679112241"><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679112241"><span class="hs-identifier hs-var">err</span></a></span></span><span>              </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">do</span><span> </span><span class="annot"><span class="annottext">IO () -&gt; IO ()
 forall (m :: * -&gt; *) a. MonadIO m =&gt; IO a -&gt; m a
 </span><span class="hs-identifier hs-var">liftIO</span></span><span> </span><span class="annot"><span class="annottext">(IO () -&gt; IO ()) -&gt; IO () -&gt; IO ()
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Text -&gt; IO ()
 forall a. Show a =&gt; a -&gt; IO ()
 </span><span class="hs-identifier hs-var">print</span></span><span> </span><span class="annot"><span class="annottext">Text
-</span><a href="#local-6989586621679111555"><span class="hs-identifier hs-var">err</span></a></span><span>
+</span><a href="#local-6989586621679112241"><span class="hs-identifier hs-var">err</span></a></span><span>
 </span><span id="line-29"></span><span>                                </span><span class="annot"><span class="annottext">[String] -&gt; IO [String]
 forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
 </span><span class="hs-identifier hs-var">return</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-30"></span><span>    </span><span class="annot"><span class="hs-identifier hs-type">Right</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Hoyo.Internal.Types.html#Bookmarks"><span class="hs-identifier hs-type">Bookmarks</span></a></span><span> </span><span id="local-6989586621679111552"><span class="annot"><span class="annottext">[Bookmark]
-</span><a href="#local-6989586621679111552"><span class="hs-identifier hs-var">bms</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-31"></span><span>      </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679111551"><span class="annot"><span class="annottext">indices :: [String]
-</span><a href="#local-6989586621679111551"><span class="hs-identifier hs-var hs-var">indices</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Bookmark -&gt; String) -&gt; [Bookmark] -&gt; [String]
+</span><span id="line-30"></span><span>    </span><span class="annot"><span class="hs-identifier hs-type">Right</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Hoyo.Internal.Types.html#Bookmarks"><span class="hs-identifier hs-type">Bookmarks</span></a></span><span> </span><span id="local-6989586621679112238"><span class="annot"><span class="annottext">[Bookmark]
+</span><a href="#local-6989586621679112238"><span class="hs-identifier hs-var">bms</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-31"></span><span>      </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679112237"><span class="annot"><span class="annottext">indices :: [String]
+</span><a href="#local-6989586621679112237"><span class="hs-identifier hs-var hs-var">indices</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Bookmark -&gt; String) -&gt; [Bookmark] -&gt; [String]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int -&gt; String
 forall a. Show a =&gt; a -&gt; String
@@ -70,9 +70,9 @@ forall a. Show a =&gt; a -&gt; String
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Bookmark -&gt; Int
 </span><a href="Hoyo.Internal.Types.html#_bookmarkIndex"><span class="hs-identifier hs-var hs-var">_bookmarkIndex</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Bookmark]
-</span><a href="#local-6989586621679111552"><span class="hs-identifier hs-var">bms</span></a></span><span>
-</span><span id="line-32"></span><span>      </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679111547"><span class="annot"><span class="annottext">nicknames :: [String]
-</span><a href="#local-6989586621679111547"><span class="hs-identifier hs-var hs-var">nicknames</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Bookmark -&gt; Maybe String) -&gt; [Bookmark] -&gt; [String]
+</span><a href="#local-6989586621679112238"><span class="hs-identifier hs-var">bms</span></a></span><span>
+</span><span id="line-32"></span><span>      </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679112233"><span class="annot"><span class="annottext">nicknames :: [String]
+</span><a href="#local-6989586621679112233"><span class="hs-identifier hs-var hs-var">nicknames</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Bookmark -&gt; Maybe String) -&gt; [Bookmark] -&gt; [String]
 forall a b. (a -&gt; Maybe b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">mapMaybe</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(Text -&gt; String) -&gt; Maybe Text -&gt; Maybe String
 forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
@@ -82,14 +82,14 @@ forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Bookmark -&gt; Maybe Text
 </span><a href="Hoyo.Internal.Types.html#_bookmarkName"><span class="hs-identifier hs-var hs-var">_bookmarkName</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Bookmark]
-</span><a href="#local-6989586621679111552"><span class="hs-identifier hs-var">bms</span></a></span><span>
+</span><a href="#local-6989586621679112238"><span class="hs-identifier hs-var">bms</span></a></span><span>
 </span><span id="line-33"></span><span>      </span><span class="annot"><span class="annottext">[String] -&gt; IO [String]
 forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
 </span><span class="hs-identifier hs-var">return</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[String]
-</span><a href="#local-6989586621679111547"><span class="hs-identifier hs-var">nicknames</span></a></span><span> </span><span class="annot"><span class="annottext">[String] -&gt; [String] -&gt; [String]
+</span><a href="#local-6989586621679112233"><span class="hs-identifier hs-var">nicknames</span></a></span><span> </span><span class="annot"><span class="annottext">[String] -&gt; [String] -&gt; [String]
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">[String]
-</span><a href="#local-6989586621679111551"><span class="hs-identifier hs-var">indices</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679112237"><span class="hs-identifier hs-var">indices</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-34"></span><span>
 </span><span id="line-35"></span><span class="hs-comment">-- | Complete configuration keys.</span><span>
 </span><span id="line-36"></span><span class="annot"><a href="Hoyo.CLI.Complete.html#configKeyCompleter"><span class="hs-identifier hs-type">configKeyCompleter</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Completer</span></span><span>

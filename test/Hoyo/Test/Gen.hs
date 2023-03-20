@@ -103,7 +103,7 @@ instance Arbitrary MoveOptions where
   arbitrary = MoveOptions <$> arbitrary
 
 instance Arbitrary ListOptions where
-  arbitrary = ListOptions <$> maybeText <*> maybeText
+  arbitrary = ListOptions <$> maybeText <*> maybeText <*> arbitrary
 
 instance Arbitrary ClearOptions where
   arbitrary = pure ClearOptions
@@ -115,7 +115,7 @@ instance Arbitrary RefreshOptions where
   arbitrary = pure RefreshOptions
 
 instance Arbitrary ConfigPrintOptions where
-  arbitrary = pure ConfigPrintOptions
+  arbitrary = ConfigPrintOptions <$> arbitrary
 
 instance Arbitrary ConfigResetOptions where
   arbitrary = pure ConfigResetOptions
