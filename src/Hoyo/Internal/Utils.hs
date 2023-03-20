@@ -258,6 +258,7 @@ printStderr msg = liftIO $ do
   hSetSGR stderr [SetColor Foreground Vivid Red]
   T.hPutStrLn stderr msg
   hSetSGR stderr []
+  hPutStrLn stderr ""
 
 -- | Print to stdout.
 printStdout :: MonadIO m => T.Text -> m ()
