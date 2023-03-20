@@ -1,7 +1,8 @@
-{ mkDerivation, ansi-terminal, base, directory, filepath, lib
-, microlens, microlens-th, mtl, optparse-applicative
-, package-version, pager, QuickCheck, quickcheck-instances, temporary
-, text, time, tomland, transformers, unordered-containers
+{ mkDerivation, ansi-terminal, base, directory, filepath, json
+, lib, microlens, microlens-th, mtl, optparse-applicative
+, package-version, pager, QuickCheck, quickcheck-instances
+, template-haskell, temporary, text, time, tomland, transformers
+, unordered-containers
 }:
 mkDerivation rec {
   pname = "hoyo";
@@ -10,9 +11,9 @@ mkDerivation rec {
   isLibrary = true;
   isExecutable = true;
   libraryHaskellDepends = [
-    ansi-terminal base directory filepath microlens microlens-th mtl
-    optparse-applicative package-version pager text time tomland
-    transformers unordered-containers
+    ansi-terminal base directory filepath json microlens microlens-th
+    mtl optparse-applicative package-version pager text time tomland
+    template-haskell transformers unordered-containers
   ];
   executableHaskellDepends = libraryHaskellDepends;
   testHaskellDepends = libraryHaskellDepends ++ [
