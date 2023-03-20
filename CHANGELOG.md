@@ -10,6 +10,9 @@ and this project adheres to the
 
 ### Added
 
+- When the output is longer than a page, and the output is a TTY, then pass output to a pager.
+    Otherwise, print normally.
+
 ### Fixed
 
 ### Changed
