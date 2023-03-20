@@ -1,17 +1,15 @@
 {-# LANGUAGE TemplateHaskell #-}
 module Hoyo.Test.Env where
 
-import qualified Data.Text               as T
+import Hoyo
+import Hoyo.Test.Bookmark
+import Hoyo.Test.Gen           ()
+import Hoyo.Test.Hoyo
 
-import           Hoyo
-import           Hoyo.Test.Bookmark
-import           Hoyo.Test.Gen           ()
-import           Hoyo.Test.Hoyo
+import System.IO.Temp
 
-import           System.IO.Temp
-
-import           Test.QuickCheck
-import           Test.QuickCheck.Monadic as Q
+import Test.QuickCheck
+import Test.QuickCheck.Monadic as Q
 
 
 envEq :: Env -> Env -> Bool
@@ -31,7 +29,7 @@ testWriteReadEnv bms cfg = monadicIO $ do
   Q.assert (eitherEnvEq (Right writtenEnv) readenEnv)
 
   where
-    writeRead :: Env -> IO (Env, Either T.Text Env)
+    writeRead :: Env -> IO (Env, Either HoyoException Env)
     writeRead env = do
       let Env _ bFile _ cFile = env
       env2 <- readEnv bFile cFile

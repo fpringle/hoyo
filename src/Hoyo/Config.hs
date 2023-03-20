@@ -84,12 +84,14 @@ defaultConfig = Config {
   }
 
 -- | Decode a 'Config' from a Text.
-decodeConfig :: T.Text -> Either T.Text Config
-decodeConfig = first Toml.prettyTomlDecodeErrors . Toml.decodeExact configCodec
+decodeConfig :: T.Text -> Either HoyoException Config
+decodeConfig = first (ParseException . pure . Toml.prettyTomlDecodeErrors)
+                . Toml.decodeExact configCodec
 
 -- | Decode a 'Config' from a file.
-decodeConfigFile :: MonadIO m => FilePath -> m (Either T.Text Config)
-decodeConfigFile = fmap (first Toml.prettyTomlDecodeErrors) . Toml.decodeFileExact configCodec
+decodeConfigFile :: MonadIO m => FilePath -> m (Either HoyoException Config)
+decodeConfigFile = fmap (first (ParseException . pure . Toml.prettyTomlDecodeErrors))
+                . Toml.decodeFileExact configCodec
 
 -- | Encode a 'Config' to a Text.
 encodeConfig :: Config -> T.Text
@@ -111,7 +113,7 @@ getKeyVals cfg = [
       <> [("default_bookmarks", AnyConfigValue $ _defaultBookmarks cfg)]
 
 -- | Try to set a key-value pair in the config.
-setConfig :: MonadError T.Text m => T.Text -> T.Text -> Config -> m Config
+setConfig :: MonadError HoyoException m => T.Text -> T.Text -> Config -> m Config
 setConfig   "fail_on_error"           val cfg = flip (set failOnError) cfg
                                                   <$> liftEither (readBool val)
 setConfig   "display_creation_time"   val cfg = flip (set displayCreationTime) cfg
@@ -122,4 +124,4 @@ setConfig   "enable_reset"            val cfg = flip (set enableReset) cfg
                                                   <$> liftEither (readBool val)
 setConfig   "backup_before_clear"     val cfg = flip (set backupBeforeClear) cfg
                                                   <$> liftEither (readBool val)
-setConfig key _ _ = throwError ("Invalid key: " <> key)
+setConfig key _ _ = throwError $ ConfigException ["Invalid key: " <> key]

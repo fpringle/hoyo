@@ -155,22 +155,24 @@ modifyBookmarksM f = do
 normaliseAndVerifyDirectory :: FilePath -> HoyoMonad FilePath
 normaliseAndVerifyDirectory d = do
   dir <- liftIO $ canonicalizePath d
-  assertVerbose "not a directory" $ liftIO $ doesDirectoryExist dir
+  assertVerbose (FileSystemException $ NoDirException dir) $ liftIO $ doesDirectoryExist dir
   return dir
 
 -- | Take a name and make sure it's valid.
 verifyName :: T.Text -> HoyoMonad ()
 verifyName name = do
   let nameStr = T.unpack name
-  assert "bookmark name can't be empty" $ return $ not $ T.null name
-  assert "bookmark name can't be a number" $ return $ not $ all isDigit nameStr
+  assert (CommandException $ InvalidArgumentException ["bookmark name can't be empty"])
+    $ return $ not $ T.null name
+  assert (CommandException $ InvalidArgumentException ["bookmark name can't be a number"])
+    $ return $ not $ all isDigit nameStr
 
 -- | Given the existing bookmarks and a potential bookmark name,
 -- test if the new bookmark will have a unique name.
 testNameUnique :: [Bookmark] -> T.Text -> HoyoMonad Bool
 testNameUnique bms name =
-  assertVerbose "bookmark name already used" $
-    return $ all ((/= Just name) . view bookmarkName) bms
+  assertVerbose (CommandException $ InvalidArgumentException ["bookmark name already used"])
+    $ return $ all ((/= Just name) . view bookmarkName) bms
 
 -- | Run the "add" command: add a new bookmark.
 runAdd :: AddOptions -> HoyoMonad ()
@@ -179,7 +181,7 @@ runAdd opts = do
   let name = addName opts
   modifyBookmarksM $ \bms -> do
     uniqName <- case name of Nothing -> return True
-                             Just n  -> testNameUnique bms n
+                             Just n  -> verifyName n >> testNameUnique bms n
     if uniqName
     then do
       let maxIndex = maximumDefault 0 $ map (view bookmarkIndex) bms
@@ -194,12 +196,12 @@ runMove opts = do
   bms <- asks' bookmarks
   let search = moveSearch opts
   case fst $ searchBookmarks search bms of
-    []    -> throwError ("Unknown bookmark: " <> tshow search)
+    []    -> throwError $ CommandException $ SearchException $ NothingFound search
     [bm]  -> do printStdout ("cd " <> T.pack (view bookmarkDirectory bm))
                 liftIO $ exitWith (ExitFailure 3)
     ms    -> do displayTime <- asks' (config . displayCreationTime)
                 let strs = formatBookmarks displayTime $ sortOn (view bookmarkIndex) ms
-                throwError $ T.intercalate "\n" ("multiple bookmarks matching search:" : strs)
+                throwError $ CommandException $ SearchException $ TooManyResults search strs
 
 -- | Run the "list" command: list all the saved bookmarks.
 runList :: ListOptions -> HoyoMonad ()
@@ -216,16 +218,16 @@ runList opts = do
 
 -- | Help text displayed when the user tries to run "hoyo clear"
 -- when "enable_clear" is set to false.
-clearDisabledErrMsg :: T.Text
-clearDisabledErrMsg = T.intercalate "\n" [
+clearDisabledErr :: HoyoException
+clearDisabledErr = ConfigException [
   "The 'clear' command is disabled by default."
   , "To enable, set enable_clear = true in the config or pass the --enable-clear flag."
   ]
 
 -- | Help text displayed when the user tries to run "hoyo config reset"
 -- when "enable_reset" is set to false.
-resetDisabledErrMsg :: T.Text
-resetDisabledErrMsg = T.intercalate "\n" [
+resetDisabledErr :: HoyoException
+resetDisabledErr = ConfigException [
   "The 'config reset' command is disabled by default."
   , "To enable, set enable_reset = true in the config or pass the --enable-reset flag."
   ]
@@ -250,7 +252,7 @@ getConfirmation s = bracket_ makeRed resetColour getConfirmation'
 -- | Run the "clear" command: delete all the saved bookmarks.
 runClear :: ClearOptions -> HoyoMonad ()
 runClear _ = do
-  assert clearDisabledErrMsg (asks' (config . enableClearing))
+  assert clearDisabledErr (asks' (config . enableClearing))
 
   path <- asks' bookmarksPath
   backup <- asks' (config . backupBeforeClear)
@@ -277,9 +279,11 @@ runDelete opts = do
   let search = deleteSearch opts
   modifyBookmarksM $ \bms -> do
     let (searchResults, afterDelete) = searchBookmarks search (Bookmarks bms)
-    assertVerbose ("no bookmarks found for search " <> tshow search)
+    assertVerbose (CommandException $ SearchException $ NothingFound search)
       $ return $ not $ null searchResults
-    assertVerbose ("multiple bookmarks found for search " <> tshow search)
+    displayTime <- asks' (config . displayCreationTime)
+    let strs = formatBookmarks displayTime $ sortOn (view bookmarkIndex) searchResults
+    assertVerbose (CommandException $ SearchException $ TooManyResults search strs)
       $ return $ length searchResults == 1
     return afterDelete
 
@@ -308,7 +312,7 @@ runConfigPrint opts = do
 -- | Run the "config reset" command: reset the config to 'defaultConfig'.
 runConfigReset :: ConfigResetOptions -> HoyoMonad ()
 runConfigReset _ = do
-  assert resetDisabledErrMsg (asks' (config . enableReset))
+  assert resetDisabledErr (asks' (config . enableReset))
 
   path <- asks' configPath
 
@@ -354,13 +358,13 @@ runConfig (AddDefaultBookmark opts) = runAddDefault opts
 -- | Check that the config file is valid.
 runCheckConfig :: FilePath -> IO ()
 runCheckConfig = decodeConfigFile >=> \case
-  Left err -> printStderr err
+  Left err -> printStderr $ formatException err
   Right _  -> printStdout "Config is good"
 
 -- | Check that the bookmarks file is valid.
 runCheckBookmarks :: FilePath -> IO ()
 runCheckBookmarks = decodeBookmarksFile >=> \case
-  Left err -> printStderr err
+  Left err -> printStderr $ formatException err
   Right _  -> printStdout "Bookmarks file is good"
 
 -- | Run the "config check" command: validate the current
@@ -374,7 +378,7 @@ runCheck opts bFp sFp = do
 runDefaultCommand :: HoyoMonad ()
 runDefaultCommand = asks' (config . defaultCommand) >>= \case
   Nothing             -> liftIO $ showHelp Nothing
-  Just DefaultCommand -> throwError "default command: stuck in a loop!"
+  Just DefaultCommand -> throwError $ CommandException LoopException
   Just otherCommand   -> runCommand otherCommand
 
 -- | Run the "help" command: get help on a specific subcommand.

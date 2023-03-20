@@ -33,6 +33,7 @@ module Hoyo (
   , withFiles
   , getEnvAndRunHoyo
   , getEnvAndRunCommand
+  , HoyoException (..)
   , HoyoMonad
   , modifyBookmarks
   , modifyBookmarksM
@@ -48,10 +49,8 @@ module Hoyo (
   , versionString
   ) where
 
-import           Control.Monad.Except       (runExceptT)
-import           Control.Monad.Trans.Reader (runReaderT)
-
-import qualified Data.Text                  as T
+import Control.Monad.Except       (runExceptT)
+import Control.Monad.Trans.Reader (runReaderT)
 
 import           Hoyo.Bookmark
 import           Hoyo.Command
@@ -64,19 +63,19 @@ import           Hoyo.Utils
 import           System.Exit
 
 -- | Given a hoyo 'Env', run a monadic action in IO.
-runHoyo :: HoyoMonad a -> Env -> IO (Either T.Text a)
+runHoyo :: HoyoMonad a -> Env -> IO (Either HoyoException a)
 runHoyo = runReaderT . runExceptT . unHoyo
 
-failure :: T.Text -> IO a
+failure :: HoyoException -> IO a
 failure err = do
-  printStderr ("Error: " <> err)
+  printStderr ("Error: " <> formatException err)
   exitWith (ExitFailure 1)
 
 -- | @withFiles globals bFp sFp hoyo@ gets the environment saved in
 -- the bookmark path (@bFp@) and the config path (@sFp@), applies the global
 -- options and overrides in @globals@, and runs @hoyo@, returning either
 -- the result or an error message.
-withFiles :: GlobalOptions -> FilePath -> FilePath -> HoyoMonad a -> IO (Either T.Text a)
+withFiles :: GlobalOptions -> FilePath -> FilePath -> HoyoMonad a -> IO (Either HoyoException a)
 withFiles globals bFp sFp hoyo =
   getEnv bFp sFp >>= \case
     Left err  -> failure err

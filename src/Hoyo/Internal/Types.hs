@@ -8,6 +8,7 @@ Types used by all the main Hoyo.* modules.
 -}
 
 {-# LANGUAGE DataKinds       #-}
+{-# LANGUAGE DeriveGeneric   #-}
 {-# LANGUAGE GADTs           #-}
 {-# LANGUAGE KindSignatures  #-}
 {-# LANGUAGE RankNTypes      #-}
@@ -24,12 +25,16 @@ import           Control.Monad.Trans.Reader (ReaderT)
 
 import           Data.Function
 import           Data.List                  (intercalate)
+import qualified Data.List.NonEmpty         as NE
 import qualified Data.Text                  as T
 import           Data.Time
 
 import           Language.Haskell.TH.Syntax
 
 import           Lens.Micro
+
+import           GHC.Generics
+
 import           Lens.Micro.TH
 
 import           System.IO.Error
@@ -54,6 +59,12 @@ data Bookmark
              , _bookmarkName         :: !(Maybe T.Text)
              }
   deriving (Show)
+
+instance Eq Bookmark where
+  Bookmark d1 i1 _ n1 == Bookmark d2 i2 _ n2
+    = d1 == d2
+   && i1 == i2
+   && n1 == n2
 
 -- | Default bookmarks to save at init. A default bookmark remembers the directory
 -- and optionally a user-specified nickname for the bookmark.
@@ -122,16 +133,61 @@ data Config
            }
   deriving (Show, Eq)
 
+-- | Report an exception while searching for a bookmark.
+data SearchException
+  = NothingFound BookmarkSearchTerm
+  | TooManyResults BookmarkSearchTerm [T.Text]
+  deriving (Show, Eq, Generic)
+
+-- | Report an exception while running a command.
+data CommandException
+  = SearchException SearchException
+  | InvalidArgumentException [T.Text]
+  | LoopException
+  deriving (Show, Eq, Generic)
+
+-- | Report a file system exception.
+data FileSystemException
+  = NoFileException FilePath
+  | NoDirException FilePath
+  deriving (Show, Eq, Generic)
+
+-- | A custom hierarchical exception type for hoyo.
+data HoyoException
+  = ConfigException [T.Text]
+  | CommandException CommandException
+  | IOException IOError
+  | FileSystemException FileSystemException
+  | ParseException [T.Text]
+  | MultipleExceptions (NE.NonEmpty HoyoException)
+  deriving (Show, Eq, Generic)
+
+instance Semigroup HoyoException where
+  MultipleExceptions ne1 <> MultipleExceptions ne2 = MultipleExceptions (ne1 <> ne2)
+  MultipleExceptions ne <> x = MultipleExceptions (ne <> (x NE.:| []))
+  x <> MultipleExceptions ne = MultipleExceptions (x NE.<| ne)
+  ConfigException xs <> ConfigException ys = ConfigException $ xs <> ys
+  ParseException xs <> ParseException ys = ParseException $ xs <> ys
+  CommandException (InvalidArgumentException xs) <> CommandException (InvalidArgumentException ys)
+    = CommandException (InvalidArgumentException (xs <> ys))
+  x <> y = MultipleExceptions (x NE.:| [y])
+
 -- | 'HoyoMonad' is the main monad stack for the hoyo program. It's essentially a wrapper
 -- around @ExceptT T.Text (ReaderT Env IO)@: in other words,
 -- @HoyoMonad a@ is equivalent to @Env -> IO (Either T.Text a)@
 newtype HoyoMonad a
-  = HoyoMonad { unHoyo :: ExceptT T.Text (ReaderT Env IO) a }
-  deriving (Functor, Applicative, Monad, MonadError T.Text, MonadReader Env)
+  = HoyoMonad { unHoyo :: ExceptT HoyoException (ReaderT Env IO) a }
+  deriving
+  ( Functor
+  , Applicative
+  , Monad
+  , MonadError HoyoException
+  , MonadReader Env
+  )
 
 instance MonadIO HoyoMonad where
   liftIO m = HoyoMonad (liftIO $ tryIOError m) >>= \case
-    Left err     -> throwError ("IO error: " <> T.pack (show err))
+    Left err     -> throwError $ IOException err
     Right result -> return result
 
 -- | Options for the "add" command to be parsed from the command-line.
