@@ -7,7 +7,12 @@ Maintainer  : freddyjepringle@gmail.com
 Bash competion functions used by the CLI.
 -}
 
-module Hoyo.CLI.Complete where
+module Hoyo.CLI.Complete (
+  -- * Completing command-line arguments
+    bookmarkCompleter
+  , configKeyCompleter
+  , configValueCompleter
+  ) where
 
 import           Control.Monad.IO.Class
 

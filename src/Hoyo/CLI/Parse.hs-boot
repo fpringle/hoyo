@@ -7,7 +7,7 @@ Maintainer  : freddyjepringle@gmail.com
 Parse CLI arguments.
 -}
 
-module Hoyo.Internal.Parse where
+module Hoyo.CLI.Parse where
 
 import Hoyo.Internal.Types
 

@@ -202,6 +202,7 @@ data CheckOptions
                  }
   deriving (Show, Eq)
 
+-- | Options for the "help" command to be parsed from the command-line.
 newtype HelpOptions
   = HelpOptions { helpSubcommand :: Maybe T.Text }
   deriving (Show, Eq)

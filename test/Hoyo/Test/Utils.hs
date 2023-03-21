@@ -1,12 +1,12 @@
 {-# LANGUAGE TemplateHaskell #-}
 module Hoyo.Test.Utils where
 
-import qualified Data.Text           as T
+import qualified Data.Text       as T
 
 import           Hoyo
-import           Hoyo.Internal.Utils
 import           Hoyo.Test.Gen
 import           Hoyo.Test.Hoyo
+import           Hoyo.Utils
 
 import           Lens.Micro
 

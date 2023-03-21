@@ -18,6 +18,8 @@ and this project adheres to the
 
 ### Changed
 
+- Got rid of all the unnecessary `Internal/*` modules.
+
 ### Removed
 
 ## [0.5.1.1] - 2023-03-20
