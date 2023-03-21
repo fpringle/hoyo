@@ -8,8 +8,8 @@ import qualified Data.Text           as T
 
 import           Hoyo
 import           Hoyo.CLI.Parse
-import           Hoyo.Internal.Utils
 import           Hoyo.Test.Gen       ()
+import           Hoyo.Utils
 
 import           Options.Applicative as O
 

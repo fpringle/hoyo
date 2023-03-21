@@ -5,6 +5,7 @@
 
 module Hoyo.Test.Gen where
 
+import qualified Data.List.NonEmpty        as NE
 import qualified Data.Text                 as T
 
 import           Hoyo
@@ -47,6 +48,48 @@ genFilePath = joinPath . ("/" :) <$> listOf string
     -- genTimeZone = TimeZone <$> ((* 60) <$> chooseInt (-12, 12))
                            -- <*> arbitrary
                            -- <*> vectorOf 3 letterOrDigit
+
+genNE :: Gen a -> Gen (NE.NonEmpty a)
+genNE gen = (NE.:|) <$> gen <*> listOf gen
+
+instance Arbitrary SearchException where
+  arbitrary = oneof [
+      NothingFound <$> arbitrary
+    , TooManyResults <$> arbitrary <*> arbitrary
+    ]
+  shrink = genericShrink
+
+instance Arbitrary CommandException where
+  arbitrary = oneof [
+      SearchException <$> arbitrary
+    , InvalidArgumentException <$> arbitrary
+    , pure LoopException
+    ]
+  shrink = genericShrink
+
+instance Arbitrary FileSystemException where
+  arbitrary = oneof [
+      NoFileException <$> genFilePath
+    , NoDirException <$> genFilePath
+    ]
+  shrink = genericShrink
+
+instance Arbitrary HoyoException where
+  -- need to stop nested 'MultipleException's
+  arbitrary = oneof (multiple : normal)
+    where
+      normal = [
+          ConfigException <$> arbitrary
+        , CommandException <$> arbitrary
+        -- , IOException <$> _
+        , FileSystemException <$> arbitrary
+        , ParseException <$> arbitrary
+        ]
+      multiple = MultipleExceptions <$> genNE (oneof normal)
+
+  -- shrink = genericShrink
+  shrink = subterms
+
 
 instance Arbitrary Bookmark where
   arbitrary = Bookmark <$> genFilePath

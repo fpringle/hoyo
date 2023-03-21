@@ -12,12 +12,12 @@ import           System.IO.Temp
 import           Test.QuickCheck
 import           Test.QuickCheck.Monadic as Q
 
-testHoyoMonadProperty :: HoyoMonad a -> Env -> (Either T.Text a -> Bool) -> Property
+testHoyoMonadProperty :: HoyoMonad a -> Env -> (Either HoyoException a -> Bool) -> Property
 testHoyoMonadProperty hoyo env test = monadicIO $ do
   res <- run (runHoyo hoyo env)
   Q.assert (test res)
 
-testHoyoMonadEq :: Eq a => HoyoMonad a -> Env -> Either T.Text a -> Property
+testHoyoMonadEq :: Eq a => HoyoMonad a -> Env -> Either HoyoException a -> Property
 testHoyoMonadEq hoyo env expected = testHoyoMonadProperty hoyo env (== expected)
 
 withEnv :: (Env -> IO a) -> Bookmarks -> Config -> IO a
@@ -44,10 +44,10 @@ withEnv func bms cfg = bracket createFiles deleteFiles runFunc
       removeFile bFile
       removeFile cFile
 
-testHoyoMonadPropertyWithEnv :: Bookmarks -> Config -> HoyoMonad a -> (Either T.Text a -> Bool) -> Property
+testHoyoMonadPropertyWithEnv :: Bookmarks -> Config -> HoyoMonad a -> (Either HoyoException a -> Bool) -> Property
 testHoyoMonadPropertyWithEnv bms cfg hoyo test = monadicIO $ do
   result <- run (withEnv (runHoyo hoyo) bms cfg)
   Q.assert (test result)
 
-testHoyoMonadEqWithEnv :: Eq a => Bookmarks -> Config -> HoyoMonad a -> Either T.Text a -> Property
+testHoyoMonadEqWithEnv :: Eq a => Bookmarks -> Config -> HoyoMonad a -> Either HoyoException a -> Property
 testHoyoMonadEqWithEnv bms cfg hoyo expected = testHoyoMonadPropertyWithEnv bms cfg hoyo (== expected)

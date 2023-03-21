@@ -1,5 +1,5 @@
 {-|
-Module      : Hoyo.Internal.Utils
+Module      : Hoyo.Utils
 Copyright   : (c) Frederick Pringle, 2023
 License     : BSD-3-Clause
 Maintainer  : freddyjepringle@gmail.com
@@ -12,7 +12,7 @@ Utility functions used by all the main Hoyo.* modules.
 {-# LANGUAGE KindSignatures #-}
 {-# LANGUAGE RankNTypes     #-}
 
-module Hoyo.Internal.Utils (
+module Hoyo.Utils (
   -- * Lenses for ConfigValue
     cfgBool
   , cfgDefaultBookmark
@@ -34,6 +34,7 @@ module Hoyo.Internal.Utils (
   , assert
   , assertVerbose
   , maximumDefault
+  , catchIOException
 
   -- ** Backups
   , backupFile
@@ -54,6 +55,7 @@ module Hoyo.Internal.Utils (
   , formatBookmarks
   , formatConfigValue
   , formatOptions
+  , formatException
   , tshow
   , anyCfgValToJson
   , bookmarksToJSON
@@ -62,7 +64,7 @@ module Hoyo.Internal.Utils (
 {- HLINT ignore "Use list comprehension" -}
 
 import           Control.Applicative
-import           Control.Exception          (bracket_)
+import           Control.Exception          (IOException, bracket_)
 import           Control.Monad              (unless, when)
 import           Control.Monad.Except
                  ( MonadError (..)
@@ -73,6 +75,7 @@ import           Control.Monad.IO.Class
 import           Control.Monad.Reader.Class (MonadReader, asks)
 
 import           Data.Bifunctor             (bimap, first)
+import           Data.Foldable              (toList)
 import           Data.Maybe
 import qualified Data.Text                  as T
 import qualified Data.Text.IO               as T
@@ -197,13 +200,13 @@ maximumDefault def [] = def
 maximumDefault _ xs   = maximum xs
 
 -- | Throw an error if a check fails.
-assert :: T.Text -> HoyoMonad Bool -> HoyoMonad ()
+assert :: HoyoException -> HoyoMonad Bool -> HoyoMonad ()
 assert err check = do
   res <- check
   unless res $ throwError err
 
 -- | Throw an error if a check fails AND the "fail_on_error" flag is set.
-assertVerbose :: T.Text -> HoyoMonad Bool -> HoyoMonad Bool
+assertVerbose :: HoyoException -> HoyoMonad Bool -> HoyoMonad Bool
 assertVerbose err check = do
   shouldFail <- asks' (config . failOnError)
   res <- check
@@ -212,10 +215,10 @@ assertVerbose err check = do
 
 -- | Given a file name and an extension, try to find a suitable path for
 -- backing up that file. Used by 'backupFile'.
-getBackupFile :: (MonadIO m, MonadError T.Text m) => FilePath -> String -> m FilePath
+getBackupFile :: (MonadIO m, MonadError HoyoException m) => FilePath -> String -> m FilePath
 getBackupFile fp ext = do
   ex <- liftIO $ doesFileExist fp
-  unless ex $ throwError ("not a file: " <> T.pack fp)
+  unless ex $ throwError $ FileSystemException $ NoFileException fp
   let firstTry = fp <> "." <> ext
   firstExists <- liftIO $ doesFileExist firstTry
   if firstExists
@@ -223,7 +226,7 @@ getBackupFile fp ext = do
   else return firstTry
 
   where
-    getBackupFile' :: (MonadIO m, MonadError T.Text m) => String -> Int -> m String
+    getBackupFile' :: (MonadIO m, MonadError HoyoException m) => String -> Int -> m String
     getBackupFile' file' n = do
       let file = file' <> "." <> show n <> ext
       fileExists <- liftIO $ doesFileExist file
@@ -232,14 +235,14 @@ getBackupFile fp ext = do
       else return file
 
 -- | Try to back-up a file. Used when the "backup_before_clear" option is set.
-backupFile :: (MonadIO m, MonadError T.Text m) => FilePath -> String -> m ()
+backupFile :: (MonadIO m, MonadError HoyoException m) => FilePath -> String -> m ()
 backupFile fp ext = do
   file <- getBackupFile fp ext
   liftIO $ copyFileWithMetadata fp file
 
 -- | Try to read a 'Bool'.
-readBool :: MonadError T.Text m => T.Text -> m Bool
-readBool s = liftEither $ first T.pack (
+readBool :: MonadError HoyoException m => T.Text -> m Bool
+readBool s = liftEither $ first (ParseException . pure . T.pack) (
               readEither sStr
                 <|> first Toml.errorBundlePretty (Toml.parse (Toml.boolP <* Toml.eof) "" s)
                 <|> Left ("Couldn't parse bool: " <> sStr)
@@ -247,8 +250,8 @@ readBool s = liftEither $ first T.pack (
   where sStr = T.unpack s
 
 -- | Try to read an 'Int'.
-readInt :: MonadError T.Text m => T.Text -> m Int
-readInt s = liftEither $ first T.pack (
+readInt :: MonadError HoyoException m => T.Text -> m Int
+readInt s = liftEither $ first (ParseException . pure . T.pack) (
               readEither sStr
                 <|> bimap Toml.errorBundlePretty fromIntegral (Toml.parse (Toml.integerP <* Toml.eof) "" s)
                 <|> Left ("Couldn't parse integer: " <> sStr)
@@ -273,9 +276,9 @@ printStdout = liftIO . T.putStrLn
 pageLines :: MonadIO m => [T.Text] -> m ()
 pageLines ts = do
   let t = T.intercalate "\n" ts
-  isTTY <- liftIO $ hIsTerminalDevice stdout
+  isTTY <- liftIO $ hIsTerminalDevice stdin
   if isTTY
-  then liftIO $ printOrPage t
+  then liftIO $ printOrPage (t <> "\n")
   else printStdout t
 
 -- | Format a 'Bookmark'. Used for the "list" command and error reporting
@@ -339,6 +342,10 @@ formatConfigValue (AnyConfigValue (ListOfV xs)) = T.intercalate "\n" (["["] <> m
 formatSearchTerm :: BookmarkSearchTerm -> T.Text
 formatSearchTerm (SearchIndex idx) = tshow idx
 formatSearchTerm (SearchName name) = name
+
+formatSearchTermPretty :: BookmarkSearchTerm -> T.Text
+formatSearchTermPretty (SearchIndex idx) = "#" <> tshow idx
+formatSearchTermPretty (SearchName name) = name
 
 singleton :: T.Text -> [T.Text]
 singleton t = [t]
@@ -436,3 +443,31 @@ cfgValToJson (MaybeV (Just x)) = cfgValToJson x
 -- | Convert a configuration value to a JSON value. Used in `hoyo config print --json`.
 anyCfgValToJson :: AnyConfigValue -> JSValue
 anyCfgValToJson (AnyConfigValue val) = cfgValToJson val
+
+withTitle :: T.Text -> [T.Text] -> T.Text
+withTitle title []    = title
+withTitle title [one] = title <> ": " <> one
+withTitle title ts    = T.intercalate "\n" $ (title <> ":"): map ("  " <>) ts
+
+formatFsException :: FileSystemException -> T.Text
+formatFsException (NoFileException fp) = withTitle "file not found" [T.pack fp]
+formatFsException (NoDirException fp) = withTitle "directory not found" [T.pack fp]
+
+formatCmdException :: CommandException -> T.Text
+formatCmdException (SearchException (NothingFound search)) = withTitle "unknown bookmark" [formatSearchTermPretty search]
+formatCmdException (SearchException (TooManyResults search bms)) = withTitle ("multiple bookmarks matching search [" <> tshow search <> "]") bms
+formatCmdException (InvalidArgumentException ts) = withTitle "invalid argument(s)" ts
+formatCmdException LoopException = withTitle "default command" ["stuck in a loop"]
+
+-- | Format a 'HoyoException' to display to the user.
+formatException :: HoyoException -> T.Text
+formatException (ConfigException ts) = withTitle "config error" ts
+formatException (CommandException cmdExc) = formatCmdException cmdExc
+formatException (IOException ioExc) = withTitle "IO error:" [tshow ioExc]
+formatException (FileSystemException exc) = formatFsException exc
+formatException (ParseException ts) = withTitle "parse error" ts
+formatException (MultipleExceptions excs) = T.intercalate "\n" $ map formatException $ toList excs
+
+-- | Catch an 'GHC.IO.Exception.IOException' and wrap it in a 'HoyoException'.
+catchIOException :: Monad m => IOException -> m (Either HoyoException a)
+catchIOException exc = return $ Left $ IOException exc
