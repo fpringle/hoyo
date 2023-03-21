@@ -37,6 +37,7 @@ module Hoyo.Bookmark (
   ) where
 
 import           Control.Monad          (forM, void)
+import           Control.Monad.Catch
 import           Control.Monad.IO.Class
 
 import           Data.Bifunctor         (first)
@@ -78,8 +79,9 @@ decodeBookmarks = first (ParseException . pure . Toml.prettyTomlDecodeErrors)
 
 -- | Decode a 'Bookmark' from a file.
 -- TODO: catch IO exceptions
-decodeBookmarksFile :: MonadIO m => FilePath -> m (Either HoyoException Bookmarks)
-decodeBookmarksFile = fmap (first (ParseException . pure . Toml.prettyTomlDecodeErrors))
+decodeBookmarksFile :: (MonadIO m, MonadCatch m) => FilePath -> m (Either HoyoException Bookmarks)
+decodeBookmarksFile = handle catchIOException
+                        . fmap (first (ParseException . pure . Toml.prettyTomlDecodeErrors))
                         . Toml.decodeFileExact bookmarksCodec
 
 -- | Encode a 'Bookmark' to a Text.

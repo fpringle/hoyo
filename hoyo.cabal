@@ -45,7 +45,8 @@ common deps
     ansi-terminal,
     json,
     template-haskell,
-    pager
+    pager,
+    exceptions
 
 common warnings
   ghc-options: -Wall

@@ -20,6 +20,7 @@ module Hoyo.Env (
   , defaultConfigPath
   ) where
 
+import Control.Monad.Catch
 import Control.Monad.Except
 
 import Hoyo.Bookmark
@@ -39,7 +40,7 @@ writeEnv env = do
   encodeConfigFile (view configPath env) (view config env)
 
 -- | Read an 'Env' from a file.
-readEnv :: MonadIO m => FilePath -> FilePath -> m (Either HoyoException Env)
+readEnv :: (MonadIO m, MonadCatch m) => FilePath -> FilePath -> m (Either HoyoException Env)
 readEnv bFp sFp = do
   bs <- decodeBookmarksFile bFp
   se <- decodeConfigFile sFp
@@ -70,7 +71,7 @@ initEnv bFp sFp = do
 --
 -- Returns the newly created 'Bookmarks' object, or the result of parsing
 -- the file if it already existed.
-initBookmarksIfNotExists :: (MonadIO m, MonadError HoyoException m) => Config -> FilePath -> m Bookmarks
+initBookmarksIfNotExists :: (MonadIO m, MonadCatch m, MonadError HoyoException m) => Config -> FilePath -> m Bookmarks
 initBookmarksIfNotExists cfg fp' = do
   fp <- liftIO $ makeAbsolute fp'
   ex <- liftIO $ doesFileExist fp
@@ -84,7 +85,7 @@ initBookmarksIfNotExists cfg fp' = do
 --
 -- Returns the newly created 'Config' object, or the result of parsing
 -- the file if it already existed.
-initConfigIfNotExists :: (MonadIO m, MonadError HoyoException m) => FilePath -> m Config
+initConfigIfNotExists :: (MonadIO m, MonadCatch m, MonadError HoyoException m) => FilePath -> m Config
 initConfigIfNotExists fp' = do
   fp <- liftIO $ makeAbsolute fp'
   exists <- liftIO $ doesFileExist fp
@@ -96,14 +97,14 @@ initConfigIfNotExists fp' = do
 -- | If the environment files have not been created yet, do so.
 --
 -- Return the 'Env' object.
-initEnvIfNotExists :: (MonadIO m, MonadError HoyoException m) => FilePath -> FilePath -> m Env
+initEnvIfNotExists :: (MonadIO m, MonadCatch m, MonadError HoyoException m) => FilePath -> FilePath -> m Env
 initEnvIfNotExists bFp sFp = do
   cfg <- initConfigIfNotExists sFp
   bms <- initBookmarksIfNotExists cfg bFp
   return $ Env bms bFp cfg sFp
 
 -- | Retrieve an 'Env' from given bookmark- and config- file locations.
-getEnv :: MonadIO m => FilePath -> FilePath -> m (Either HoyoException Env)
+getEnv :: (MonadIO m, MonadCatch m) => FilePath -> FilePath -> m (Either HoyoException Env)
 getEnv bFp' sFp' = do
   sFp <- liftIO (makeAbsolute sFp')
   bFp <- liftIO (makeAbsolute bFp')

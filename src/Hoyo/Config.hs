@@ -25,6 +25,7 @@ module Hoyo.Config (
 
 import                          Control.Category     ((<<<))
 import                          Control.Monad
+import                          Control.Monad.Catch
 import                          Control.Monad.Except
 
 import                          Data.Bifunctor       (first)
@@ -89,9 +90,10 @@ decodeConfig = first (ParseException . pure . Toml.prettyTomlDecodeErrors)
                 . Toml.decodeExact configCodec
 
 -- | Decode a 'Config' from a file.
-decodeConfigFile :: MonadIO m => FilePath -> m (Either HoyoException Config)
-decodeConfigFile = fmap (first (ParseException . pure . Toml.prettyTomlDecodeErrors))
-                . Toml.decodeFileExact configCodec
+decodeConfigFile :: (MonadIO m, MonadCatch m) => FilePath -> m (Either HoyoException Config)
+decodeConfigFile = handle catchIOException
+                      . fmap (first (ParseException . pure . Toml.prettyTomlDecodeErrors))
+                      . Toml.decodeFileExact configCodec
 
 -- | Encode a 'Config' to a Text.
 encodeConfig :: Config -> T.Text
