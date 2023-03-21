@@ -342,6 +342,10 @@ formatSearchTerm :: BookmarkSearchTerm -> T.Text
 formatSearchTerm (SearchIndex idx) = tshow idx
 formatSearchTerm (SearchName name) = name
 
+formatSearchTermPretty :: BookmarkSearchTerm -> T.Text
+formatSearchTermPretty (SearchIndex idx) = "#" <> tshow idx
+formatSearchTermPretty (SearchName name) = name
+
 singleton :: T.Text -> [T.Text]
 singleton t = [t]
 
@@ -449,7 +453,7 @@ formatFsException (NoFileException fp) = withTitle "file not found" [T.pack fp]
 formatFsException (NoDirException fp) = withTitle "directory not found" [T.pack fp]
 
 formatCmdException :: CommandException -> T.Text
-formatCmdException (SearchException (NothingFound search)) = withTitle "unknown bookmark" [tshow search]
+formatCmdException (SearchException (NothingFound search)) = withTitle "unknown bookmark" [formatSearchTermPretty search]
 formatCmdException (SearchException (TooManyResults search bms)) = withTitle ("multiple bookmarks matching search [" <> tshow search <> "]") bms
 formatCmdException (InvalidArgumentException ts) = withTitle "invalid argument(s)" ts
 formatCmdException LoopException = withTitle "default command" ["stuck in a loop"]

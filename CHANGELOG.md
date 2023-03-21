@@ -20,6 +20,7 @@ and this project adheres to the
 
 - Got rid of all the unnecessary `Internal/*` modules.
 - Switch to using a custom Exception type instead of just `Text`.
+- Format the search term in error messages.
 
 ### Removed
 
