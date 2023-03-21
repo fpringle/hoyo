@@ -16,6 +16,8 @@ and this project adheres to the
 
 ### Fixed
 
+- Add a newline to pager output.
+
 ### Changed
 
 - Got rid of all the unnecessary `Internal/*` modules.
