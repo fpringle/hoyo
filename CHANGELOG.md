@@ -10,9 +10,19 @@ and this project adheres to the
 
 ### Added
 
+### Fixed
+
+### Changed
+
+### Removed
+
+## [0.6.0.0] - 2023-03-21
+
+### Added
+
 - Prompt the user for confirmation before performing a destructive action, but only if:
-        1. We're not going to backup first, AND
-        2. The input handle is a terminal.
+    - We're not going to backup first, AND
+    - The input handle is a terminal.
 
 - Catch IO exceptions in TOML file encoding/decoding functions; wrap them in `HoyoException`.
 
@@ -240,7 +250,8 @@ build docs using a pre-commit hook.
 
 - Initial release.
 
-[unreleased]: https://github.com/fpringle/hoyo/compare/v0.5.1.0...HEAD
+[unreleased]: https://github.com/fpringle/hoyo/compare/v0.6.0.0...HEAD
+[0.6.0.0]: https://github.com/fpringle/hoyo/compare/v0.5.1.1...v0.6.0.0
 [0.5.1.1]: https://github.com/fpringle/hoyo/compare/v0.5.1.0...v0.5.1.1
 [0.5.1.0]: https://github.com/fpringle/hoyo/compare/v0.5.0.0...v0.5.1.0
 [0.5.0.0]: https://github.com/fpringle/hoyo/compare/v0.4.0.0...v0.5.0.0

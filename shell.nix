@@ -3,9 +3,9 @@ let
   inherit (nixpkgs) pkgs;
   ghc = pkgs.haskell.packages.${compiler}.ghcWithPackages (ps: with ps; [
     # library dependencies
-    ansi-terminal base directory filepath json microlens microlens-th
-    mtl optparse-applicative package-version pager text time tomland
-    template-haskell transformers unordered-containers
+    ansi-terminal base directory exceptions filepath json microlens
+    microlens-th mtl optparse-applicative package-version pager text
+    time tomland template-haskell transformers unordered-containers
 
     # test dependencies
     QuickCheck quickcheck-instances temporary
