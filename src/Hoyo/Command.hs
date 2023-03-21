@@ -322,10 +322,10 @@ runConfigReset _ = do
   isTTY <- liftIO $ hIsTerminalDevice stdin
 
   if backup || not isTTY
-  then encodeConfigFile path defaultConfig
+  then void $ encodeConfigFile path defaultConfig
   else do
     yes <- liftIO $ getConfirmation "Are you sure you want to clear your hoyo configuration?"
-    when yes $ encodeConfigFile path defaultConfig
+    when yes $ void $ encodeConfigFile path defaultConfig
 
 -- | Run the "config set" command: try to set a key-value pair in the config.
 runConfigSet :: ConfigSetOptions -> HoyoMonad ()
@@ -335,7 +335,7 @@ runConfigSet opts = do
   cfgPath <- asks' configPath
   asks' config
     >>= setConfig key val
-    >>= encodeConfigFile cfgPath
+    >>= void . encodeConfigFile cfgPath
 
 -- | Run the "config add-default" command: try to set a key-value pair in the config.
 runAddDefault :: ConfigAddDefaultOptions -> HoyoMonad ()
@@ -346,7 +346,7 @@ runAddDefault opts = do
   let defaultBm = DefaultBookmark dir name
   cfgPath <- asks' configPath
   asks' config
-    >>= encodeConfigFile cfgPath . over defaultBookmarks (defaultBm :)
+    >>= void . encodeConfigFile cfgPath . over defaultBookmarks (defaultBm :)
 
 -- | Run the "config" command: dispatch on the given sub-command.
 runConfig :: ConfigCommand -> HoyoMonad ()

@@ -34,6 +34,7 @@ module Hoyo.Utils (
   , assert
   , assertVerbose
   , maximumDefault
+  , catchIOException
 
   -- ** Backups
   , backupFile
@@ -63,7 +64,7 @@ module Hoyo.Utils (
 {- HLINT ignore "Use list comprehension" -}
 
 import           Control.Applicative
-import           Control.Exception          (bracket_)
+import           Control.Exception          (IOException, bracket_)
 import           Control.Monad              (unless, when)
 import           Control.Monad.Except
                  ( MonadError (..)
@@ -466,3 +467,7 @@ formatException (IOException ioExc) = withTitle "IO error:" [tshow ioExc]
 formatException (FileSystemException exc) = formatFsException exc
 formatException (ParseException ts) = withTitle "parse error" ts
 formatException (MultipleExceptions excs) = T.intercalate "\n" $ map formatException $ toList excs
+
+-- | Catch an 'GHC.IO.Exception.IOException' and wrap it in a 'HoyoException'.
+catchIOException :: Monad m => IOException -> m (Either HoyoException a)
+catchIOException exc = return $ Left $ IOException exc
