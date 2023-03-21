@@ -18,6 +18,7 @@ Types used by all the main Hoyo.* modules.
 
 module Hoyo.Internal.Types where
 
+import           Control.Monad.Catch
 import           Control.Monad.Except       (ExceptT, MonadError (..))
 import           Control.Monad.IO.Class
 import           Control.Monad.Reader.Class (MonadReader)
@@ -182,6 +183,8 @@ newtype HoyoMonad a
   , Monad
   , MonadError HoyoException
   , MonadReader Env
+  , MonadThrow
+  , MonadCatch
   )
 
 instance MonadIO HoyoMonad where

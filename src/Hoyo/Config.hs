@@ -100,8 +100,8 @@ encodeConfig :: Config -> T.Text
 encodeConfig = Toml.encode configCodec
 
 -- | Encode a 'Config' to a file.
-encodeConfigFile :: MonadIO m => FilePath -> Config -> m ()
-encodeConfigFile fp = void . Toml.encodeToFile configCodec fp
+encodeConfigFile :: (MonadIO m, MonadCatch m) => FilePath -> Config -> m (Either HoyoException ())
+encodeConfigFile fp = handle catchIOException . fmap Right . void . Toml.encodeToFile configCodec fp
 
 -- | Get TOML key-value pairs from a 'Config'.
 getKeyVals :: Config -> [(T.Text, AnyConfigValue)]

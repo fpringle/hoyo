@@ -34,10 +34,10 @@ import System.Directory
 import System.FilePath
 
 -- | Write an 'Env' to file.
-writeEnv :: MonadIO m => Env -> m ()
+writeEnv :: (MonadIO m, MonadCatch m) => Env -> m ()
 writeEnv env = do
-  encodeBookmarksFile (view bookmarksPath env) (view bookmarks env)
-  encodeConfigFile (view configPath env) (view config env)
+  void $ encodeBookmarksFile (view bookmarksPath env) (view bookmarks env)
+  void $ encodeConfigFile (view configPath env) (view config env)
 
 -- | Read an 'Env' from a file.
 readEnv :: (MonadIO m, MonadCatch m) => FilePath -> FilePath -> m (Either HoyoException Env)
@@ -59,7 +59,7 @@ initPath fp' = do
 
 -- | Given a filepath for the bookmarks file and a filepath for the config file,
 -- initialize the respective TOMLs at those locations.
-initEnv :: MonadIO m => FilePath -> FilePath -> m ()
+initEnv :: (MonadIO m, MonadCatch m) => FilePath -> FilePath -> m ()
 initEnv bFp sFp = do
   initPath sFp
   initPath bFp
@@ -91,7 +91,7 @@ initConfigIfNotExists fp' = do
   exists <- liftIO $ doesFileExist fp
   unless exists $ do
     initPath fp
-    encodeConfigFile fp defaultConfig
+    void $ encodeConfigFile fp defaultConfig
   decodeConfigFile fp >>= liftEither
 
 -- | If the environment files have not been created yet, do so.

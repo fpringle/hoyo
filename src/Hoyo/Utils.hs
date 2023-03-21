@@ -468,5 +468,6 @@ formatException (FileSystemException exc) = formatFsException exc
 formatException (ParseException ts) = withTitle "parse error" ts
 formatException (MultipleExceptions excs) = T.intercalate "\n" $ map formatException $ toList excs
 
+-- | Catch an 'GHC.IO.Exception.IOException' and wrap it in a 'HoyoException'.
 catchIOException :: Monad m => IOException -> m (Either HoyoException a)
 catchIOException exc = return $ Left $ IOException exc

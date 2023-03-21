@@ -314,21 +314,21 @@ forall field object error.
 (field -&gt; object)
 -&gt; (object -&gt; Either error field) -&gt; BiMap error object field
 </span><span class="hs-identifier hs-var">Toml.prism</span></span><span> </span><span class="annot"><span class="annottext">Command -&gt; Text
-</span><a href="#local-6989586621679128993"><span class="hs-identifier hs-var">fmt</span></a></span><span> </span><span class="annot"><span class="annottext">Text -&gt; Either TomlBiMapError Command
-</span><a href="#local-6989586621679128992"><span class="hs-identifier hs-var">prs</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679129469"><span class="hs-identifier hs-var">fmt</span></a></span><span> </span><span class="annot"><span class="annottext">Text -&gt; Either TomlBiMapError Command
+</span><a href="#local-6989586621679129468"><span class="hs-identifier hs-var">prs</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
 </span><span id="line-64"></span><span>  </span><span class="hs-keyword">where</span><span>
-</span><span id="line-65"></span><span>    </span><span class="annot"><a href="#local-6989586621679128993"><span class="hs-identifier hs-type">fmt</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#Command"><span class="hs-identifier hs-type">Command</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">T.Text</span></span><span>
-</span><span id="line-66"></span><span>    </span><span id="local-6989586621679128993"><span class="annot"><span class="annottext">fmt :: Command -&gt; Text
-</span><a href="#local-6989586621679128993"><span class="hs-identifier hs-var hs-var">fmt</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Text] -&gt; Text
+</span><span id="line-65"></span><span>    </span><span class="annot"><a href="#local-6989586621679129469"><span class="hs-identifier hs-type">fmt</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#Command"><span class="hs-identifier hs-type">Command</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">T.Text</span></span><span>
+</span><span id="line-66"></span><span>    </span><span id="local-6989586621679129469"><span class="annot"><span class="annottext">fmt :: Command -&gt; Text
+</span><a href="#local-6989586621679129469"><span class="hs-identifier hs-var hs-var">fmt</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Text] -&gt; Text
 </span><a href="Hoyo.Utils.html#formatArgs"><span class="hs-identifier hs-var">formatArgs</span></a></span><span> </span><span class="annot"><span class="annottext">([Text] -&gt; Text) -&gt; (Command -&gt; [Text]) -&gt; Command -&gt; Text
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Command -&gt; [Text]
 </span><a href="Hoyo.Utils.html#formatCommand"><span class="hs-identifier hs-var">formatCommand</span></a></span><span>
 </span><span id="line-67"></span><span>
-</span><span id="line-68"></span><span>    </span><span class="annot"><a href="#local-6989586621679128992"><span class="hs-identifier hs-type">prs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">T.Text</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Either</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Toml.TomlBiMapError</span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#Command"><span class="hs-identifier hs-type">Command</span></a></span><span>
-</span><span id="line-69"></span><span>    </span><span id="local-6989586621679128992"><span class="annot"><span class="annottext">prs :: Text -&gt; Either TomlBiMapError Command
-</span><a href="#local-6989586621679128992"><span class="hs-identifier hs-var hs-var">prs</span></a></span></span><span> </span><span id="local-6989586621679128989"><span class="annot"><span class="annottext">Text
-</span><a href="#local-6989586621679128989"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">ParserPrefs
+</span><span id="line-68"></span><span>    </span><span class="annot"><a href="#local-6989586621679129468"><span class="hs-identifier hs-type">prs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">T.Text</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Either</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Toml.TomlBiMapError</span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#Command"><span class="hs-identifier hs-type">Command</span></a></span><span>
+</span><span id="line-69"></span><span>    </span><span id="local-6989586621679129468"><span class="annot"><span class="annottext">prs :: Text -&gt; Either TomlBiMapError Command
+</span><a href="#local-6989586621679129468"><span class="hs-identifier hs-var hs-var">prs</span></a></span></span><span> </span><span id="local-6989586621679129465"><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679129465"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">ParserPrefs
 -&gt; ParserInfo Command -&gt; [String] -&gt; ParserResult Command
 forall a. ParserPrefs -&gt; ParserInfo a -&gt; [String] -&gt; ParserResult a
 </span><span class="hs-identifier hs-var">execParserPure</span></span><span> </span><span class="annot"><span class="annottext">ParserPrefs
@@ -339,18 +339,18 @@ forall a. Parser a -&gt; InfoMod a -&gt; ParserInfo a
 forall a. Monoid a =&gt; a
 </span><span class="hs-identifier hs-var">mempty</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Text -&gt; [String]
 </span><a href="Hoyo.CLI.Parse.html#splitArgs"><span class="hs-identifier hs-var">splitArgs</span></a></span><span> </span><span class="annot"><span class="annottext">Text
-</span><a href="#local-6989586621679128989"><span class="hs-identifier hs-var">t</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">of</span><span>
-</span><span id="line-70"></span><span>      </span><span class="annot"><span class="hs-identifier hs-type">Success</span></span><span> </span><span id="local-6989586621679128982"><span class="annot"><span class="annottext">Command
-</span><a href="#local-6989586621679128982"><span class="hs-identifier hs-var">cmd</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Command -&gt; Either TomlBiMapError Command
+</span><a href="#local-6989586621679129465"><span class="hs-identifier hs-var">t</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">of</span><span>
+</span><span id="line-70"></span><span>      </span><span class="annot"><span class="hs-identifier hs-type">Success</span></span><span> </span><span id="local-6989586621679129458"><span class="annot"><span class="annottext">Command
+</span><a href="#local-6989586621679129458"><span class="hs-identifier hs-var">cmd</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Command -&gt; Either TomlBiMapError Command
 forall a b. b -&gt; Either a b
 </span><span class="hs-identifier hs-var">Right</span></span><span> </span><span class="annot"><span class="annottext">Command
-</span><a href="#local-6989586621679128982"><span class="hs-identifier hs-var">cmd</span></a></span><span>
-</span><span id="line-71"></span><span>      </span><span class="annot"><span class="hs-identifier hs-type">Failure</span></span><span> </span><span id="local-6989586621679128980"><span class="annot"><span class="annottext">ParserFailure ParserHelp
-</span><a href="#local-6989586621679128980"><span class="hs-identifier hs-var">err</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">do</span><span> </span><span class="hs-keyword">let</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679128979"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679128979"><span class="hs-identifier hs-var">msg</span></a></span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ExitCode
+</span><a href="#local-6989586621679129458"><span class="hs-identifier hs-var">cmd</span></a></span><span>
+</span><span id="line-71"></span><span>      </span><span class="annot"><span class="hs-identifier hs-type">Failure</span></span><span> </span><span id="local-6989586621679129456"><span class="annot"><span class="annottext">ParserFailure ParserHelp
+</span><a href="#local-6989586621679129456"><span class="hs-identifier hs-var">err</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">do</span><span> </span><span class="hs-keyword">let</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679129455"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679129455"><span class="hs-identifier hs-var">msg</span></a></span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ExitCode
 </span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ParserFailure ParserHelp -&gt; String -&gt; (String, ExitCode)
 </span><span class="hs-identifier hs-var">renderFailure</span></span><span> </span><span class="annot"><span class="annottext">ParserFailure ParserHelp
-</span><a href="#local-6989586621679128980"><span class="hs-identifier hs-var">err</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679129456"><span class="hs-identifier hs-var">err</span></a></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;hoyo&quot;</span></span><span>
 </span><span id="line-72"></span><span>                        </span><span class="annot"><span class="annottext">TomlBiMapError -&gt; Either TomlBiMapError Command
 forall a b. a -&gt; Either a b
@@ -359,9 +359,9 @@ forall a b. a -&gt; Either a b
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Text
 </span><span class="hs-identifier hs-var">T.pack</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679128979"><span class="hs-identifier hs-var">msg</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-73"></span><span>      </span><span class="annot"><span class="hs-identifier hs-type">CompletionInvoked</span></span><span> </span><span id="local-6989586621679128974"><span class="annot"><span class="annottext">CompletionResult
-</span><a href="#local-6989586621679128974"><span class="hs-identifier hs-var">res</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">TomlBiMapError -&gt; Either TomlBiMapError Command
+</span><a href="#local-6989586621679129455"><span class="hs-identifier hs-var">msg</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-73"></span><span>      </span><span class="annot"><span class="hs-identifier hs-type">CompletionInvoked</span></span><span> </span><span id="local-6989586621679129450"><span class="annot"><span class="annottext">CompletionResult
+</span><a href="#local-6989586621679129450"><span class="hs-identifier hs-var">res</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">TomlBiMapError -&gt; Either TomlBiMapError Command
 forall a b. a -&gt; Either a b
 </span><span class="hs-identifier hs-var">Left</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Text -&gt; TomlBiMapError
 </span><span class="hs-identifier hs-var">Toml.ArbitraryError</span></span><span> </span><span class="annot"><span class="annottext">(Text -&gt; TomlBiMapError) -&gt; Text -&gt; TomlBiMapError
@@ -369,7 +369,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">CompletionResult -&gt; Text
 forall a. Show a =&gt; a -&gt; Text
 </span><a href="Hoyo.Utils.html#tshow"><span class="hs-identifier hs-var">tshow</span></a></span><span> </span><span class="annot"><span class="annottext">CompletionResult
-</span><a href="#local-6989586621679128974"><span class="hs-identifier hs-var">res</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679129450"><span class="hs-identifier hs-var">res</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-74"></span><span>
 </span><span id="line-75"></span><span class="hs-comment">-- | The default config for hoyo.</span><span>
 </span><span id="line-76"></span><span class="annot"><a href="Hoyo.Config.html#defaultConfig"><span class="hs-identifier hs-type">defaultConfig</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#Config"><span class="hs-identifier hs-type">Config</span></a></span><span>
@@ -450,7 +450,7 @@ forall a. TomlCodec a -&gt; Text -&gt; Either [TomlDecodeError] a
 </span><a href="Hoyo.Config.html#configCodec"><span class="hs-identifier hs-var">configCodec</span></a></span><span>
 </span><span id="line-91"></span><span>
 </span><span id="line-92"></span><span class="hs-comment">-- | Decode a 'Config' from a file.</span><span>
-</span><span id="line-93"></span><span id="local-6989586621679128962"><span class="annot"><a href="Hoyo.Config.html#decodeConfigFile"><span class="hs-identifier hs-type">decodeConfigFile</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">MonadIO</span></span><span> </span><span class="annot"><a href="#local-6989586621679128962"><span class="hs-identifier hs-type">m</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MonadCatch</span></span><span> </span><span class="annot"><a href="#local-6989586621679128962"><span class="hs-identifier hs-type">m</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">FilePath</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679128962"><span class="hs-identifier hs-type">m</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Either</span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#HoyoException"><span class="hs-identifier hs-type">HoyoException</span></a></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#Config"><span class="hs-identifier hs-type">Config</span></a></span><span class="hs-special">)</span></span><span>
+</span><span id="line-93"></span><span id="local-6989586621679129438"><span class="annot"><a href="Hoyo.Config.html#decodeConfigFile"><span class="hs-identifier hs-type">decodeConfigFile</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">MonadIO</span></span><span> </span><span class="annot"><a href="#local-6989586621679129438"><span class="hs-identifier hs-type">m</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MonadCatch</span></span><span> </span><span class="annot"><a href="#local-6989586621679129438"><span class="hs-identifier hs-type">m</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">FilePath</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679129438"><span class="hs-identifier hs-type">m</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Either</span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#HoyoException"><span class="hs-identifier hs-type">HoyoException</span></a></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#Config"><span class="hs-identifier hs-type">Config</span></a></span><span class="hs-special">)</span></span><span>
 </span><span id="line-94"></span><span id="decodeConfigFile"><span class="annot"><span class="annottext">decodeConfigFile :: String -&gt; m (Either HoyoException Config)
 </span><a href="Hoyo.Config.html#decodeConfigFile"><span class="hs-identifier hs-var hs-var">decodeConfigFile</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(IOException -&gt; m (Either HoyoException Config))
 -&gt; m (Either HoyoException Config)
@@ -513,10 +513,32 @@ forall a. TomlCodec a -&gt; a -&gt; Text
 </span><a href="Hoyo.Config.html#configCodec"><span class="hs-identifier hs-var">configCodec</span></a></span><span>
 </span><span id="line-101"></span><span>
 </span><span id="line-102"></span><span class="hs-comment">-- | Encode a 'Config' to a file.</span><span>
-</span><span id="line-103"></span><span id="local-6989586621679128956"><span class="annot"><a href="Hoyo.Config.html#encodeConfigFile"><span class="hs-identifier hs-type">encodeConfigFile</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MonadIO</span></span><span> </span><span class="annot"><a href="#local-6989586621679128956"><span class="hs-identifier hs-type">m</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">FilePath</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#Config"><span class="hs-identifier hs-type">Config</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679128956"><span class="hs-identifier hs-type">m</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span></span><span>
-</span><span id="line-104"></span><span id="encodeConfigFile"><span class="annot"><span class="annottext">encodeConfigFile :: String -&gt; Config -&gt; m ()
-</span><a href="Hoyo.Config.html#encodeConfigFile"><span class="hs-identifier hs-var hs-var">encodeConfigFile</span></a></span></span><span> </span><span id="local-6989586621679128955"><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679128955"><span class="hs-identifier hs-var">fp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">m Text -&gt; m ()
+</span><span id="line-103"></span><span id="local-6989586621679129432"><span class="annot"><a href="Hoyo.Config.html#encodeConfigFile"><span class="hs-identifier hs-type">encodeConfigFile</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">MonadIO</span></span><span> </span><span class="annot"><a href="#local-6989586621679129432"><span class="hs-identifier hs-type">m</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MonadCatch</span></span><span> </span><span class="annot"><a href="#local-6989586621679129432"><span class="hs-identifier hs-type">m</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">FilePath</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#Config"><span class="hs-identifier hs-type">Config</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679129432"><span class="hs-identifier hs-type">m</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Either</span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#HoyoException"><span class="hs-identifier hs-type">HoyoException</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span class="hs-special">)</span></span><span>
+</span><span id="line-104"></span><span id="encodeConfigFile"><span class="annot"><span class="annottext">encodeConfigFile :: String -&gt; Config -&gt; m (Either HoyoException ())
+</span><a href="Hoyo.Config.html#encodeConfigFile"><span class="hs-identifier hs-var hs-var">encodeConfigFile</span></a></span></span><span> </span><span id="local-6989586621679129431"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679129431"><span class="hs-identifier hs-var">fp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(IOException -&gt; m (Either HoyoException ()))
+-&gt; m (Either HoyoException ()) -&gt; m (Either HoyoException ())
+forall (m :: * -&gt; *) e a.
+(MonadCatch m, Exception e) =&gt;
+(e -&gt; m a) -&gt; m a -&gt; m a
+</span><span class="hs-identifier hs-var">handle</span></span><span> </span><span class="annot"><span class="annottext">IOException -&gt; m (Either HoyoException ())
+forall (m :: * -&gt; *) a.
+Monad m =&gt;
+IOException -&gt; m (Either HoyoException a)
+</span><a href="Hoyo.Utils.html#catchIOException"><span class="hs-identifier hs-var">catchIOException</span></a></span><span> </span><span class="annot"><span class="annottext">(m (Either HoyoException ()) -&gt; m (Either HoyoException ()))
+-&gt; (Config -&gt; m (Either HoyoException ()))
+-&gt; Config
+-&gt; m (Either HoyoException ())
+forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">(() -&gt; Either HoyoException ())
+-&gt; m () -&gt; m (Either HoyoException ())
+forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
+</span><span class="hs-identifier hs-var">fmap</span></span><span> </span><span class="annot"><span class="annottext">() -&gt; Either HoyoException ()
+forall a b. b -&gt; Either a b
+</span><span class="hs-identifier hs-var">Right</span></span><span> </span><span class="annot"><span class="annottext">(m () -&gt; m (Either HoyoException ()))
+-&gt; (Config -&gt; m ()) -&gt; Config -&gt; m (Either HoyoException ())
+forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">m Text -&gt; m ()
 forall (f :: * -&gt; *) a. Functor f =&gt; f a -&gt; f ()
 </span><span class="hs-identifier hs-var">void</span></span><span> </span><span class="annot"><span class="annottext">(m Text -&gt; m ()) -&gt; (Config -&gt; m Text) -&gt; Config -&gt; m ()
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
@@ -526,13 +548,13 @@ MonadIO m =&gt;
 TomlCodec a -&gt; String -&gt; a -&gt; m Text
 </span><span class="hs-identifier hs-var">Toml.encodeToFile</span></span><span> </span><span class="annot"><span class="annottext">TomlCodec Config
 </span><a href="Hoyo.Config.html#configCodec"><span class="hs-identifier hs-var">configCodec</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679128955"><span class="hs-identifier hs-var">fp</span></a></span><span>
+</span><a href="#local-6989586621679129431"><span class="hs-identifier hs-var">fp</span></a></span><span>
 </span><span id="line-105"></span><span>
 </span><span id="line-106"></span><span class="hs-comment">-- | Get TOML key-value pairs from a 'Config'.</span><span>
 </span><span id="line-107"></span><span class="annot"><a href="Hoyo.Config.html#getKeyVals"><span class="hs-identifier hs-type">getKeyVals</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#Config"><span class="hs-identifier hs-type">Config</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">T.Text</span></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#AnyConfigValue"><span class="hs-identifier hs-type">AnyConfigValue</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
 </span><span id="line-108"></span><span id="getKeyVals"><span class="annot"><span class="annottext">getKeyVals :: Config -&gt; [(Text, AnyConfigValue)]
-</span><a href="Hoyo.Config.html#getKeyVals"><span class="hs-identifier hs-var hs-var">getKeyVals</span></a></span></span><span> </span><span id="local-6989586621679128952"><span class="annot"><span class="annottext">Config
-</span><a href="#local-6989586621679128952"><span class="hs-identifier hs-var">cfg</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span>
+</span><a href="Hoyo.Config.html#getKeyVals"><span class="hs-identifier hs-var hs-var">getKeyVals</span></a></span></span><span> </span><span id="local-6989586621679129428"><span class="annot"><span class="annottext">Config
+</span><a href="#local-6989586621679129428"><span class="hs-identifier hs-var">cfg</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span>
 </span><span id="line-109"></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Text
 </span><span class="hs-string">&quot;fail_on_error&quot;</span></span><span class="hs-special">,</span><span>         </span><span class="annot"><span class="annottext">ConfigValue 'TBool -&gt; AnyConfigValue
 forall (t :: ConfigValueType). ConfigValue t -&gt; AnyConfigValue
@@ -541,7 +563,7 @@ forall (t :: ConfigValueType). ConfigValue t -&gt; AnyConfigValue
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Config -&gt; ConfigValue 'TBool
 </span><a href="Hoyo.Internal.Types.html#_failOnError"><span class="hs-identifier hs-var hs-var">_failOnError</span></a></span><span> </span><span class="annot"><span class="annottext">Config
-</span><a href="#local-6989586621679128952"><span class="hs-identifier hs-var">cfg</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679129428"><span class="hs-identifier hs-var">cfg</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-110"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Text
 </span><span class="hs-string">&quot;display_creation_time&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConfigValue 'TBool -&gt; AnyConfigValue
 forall (t :: ConfigValueType). ConfigValue t -&gt; AnyConfigValue
@@ -550,7 +572,7 @@ forall (t :: ConfigValueType). ConfigValue t -&gt; AnyConfigValue
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Config -&gt; ConfigValue 'TBool
 </span><a href="Hoyo.Internal.Types.html#_displayCreationTime"><span class="hs-identifier hs-var hs-var">_displayCreationTime</span></a></span><span> </span><span class="annot"><span class="annottext">Config
-</span><a href="#local-6989586621679128952"><span class="hs-identifier hs-var">cfg</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679129428"><span class="hs-identifier hs-var">cfg</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-111"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Text
 </span><span class="hs-string">&quot;enable_clearing&quot;</span></span><span class="hs-special">,</span><span>       </span><span class="annot"><span class="annottext">ConfigValue 'TBool -&gt; AnyConfigValue
 forall (t :: ConfigValueType). ConfigValue t -&gt; AnyConfigValue
@@ -559,7 +581,7 @@ forall (t :: ConfigValueType). ConfigValue t -&gt; AnyConfigValue
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Config -&gt; ConfigValue 'TBool
 </span><a href="Hoyo.Internal.Types.html#_enableClearing"><span class="hs-identifier hs-var hs-var">_enableClearing</span></a></span><span> </span><span class="annot"><span class="annottext">Config
-</span><a href="#local-6989586621679128952"><span class="hs-identifier hs-var">cfg</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679129428"><span class="hs-identifier hs-var">cfg</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-112"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Text
 </span><span class="hs-string">&quot;enable_reset&quot;</span></span><span class="hs-special">,</span><span>          </span><span class="annot"><span class="annottext">ConfigValue 'TBool -&gt; AnyConfigValue
 forall (t :: ConfigValueType). ConfigValue t -&gt; AnyConfigValue
@@ -568,7 +590,7 @@ forall (t :: ConfigValueType). ConfigValue t -&gt; AnyConfigValue
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Config -&gt; ConfigValue 'TBool
 </span><a href="Hoyo.Internal.Types.html#_enableReset"><span class="hs-identifier hs-var hs-var">_enableReset</span></a></span><span> </span><span class="annot"><span class="annottext">Config
-</span><a href="#local-6989586621679128952"><span class="hs-identifier hs-var">cfg</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679129428"><span class="hs-identifier hs-var">cfg</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-113"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Text
 </span><span class="hs-string">&quot;backup_before_clear&quot;</span></span><span class="hs-special">,</span><span>   </span><span class="annot"><span class="annottext">ConfigValue 'TBool -&gt; AnyConfigValue
 forall (t :: ConfigValueType). ConfigValue t -&gt; AnyConfigValue
@@ -577,7 +599,7 @@ forall (t :: ConfigValueType). ConfigValue t -&gt; AnyConfigValue
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Config -&gt; ConfigValue 'TBool
 </span><a href="Hoyo.Internal.Types.html#_backupBeforeClear"><span class="hs-identifier hs-var hs-var">_backupBeforeClear</span></a></span><span> </span><span class="annot"><span class="annottext">Config
-</span><a href="#local-6989586621679128952"><span class="hs-identifier hs-var">cfg</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679129428"><span class="hs-identifier hs-var">cfg</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-114"></span><span>    </span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[(Text, AnyConfigValue)]
 -&gt; [(Text, AnyConfigValue)] -&gt; [(Text, AnyConfigValue)]
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
@@ -629,7 +651,7 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 forall (t :: ConfigValueType).
 Lens' (ConfigValue ('TMaybe t)) (Maybe (ConfigValue t))
 </span><a href="Hoyo.Utils.html#cfgMaybe"><span class="hs-identifier hs-var">cfgMaybe</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Config
-</span><a href="#local-6989586621679128952"><span class="hs-identifier hs-var">cfg</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679129428"><span class="hs-identifier hs-var">cfg</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-115"></span><span>      </span><span class="annot"><span class="annottext">[(Text, AnyConfigValue)]
 -&gt; [(Text, AnyConfigValue)] -&gt; [(Text, AnyConfigValue)]
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
@@ -641,22 +663,22 @@ forall (t :: ConfigValueType). ConfigValue t -&gt; AnyConfigValue
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Config -&gt; ConfigValue ('TList 'TDefaultBookmark)
 </span><a href="Hoyo.Internal.Types.html#_defaultBookmarks"><span class="hs-identifier hs-var hs-var">_defaultBookmarks</span></a></span><span> </span><span class="annot"><span class="annottext">Config
-</span><a href="#local-6989586621679128952"><span class="hs-identifier hs-var">cfg</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
+</span><a href="#local-6989586621679129428"><span class="hs-identifier hs-var">cfg</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
 </span><span id="line-116"></span><span>
 </span><span id="line-117"></span><span class="hs-comment">-- | Try to set a key-value pair in the config.</span><span>
-</span><span id="line-118"></span><span id="local-6989586621679128948"><span class="annot"><a href="Hoyo.Config.html#setConfig"><span class="hs-identifier hs-type">setConfig</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MonadError</span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#HoyoException"><span class="hs-identifier hs-type">HoyoException</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679128948"><span class="hs-identifier hs-type">m</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">T.Text</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">T.Text</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#Config"><span class="hs-identifier hs-type">Config</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679128948"><span class="hs-identifier hs-type">m</span></a></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#Config"><span class="hs-identifier hs-type">Config</span></a></span></span><span>
+</span><span id="line-118"></span><span id="local-6989586621679129424"><span class="annot"><a href="Hoyo.Config.html#setConfig"><span class="hs-identifier hs-type">setConfig</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MonadError</span></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#HoyoException"><span class="hs-identifier hs-type">HoyoException</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679129424"><span class="hs-identifier hs-type">m</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">T.Text</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">T.Text</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#Config"><span class="hs-identifier hs-type">Config</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679129424"><span class="hs-identifier hs-type">m</span></a></span><span> </span><span class="annot"><a href="Hoyo.Internal.Types.html#Config"><span class="hs-identifier hs-type">Config</span></a></span></span><span>
 </span><span id="line-119"></span><span id="setConfig"><span class="annot"><span class="annottext">setConfig :: Text -&gt; Text -&gt; Config -&gt; m Config
 </span><a href="Hoyo.Config.html#setConfig"><span class="hs-identifier hs-var hs-var">setConfig</span></a></span></span><span>   </span><span class="annot"><span class="annottext">Text
-</span><span class="hs-string">&quot;fail_on_error&quot;</span></span><span>           </span><span id="local-6989586621679128947"><span class="annot"><span class="annottext">Text
-</span><a href="#local-6989586621679128947"><span class="hs-identifier hs-var">val</span></a></span></span><span> </span><span id="local-6989586621679128946"><span class="annot"><span class="annottext">Config
-</span><a href="#local-6989586621679128946"><span class="hs-identifier hs-var">cfg</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Bool -&gt; Config -&gt; Config) -&gt; Config -&gt; Bool -&gt; Config
+</span><span class="hs-string">&quot;fail_on_error&quot;</span></span><span>           </span><span id="local-6989586621679129423"><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679129423"><span class="hs-identifier hs-var">val</span></a></span></span><span> </span><span id="local-6989586621679129422"><span class="annot"><span class="annottext">Config
+</span><a href="#local-6989586621679129422"><span class="hs-identifier hs-var">cfg</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Bool -&gt; Config -&gt; Config) -&gt; Config -&gt; Bool -&gt; Config
 forall a b c. (a -&gt; b -&gt; c) -&gt; b -&gt; a -&gt; c
 </span><span class="hs-identifier hs-var">flip</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ASetter Config Config Bool Bool -&gt; Bool -&gt; Config -&gt; Config
 forall s t a b. ASetter s t a b -&gt; b -&gt; s -&gt; t
 </span><span class="hs-identifier hs-var">set</span></span><span> </span><span class="annot"><span class="annottext">ASetter Config Config Bool Bool
 Lens' Config Bool
 </span><a href="Hoyo.Utils.html#failOnError"><span class="hs-identifier hs-var">failOnError</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Config
-</span><a href="#local-6989586621679128946"><span class="hs-identifier hs-var">cfg</span></a></span><span>
+</span><a href="#local-6989586621679129422"><span class="hs-identifier hs-var">cfg</span></a></span><span>
 </span><span id="line-120"></span><span>                                                  </span><span class="annot"><span class="annottext">(Bool -&gt; Config) -&gt; m Bool -&gt; m Config
 forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
 </span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="annottext">Either HoyoException Bool -&gt; m Bool
@@ -664,18 +686,18 @@ forall e (m :: * -&gt; *) a. MonadError e m =&gt; Either e a -&gt; m a
 </span><span class="hs-identifier hs-var">liftEither</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Text -&gt; Either HoyoException Bool
 forall (m :: * -&gt; *). MonadError HoyoException m =&gt; Text -&gt; m Bool
 </span><a href="Hoyo.Utils.html#readBool"><span class="hs-identifier hs-var">readBool</span></a></span><span> </span><span class="annot"><span class="annottext">Text
-</span><a href="#local-6989586621679128947"><span class="hs-identifier hs-var">val</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679129423"><span class="hs-identifier hs-var">val</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-121"></span><span class="annot"><a href="Hoyo.Config.html#setConfig"><span class="hs-identifier hs-var">setConfig</span></a></span><span>   </span><span class="annot"><span class="annottext">Text
-</span><span class="hs-string">&quot;display_creation_time&quot;</span></span><span>   </span><span id="local-6989586621679128941"><span class="annot"><span class="annottext">Text
-</span><a href="#local-6989586621679128941"><span class="hs-identifier hs-var">val</span></a></span></span><span> </span><span id="local-6989586621679128940"><span class="annot"><span class="annottext">Config
-</span><a href="#local-6989586621679128940"><span class="hs-identifier hs-var">cfg</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Bool -&gt; Config -&gt; Config) -&gt; Config -&gt; Bool -&gt; Config
+</span><span class="hs-string">&quot;display_creation_time&quot;</span></span><span>   </span><span id="local-6989586621679129417"><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679129417"><span class="hs-identifier hs-var">val</span></a></span></span><span> </span><span id="local-6989586621679129416"><span class="annot"><span class="annottext">Config
+</span><a href="#local-6989586621679129416"><span class="hs-identifier hs-var">cfg</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Bool -&gt; Config -&gt; Config) -&gt; Config -&gt; Bool -&gt; Config
 forall a b c. (a -&gt; b -&gt; c) -&gt; b -&gt; a -&gt; c
 </span><span class="hs-identifier hs-var">flip</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ASetter Config Config Bool Bool -&gt; Bool -&gt; Config -&gt; Config
 forall s t a b. ASetter s t a b -&gt; b -&gt; s -&gt; t
 </span><span class="hs-identifier hs-var">set</span></span><span> </span><span class="annot"><span class="annottext">ASetter Config Config Bool Bool
 Lens' Config Bool
 </span><a href="Hoyo.Utils.html#displayCreationTime"><span class="hs-identifier hs-var">displayCreationTime</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Config
-</span><a href="#local-6989586621679128940"><span class="hs-identifier hs-var">cfg</span></a></span><span>
+</span><a href="#local-6989586621679129416"><span class="hs-identifier hs-var">cfg</span></a></span><span>
 </span><span id="line-122"></span><span>                                                  </span><span class="annot"><span class="annottext">(Bool -&gt; Config) -&gt; m Bool -&gt; m Config
 forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
 </span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="annottext">Either HoyoException Bool -&gt; m Bool
@@ -683,18 +705,18 @@ forall e (m :: * -&gt; *) a. MonadError e m =&gt; Either e a -&gt; m a
 </span><span class="hs-identifier hs-var">liftEither</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Text -&gt; Either HoyoException Bool
 forall (m :: * -&gt; *). MonadError HoyoException m =&gt; Text -&gt; m Bool
 </span><a href="Hoyo.Utils.html#readBool"><span class="hs-identifier hs-var">readBool</span></a></span><span> </span><span class="annot"><span class="annottext">Text
-</span><a href="#local-6989586621679128941"><span class="hs-identifier hs-var">val</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679129417"><span class="hs-identifier hs-var">val</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-123"></span><span class="annot"><a href="Hoyo.Config.html#setConfig"><span class="hs-identifier hs-var">setConfig</span></a></span><span>   </span><span class="annot"><span class="annottext">Text
-</span><span class="hs-string">&quot;enable_clearing&quot;</span></span><span>         </span><span id="local-6989586621679128939"><span class="annot"><span class="annottext">Text
-</span><a href="#local-6989586621679128939"><span class="hs-identifier hs-var">val</span></a></span></span><span> </span><span id="local-6989586621679128938"><span class="annot"><span class="annottext">Config
-</span><a href="#local-6989586621679128938"><span class="hs-identifier hs-var">cfg</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Bool -&gt; Config -&gt; Config) -&gt; Config -&gt; Bool -&gt; Config
+</span><span class="hs-string">&quot;enable_clearing&quot;</span></span><span>         </span><span id="local-6989586621679129415"><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679129415"><span class="hs-identifier hs-var">val</span></a></span></span><span> </span><span id="local-6989586621679129414"><span class="annot"><span class="annottext">Config
+</span><a href="#local-6989586621679129414"><span class="hs-identifier hs-var">cfg</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Bool -&gt; Config -&gt; Config) -&gt; Config -&gt; Bool -&gt; Config
 forall a b c. (a -&gt; b -&gt; c) -&gt; b -&gt; a -&gt; c
 </span><span class="hs-identifier hs-var">flip</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ASetter Config Config Bool Bool -&gt; Bool -&gt; Config -&gt; Config
 forall s t a b. ASetter s t a b -&gt; b -&gt; s -&gt; t
 </span><span class="hs-identifier hs-var">set</span></span><span> </span><span class="annot"><span class="annottext">ASetter Config Config Bool Bool
 Lens' Config Bool
 </span><a href="Hoyo.Utils.html#enableClearing"><span class="hs-identifier hs-var">enableClearing</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Config
-</span><a href="#local-6989586621679128938"><span class="hs-identifier hs-var">cfg</span></a></span><span>
+</span><a href="#local-6989586621679129414"><span class="hs-identifier hs-var">cfg</span></a></span><span>
 </span><span id="line-124"></span><span>                                                  </span><span class="annot"><span class="annottext">(Bool -&gt; Config) -&gt; m Bool -&gt; m Config
 forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
 </span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="annottext">Either HoyoException Bool -&gt; m Bool
@@ -702,18 +724,18 @@ forall e (m :: * -&gt; *) a. MonadError e m =&gt; Either e a -&gt; m a
 </span><span class="hs-identifier hs-var">liftEither</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Text -&gt; Either HoyoException Bool
 forall (m :: * -&gt; *). MonadError HoyoException m =&gt; Text -&gt; m Bool
 </span><a href="Hoyo.Utils.html#readBool"><span class="hs-identifier hs-var">readBool</span></a></span><span> </span><span class="annot"><span class="annottext">Text
-</span><a href="#local-6989586621679128939"><span class="hs-identifier hs-var">val</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679129415"><span class="hs-identifier hs-var">val</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-125"></span><span class="annot"><a href="Hoyo.Config.html#setConfig"><span class="hs-identifier hs-var">setConfig</span></a></span><span>   </span><span class="annot"><span class="annottext">Text
-</span><span class="hs-string">&quot;enable_reset&quot;</span></span><span>            </span><span id="local-6989586621679128937"><span class="annot"><span class="annottext">Text
-</span><a href="#local-6989586621679128937"><span class="hs-identifier hs-var">val</span></a></span></span><span> </span><span id="local-6989586621679128936"><span class="annot"><span class="annottext">Config
-</span><a href="#local-6989586621679128936"><span class="hs-identifier hs-var">cfg</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Bool -&gt; Config -&gt; Config) -&gt; Config -&gt; Bool -&gt; Config
+</span><span class="hs-string">&quot;enable_reset&quot;</span></span><span>            </span><span id="local-6989586621679129413"><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679129413"><span class="hs-identifier hs-var">val</span></a></span></span><span> </span><span id="local-6989586621679129412"><span class="annot"><span class="annottext">Config
+</span><a href="#local-6989586621679129412"><span class="hs-identifier hs-var">cfg</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Bool -&gt; Config -&gt; Config) -&gt; Config -&gt; Bool -&gt; Config
 forall a b c. (a -&gt; b -&gt; c) -&gt; b -&gt; a -&gt; c
 </span><span class="hs-identifier hs-var">flip</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ASetter Config Config Bool Bool -&gt; Bool -&gt; Config -&gt; Config
 forall s t a b. ASetter s t a b -&gt; b -&gt; s -&gt; t
 </span><span class="hs-identifier hs-var">set</span></span><span> </span><span class="annot"><span class="annottext">ASetter Config Config Bool Bool
 Lens' Config Bool
 </span><a href="Hoyo.Utils.html#enableReset"><span class="hs-identifier hs-var">enableReset</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Config
-</span><a href="#local-6989586621679128936"><span class="hs-identifier hs-var">cfg</span></a></span><span>
+</span><a href="#local-6989586621679129412"><span class="hs-identifier hs-var">cfg</span></a></span><span>
 </span><span id="line-126"></span><span>                                                  </span><span class="annot"><span class="annottext">(Bool -&gt; Config) -&gt; m Bool -&gt; m Config
 forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
 </span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="annottext">Either HoyoException Bool -&gt; m Bool
@@ -721,18 +743,18 @@ forall e (m :: * -&gt; *) a. MonadError e m =&gt; Either e a -&gt; m a
 </span><span class="hs-identifier hs-var">liftEither</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Text -&gt; Either HoyoException Bool
 forall (m :: * -&gt; *). MonadError HoyoException m =&gt; Text -&gt; m Bool
 </span><a href="Hoyo.Utils.html#readBool"><span class="hs-identifier hs-var">readBool</span></a></span><span> </span><span class="annot"><span class="annottext">Text
-</span><a href="#local-6989586621679128937"><span class="hs-identifier hs-var">val</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679129413"><span class="hs-identifier hs-var">val</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-127"></span><span class="annot"><a href="Hoyo.Config.html#setConfig"><span class="hs-identifier hs-var">setConfig</span></a></span><span>   </span><span class="annot"><span class="annottext">Text
-</span><span class="hs-string">&quot;backup_before_clear&quot;</span></span><span>     </span><span id="local-6989586621679128935"><span class="annot"><span class="annottext">Text
-</span><a href="#local-6989586621679128935"><span class="hs-identifier hs-var">val</span></a></span></span><span> </span><span id="local-6989586621679128934"><span class="annot"><span class="annottext">Config
-</span><a href="#local-6989586621679128934"><span class="hs-identifier hs-var">cfg</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Bool -&gt; Config -&gt; Config) -&gt; Config -&gt; Bool -&gt; Config
+</span><span class="hs-string">&quot;backup_before_clear&quot;</span></span><span>     </span><span id="local-6989586621679129411"><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679129411"><span class="hs-identifier hs-var">val</span></a></span></span><span> </span><span id="local-6989586621679129410"><span class="annot"><span class="annottext">Config
+</span><a href="#local-6989586621679129410"><span class="hs-identifier hs-var">cfg</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Bool -&gt; Config -&gt; Config) -&gt; Config -&gt; Bool -&gt; Config
 forall a b c. (a -&gt; b -&gt; c) -&gt; b -&gt; a -&gt; c
 </span><span class="hs-identifier hs-var">flip</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ASetter Config Config Bool Bool -&gt; Bool -&gt; Config -&gt; Config
 forall s t a b. ASetter s t a b -&gt; b -&gt; s -&gt; t
 </span><span class="hs-identifier hs-var">set</span></span><span> </span><span class="annot"><span class="annottext">ASetter Config Config Bool Bool
 Lens' Config Bool
 </span><a href="Hoyo.Utils.html#backupBeforeClear"><span class="hs-identifier hs-var">backupBeforeClear</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Config
-</span><a href="#local-6989586621679128934"><span class="hs-identifier hs-var">cfg</span></a></span><span>
+</span><a href="#local-6989586621679129410"><span class="hs-identifier hs-var">cfg</span></a></span><span>
 </span><span id="line-128"></span><span>                                                  </span><span class="annot"><span class="annottext">(Bool -&gt; Config) -&gt; m Bool -&gt; m Config
 forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
 </span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="annottext">Either HoyoException Bool -&gt; m Bool
@@ -740,9 +762,9 @@ forall e (m :: * -&gt; *) a. MonadError e m =&gt; Either e a -&gt; m a
 </span><span class="hs-identifier hs-var">liftEither</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Text -&gt; Either HoyoException Bool
 forall (m :: * -&gt; *). MonadError HoyoException m =&gt; Text -&gt; m Bool
 </span><a href="Hoyo.Utils.html#readBool"><span class="hs-identifier hs-var">readBool</span></a></span><span> </span><span class="annot"><span class="annottext">Text
-</span><a href="#local-6989586621679128935"><span class="hs-identifier hs-var">val</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-129"></span><span class="annot"><a href="Hoyo.Config.html#setConfig"><span class="hs-identifier hs-var">setConfig</span></a></span><span> </span><span id="local-6989586621679128933"><span class="annot"><span class="annottext">Text
-</span><a href="#local-6989586621679128933"><span class="hs-identifier hs-var">key</span></a></span></span><span> </span><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679129411"><span class="hs-identifier hs-var">val</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-129"></span><span class="annot"><a href="Hoyo.Config.html#setConfig"><span class="hs-identifier hs-var">setConfig</span></a></span><span> </span><span id="local-6989586621679129409"><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679129409"><span class="hs-identifier hs-var">key</span></a></span></span><span> </span><span class="annot"><span class="annottext">Text
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">Config
 </span><span class="hs-identifier">_</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">HoyoException -&gt; m Config
 forall e (m :: * -&gt; *) a. MonadError e m =&gt; e -&gt; m a
@@ -753,5 +775,5 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-string">&quot;Invalid key: &quot;</span></span><span> </span><span class="annot"><span class="annottext">Text -&gt; Text -&gt; Text
 forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">Text
-</span><a href="#local-6989586621679128933"><span class="hs-identifier hs-var">key</span></a></span><span class="hs-special">]</span><span>
+</span><a href="#local-6989586621679129409"><span class="hs-identifier hs-var">key</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-130"></span></pre></body></html>
