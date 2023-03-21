@@ -10,6 +10,10 @@ and this project adheres to the
 
 ### Added
 
+- Prompt the user for confirmation before performing a destructive action, but only if:
+        1. We're not going to backup first, AND
+        2. The input handle is a terminal.
+
 ### Fixed
 
 ### Changed
