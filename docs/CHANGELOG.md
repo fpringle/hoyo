@@ -14,6 +14,8 @@ and this project adheres to the
         1. We're not going to backup first, AND
         2. The input handle is a terminal.
 
+- Catch IO exceptions in TOML file encoding/decoding functions; wrap them in `HoyoException`.
+
 ### Fixed
 
 - Add a newline to pager output.
