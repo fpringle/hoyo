@@ -1,5 +1,5 @@
 {-|
-Module      : Hoyo.Internal.Utils
+Module      : Hoyo.Utils
 Copyright   : (c) Frederick Pringle, 2023
 License     : BSD-3-Clause
 Maintainer  : freddyjepringle@gmail.com
@@ -12,7 +12,7 @@ Utility functions used by all the main Hoyo.* modules.
 {-# LANGUAGE KindSignatures #-}
 {-# LANGUAGE RankNTypes     #-}
 
-module Hoyo.Internal.Utils (
+module Hoyo.Utils (
   -- * Lenses for ConfigValue
     cfgBool
   , cfgDefaultBookmark

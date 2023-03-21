@@ -56,25 +56,28 @@ library
       , warnings
     exposed-modules:
         Hoyo
+
         Hoyo.Env
         Hoyo.Config
         Hoyo.Command
         Hoyo.Bookmark
+        Hoyo.Utils
+
         Hoyo.CLI.Parse
         Hoyo.CLI.Complete
-        Hoyo.Internal.Env
-        Hoyo.Internal.Config
-        Hoyo.Internal.Command
-        Hoyo.Internal.Bookmark
-        Hoyo.Internal.Parse
+
         Hoyo.Internal.Types
-        Hoyo.Internal.Utils
         Hoyo.Internal.Version
 
     hs-source-dirs:     src
     -- other-modules:
     default-language:   Haskell2010
-    default-extensions: OverloadedStrings GeneralizedNewtypeDeriving LambdaCase FlexibleContexts
+    default-extensions:
+      OverloadedStrings
+      GeneralizedNewtypeDeriving
+      LambdaCase
+      FlexibleContexts
+      TupleSections
     ghc-options:        -Wall -Wno-duplicate-exports -Wno-unused-do-bind
 
 executable hoyo-cli

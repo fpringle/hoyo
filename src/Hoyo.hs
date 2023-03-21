@@ -58,8 +58,8 @@ import           Hoyo.Command
 import           Hoyo.Config
 import           Hoyo.Env
 import           Hoyo.Internal.Types
-import           Hoyo.Internal.Utils
 import           Hoyo.Internal.Version
+import           Hoyo.Utils
 
 import           System.Exit
 
