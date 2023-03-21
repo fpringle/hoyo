@@ -1,10 +1,11 @@
-# Ensure that if any source files change, that CHANGELOG.ms has also change
+# Ensure that if any source files change, that CHANGELOG.md has also change
 name: Check CHANGELOG.md on PR
 
 on:
     pull_request:
         branches:
             - main
+            - release*
         paths:
             - '**.hs'
 
