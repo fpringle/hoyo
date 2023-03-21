@@ -72,12 +72,15 @@ bookmarksCodec :: TomlCodec Bookmarks
 bookmarksCodec = Toml.diwrap (Toml.list bookmarkCodec "bookmark")
 
 -- | Decode a 'Bookmark' from a Text.
-decodeBookmarks :: T.Text -> Either T.Text Bookmarks
-decodeBookmarks = first Toml.prettyTomlDecodeErrors . Toml.decodeExact bookmarksCodec
+decodeBookmarks :: T.Text -> Either HoyoException Bookmarks
+decodeBookmarks = first (ParseException . pure . Toml.prettyTomlDecodeErrors)
+                    . Toml.decodeExact bookmarksCodec
 
 -- | Decode a 'Bookmark' from a file.
-decodeBookmarksFile :: MonadIO m => FilePath -> m (Either T.Text Bookmarks)
-decodeBookmarksFile = fmap (first Toml.prettyTomlDecodeErrors) . Toml.decodeFileExact bookmarksCodec
+-- TODO: catch IO exceptions
+decodeBookmarksFile :: MonadIO m => FilePath -> m (Either HoyoException Bookmarks)
+decodeBookmarksFile = fmap (first (ParseException . pure . Toml.prettyTomlDecodeErrors))
+                        . Toml.decodeFileExact bookmarksCodec
 
 -- | Encode a 'Bookmark' to a Text.
 encodeBookmarks :: Bookmarks -> T.Text
