@@ -129,7 +129,6 @@ data Config
            , _enableReset         :: !(ConfigValue 'TBool)
            , _backupBeforeClear   :: !(ConfigValue 'TBool)
            , _defaultBookmarks    :: !(ConfigValue ('TList 'TDefaultBookmark))
-           , _defaultCommand      :: !(ConfigValue ('TMaybe 'TCommand))
            }
   deriving (Show, Eq)
 
@@ -276,7 +275,6 @@ data Command
   | Refresh RefreshOptions
   | ConfigCmd ConfigCommand
   | Check CheckOptions
-  | DefaultCommand
   | Help HelpOptions
   deriving (Show, Eq)
 

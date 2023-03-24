@@ -27,7 +27,6 @@ module Hoyo.Utils (
   , enableReset
   , backupBeforeClear
   , defaultBookmarks
-  , defaultCommand
 
   -- * Utility functions
   , asks'
@@ -184,9 +183,6 @@ liftLens l = lens (fmap (view l)) (\ga gb -> set l <$> gb <*> ga)
 
 defaultBookmarks :: Lens' Config [DefaultBookmark]
 defaultBookmarks = __defaultBookmarks . cfgList . liftLensToList cfgDefaultBookmark
-
-defaultCommand :: Lens' Config (Maybe Command)
-defaultCommand = __defaultCommand . cfgMaybe . liftLens cfgCommand
 
 -----------------------------------------
 
@@ -372,7 +368,6 @@ formatCommand (Check (CheckOptions c b)) = ["check"]
                                         <> (if c then ["--config"] else [])
                                         <> (if b then ["--bookmarks"] else [])
 formatCommand (Help (HelpOptions cmd)) = ["help"] <> maybeToList cmd
-formatCommand DefaultCommand = []
 
 formatConfigCommand :: ConfigCommand -> [T.Text]
 formatConfigCommand (Print (ConfigPrintOptions json)) = ["print"]

@@ -22,7 +22,6 @@ module Hoyo.CLI.Parse (
   , clearCommand
   , deleteCommand
   , checkCommand
-  , defaultCommand
 
   -- ** Parsing sub-commands for hoyo config
   , configCommand
@@ -277,14 +276,10 @@ helpCommand = Help . HelpOptions
                               )
                             )
 
--- | If hoyo is run with no arguments, we run the "default command" if it's set.
-defaultCommand :: Parser Command
-defaultCommand = pure DefaultCommand
-
 -- | Parse a command and the arguments/options for that
 -- command from the command-line arguments.
 parseCommand :: Parser Command
-parseCommand = (versionOption <*> hsubparser (
+parseCommand = versionOption <*> hsubparser (
   command "add" (info addCommand (progDesc "Add a bookmark"))
   <> command "move" (info moveCommand (progDesc "Change directory using a bookmark"))
   <> command "list" (info listCommand (progDesc "List existing bookmarks"))
@@ -294,7 +289,7 @@ parseCommand = (versionOption <*> hsubparser (
   <> command "config" (info configCommand (progDesc "View/manage hoyo config"))
   <> command "check" (info checkCommand (progDesc "Verify validity of config and bookmarks"))
   <> command "help" (info helpCommand (progDesc "Print a help message for the entire program or a specific command"))
-  )) <|> defaultCommand
+  )
 
 -- | Parse an 'Options' argument, which includes the command
 -- to run and any global options.
