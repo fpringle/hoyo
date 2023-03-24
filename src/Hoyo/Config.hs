@@ -23,27 +23,22 @@ module Hoyo.Config (
   , getKeyVals
   ) where
 
-import                          Control.Category     ((<<<))
-import                          Control.Monad
-import                          Control.Monad.Catch
-import                          Control.Monad.Except
+import           Control.Monad
+import           Control.Monad.Catch
+import           Control.Monad.Except
 
-import                          Data.Bifunctor       (first)
-import                          Data.Maybe           (maybeToList)
-import                qualified Data.Text            as T
+import           Data.Bifunctor       (first)
+import qualified Data.Text            as T
 
-import                          Hoyo.Bookmark
-import {-# SOURCE #-}           Hoyo.CLI.Parse
-import                          Hoyo.Internal.Types
-import                          Hoyo.Utils
+import           Hoyo.Bookmark
+import           Hoyo.Internal.Types
+import           Hoyo.Utils
 
-import                          Lens.Micro
-import                          Lens.Micro.Extras
+import           Lens.Micro
+import           Lens.Micro.Extras
 
-import                          Options.Applicative
-
-import                qualified Toml
-import                          Toml                 (TomlCodec, (.=))
+import qualified Toml
+import           Toml                 (TomlCodec, (.=))
 
 -- | A TOML codec describing how to convert a 'Config' to and from its
 -- TOML representation.
@@ -55,22 +50,6 @@ configCodec = Config
   <*> (BoolV <$> Toml.bool "enable_reset")            .= view enableReset
   <*> (BoolV <$> Toml.bool "backup_before_clear")     .= view backupBeforeClear
   <*> (ListOfV . fmap DefaultBookmarkV <$> Toml.list defaultBookmarkCodec "default_bookmark") .= view defaultBookmarks
-  <*> (MaybeV . fmap CommandV <$> Toml.dioptional (commandCodec "default_command")) .= view defaultCommand
-
--- | Toml codec using optparse-applicative to parse a default command. Incurs a cyclic
--- dependency which is resolved using Parse.hs-boot.
-commandCodec :: Toml.Key -> TomlCodec Command
-commandCodec = Toml.match (Toml._Text <<< Toml.invert (Toml.prism fmt prs))
-  where
-    fmt :: Command -> T.Text
-    fmt = formatArgs . formatCommand
-
-    prs :: T.Text -> Either Toml.TomlBiMapError Command
-    prs t = case execParserPure defaultPrefs (info parseCommand mempty) (splitArgs t) of
-      Success cmd -> Right cmd
-      Failure err -> do let (msg, _) = renderFailure err "hoyo"
-                        Left (Toml.ArbitraryError $ T.pack msg)
-      CompletionInvoked res -> Left (Toml.ArbitraryError $ tshow res)
 
 -- | The default config for hoyo.
 defaultConfig :: Config
@@ -81,7 +60,6 @@ defaultConfig = Config {
   , _enableReset              = BoolV False
   , _backupBeforeClear        = BoolV False
   , _defaultBookmarks         = ListOfV []
-  , _defaultCommand           = MaybeV Nothing
   }
 
 -- | Decode a 'Config' from a Text.
@@ -111,8 +89,7 @@ getKeyVals cfg = [
   , ("enable_clearing",       AnyConfigValue $ _enableClearing cfg)
   , ("enable_reset",          AnyConfigValue $ _enableReset cfg)
   , ("backup_before_clear",   AnyConfigValue $ _backupBeforeClear cfg)
-    ] <> maybeToList (("default_command", ) . AnyConfigValue <$> view (__defaultCommand . cfgMaybe) cfg)
-      <> [("default_bookmarks", AnyConfigValue $ _defaultBookmarks cfg)]
+    ] <> [("default_bookmarks", AnyConfigValue $ _defaultBookmarks cfg)]
 
 -- | Try to set a key-value pair in the config.
 setConfig :: MonadError HoyoException m => T.Text -> T.Text -> Config -> m Config

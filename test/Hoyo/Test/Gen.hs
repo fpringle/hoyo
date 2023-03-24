@@ -131,7 +131,6 @@ instance Arbitrary Config where
                      <*> arbitrary
                      <*> arbitrary
                      <*> arbitrary
-                     <*> arbitrary
 
 instance Arbitrary Env where
   arbitrary = Env <$> arbitrary
@@ -188,7 +187,6 @@ instance Arbitrary Command where
                     , Refresh <$> arbitrary
                     , ConfigCmd <$> arbitrary
                     , Check <$> arbitrary
-                    , pure DefaultCommand
                     ]
 
 instance Arbitrary MaybeOverride where

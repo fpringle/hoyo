@@ -23,7 +23,6 @@ module Hoyo.Command (
   , runRefresh
   , runConfig
   , runCheck
-  , runDefaultCommand
 
   -- * Types
   , Options (..)
@@ -374,13 +373,6 @@ runCheck opts bFp sFp = do
   when (checkConfig opts) $ runCheckConfig sFp
   when (checkBookmarks opts) $ runCheckBookmarks bFp
 
--- | Run the default command, if it has been specified by the user.
-runDefaultCommand :: HoyoMonad ()
-runDefaultCommand = asks' (config . defaultCommand) >>= \case
-  Nothing             -> liftIO $ showHelp Nothing
-  Just DefaultCommand -> throwError $ CommandException LoopException
-  Just otherCommand   -> runCommand otherCommand
-
 -- | Run the "help" command: get help on a specific subcommand.
 runHelp :: HelpOptions -> HoyoMonad ()
 runHelp (HelpOptions cmd) = liftIO $ showHelp (T.unpack <$> cmd)
@@ -394,7 +386,6 @@ runCommand     (Clear opts) = runClear opts
 runCommand    (Delete opts) = runDelete opts
 runCommand   (Refresh opts) = runRefresh opts
 runCommand (ConfigCmd opts) = runConfig opts
-runCommand   DefaultCommand = runDefaultCommand
 runCommand      (Help opts) = runHelp opts
 runCommand     (Check opts) = do
   -- printStderr "The 'check' command should be run outside the Hoyo monad."

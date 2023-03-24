@@ -16,6 +16,10 @@ and this project adheres to the
 
 ### Removed
 
+- Get rid of the default command
+    (see [here](https://clig.dev/#help:~:text=Display%20a%20concise%20help%20text%20by%20default)
+    for more information).
+
 ## [0.6.0.0] - 2023-03-21
 
 ### Added

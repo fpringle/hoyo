@@ -14,7 +14,6 @@ hoyo is a command-line utility that lets the user save directories as bookmarks 
     * [Command-line options](#command-line-options)
     * [Examples](#examples)
     * [Configuration](#configuration)
-        * [Default command](#default-command)
         * [Default bookmarks](#default-bookmarks)
 * [Contributing](#contributing)
 
@@ -259,22 +258,6 @@ bookmark can have these fields:
 
 - `directory`: required. The directory of the bookmark.
 - `name`: optional. Give the bookmark a nickname for easier cd.
-
-### Default command
-
-If the `default_command` option is set, then running `hoyo` with no arguments
-will actually run the default command.
-
-For example, if `default_command = "list"`:
-
-```shell
-$ hoyo      # no arguments
-1. /home/me
-2. /home/me/coding/haskell  (hask)
-```
-
-If the `default_command` option is no set, then running `hoyo` with no arguments
-is equivalent to running `hoyo --help`.
 
 # Contributing
 
